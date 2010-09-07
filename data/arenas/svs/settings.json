@@ -1,0 +1,18 @@
+{
+  "map":
+  {
+    "width": 1024,
+    "height": 1024
+  },
+
+  "ships":
+  [
+    {
+      "name": "Warbird"
+    },
+
+    {
+      "name": "Javelin"
+    }
+  ]
+}

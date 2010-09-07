@@ -1,0 +1,70 @@
+body {
+  margin: 0;
+  background: #000;
+  font-family: Verdana;
+  font-size: 14pt;
+  color: #ccc;
+}
+
+input {
+  outline: none;
+  font-size: inherit;
+}
+
+.title {
+  margin: 0 0 30px 0;
+  padding: 40px 0 40px 80px;
+  font-size: 55px;
+  font-weight: 100;
+  background: #111;
+  border-bottom: 1px solid #222;
+  color: #dd489a;
+/*  color: #80d850;*/
+/*  color: #36ade1;*/
+}
+
+.title .dot {
+  color: #fff;
+}
+
+/**************************************
+              LOGIN VIEW
+ **************************************/
+
+.lv-name {
+  text-align: center;
+  color: #ccc;
+  background: #111;
+  border: 1px solid #222;
+  padding: 5px 9px;
+  margin: 0;
+}
+
+.lv-login-button {
+  border: none;
+  background: #80d850;
+  color: #fff;
+  padding: 5px 9px;
+}
+
+/**************************************
+              MAP VIEW
+ **************************************/
+
+.mv-map-canvas {
+  text-align: center;
+  border: 3px solid #222;
+}
+
+/**************************************
+            LOADING VIEW
+ **************************************/
+
+.ldv-progress {
+  border: 3px solid #222;
+}
+
+.ldv-progress-value {
+  background: #444;
+  width: 0;
+}

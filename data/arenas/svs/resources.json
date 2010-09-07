@@ -1,0 +1,55 @@
+{
+  "tileset": {
+    "url": "data/arenas/svs/tileset.bmp",
+    "xTiles": 19,
+    "yTiles": 10
+  },
+
+  "ship0": {
+    "url": "data/shared/graphics/ship0.png",
+    "xTiles": 10,
+    "yTiles": 4
+  },
+
+  "ship1": {
+    "url": "data/shared/graphics/ship1.png",
+    "xTiles": 10,
+    "yTiles": 4
+  },
+
+  "ship2": {
+    "url": "data/shared/graphics/ship2.png",
+    "xTiles": 10,
+    "yTiles": 4
+  },
+
+  "ship3": {
+    "url": "data/shared/graphics/ship3.png",
+    "xTiles": 10,
+    "yTiles": 4
+  },
+
+  "ship4": {
+    "url": "data/shared/graphics/ship4.png",
+    "xTiles": 10,
+    "yTiles": 4
+  },
+
+  "ship5": {
+    "url": "data/shared/graphics/ship5.png",
+    "xTiles": 10,
+    "yTiles": 4
+  },
+
+  "ship6": {
+    "url": "data/shared/graphics/ship6.png",
+    "xTiles": 10,
+    "yTiles": 4
+  },
+
+  "ship7": {
+    "url": "data/shared/graphics/ship7.png",
+    "xTiles": 10,
+    "yTiles": 4
+  }
+}
