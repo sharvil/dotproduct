@@ -22,10 +22,40 @@ dotprod.Player = function(game, camera) {
   this.game_ = game;
 
   /**
+   * @type {!Object}
+   * @private
+   */
+  this.settings_ = game.getConfig().getSettings();
+
+  /**
    * @type {number}
    * @private
    */
   this.ship_ = 0;
+
+  /**
+   * @type {number}
+   * @private
+   */
+  this.x_ = 8192;
+
+  /**
+   * @type {number}
+   * @private
+   */
+  this.y_ = 8192;
+
+  /**
+   * @type {number}
+   * @private
+   */
+  this.speedX_ = 0;
+
+  /**
+   * @type {number}
+   * @private
+   */
+  this.speedY_ = 0;
 
   /**
    * @type {!dotprod.TiledImage}
@@ -58,32 +88,44 @@ dotprod.Player.prototype.setShip = function(ship) {
  * @param {number} timeDiff
  */
 dotprod.Player.prototype.update = function(timeDiff) {
-  this.angleInRadians_ += timeDiff * 0.05;
-  if (this.angleInRadians_ >= Math.PI * 2) {
-    this.angleInRadians_ = 0;
-  }
+  var shipSettings = this.settings_['ships'][this.ship_];
+  var shipRotation = shipSettings['rotationRadiansPerTick'];
+  var shipSpeed = shipSettings['speedPixelsPerTick'];
+  var acceleration = shipSettings['accelerationPerTick'];
 
   var keyboard = this.game_.getKeyboard();
   var dimensions = this.camera_.getDimensions();
-  var magnitude = timeDiff * 5;
 
-  if (keyboard.isKeyPressed(goog.events.KeyCodes.SHIFT)) {
-    magnitude *= 4;
+  if (keyboard.isKeyPressed(goog.events.KeyCodes.LEFT)) {
+    this.angleInRadians_ -= timeDiff * shipRotation;
+  } else if (keyboard.isKeyPressed(goog.events.KeyCodes.RIGHT)) {
+    this.angleInRadians_ += timeDiff * shipRotation;
+  }
+
+  if (this.angleInRadians_ < 0 || this.angleInRadians_ >= Math.PI * 2) {
+    this.angleInRadians_ -= Math.floor(this.angleInRadians_ / (2 * Math.PI)) * 2 * Math.PI;
   }
 
   if (keyboard.isKeyPressed(goog.events.KeyCodes.UP)) {
-    dimensions.y -= magnitude;
+    this.speedX_ += Math.sin(this.angleInRadians_) * acceleration * timeDiff;
+    this.speedY_ -= Math.cos(this.angleInRadians_) * acceleration * timeDiff;
   } else if (keyboard.isKeyPressed(goog.events.KeyCodes.DOWN)) {
-    dimensions.y += magnitude;
+    this.speedX_ -= Math.sin(this.angleInRadians_) * acceleration * timeDiff;
+    this.speedY_ += Math.cos(this.angleInRadians_) * acceleration * timeDiff;
   }
 
-  if (keyboard.isKeyPressed(goog.events.KeyCodes.LEFT)) {
-    dimensions.x -= magnitude;
-  } else if (keyboard.isKeyPressed(goog.events.KeyCodes.RIGHT)) {
-    dimensions.x += magnitude;
+  // Magnitude of speed is greater than maximum ship speed - clamp.
+  var magSquared = this.speedX_ * this.speedX_ + this.speedY_ * this.speedY_;
+  if (magSquared >= shipSpeed * shipSpeed) {
+    var magnitude = Math.sqrt(magSquared);
+    this.speedX_ = this.speedX_ * shipSpeed / magnitude;
+    this.speedY_ = this.speedY_ * shipSpeed / magnitude;
   }
 
-  this.camera_.setPosition(dimensions.x, dimensions.y);
+  this.x_ += this.speedX_ * timeDiff;
+  this.y_ += this.speedY_ * timeDiff;
+
+  this.camera_.setPosition(Math.floor(this.x_), Math.floor(this.y_));
 };
 
 /**
@@ -91,5 +133,6 @@ dotprod.Player.prototype.update = function(timeDiff) {
  */
 dotprod.Player.prototype.render = function(camera) {
   var tileNum = Math.floor(this.angleInRadians_ / (2 * Math.PI) * this.image_.getNumTiles());
-  this.image_.render(camera.getContext(), 0, 0, tileNum);
+  var dimensions = camera.getDimensions();
+  this.image_.render(camera.getContext(), Math.floor((dimensions.width - this.image_.getTileWidth()) / 2), Math.floor((dimensions.height - this.image_.getTileHeight()) / 2), tileNum);
 };

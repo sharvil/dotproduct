@@ -8,11 +8,17 @@
   "ships":
   [
     {
-      "name": "Warbird"
+      "name": "Warbird",
+      "rotationRadiansPerTick": 0.05,
+      "speedPixelsPerTick": 5,
+      "accelerationPerTick": 0.035
     },
 
     {
-      "name": "Javelin"
+      "name": "Javelin",
+      "rotationRadiansPerTick": 0.10,
+      "speedPixelsPerTick": 5,
+      "accelerationPerTick": 0.075
     }
   ]
 }

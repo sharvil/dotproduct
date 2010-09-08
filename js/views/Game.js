@@ -106,7 +106,7 @@ dotprod.Game.ANIMATION_PERIOD_ = 10;
  * @type {string}
  * @private
  */
-dotprod.Game.CANVAS_CLASS_NAME_ = 'mv-map-canvas';
+dotprod.Game.CANVAS_CLASS_NAME_ = 'gv-map-canvas';
 
 /**
  * @param {!HTMLDivElement} rootNode
@@ -115,17 +115,6 @@ dotprod.Game.CANVAS_CLASS_NAME_ = 'mv-map-canvas';
 dotprod.Game.prototype.renderDom = function(rootNode) {
   goog.base(this, 'renderDom', rootNode);
   rootNode.appendChild(this.canvas_);
-
-  var div = document.createElement('div');
-  div.style.position = 'absolute';
-  div.style.top = '0px';
-  div.style.border = '1px solid grey';
-  div.style.width = '100px';
-  div.style.height = '600px';
-  div.style.background = 'rgba(40, 40, 40, 0.3)';
-
-  rootNode.style.position = 'relative';
-  rootNode.appendChild(div);
 };
 
 dotprod.Game.prototype.start = function() {

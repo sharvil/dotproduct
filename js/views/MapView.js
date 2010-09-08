@@ -96,7 +96,6 @@ dotprod.views.MapView.prototype.render = function(camera) {
         if (tileNum == 0 || tileNum > this.tileset_.getNumTiles()) {
           continue;
         }
-        console.log('tile ' + tileNum);
         this.tileset_.render(context,
                             x * tileWidth - dimensions.x + halfWidth,
                             y * tileHeight - dimensions.y + halfHeight,

@@ -48,10 +48,10 @@ input {
 }
 
 /**************************************
-              MAP VIEW
+              GAME VIEW
  **************************************/
 
-.mv-map-canvas {
+.gv-map-canvas {
   text-align: center;
   border: 3px solid #222;
 }
