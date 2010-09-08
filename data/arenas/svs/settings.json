@@ -11,14 +11,16 @@
       "name": "Warbird",
       "rotationRadiansPerTick": 0.05,
       "speedPixelsPerTick": 5,
-      "accelerationPerTick": 0.035
+      "accelerationPerTick": 0.035,
+      "bounceFactor": 0.5
     },
 
     {
       "name": "Javelin",
       "rotationRadiansPerTick": 0.10,
-      "speedPixelsPerTick": 5,
-      "accelerationPerTick": 0.075
+      "speedPixelsPerTick": 10,
+      "accelerationPerTick": 0.055,
+      "bounceFactor": 0.3
     }
   ]
 }

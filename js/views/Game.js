@@ -10,10 +10,10 @@ goog.require('goog.dom');
 goog.require('dotprod.Camera');
 goog.require('dotprod.GameConfig');
 goog.require('dotprod.input.Keyboard');
+goog.require('dotprod.layers.MapLayer');
 goog.require('dotprod.Player');
 goog.require('dotprod.Protocol');
 goog.require('dotprod.ResourceManager');
-goog.require('dotprod.views.MapView');
 goog.require('dotprod.views.View');
 
 /**
@@ -63,16 +63,16 @@ dotprod.Game = function(protocol, resourceManager, gameConfig) {
   this.camera_ = new dotprod.Camera(this, this.canvas_.getContext('2d'))
 
   /**
-   * @type {!dotprod.views.MapView}
+   * @type {!dotprod.layers.MapLayer}
    * @private
    */
-  this.map_ = new dotprod.views.MapView(this);
+  this.mapLayer_ = new dotprod.layers.MapLayer(this);
 
   /**
    * @type {!dotprod.Player}
    * @private
    */
-  this.player_ = new dotprod.Player(this, this.camera_);
+  this.player_ = new dotprod.Player(this, this.camera_, this.mapLayer_);
 
   /**
    * @type {number|null}
@@ -156,10 +156,10 @@ dotprod.Game.prototype.renderingLoop_ = function() {
   var curTime = goog.now();
   var timeDiff = Math.floor((curTime - this.lastTime_ + this.tickResidue_) / 10);
 
-  this.map_.update(timeDiff);
+  this.mapLayer_.update(timeDiff);
   this.player_.update(timeDiff);
 
-  this.map_.render(this.camera_);
+  this.mapLayer_.render(this.camera_);
   this.player_.render(this.camera_);
 
   this.tickResidue_ += curTime - this.lastTime_;

@@ -8,13 +8,15 @@ goog.provide('dotprod.Player');
 goog.require('goog.events');
 goog.require('dotprod.Camera');
 goog.require('dotprod.input.Keyboard');
+goog.require('dotprod.layers.MapLayer');
 
 /**
  * @constructor
  * @param {!dotprod.Game} game
  * @param {!dotprod.Camera} camera
+ * @param {!dotprod.MapLayer} mapLayer
  */
-dotprod.Player = function(game, camera) {
+dotprod.Player = function(game, camera, mapLayer) {
   /**
    * @type {!dotprod.Game}
    * @private
@@ -26,6 +28,12 @@ dotprod.Player = function(game, camera) {
    * @private
    */
   this.settings_ = game.getConfig().getSettings();
+
+  /**
+   * @type {!dotprod.layers.MapLayer}
+   * @private
+   */
+  this.mapLayer_ = mapLayer;
 
   /**
    * @type {number}
@@ -92,6 +100,7 @@ dotprod.Player.prototype.update = function(timeDiff) {
   var shipRotation = shipSettings['rotationRadiansPerTick'];
   var shipSpeed = shipSettings['speedPixelsPerTick'];
   var acceleration = shipSettings['accelerationPerTick'];
+  var bounceFactor = shipSettings['bounceFactor'];
 
   var keyboard = this.game_.getKeyboard();
   var dimensions = this.camera_.getDimensions();
@@ -123,7 +132,24 @@ dotprod.Player.prototype.update = function(timeDiff) {
   }
 
   this.x_ += this.speedX_ * timeDiff;
+
+  if (this.mapLayer_.isCollision(this.x_, this.y_)) {
+    // TODO(sharvil): setting the 'x' position like this to undo
+    // the previous update is terribly wrong. Remove when full rect
+    // collision detection is in.
+    this.x_ -= this.speedX_ * timeDiff;
+    this.speedX_ = -this.speedX_ * bounceFactor;
+  }
+
   this.y_ += this.speedY_ * timeDiff;
+
+  if (this.mapLayer_.isCollision(this.x_, this.y_)) {
+    // TODO(sharvil): setting the 'y' position like this to undo
+    // the previous update is terribly wrong. Remove when full rect
+    // collision detection is in.
+    this.y_ -= this.speedY_ * timeDiff;
+    this.speedY_ = -this.speedY_ * bounceFactor;
+  }
 
   this.camera_.setPosition(Math.floor(this.x_), Math.floor(this.y_));
 };
