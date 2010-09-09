@@ -99,6 +99,8 @@ dotprod.views.LoginView.prototype.onLoginReply_ = function(packet) {
     var settings = packet[2];
     var mapData = packet[3];
 
+    // TODO(sharvil): shoving the user name into the settings is pretty evil...
+    settings['name'] = this.nameNode_.value;
     this.successCb_(new dotprod.GameConfig(resources, settings, mapData));
   } else {
     alert('Login failure: ' + packet[1]);

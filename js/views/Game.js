@@ -72,7 +72,7 @@ dotprod.Game = function(protocol, resourceManager, gameConfig) {
    * @type {!dotprod.sprites.Player}
    * @private
    */
-  this.player_ = new dotprod.sprites.Player(this, this.camera_, this.mapLayer_);
+  this.player_ = new dotprod.sprites.Player(this, this.camera_, this.mapLayer_, this.gameConfig_.getSettings()['name']);
 
   /**
    * @type {number|null}

@@ -17,8 +17,9 @@ goog.require('dotprod.sprites.Sprite');
  * @param {!dotprod.Game} game
  * @param {!dotprod.Camera} camera
  * @param {!dotprod.layers.MapLayer} mapLayer
+ * @param {string} name
  */
-dotprod.sprites.Player = function(game, camera, mapLayer) {
+dotprod.sprites.Player = function(game, camera, mapLayer, name) {
   dotprod.sprites.Sprite.call(this);
 
   /**
@@ -38,6 +39,12 @@ dotprod.sprites.Player = function(game, camera, mapLayer) {
    * @private
    */
   this.mapLayer_ = mapLayer;
+
+  /**
+   * @type {string}
+   * @private
+   */
+  this.name_ = name;
 
   /**
    * @type {number}
@@ -153,5 +160,17 @@ dotprod.sprites.Player.prototype.update = function(timeDiff) {
 dotprod.sprites.Player.prototype.render = function(camera) {
   var tileNum = Math.floor(this.angleInRadians_ / (2 * Math.PI) * this.image_.getNumTiles());
   var dimensions = camera.getDimensions();
-  this.image_.render(camera.getContext(), Math.floor((dimensions.width - this.image_.getTileWidth()) / 2), Math.floor((dimensions.height - this.image_.getTileHeight()) / 2), tileNum);
+  var context = camera.getContext();
+
+  var x = Math.floor((dimensions.width - this.image_.getTileWidth()) / 2);
+  var y = Math.floor((dimensions.height - this.image_.getTileHeight()) / 2);
+
+  this.image_.render(context, x, y, tileNum);
+
+  context.save();
+    context.font = '12pt Verdana';
+    context.fillStyle = 'rgb(200, 200, 200)';
+    context.textAlign = 'center';
+    context.fillText(this.name_, dimensions.width / 2, dimensions.height / 2 + this.image_.getTileHeight());
+  context.restore();
 };
