@@ -13,6 +13,7 @@ goog.require('dotprod.layers.Layer');
 goog.require('dotprod.layers.StarLayer');
 goog.require('dotprod.Map');
 goog.require('dotprod.ResourceManager');
+goog.require('dotprod.sprites.Sprite');
 
 /**
  * @constructor
@@ -45,6 +46,13 @@ dotprod.layers.MapLayer = function(game) {
 };
 
 /**
+ * @type {number}
+ * @private
+ * @const
+ */
+dotprod.layers.MapLayer.COLLISION_EPSILON_ = 0.0001;
+
+/**
  * @return {number}
  */
 dotprod.layers.MapLayer.prototype.getWidth = function() {
@@ -59,10 +67,61 @@ dotprod.layers.MapLayer.prototype.getHeight = function() {
 };
 
 /**
- * @return {boolean}
+ * @param {!dotprod.sprites.Sprite} sprite
+ * @return {Object}
  */
-dotprod.layers.MapLayer.prototype.isCollision = function(x, y) {
-  return x < 0 || y < 0 || x >= this.getHeight() || y >= this.getHeight() || this.map_.getTile(Math.floor(x / this.tileset_.getTileWidth()), Math.floor(y / this.tileset_.getTileHeight())) != 0;
+dotprod.layers.MapLayer.prototype.getCollision = function(sprite) {
+  var dimensions = sprite.getDimensions();
+
+  var left = dimensions.left;
+  var right = dimensions.right;
+  var top = dimensions.top;
+  var bottom = dimensions.bottom;
+  var xRadius = dimensions.xRadius;
+  var yRadius = dimensions.yRadius;
+
+  var tileWidth = this.tileset_.getTileWidth();
+  var tileHeight = this.tileset_.getTileHeight();
+
+  // Trivial case 1: left/top of map.
+  if (left < 0 || right < 0) {
+    return {
+      left: -dotprod.layers.MapLayer.COLLISION_EPSILON_ - xRadius,
+      right: tileWidth + xRadius,
+      top: -dotprod.layers.MapLayer.COLLISION_EPSILON_ - yRadius,
+      bottom: tileHeight + yRadius
+    };
+  }
+
+  // Trivial case 2: right/bottom of map.
+  if (right >= this.getWidth() || bottom >= this.getHeight()) {
+    return {
+      left: this.getWidth() - tileWidth - dotprod.layers.MapLayer.COLLISION_EPSILON_ - xRadius,
+      right: this.getWidth() + xRadius,
+      top: this.getHeight() - tileHeight - dotprod.layers.MapLayer.COLLISION_EPSILON_ - yRadius,
+      bottom: this.getHeight() + yRadius
+    };
+  }
+
+  var leftTile = Math.floor(left / tileWidth);
+  var rightTile = Math.floor(right / tileWidth);
+  var topTile = Math.floor(top / tileHeight);
+  var bottomTile = Math.floor(bottom / tileHeight);
+
+  for (var yTile = topTile; yTile <= bottomTile; ++yTile) {
+    for (var xTile = leftTile; xTile <= rightTile; ++xTile) {
+      if (this.map_.getTile(xTile, yTile) != 0) {
+        return {
+          left: xTile * tileWidth - dotprod.layers.MapLayer.COLLISION_EPSILON_ - xRadius,
+          right: (xTile + 1) * tileWidth + xRadius,
+          top: yTile * tileHeight - dotprod.layers.MapLayer.COLLISION_EPSILON_ - yRadius,
+          bottom: (yTile + 1) * tileHeight + yRadius
+        };
+      }
+    }
+  }
+
+  return null;
 };
 
 /**

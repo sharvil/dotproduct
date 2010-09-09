@@ -11,7 +11,7 @@ goog.require('dotprod.Camera');
 goog.require('dotprod.GameConfig');
 goog.require('dotprod.input.Keyboard');
 goog.require('dotprod.layers.MapLayer');
-goog.require('dotprod.Player');
+goog.require('dotprod.sprites.Player');
 goog.require('dotprod.Protocol');
 goog.require('dotprod.ResourceManager');
 goog.require('dotprod.views.View');
@@ -69,10 +69,10 @@ dotprod.Game = function(protocol, resourceManager, gameConfig) {
   this.mapLayer_ = new dotprod.layers.MapLayer(this);
 
   /**
-   * @type {!dotprod.Player}
+   * @type {!dotprod.sprites.Player}
    * @private
    */
-  this.player_ = new dotprod.Player(this, this.camera_, this.mapLayer_);
+  this.player_ = new dotprod.sprites.Player(this, this.camera_, this.mapLayer_);
 
   /**
    * @type {number|null}

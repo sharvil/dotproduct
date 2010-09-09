@@ -3,20 +3,24 @@
  * @author sharvil.nanavati@gmail.com (Sharvil Nanavati)
  */
 
-goog.provide('dotprod.Player');
+goog.provide('dotprod.sprites.Player');
 
 goog.require('goog.events');
 goog.require('dotprod.Camera');
 goog.require('dotprod.input.Keyboard');
 goog.require('dotprod.layers.MapLayer');
+goog.require('dotprod.sprites.Sprite');
 
 /**
  * @constructor
+ * @extends {dotprod.sprites.Sprite}
  * @param {!dotprod.Game} game
  * @param {!dotprod.Camera} camera
  * @param {!dotprod.layers.MapLayer} mapLayer
  */
-dotprod.Player = function(game, camera, mapLayer) {
+dotprod.sprites.Player = function(game, camera, mapLayer) {
+  dotprod.sprites.Sprite.call(this);
+
   /**
    * @type {!dotprod.Game}
    * @private
@@ -45,25 +49,13 @@ dotprod.Player = function(game, camera, mapLayer) {
    * @type {number}
    * @private
    */
-  this.x_ = 8192;
+  this.xVelocity_ = 0;
 
   /**
    * @type {number}
    * @private
    */
-  this.y_ = 8192;
-
-  /**
-   * @type {number}
-   * @private
-   */
-  this.speedX_ = 0;
-
-  /**
-   * @type {number}
-   * @private
-   */
-  this.speedY_ = 0;
+  this.yVelocity_ = 0;
 
   /**
    * @type {!dotprod.TiledImage}
@@ -82,12 +74,19 @@ dotprod.Player = function(game, camera, mapLayer) {
    * @private
    */
   this.camera_ = camera;
+
+  this.setShip(0);
 };
+goog.inherits(dotprod.sprites.Player, dotprod.sprites.Sprite);
 
 /**
  * @param {number} ship
  */
-dotprod.Player.prototype.setShip = function(ship) {
+dotprod.sprites.Player.prototype.setShip = function(ship) {
+  this.x_ = 8192;
+  this.y_ = 8192;
+  this.xRadius_ = this.settings_['ships'][this.ship_]['xRadius'];
+  this.yRadius_ = this.settings_['ships'][this.ship_]['yRadius'];
   this.ship_ = ship;
   this.image_ = this.game_.getResourceManager().getTiledImage('ship' + this.ship_);
 };
@@ -95,7 +94,7 @@ dotprod.Player.prototype.setShip = function(ship) {
 /**
  * @param {number} timeDiff
  */
-dotprod.Player.prototype.update = function(timeDiff) {
+dotprod.sprites.Player.prototype.update = function(timeDiff) {
   var shipSettings = this.settings_['ships'][this.ship_];
   var shipRotation = shipSettings['rotationRadiansPerTick'];
   var shipSpeed = shipSettings['speedPixelsPerTick'];
@@ -116,39 +115,33 @@ dotprod.Player.prototype.update = function(timeDiff) {
   }
 
   if (keyboard.isKeyPressed(goog.events.KeyCodes.UP)) {
-    this.speedX_ += Math.sin(this.angleInRadians_) * acceleration * timeDiff;
-    this.speedY_ -= Math.cos(this.angleInRadians_) * acceleration * timeDiff;
+    this.xVelocity_ += Math.sin(this.angleInRadians_) * acceleration * timeDiff;
+    this.yVelocity_ -= Math.cos(this.angleInRadians_) * acceleration * timeDiff;
   } else if (keyboard.isKeyPressed(goog.events.KeyCodes.DOWN)) {
-    this.speedX_ -= Math.sin(this.angleInRadians_) * acceleration * timeDiff;
-    this.speedY_ += Math.cos(this.angleInRadians_) * acceleration * timeDiff;
+    this.xVelocity_ -= Math.sin(this.angleInRadians_) * acceleration * timeDiff;
+    this.yVelocity_ += Math.cos(this.angleInRadians_) * acceleration * timeDiff;
   }
 
   // Magnitude of speed is greater than maximum ship speed - clamp.
-  var magSquared = this.speedX_ * this.speedX_ + this.speedY_ * this.speedY_;
+  var magSquared = this.xVelocity_ * this.xVelocity_ + this.yVelocity_ * this.yVelocity_;
   if (magSquared >= shipSpeed * shipSpeed) {
     var magnitude = Math.sqrt(magSquared);
-    this.speedX_ = this.speedX_ * shipSpeed / magnitude;
-    this.speedY_ = this.speedY_ * shipSpeed / magnitude;
+    this.xVelocity_ = this.xVelocity_ * shipSpeed / magnitude;
+    this.yVelocity_ = this.yVelocity_ * shipSpeed / magnitude;
   }
 
-  this.x_ += this.speedX_ * timeDiff;
-
-  if (this.mapLayer_.isCollision(this.x_, this.y_)) {
-    // TODO(sharvil): setting the 'x' position like this to undo
-    // the previous update is terribly wrong. Remove when full rect
-    // collision detection is in.
-    this.x_ -= this.speedX_ * timeDiff;
-    this.speedX_ = -this.speedX_ * bounceFactor;
+  this.x_ += this.xVelocity_ * timeDiff;
+  var collisionRect = this.mapLayer_.getCollision(this);
+  if (collisionRect) {
+    this.x_ = this.xVelocity_ >= 0 ? collisionRect.left : collisionRect.right;
+    this.xVelocity_ = -this.xVelocity_ * bounceFactor;
   }
 
-  this.y_ += this.speedY_ * timeDiff;
-
-  if (this.mapLayer_.isCollision(this.x_, this.y_)) {
-    // TODO(sharvil): setting the 'y' position like this to undo
-    // the previous update is terribly wrong. Remove when full rect
-    // collision detection is in.
-    this.y_ -= this.speedY_ * timeDiff;
-    this.speedY_ = -this.speedY_ * bounceFactor;
+  this.y_ += this.yVelocity_ * timeDiff;
+  collisionRect = this.mapLayer_.getCollision(this);
+  if (collisionRect) {
+    this.y_ = this.yVelocity_ >= 0 ? collisionRect.top : collisionRect.bottom;
+    this.yVelocity_ = -this.yVelocity_ * bounceFactor;
   }
 
   this.camera_.setPosition(Math.floor(this.x_), Math.floor(this.y_));
@@ -157,7 +150,7 @@ dotprod.Player.prototype.update = function(timeDiff) {
 /**
  * @param {!dotprod.Camera} camera
  */
-dotprod.Player.prototype.render = function(camera) {
+dotprod.sprites.Player.prototype.render = function(camera) {
   var tileNum = Math.floor(this.angleInRadians_ / (2 * Math.PI) * this.image_.getNumTiles());
   var dimensions = camera.getDimensions();
   this.image_.render(camera.getContext(), Math.floor((dimensions.width - this.image_.getTileWidth()) / 2), Math.floor((dimensions.height - this.image_.getTileHeight()) / 2), tileNum);

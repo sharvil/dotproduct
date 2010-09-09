@@ -12,7 +12,9 @@
       "rotationRadiansPerTick": 0.05,
       "speedPixelsPerTick": 5,
       "accelerationPerTick": 0.035,
-      "bounceFactor": 0.5
+      "bounceFactor": 0.5,
+      "xRadius": 14,
+      "yRadius": 14
     },
 
     {
@@ -20,7 +22,9 @@
       "rotationRadiansPerTick": 0.10,
       "speedPixelsPerTick": 10,
       "accelerationPerTick": 0.055,
-      "bounceFactor": 0.3
+      "bounceFactor": 0.3,
+      "xRadius": 14,
+      "yRadius": 14
     }
   ]
 }
