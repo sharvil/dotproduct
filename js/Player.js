@@ -14,7 +14,7 @@ goog.require('dotprod.layers.MapLayer');
  * @constructor
  * @param {!dotprod.Game} game
  * @param {!dotprod.Camera} camera
- * @param {!dotprod.MapLayer} mapLayer
+ * @param {!dotprod.layers.MapLayer} mapLayer
  */
 dotprod.Player = function(game, camera, mapLayer) {
   /**
