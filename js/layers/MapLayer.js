@@ -10,7 +10,7 @@ goog.require('goog.events');
 goog.require('dotprod.Camera');
 goog.require('dotprod.GameConfig');
 goog.require('dotprod.layers.Layer');
-goog.require('dotprod.layers.Stars');
+goog.require('dotprod.layers.StarLayer');
 goog.require('dotprod.Map');
 goog.require('dotprod.ResourceManager');
 
@@ -27,9 +27,9 @@ dotprod.layers.MapLayer = function(game) {
   this.game_ = game;
 
   /**
-   * @type {!dotprod.layers.Stars}
+   * @type {!dotprod.layers.StarLayer}
    */
-  this.stars_ = new dotprod.layers.Stars();
+  this.starLayer_ = new dotprod.layers.StarLayer();
 
   /**
    * @type {!dotprod.TiledImage}
@@ -87,7 +87,7 @@ dotprod.layers.MapLayer.prototype.render = function(camera) {
     context.fillStyle = 'rgb(0, 0, 0)';
     context.fillRect(0, 0, dimensions.width, dimensions.height);
 
-    this.stars_.render(context, dimensions.x, dimensions.y, dimensions.width, dimensions.height);
+    this.starLayer_.render(camera);
 
     var halfWidth = Math.floor(dimensions.width / 2);
     var halfHeight = Math.floor(dimensions.height / 2);
@@ -98,13 +98,8 @@ dotprod.layers.MapLayer.prototype.render = function(camera) {
     var numVertTiles = Math.ceil(dimensions.height / tileHeight);
 
     // Don't render tiles before 0th index.
-    if (topTile < 0) {
-      topTile = 0;
-    }
-
-    if (leftTile < 0) {
-      leftTile = 0;
-    }
+    topTile = Math.max(topTile, 0);
+    leftTile = Math.max(leftTile, 0);
 
     // Don't draw tiles past the map width/height.
     if (topTile + numVertTiles >= this.map_.getHeight()) {
