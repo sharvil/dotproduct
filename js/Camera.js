@@ -49,10 +49,10 @@ dotprod.Camera.prototype.getDimensions = function() {
     y: this.y_,
     width: this.context_.canvas.width,
     height: this.context_.canvas.height,
-    left: this.x_,
-    right: this.x_ + this.context_.canvas.width,
-    top: this.y_,
-    bottom: this.y_ + this.context_.canvas.height
+    left: this.x_ - this.context_.canvas.width / 2,
+    right: this.x_ + this.context_.canvas.width / 2,
+    top: this.y_ - this.context_.canvas.height / 2,
+    bottom: this.y_ + this.context_.canvas.height / 2
   };
 };
 
