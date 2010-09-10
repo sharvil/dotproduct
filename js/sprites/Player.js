@@ -128,7 +128,7 @@ dotprod.sprites.Player.prototype.update = function(timeDiff) {
 
   if (keyboard.isKeyPressed(goog.events.KeyCodes.CTRL)) {
     if (now - this.projectileFireTime_ > 300) {
-      var front = this.getPoint(0, -1);
+      var front = this.getPoint(0, 1);
       this.projectileLayer_.addProjectile(this.name_, new dotprod.sprites.Bullet(this.mapLayer_, front.x, front.y, this.xVelocity_, this.yVelocity_));
       this.projectileFireTime_ = now;
     }
