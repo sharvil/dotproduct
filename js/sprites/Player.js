@@ -62,12 +62,6 @@ dotprod.sprites.Player = function(game, camera, mapLayer, projectileLayer, name)
   this.ship_ = 0;
 
   /**
-   * @type {!dotprod.Vector}
-   * @private
-   */
-  this.velocity_ = new dotprod.Vector(0, 0);
-
-  /**
    * @type {!dotprod.TiledImage}
    * @private
    */
@@ -124,7 +118,7 @@ dotprod.sprites.Player.prototype.update = function(timeDiff) {
     if (now - this.projectileFireTime_ > 300) {
       var front = new dotprod.Vector(0, -this.yRadius_).rotate(this.angleInRadians_).add(this.position_);
       var velocity = this.velocity_.add(dotprod.Vector.fromPolar(3, this.angleInRadians_));
-      this.projectileLayer_.addProjectile(this.name_, new dotprod.sprites.Bullet(this.mapLayer_, front.getX(), front.getY(), velocity));
+      this.projectileLayer_.addProjectile(this.name_, new dotprod.sprites.Bullet(this.mapLayer_, front, velocity));
       this.projectileFireTime_ = now;
     }
   }

@@ -18,6 +18,12 @@ dotprod.sprites.Sprite = function() {
   this.position_ = new dotprod.Vector(0, 0);
 
   /**
+   * @type {!dotprod.Vector}
+   * @protected
+   */
+  this.velocity_ = new dotprod.Vector(0, 0);
+
+  /**
    * @type {number}
    * @protected
    */

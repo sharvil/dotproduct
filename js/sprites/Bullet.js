@@ -14,11 +14,10 @@ goog.require('dotprod.Vector');
  * @constructor
  * @extends {dotprod.sprites.Sprite}
  * @param {!dotprod.layers.MapLayer} mapLayer
- * @param {number} x
- * @param {number} y
+ * @param {!dotprod.Vector} position
  * @param {!dotprod.Vector} velocity
  */
-dotprod.sprites.Bullet = function(mapLayer, x, y, velocity) {
+dotprod.sprites.Bullet = function(mapLayer, position, velocity) {
   dotprod.sprites.Sprite.call(this);
 
   /**
@@ -33,12 +32,7 @@ dotprod.sprites.Bullet = function(mapLayer, x, y, velocity) {
    */
   this.lifetime_ = 500;
 
-  this.position_ = new dotprod.Vector(x, y);
-
-  /**
-   * @type {!dotprod.Vector}
-   * @private
-   */
+  this.position_ = position;
   this.velocity_ = velocity;
 };
 goog.inherits(dotprod.sprites.Bullet, dotprod.sprites.Sprite);
