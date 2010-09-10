@@ -33,8 +33,7 @@ dotprod.sprites.Bullet = function(mapLayer, x, y, velocity) {
    */
   this.lifetime_ = 500;
 
-  this.x_ = x;
-  this.y_ = y;
+  this.position_ = new dotprod.Vector(x, y);
 
   /**
    * @type {!dotprod.Vector}
@@ -67,18 +66,19 @@ dotprod.sprites.Bullet.prototype.update = function(timeDiff) {
     return;
   }
 
-  this.x_ += this.velocity_.getX() * timeDiff;
+  this.position_ = this.position_.add(this.velocity_.getXComponent().scale(timeDiff));
   var collision = this.mapLayer_.getCollision(this);
   if (collision) {
     var xVel = this.velocity_.getX();
-    this.x_ = xVel >= 0 ? collision.left : collision.right;
+    this.position_ = new dotprod.Vector(xVel >= 0 ? collision.left : collision.right, this.position_.getY());
     this.velocity_ = new dotprod.Vector(-xVel, this.velocity_.getY());
   }
-  this.y_ += this.velocity_.getY() * timeDiff;
+
+  this.position_ = this.position_.add(this.velocity_.getYComponent().scale(timeDiff));
   collision = this.mapLayer_.getCollision(this);
   if (collision) {
     var yVel = this.velocity_.getY();
-    this.y_ = yVel >= 0 ? collision.top : collision.bottom;
+    this.position_ = new dotprod.Vector(this.position_.getX(), yVel >= 0 ? collision.top : collision.bottom);
     this.velocity_ = new dotprod.Vector(this.velocity_.getX(), -yVel);
   }
 };
@@ -94,8 +94,8 @@ dotprod.sprites.Bullet.prototype.render = function(camera) {
   var context = camera.getContext();
   var dimensions = camera.getDimensions();
 
-  var x = this.x_ - dimensions.left;
-  var y = this.y_ - dimensions.top;
+  var x = this.position_.getX() - dimensions.left;
+  var y = this.position_.getY() - dimensions.top;
 
   if (x + dotprod.sprites.Bullet.RADIUS_ < 0 || y + dotprod.sprites.Bullet.RADIUS_ < 0 || x >= dimensions.width || y >= dimensions.height) {
     return;

@@ -99,8 +99,7 @@ goog.inherits(dotprod.sprites.Player, dotprod.sprites.Sprite);
  * @param {number} ship
  */
 dotprod.sprites.Player.prototype.setShip = function(ship) {
-  this.x_ = 8192;
-  this.y_ = 8192;
+  this.position_ = new dotprod.Vector(8192, 8192);
   this.xRadius_ = this.settings_['ships'][this.ship_]['xRadius'];
   this.yRadius_ = this.settings_['ships'][this.ship_]['yRadius'];
   this.ship_ = ship;
@@ -123,7 +122,7 @@ dotprod.sprites.Player.prototype.update = function(timeDiff) {
 
   if (keyboard.isKeyPressed(goog.events.KeyCodes.CTRL)) {
     if (now - this.projectileFireTime_ > 300) {
-      var front = new dotprod.Vector(0, -this.yRadius_).rotate(this.angleInRadians_).add(new dotprod.Vector(this.x_, this.y_));
+      var front = new dotprod.Vector(0, -this.yRadius_).rotate(this.angleInRadians_).add(this.position_);
       var velocity = this.velocity_.add(dotprod.Vector.fromPolar(3, this.angleInRadians_));
       this.projectileLayer_.addProjectile(this.name_, new dotprod.sprites.Bullet(this.mapLayer_, front.getX(), front.getY(), velocity));
       this.projectileFireTime_ = now;
@@ -152,23 +151,23 @@ dotprod.sprites.Player.prototype.update = function(timeDiff) {
     this.velocity_ = this.velocity_.scale(shipSpeed / magnitude);
   }
 
-  this.x_ += this.velocity_.getX() * timeDiff;
+  this.position_ = this.position_.add(this.velocity_.getXComponent().scale(timeDiff));
   var collisionRect = this.mapLayer_.getCollision(this);
   if (collisionRect) {
     var xVel = this.velocity_.getX();
-    this.x_ = xVel >= 0 ? collisionRect.left : collisionRect.right;
+    this.position_ = new dotprod.Vector(xVel >= 0 ? collisionRect.left : collisionRect.right, this.position_.getY());
     this.velocity_ = new dotprod.Vector(-xVel * bounceFactor, this.velocity_.getY());
   }
 
-  this.y_ += this.velocity_.getY() * timeDiff;
+  this.position_ = this.position_.add(this.velocity_.getYComponent().scale(timeDiff));
   collisionRect = this.mapLayer_.getCollision(this);
   if (collisionRect) {
     var yVel = this.velocity_.getY();
-    this.y_ = yVel >= 0 ? collisionRect.top : collisionRect.bottom;
+    this.position_ = new dotprod.Vector(this.position_.getX(), yVel >= 0 ? collisionRect.top : collisionRect.bottom);
     this.velocity_ = new dotprod.Vector(this.velocity_.getX(), -yVel * bounceFactor);
   }
 
-  this.camera_.setPosition(Math.floor(this.x_), Math.floor(this.y_));
+  this.camera_.setPosition(Math.floor(this.position_.getX()), Math.floor(this.position_.getY()));
 };
 
 /**

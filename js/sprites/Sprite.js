@@ -5,21 +5,17 @@
 
 goog.provide('dotprod.sprites.Sprite');
 
+goog.require('dotprod.Vector');
+
 /**
  * @constructor
  */
 dotprod.sprites.Sprite = function() {
   /**
-   * @type {number}
+   * @type {!dotprod.Vector}
    * @protected
    */
-  this.x_ = 0;
-
-  /**
-   * @type {number}
-   * @protected
-   */
-  this.y_ = 0;
+  this.position_ = new dotprod.Vector(0, 0);
 
   /**
    * @type {number}
@@ -38,13 +34,16 @@ dotprod.sprites.Sprite = function() {
  * return {!Object}
  */
 dotprod.sprites.Sprite.prototype.getDimensions = function() {
+  var x = this.position_.getX();
+  var y = this.position_.getY();
+
   return {
-    x: this.x_,
-    y: this.y_,
-    left: this.x_ - this.xRadius_,
-    right: this.x_ + this.xRadius_,
-    top: this.y_ - this.yRadius_,
-    bottom: this.y_ + this.yRadius_,
+    x: x,
+    y: y,
+    left: x - this.xRadius_,
+    right: x + this.xRadius_,
+    top: y - this.yRadius_,
+    bottom: y + this.yRadius_,
     width: this.xRadius_ * 2,
     height: this.yRadius_ * 2,
     xRadius: this.xRadius_,

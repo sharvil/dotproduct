@@ -57,6 +57,20 @@ dotprod.Vector.prototype.magnitude = function() {
 /**
  * @return {!dotprod.Vector}
  */
+dotprod.Vector.prototype.getXComponent = function() {
+  return new dotprod.Vector(this.x_, 0);
+};
+
+/**
+ * @return {!dotprod.Vector}
+ */
+dotprod.Vector.prototype.getYComponent = function() {
+  return new dotprod.Vector(0, this.y_);
+};
+
+/**
+ * @return {!dotprod.Vector}
+ */
 dotprod.Vector.prototype.add = function(vector) {
   return new dotprod.Vector(this.x_ + vector.x_, this.y_ + vector.y_);
 };
