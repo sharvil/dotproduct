@@ -9,6 +9,8 @@ goog.require('goog.events');
 goog.require('dotprod.Camera');
 goog.require('dotprod.input.Keyboard');
 goog.require('dotprod.layers.MapLayer');
+goog.require('dotprod.layers.ProjectileLayer');
+goog.require('dotprod.sprites.Bullet');
 goog.require('dotprod.sprites.Sprite');
 
 /**
@@ -19,7 +21,7 @@ goog.require('dotprod.sprites.Sprite');
  * @param {!dotprod.layers.MapLayer} mapLayer
  * @param {string} name
  */
-dotprod.sprites.Player = function(game, camera, mapLayer, name) {
+dotprod.sprites.Player = function(game, camera, mapLayer, projectileLayer, name) {
   dotprod.sprites.Sprite.call(this);
 
   /**
@@ -39,6 +41,12 @@ dotprod.sprites.Player = function(game, camera, mapLayer, name) {
    * @private
    */
   this.mapLayer_ = mapLayer;
+
+  /**
+   * @type {!dotprod.layers.ProjectileLayer}
+   * @private
+   */
+  this.projectileLayer_ = projectileLayer;
 
   /**
    * @type {string}
@@ -82,6 +90,12 @@ dotprod.sprites.Player = function(game, camera, mapLayer, name) {
    */
   this.camera_ = camera;
 
+  /**
+   * @type {number}
+   * @private
+   */
+  this.projectileFireTime_ = 0;
+
   this.setShip(0);
 };
 goog.inherits(dotprod.sprites.Player, dotprod.sprites.Sprite);
@@ -110,6 +124,15 @@ dotprod.sprites.Player.prototype.update = function(timeDiff) {
 
   var keyboard = this.game_.getKeyboard();
   var dimensions = this.camera_.getDimensions();
+  var now = goog.now();
+
+  if (keyboard.isKeyPressed(goog.events.KeyCodes.CTRL)) {
+    if (now - this.projectileFireTime_ > 300) {
+      var front = this.getPoint(0, -1);
+      this.projectileLayer_.addProjectile(this.name_, new dotprod.sprites.Bullet(this.mapLayer_, front.x, front.y, this.xVelocity_, this.yVelocity_));
+      this.projectileFireTime_ = now;
+    }
+  }
 
   if (keyboard.isKeyPressed(goog.events.KeyCodes.LEFT)) {
     this.angleInRadians_ -= timeDiff * shipRotation;
@@ -173,4 +196,22 @@ dotprod.sprites.Player.prototype.render = function(camera) {
     context.textAlign = 'center';
     context.fillText(this.name_, dimensions.width / 2, dimensions.height / 2 + this.image_.getTileHeight());
   context.restore();
+};
+
+/**
+ * Given x, y in [-1, 1], this function returns a point (x, y) in pixel
+ * coordinates on the ship assuming a cartesian origin at this.x_, this.y_
+ * under rotation by this.angleInRadians_.
+ * @param {number} x
+ * @param {number} y
+ * @return {!Object}
+ */
+dotprod.sprites.Player.prototype.getPoint = function(x, y) {
+  x = Math.min(Math.max(-1, x), 1);
+  y = Math.min(Math.max(-1, y), 1);
+
+  return {
+    x: this.x_ + Math.sin(this.angleInRadians_) * (this.xRadius_ * x + this.yRadius_ * y),
+    y: this.y_ + Math.cos(this.angleInRadians_) * (this.xRadius_ * x - this.yRadius_ * y)
+  };
 };
