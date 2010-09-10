@@ -112,6 +112,13 @@ dotprod.Game.ANIMATION_PERIOD_ = 10;
 
 /**
  * @const
+ * @type {number}
+ * @private
+ */
+dotprod.Game.MAX_TICKS_PER_FRAME_ = 150;
+
+/**
+ * @const
  * @type {string}
  * @private
  */
@@ -163,17 +170,21 @@ dotprod.Game.prototype.getConfig = function() {
  */
 dotprod.Game.prototype.renderingLoop_ = function() {
   var curTime = goog.now();
-  var timeDiff = Math.floor((curTime - this.lastTime_ + this.tickResidue_) / 10);
+  var timeDiff = Math.floor((curTime - this.lastTime_ + this.tickResidue_) / dotprod.Game.ANIMATION_PERIOD_);
 
-  this.mapLayer_.update(timeDiff);
-  this.projectileLayer_.update(timeDiff);
-  this.shipLayer_.update(timeDiff);
+  timeDiff = Math.min(timeDiff, dotprod.Game.MAX_TICKS_PER_FRAME_);
+
+  for (var i = 0; i < timeDiff; ++i) {
+    this.mapLayer_.update(1);
+    this.projectileLayer_.update(1);
+    this.shipLayer_.update(1);
+  }
 
   this.mapLayer_.render(this.camera_);
   this.projectileLayer_.render(this.camera_);
   this.shipLayer_.render(this.camera_);
 
   this.tickResidue_ += curTime - this.lastTime_;
-  this.tickResidue_ -= timeDiff * 10;
+  this.tickResidue_ -= timeDiff * dotprod.Game.ANIMATION_PERIOD_;
   this.lastTime_ = curTime;
 };
