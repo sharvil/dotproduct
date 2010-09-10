@@ -14,7 +14,11 @@
       "accelerationPerTick": 0.035,
       "bounceFactor": 0.5,
       "xRadius": 14,
-      "yRadius": 14
+      "yRadius": 14,
+      "bullet": {
+        "speed": 3,
+        "fireDelay": 30
+      }
     },
 
     {
@@ -24,7 +28,11 @@
       "accelerationPerTick": 0.055,
       "bounceFactor": 0.3,
       "xRadius": 14,
-      "yRadius": 14
+      "yRadius": 14,
+      "bullet": {
+        "speed": 3,
+        "fireDelay": 10
+      }
     }
   ]
 }

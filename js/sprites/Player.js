@@ -62,6 +62,12 @@ dotprod.sprites.Player = function(game, camera, mapLayer, projectileLayer, name)
   this.ship_ = 0;
 
   /**
+   * @type {!Object}
+   * @private
+   */
+  this.shipSettings_ = this.settings_['ships'][this.ship_];
+
+  /**
    * @type {!dotprod.TiledImage}
    * @private
    */
@@ -83,7 +89,7 @@ dotprod.sprites.Player = function(game, camera, mapLayer, projectileLayer, name)
    * @type {number}
    * @private
    */
-  this.projectileFireTime_ = 0;
+  this.projectileFireDelay_ = 0;
 
   this.setShip(0);
 };
@@ -93,10 +99,12 @@ goog.inherits(dotprod.sprites.Player, dotprod.sprites.Sprite);
  * @param {number} ship
  */
 dotprod.sprites.Player.prototype.setShip = function(ship) {
-  this.position_ = new dotprod.Vector(8192, 8192);
-  this.xRadius_ = this.settings_['ships'][this.ship_]['xRadius'];
-  this.yRadius_ = this.settings_['ships'][this.ship_]['yRadius'];
   this.ship_ = ship;
+  this.shipSettings_ = this.settings_['ships'][this.ship_];
+
+  this.position_ = new dotprod.Vector(8192, 8192);
+  this.xRadius_ = this.shipSettings_['xRadius'];
+  this.yRadius_ = this.shipSettings_['yRadius'];
   this.image_ = this.game_.getResourceManager().getTiledImage('ship' + this.ship_);
 };
 
@@ -104,22 +112,25 @@ dotprod.sprites.Player.prototype.setShip = function(ship) {
  * @param {number} timeDiff
  */
 dotprod.sprites.Player.prototype.update = function(timeDiff) {
-  var shipSettings = this.settings_['ships'][this.ship_];
-  var shipRotation = shipSettings['rotationRadiansPerTick'];
-  var shipSpeed = shipSettings['speedPixelsPerTick'];
-  var acceleration = shipSettings['accelerationPerTick'];
-  var bounceFactor = shipSettings['bounceFactor'];
+  var shipRotation = this.shipSettings_['rotationRadiansPerTick'];
+  var shipSpeed = this.shipSettings_['speedPixelsPerTick'];
+  var acceleration = this.shipSettings_['accelerationPerTick'];
+  var bounceFactor = this.shipSettings_['bounceFactor'];
+  var bulletFireDelay = this.shipSettings_['bullet']['fireDelay'];
+  var bulletSpeed = this.shipSettings_['bullet']['speed'];
 
   var keyboard = this.game_.getKeyboard();
   var dimensions = this.camera_.getDimensions();
   var now = goog.now();
 
-  if (keyboard.isKeyPressed(goog.events.KeyCodes.CTRL)) {
-    if (now - this.projectileFireTime_ > 300) {
+  this.projectileFireDelay_ = Math.max(this.projectileFireDelay_ - 1, 0);
+
+  if (this.projectileFireDelay_ <= 0) {
+    if (keyboard.isKeyPressed(goog.events.KeyCodes.CTRL)) {
       var front = new dotprod.Vector(0, -this.yRadius_).rotate(this.angleInRadians_).add(this.position_);
-      var velocity = this.velocity_.add(dotprod.Vector.fromPolar(3, this.angleInRadians_));
+      var velocity = this.velocity_.add(dotprod.Vector.fromPolar(bulletSpeed, this.angleInRadians_));
       this.projectileLayer_.addProjectile(this.name_, new dotprod.sprites.Bullet(this.mapLayer_, front, velocity));
-      this.projectileFireTime_ = now;
+      this.projectileFireDelay_ = bulletFireDelay;
     }
   }
 
