@@ -8,21 +8,21 @@ goog.provide('dotprod.sprites.Bullet');
 goog.require('dotprod.Camera');
 goog.require('dotprod.layers.MapLayer');
 goog.require('dotprod.sprites.Sprite');
+goog.require('dotprod.Vector');
 
 /**
  * @constructor
  * @extends {dotprod.sprites.Sprite}
- * @param {!dotprod.MapLayer} mapLayer
+ * @param {!dotprod.layers.MapLayer} mapLayer
  * @param {number} x
  * @param {number} y
- * @param {number} xVel
- * @param {number} yVel
+ * @param {!dotprod.Vector} velocity
  */
-dotprod.sprites.Bullet = function(mapLayer, x, y, xVel, yVel) {
+dotprod.sprites.Bullet = function(mapLayer, x, y, velocity) {
   dotprod.sprites.Sprite.call(this);
 
   /**
-   * @type {!dotprod.MapLayer}
+   * @type {!dotprod.layers.MapLayer}
    * @private
    */
   this.mapLayer_ = mapLayer;
@@ -36,8 +36,11 @@ dotprod.sprites.Bullet = function(mapLayer, x, y, xVel, yVel) {
   this.x_ = x;
   this.y_ = y;
 
-  this.xVelocity_ = xVel;
-  this.yVelocity_ = yVel;
+  /**
+   * @type {!dotprod.Vector}
+   * @private
+   */
+  this.velocity_ = velocity;
 };
 goog.inherits(dotprod.sprites.Bullet, dotprod.sprites.Sprite);
 
@@ -46,7 +49,7 @@ goog.inherits(dotprod.sprites.Bullet, dotprod.sprites.Sprite);
  * @private
  * @const
  */
-dotprod.sprites.Bullet.RADIUS_ = 10;
+dotprod.sprites.Bullet.RADIUS_ = 5;
 
 /**
  * @return {boolean}
@@ -57,30 +60,31 @@ dotprod.sprites.Bullet.prototype.isAlive = function() {
 
 /**
  * @param {number} timeDiff
- * @override
  */
 dotprod.sprites.Bullet.prototype.update = function(timeDiff) {
   this.lifetime_ -= timeDiff;
   if (!this.isAlive()) {
     return;
   }
-  this.x_ += this.xVelocity_ * timeDiff;
+
+  this.x_ += this.velocity_.getX() * timeDiff;
   var collision = this.mapLayer_.getCollision(this);
   if (collision) {
-    this.x_ = this.xVelocity_ >= 0 ? collision.left : collision.right;
-    this.xVelocity_ = -this.xVelocity_;
+    var xVel = this.velocity_.getX();
+    this.x_ = xVel >= 0 ? collision.left : collision.right;
+    this.velocity_ = new dotprod.Vector(-xVel, this.velocity_.getY());
   }
-  this.y_ += this.yVelocity_ * timeDiff;
+  this.y_ += this.velocity_.getY() * timeDiff;
   collision = this.mapLayer_.getCollision(this);
   if (collision) {
-    this.y_ = this.yVelocity_ >= 0 ? collision.top : collision.bottom;
-    this.yVelocity_ = -this.yVelocity_;
+    var yVel = this.velocity_.getY();
+    this.y_ = yVel >= 0 ? collision.top : collision.bottom;
+    this.velocity_ = new dotprod.Vector(this.velocity_.getX(), -yVel);
   }
 };
 
 /**
  * @param {!dotprod.Camera} camera
- * @override
  */
 dotprod.sprites.Bullet.prototype.render = function(camera) {
   if (!this.isAlive()) {

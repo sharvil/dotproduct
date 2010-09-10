@@ -70,7 +70,7 @@ dotprod.Game = function(protocol, resourceManager, gameConfig) {
   this.mapLayer_ = new dotprod.layers.MapLayer(this);
 
   /**
-   * @type {!dotprod.ProjectileLayer}
+   * @type {!dotprod.layers.ProjectileLayer}
    * @private
    */
   this.projectileLayer_ = new dotprod.layers.ProjectileLayer();

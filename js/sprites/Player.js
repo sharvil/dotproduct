@@ -12,6 +12,7 @@ goog.require('dotprod.layers.MapLayer');
 goog.require('dotprod.layers.ProjectileLayer');
 goog.require('dotprod.sprites.Bullet');
 goog.require('dotprod.sprites.Sprite');
+goog.require('dotprod.Vector');
 
 /**
  * @constructor
@@ -61,16 +62,10 @@ dotprod.sprites.Player = function(game, camera, mapLayer, projectileLayer, name)
   this.ship_ = 0;
 
   /**
-   * @type {number}
+   * @type {!dotprod.Vector}
    * @private
    */
-  this.xVelocity_ = 0;
-
-  /**
-   * @type {number}
-   * @private
-   */
-  this.yVelocity_ = 0;
+  this.velocity_ = new dotprod.Vector(0, 0);
 
   /**
    * @type {!dotprod.TiledImage}
@@ -128,8 +123,9 @@ dotprod.sprites.Player.prototype.update = function(timeDiff) {
 
   if (keyboard.isKeyPressed(goog.events.KeyCodes.CTRL)) {
     if (now - this.projectileFireTime_ > 300) {
-      var front = this.getPoint(0, 1);
-      this.projectileLayer_.addProjectile(this.name_, new dotprod.sprites.Bullet(this.mapLayer_, front.x, front.y, this.xVelocity_, this.yVelocity_));
+      var front = new dotprod.Vector(0, -this.yRadius_).rotate(this.angleInRadians_).add(new dotprod.Vector(this.x_, this.y_));
+      var velocity = this.velocity_.add(dotprod.Vector.fromPolar(3, this.angleInRadians_));
+      this.projectileLayer_.addProjectile(this.name_, new dotprod.sprites.Bullet(this.mapLayer_, front.getX(), front.getY(), velocity));
       this.projectileFireTime_ = now;
     }
   }
@@ -145,33 +141,31 @@ dotprod.sprites.Player.prototype.update = function(timeDiff) {
   }
 
   if (keyboard.isKeyPressed(goog.events.KeyCodes.UP)) {
-    this.xVelocity_ += Math.sin(this.angleInRadians_) * acceleration * timeDiff;
-    this.yVelocity_ -= Math.cos(this.angleInRadians_) * acceleration * timeDiff;
+    this.velocity_ = this.velocity_.add(dotprod.Vector.fromPolar(acceleration * timeDiff, this.angleInRadians_));
   } else if (keyboard.isKeyPressed(goog.events.KeyCodes.DOWN)) {
-    this.xVelocity_ -= Math.sin(this.angleInRadians_) * acceleration * timeDiff;
-    this.yVelocity_ += Math.cos(this.angleInRadians_) * acceleration * timeDiff;
+    this.velocity_ = this.velocity_.subtract(dotprod.Vector.fromPolar(acceleration * timeDiff, this.angleInRadians_));
   }
 
   // Magnitude of speed is greater than maximum ship speed - clamp.
-  var magSquared = this.xVelocity_ * this.xVelocity_ + this.yVelocity_ * this.yVelocity_;
-  if (magSquared >= shipSpeed * shipSpeed) {
-    var magnitude = Math.sqrt(magSquared);
-    this.xVelocity_ = this.xVelocity_ * shipSpeed / magnitude;
-    this.yVelocity_ = this.yVelocity_ * shipSpeed / magnitude;
+  var magnitude = this.velocity_.magnitude();
+  if (magnitude >= shipSpeed) {
+    this.velocity_ = this.velocity_.scale(shipSpeed / magnitude);
   }
 
-  this.x_ += this.xVelocity_ * timeDiff;
+  this.x_ += this.velocity_.getX() * timeDiff;
   var collisionRect = this.mapLayer_.getCollision(this);
   if (collisionRect) {
-    this.x_ = this.xVelocity_ >= 0 ? collisionRect.left : collisionRect.right;
-    this.xVelocity_ = -this.xVelocity_ * bounceFactor;
+    var xVel = this.velocity_.getX();
+    this.x_ = xVel >= 0 ? collisionRect.left : collisionRect.right;
+    this.velocity_ = new dotprod.Vector(-xVel * bounceFactor, this.velocity_.getY());
   }
 
-  this.y_ += this.yVelocity_ * timeDiff;
+  this.y_ += this.velocity_.getY() * timeDiff;
   collisionRect = this.mapLayer_.getCollision(this);
   if (collisionRect) {
-    this.y_ = this.yVelocity_ >= 0 ? collisionRect.top : collisionRect.bottom;
-    this.yVelocity_ = -this.yVelocity_ * bounceFactor;
+    var yVel = this.velocity_.getY();
+    this.y_ = yVel >= 0 ? collisionRect.top : collisionRect.bottom;
+    this.velocity_ = new dotprod.Vector(this.velocity_.getX(), -yVel * bounceFactor);
   }
 
   this.camera_.setPosition(Math.floor(this.x_), Math.floor(this.y_));
@@ -196,22 +190,4 @@ dotprod.sprites.Player.prototype.render = function(camera) {
     context.textAlign = 'center';
     context.fillText(this.name_, dimensions.width / 2, dimensions.height / 2 + this.image_.getTileHeight());
   context.restore();
-};
-
-/**
- * Given x, y in [-1, 1], this function returns a point (x, y) in pixel
- * coordinates on the ship assuming a cartesian origin at this.x_, this.y_
- * under rotation by this.angleInRadians_.
- * @param {number} x
- * @param {number} y
- * @return {!Object}
- */
-dotprod.sprites.Player.prototype.getPoint = function(x, y) {
-  x = Math.min(Math.max(-1, x), 1);
-  y = Math.min(Math.max(-1, y), 1);
-
-  return {
-    x: this.x_ + Math.sin(this.angleInRadians_) * (this.xRadius_ * x + this.yRadius_ * y),
-    y: this.y_ + Math.cos(this.angleInRadians_) * (this.xRadius_ * x - this.yRadius_ * y)
-  };
 };

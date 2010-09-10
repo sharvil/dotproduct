@@ -11,7 +11,7 @@ goog.require('dotprod.sprites.Sprite');
 
 /**
  * @constructor
- * @implements {goog.layers.Layer}
+ * @implements {dotprod.layers.Layer}
  */
 dotprod.layers.ProjectileLayer = function() {
   /**
@@ -22,7 +22,7 @@ dotprod.layers.ProjectileLayer = function() {
 };
 
 /**
- * @param {string} name
+ * @param {string} player
  * @param {!dotprod.sprites.Sprite} projectile
  */
 dotprod.layers.ProjectileLayer.prototype.addProjectile = function(player, projectile) {
