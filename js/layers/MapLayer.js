@@ -10,7 +10,6 @@ goog.require('goog.events');
 goog.require('dotprod.Camera');
 goog.require('dotprod.GameConfig');
 goog.require('dotprod.layers.Layer');
-goog.require('dotprod.layers.StarLayer');
 goog.require('dotprod.Map');
 goog.require('dotprod.ResourceManager');
 goog.require('dotprod.sprites.Sprite');
@@ -26,11 +25,6 @@ dotprod.layers.MapLayer = function(game) {
    * @private
    */
   this.game_ = game;
-
-  /**
-   * @type {!dotprod.layers.StarLayer}
-   */
-  this.starLayer_ = new dotprod.layers.StarLayer();
 
   /**
    * @type {!dotprod.TiledImage}
@@ -143,11 +137,6 @@ dotprod.layers.MapLayer.prototype.render = function(camera) {
   var tileHeight = this.tileset_.getTileHeight();
 
   context.save();
-    context.fillStyle = 'rgb(0, 0, 0)';
-    context.fillRect(0, 0, dimensions.width, dimensions.height);
-
-    this.starLayer_.render(camera);
-
     var halfWidth = Math.floor(dimensions.width / 2);
     var halfHeight = Math.floor(dimensions.height / 2);
 

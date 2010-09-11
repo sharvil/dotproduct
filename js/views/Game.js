@@ -13,6 +13,7 @@ goog.require('dotprod.input.Keyboard');
 goog.require('dotprod.layers.MapLayer');
 goog.require('dotprod.layers.ProjectileLayer');
 goog.require('dotprod.layers.ShipLayer');
+goog.require('dotprod.layers.StarLayer');
 goog.require('dotprod.sprites.Player');
 goog.require('dotprod.Protocol');
 goog.require('dotprod.ResourceManager');
@@ -63,6 +64,12 @@ dotprod.Game = function(protocol, resourceManager, gameConfig) {
    * @private
    */
   this.camera_ = new dotprod.Camera(this, this.canvas_.getContext('2d'))
+
+  /**
+   * @type {!dotprod.layers.StarLayer}
+   * @private
+   */
+  this.starLayer_ = new dotprod.layers.StarLayer();
 
   /**
    * @type {!dotprod.layers.MapLayer}
@@ -175,14 +182,21 @@ dotprod.Game.prototype.renderingLoop_ = function() {
   timeDiff = Math.min(timeDiff, dotprod.Game.MAX_TICKS_PER_FRAME_);
 
   for (var i = 0; i < timeDiff; ++i) {
+    this.starLayer_.update(1);
     this.mapLayer_.update(1);
     this.projectileLayer_.update(1);
     this.shipLayer_.update(1);
   }
 
-  this.mapLayer_.render(this.camera_);
-  this.projectileLayer_.render(this.camera_);
-  this.shipLayer_.render(this.camera_);
+  var context = this.camera_.getContext();
+  context.save();
+    context.fillStyle = '#000';
+    context.fillRect(0, 0, this.canvas_.width, this.canvas_.height);
+    this.starLayer_.render(this.camera_);
+    this.mapLayer_.render(this.camera_);
+    this.projectileLayer_.render(this.camera_);
+    this.shipLayer_.render(this.camera_);
+  context.restore();
 
   this.tickResidue_ += curTime - this.lastTime_;
   this.tickResidue_ -= timeDiff * dotprod.Game.ANIMATION_PERIOD_;

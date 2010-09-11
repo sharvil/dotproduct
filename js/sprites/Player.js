@@ -121,7 +121,6 @@ dotprod.sprites.Player.prototype.update = function(timeDiff) {
 
   var keyboard = this.game_.getKeyboard();
   var dimensions = this.camera_.getDimensions();
-  var now = goog.now();
 
   this.projectileFireDelay_ = Math.max(this.projectileFireDelay_ - 1, 0);
 
