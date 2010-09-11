@@ -10,6 +10,7 @@ goog.require('goog.dom');
 goog.require('dotprod.Camera');
 goog.require('dotprod.GameConfig');
 goog.require('dotprod.input.Keyboard');
+goog.require('dotprod.layers.NotificationLayer');
 goog.require('dotprod.layers.MapLayer');
 goog.require('dotprod.layers.ProjectileLayer');
 goog.require('dotprod.layers.ShipLayer');
@@ -89,6 +90,12 @@ dotprod.Game = function(protocol, resourceManager, gameConfig) {
    */
   this.shipLayer_ = new dotprod.layers.ShipLayer();
   this.shipLayer_.addShip(new dotprod.sprites.Player(this, this.camera_, this.mapLayer_, this.projectileLayer_, this.gameConfig_.getSettings()['name']));
+
+  /**
+   * @type {!dotprod.layers.NotificationLayer}
+   * @private
+   */
+  this.notificationLayer_ = new dotprod.layers.NotificationLayer();
 
   /**
    * @type {number|null}
@@ -186,6 +193,7 @@ dotprod.Game.prototype.renderingLoop_ = function() {
     this.mapLayer_.update(1);
     this.projectileLayer_.update(1);
     this.shipLayer_.update(1);
+    this.notificationLayer_.update(1);
   }
 
   var context = this.camera_.getContext();
@@ -196,6 +204,7 @@ dotprod.Game.prototype.renderingLoop_ = function() {
     this.mapLayer_.render(this.camera_);
     this.projectileLayer_.render(this.camera_);
     this.shipLayer_.render(this.camera_);
+    this.notificationLayer_.render(this.camera_);
   context.restore();
 
   this.tickResidue_ += curTime - this.lastTime_;
