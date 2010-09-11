@@ -8,6 +8,7 @@ goog.provide('dotprod.Protocol.S2CPacketType');
 
 goog.require('goog.debug.Logger');
 goog.require('goog.debug.Logger.Level');
+goog.require('dotprod.Vector');
 
 /**
  * @constructor
@@ -53,14 +54,19 @@ dotprod.Protocol = function(url) {
  * @private
  */
 dotprod.Protocol.C2SPacketType_ = {
-  LOGIN: 1
+  LOGIN: 1,
+  BEGIN_GAME: 2,
+  POSITION: 3
 };
 
 /**
  * @enum {number}
  */
 dotprod.Protocol.S2CPacketType = {
-  LOGIN_REPLY: 1
+  LOGIN_REPLY: 1,
+  PLAYER_ENTERED: 2,
+  PLAYER_LEFT: 3,
+  PLAYER_POSITION: 4
 };
 
 /**
@@ -76,6 +82,19 @@ dotprod.Protocol.prototype.registerHandler = function(packetType, cb) {
  */
 dotprod.Protocol.prototype.login = function(username) {
   this.send_([dotprod.Protocol.C2SPacketType_.LOGIN, username]);
+};
+
+dotprod.Protocol.prototype.startGame = function() {
+  this.send_([dotprod.Protocol.C2SPacketType_.BEGIN_GAME]);
+};
+
+/**
+ * @param {number} direction
+ * @param {dotprod.Vector} position
+ * @param {dotprod.Vector} velocity
+ */
+dotprod.Protocol.prototype.sendPosition = function(direction, position, velocity) {
+  this.send_([dotprod.Protocol.C2SPacketType_.POSITION, direction, position.getX(), position.getY(), velocity.getX(), velocity.getY()]);
 };
 
 dotprod.Protocol.prototype.onOpen_ = function() {

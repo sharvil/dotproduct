@@ -33,7 +33,7 @@ dotprod.views.LoginView = function(protocol, successCb) {
   this.buttonNode_ = /** @type {!HTMLInputElement} */ (goog.dom.createElement('input'));
   this.buttonNode_.type = 'submit';
   this.buttonNode_.className = dotprod.views.LoginView.CSS_LOGIN_BUTTON_;
-  this.buttonNode_.value = 'Login!';
+  this.buttonNode_.value = 'Play!';
 
   /**
    * @type {!dotprod.Protocol}

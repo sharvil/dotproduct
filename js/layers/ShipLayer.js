@@ -40,6 +40,28 @@ dotprod.layers.ShipLayer.prototype.removeShip = function(ship) {
   }
 };
 
+// TODO(sharvil): super hack!!!!! Fix me!!
+/**
+ * @param {string} name
+ */
+dotprod.layers.ShipLayer.prototype.removeShipByName = function(name) {
+  for (var i = 0; i < this.ships_.length; ++i) {
+    if (this.ships_[i].name_ == name) {
+      this.ships_.splice(i, 1);
+      return;
+    }
+  }
+};
+
+dotprod.layers.ShipLayer.prototype.updateShip = function(name, packet) {
+  for (var i = 0; i < this.ships_.length; ++i) {
+    if (this.ships_[i].name_ == name) {
+      this.ships_[i].positionUpdate(packet);
+      return;
+    }
+  }
+};
+
 /**
  * @param {number} timeDiff
  * @override

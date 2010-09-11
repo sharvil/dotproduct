@@ -16,6 +16,7 @@ goog.require('dotprod.layers.ProjectileLayer');
 goog.require('dotprod.layers.ShipLayer');
 goog.require('dotprod.layers.StarLayer');
 goog.require('dotprod.sprites.Player');
+goog.require('dotprod.sprites.RemotePlayer');
 goog.require('dotprod.Protocol');
 goog.require('dotprod.ResourceManager');
 goog.require('dotprod.views.View');
@@ -114,6 +115,11 @@ dotprod.Game = function(protocol, resourceManager, gameConfig) {
    * @private
    */
   this.tickResidue_ = 0;
+
+  this.protocol_.registerHandler(dotprod.Protocol.S2CPacketType.PLAYER_ENTERED, goog.bind(this.onPlayerEntered_, this));
+  this.protocol_.registerHandler(dotprod.Protocol.S2CPacketType.PLAYER_LEFT, goog.bind(this.onPlayerLeft_, this));
+  this.protocol_.registerHandler(dotprod.Protocol.S2CPacketType.PLAYER_POSITION, goog.bind(this.onPlayerPosition_, this));
+  this.protocol_.startGame();
 };
 goog.inherits(dotprod.Game, dotprod.views.View);
 
@@ -156,6 +162,13 @@ dotprod.Game.prototype.start = function() {
 dotprod.Game.prototype.stop = function() {
   window.clearInterval(this.intervalTimer_);
   this.intervalTimer_ = null;
+};
+
+/**
+ * @return {!dotprod.Protocol}
+ */
+dotprod.Game.prototype.getProtocol = function() {
+  return this.protocol_;
 };
 
 /**
@@ -210,4 +223,33 @@ dotprod.Game.prototype.renderingLoop_ = function() {
   this.tickResidue_ += curTime - this.lastTime_;
   this.tickResidue_ -= timeDiff * dotprod.Game.ANIMATION_PERIOD_;
   this.lastTime_ = curTime;
+};
+
+/**
+ * @param {!Object} packet
+ * @private
+ */
+dotprod.Game.prototype.onPlayerEntered_ = function(packet) {
+  var name = packet[0];
+  this.shipLayer_.addShip(new dotprod.sprites.RemotePlayer(this, this.mapLayer_, name, 0));
+  this.notificationLayer_.addMessage('Player entered: ' + name);
+};
+
+/**
+ * @param {!Object} packet
+ * @private
+ */
+dotprod.Game.prototype.onPlayerLeft_ = function(packet) {
+  var name = packet[0];
+  this.shipLayer_.removeShipByName(name);
+  this.notificationLayer_.addMessage('Player left: ' + name);
+};
+
+/**
+ * @param {!Object} packet
+ * @private
+ */
+dotprod.Game.prototype.onPlayerPosition_ = function(packet) {
+  var name = packet[0];
+  this.shipLayer_.updateShip(name, packet);
 };

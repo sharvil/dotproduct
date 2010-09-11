@@ -92,6 +92,13 @@ dotprod.sprites.Player = function(game, camera, mapLayer, projectileLayer, name)
   this.projectileFireDelay_ = 0;
 
   this.setShip(0);
+
+  // TODO(sharvil): hack - fix me. Don't create a new timer and change frequency of updates
+  // based on player activity (i.e. more frequent updates when accelerating / rotating).
+  var self = this;
+  window.setInterval(function() {
+    self.game_.getProtocol().sendPosition(self.angleInRadians_, self.position_, self.velocity_);
+  }, 250);
 };
 goog.inherits(dotprod.sprites.Player, dotprod.sprites.Sprite);
 

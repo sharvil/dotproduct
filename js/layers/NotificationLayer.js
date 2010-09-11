@@ -82,6 +82,7 @@ dotprod.layers.NotificationLayer.prototype.render = function(camera) {
 
       var opacity = 1.0 - this.messages_[i].ticks / dotprod.layers.NotificationLayer.MESSAGE_PERIOD_;
 
+      // TODO(sharvil): don't hard-code font, font size, color, or text position.
       context.fillStyle = 'rgba(255, 255, 255,' + opacity + ')';
       context.textAlign = 'center';
       context.fillText(this.messages_[i].text, 400, i * 13 + 220);
