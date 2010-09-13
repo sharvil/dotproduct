@@ -6,7 +6,7 @@
 goog.provide('dotprod.ProjectileIndex');
 
 goog.require('goog.array');
-goog.require('dotprod.sprites.Sprite');
+goog.require('dotprod.entities.Entity');
 
 /**
  * @constructor
@@ -20,15 +20,15 @@ dotprod.ProjectileIndex = function() {
 };
 
 /**
- * @param {!dotprod.sprites.Sprite} player
- * @param {!dotprod.sprites.Sprite} projectile
+ * @param {!dotprod.entities.Entity} player
+ * @param {!dotprod.entities.Entity} projectile
  */
 dotprod.ProjectileIndex.prototype.addProjectile = function(player, projectile) {
   this.projectiles_.push({player: player, projectile: projectile});
 };
 
 /**
- * @param {!dotprod.sprites.Sprite} player
+ * @param {!dotprod.entities.Entity} player
  */
 dotprod.ProjectileIndex.prototype.removeProjectiles = function(player) {
   goog.array.removeIf(this.projectiles_, function(element) {
@@ -37,7 +37,7 @@ dotprod.ProjectileIndex.prototype.removeProjectiles = function(player) {
 };
 
 /**
- * @return {!Array.<!dotprod.sprites.Sprite>}
+ * @return {!Array.<!dotprod.entities.Entity>}
  */
 dotprod.ProjectileIndex.prototype.getProjectiles = function() {
   goog.array.removeIf(this.projectiles_, function(element) {

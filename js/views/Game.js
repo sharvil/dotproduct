@@ -8,6 +8,8 @@ goog.provide('dotprod.Game');
 goog.require('goog.debug.ErrorHandler');
 goog.require('goog.dom');
 goog.require('dotprod.Camera');
+goog.require('dotprod.entities.LocalPlayer');
+goog.require('dotprod.entities.RemotePlayer');
 goog.require('dotprod.input.Keyboard');
 goog.require('dotprod.layers.NotificationLayer');
 goog.require('dotprod.layers.MapLayer');
@@ -18,8 +20,6 @@ goog.require('dotprod.Map');
 goog.require('dotprod.Notifications');
 goog.require('dotprod.PlayerIndex');
 goog.require('dotprod.ProjectileIndex');
-goog.require('dotprod.sprites.LocalPlayer');
-goog.require('dotprod.sprites.RemotePlayer');
 goog.require('dotprod.Protocol');
 goog.require('dotprod.ResourceManager');
 goog.require('dotprod.views.View');
@@ -88,7 +88,7 @@ dotprod.Game = function(protocol, resourceManager, settings, mapData) {
    * @private
    */
   this.playerIndex_ = new dotprod.PlayerIndex();
-  this.playerIndex_.addPlayer(new dotprod.sprites.LocalPlayer(this, this.camera_, this.map_, this.projectileIndex_, this.settings_['name']));
+  this.playerIndex_.addPlayer(new dotprod.entities.LocalPlayer(this, this.camera_, this.map_, this.projectileIndex_, this.settings_['name']));
 
   /**
    * @type {!dotprod.Notifications}
@@ -237,7 +237,7 @@ dotprod.Game.prototype.renderingLoop_ = function() {
  */
 dotprod.Game.prototype.onPlayerEntered_ = function(packet) {
   var name = packet[0];
-  this.playerIndex_.addPlayer(new dotprod.sprites.RemotePlayer(this, this.map_, name, 0));
+  this.playerIndex_.addPlayer(new dotprod.entities.RemotePlayer(this, this.map_, name, 0));
   this.notifications_.addMessage('Player entered: ' + name);
 };
 

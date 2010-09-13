@@ -5,6 +5,7 @@
 
 goog.provide('dotprod.Map');
 
+goog.require('dotprod.entities.Entity');
 goog.require('dotprod.TiledImage');
 
 /**
@@ -79,7 +80,7 @@ dotprod.Map.prototype.getTile = function(x, y) {
 };
 
 /**
- * @param {!dotprod.sprites.Sprite} sprite
+ * @param {!dotprod.entities.Entity} sprite
  * @return {Object}
  */
 dotprod.Map.prototype.getCollision = function(sprite) {

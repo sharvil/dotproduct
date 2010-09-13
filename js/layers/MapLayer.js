@@ -11,7 +11,6 @@ goog.require('dotprod.Camera');
 goog.require('dotprod.layers.Layer');
 goog.require('dotprod.Map');
 goog.require('dotprod.ResourceManager');
-goog.require('dotprod.sprites.Sprite');
 
 /**
  * @constructor

@@ -3,14 +3,14 @@
  * @author sharvil.nanavati@gmail.com (Sharvil Nanavati)
  */
 
-goog.provide('dotprod.sprites.Sprite');
+goog.provide('dotprod.entities.Entity');
 
 goog.require('dotprod.Vector');
 
 /**
  * @constructor
  */
-dotprod.sprites.Sprite = function() {
+dotprod.entities.Entity = function() {
   /**
    * @type {!dotprod.Vector}
    * @protected
@@ -39,7 +39,7 @@ dotprod.sprites.Sprite = function() {
 /**
  * return {!Object}
  */
-dotprod.sprites.Sprite.prototype.getDimensions = function() {
+dotprod.entities.Entity.prototype.getDimensions = function() {
   var x = this.position_.getX();
   var y = this.position_.getY();
 

@@ -3,29 +3,29 @@
  * @author sharvil.nanavati@gmail.com (Sharvil Nanavati)
  */
 
-goog.provide('dotprod.sprites.LocalPlayer');
+goog.provide('dotprod.entities.LocalPlayer');
 
 goog.require('goog.events');
 goog.require('dotprod.Camera');
+goog.require('dotprod.entities.Bullet');
+goog.require('dotprod.entities.Player');
 goog.require('dotprod.input.Keyboard');
 goog.require('dotprod.layers.ProjectileLayer');
 goog.require('dotprod.Map');
 goog.require('dotprod.ProjectileIndex');
-goog.require('dotprod.sprites.Bullet');
-goog.require('dotprod.sprites.Sprite');
 goog.require('dotprod.Vector');
 
 /**
  * @constructor
- * @extends {dotprod.sprites.Sprite}
+ * @extends {dotprod.entities.Player}
  * @param {!dotprod.Game} game
  * @param {!dotprod.Camera} camera
  * @param {!dotprod.Map} map
  * @param {!dotprod.ProjectileIndex} projectileIndex
  * @param {string} name
  */
-dotprod.sprites.LocalPlayer = function(game, camera, map, projectileIndex, name) {
-  dotprod.sprites.Sprite.call(this);
+dotprod.entities.LocalPlayer = function(game, camera, map, projectileIndex, name) {
+  dotprod.entities.Player.call(this, name);
 
   /**
    * @type {!dotprod.Game}
@@ -50,12 +50,6 @@ dotprod.sprites.LocalPlayer = function(game, camera, map, projectileIndex, name)
    * @private
    */
   this.projectileIndex_ = projectileIndex;
-
-  /**
-   * @type {string}
-   * @private
-   */
-  this.name_ = name;
 
   /**
    * @type {number}
@@ -102,12 +96,12 @@ dotprod.sprites.LocalPlayer = function(game, camera, map, projectileIndex, name)
     self.game_.getProtocol().sendPosition(self.angleInRadians_, self.position_, self.velocity_);
   }, 250);
 };
-goog.inherits(dotprod.sprites.LocalPlayer, dotprod.sprites.Sprite);
+goog.inherits(dotprod.entities.LocalPlayer, dotprod.entities.Player);
 
 /**
  * @param {number} ship
  */
-dotprod.sprites.LocalPlayer.prototype.setShip = function(ship) {
+dotprod.entities.LocalPlayer.prototype.setShip = function(ship) {
   this.ship_ = ship;
   this.shipSettings_ = this.settings_['ships'][this.ship_];
 
@@ -120,7 +114,7 @@ dotprod.sprites.LocalPlayer.prototype.setShip = function(ship) {
 /**
  * @param {number} timeDiff
  */
-dotprod.sprites.LocalPlayer.prototype.update = function(timeDiff) {
+dotprod.entities.LocalPlayer.prototype.update = function(timeDiff) {
   var shipRotation = this.shipSettings_['rotationRadiansPerTick'];
   var shipSpeed = this.shipSettings_['speedPixelsPerTick'];
   var acceleration = this.shipSettings_['accelerationPerTick'];
@@ -137,7 +131,7 @@ dotprod.sprites.LocalPlayer.prototype.update = function(timeDiff) {
     if (keyboard.isKeyPressed(goog.events.KeyCodes.CTRL)) {
       var front = new dotprod.Vector(0, -this.yRadius_).rotate(this.angleInRadians_).add(this.position_);
       var velocity = this.velocity_.add(dotprod.Vector.fromPolar(bulletSpeed, this.angleInRadians_));
-      this.projectileIndex_.addProjectile(this, new dotprod.sprites.Bullet(this.map_, front, velocity));
+      this.projectileIndex_.addProjectile(this, new dotprod.entities.Bullet(this.map_, front, velocity));
       this.projectileFireDelay_ = bulletFireDelay;
     }
   }
@@ -186,7 +180,7 @@ dotprod.sprites.LocalPlayer.prototype.update = function(timeDiff) {
 /**
  * @param {!dotprod.Camera} camera
  */
-dotprod.sprites.LocalPlayer.prototype.render = function(camera) {
+dotprod.entities.LocalPlayer.prototype.render = function(camera) {
   var tileNum = Math.floor(this.angleInRadians_ / (2 * Math.PI) * this.image_.getNumTiles());
   var dimensions = camera.getDimensions();
   var context = camera.getContext();
@@ -202,11 +196,4 @@ dotprod.sprites.LocalPlayer.prototype.render = function(camera) {
     context.textAlign = 'center';
     context.fillText(this.name_, dimensions.width / 2, dimensions.height / 2 + this.image_.getTileHeight());
   context.restore();
-};
-
-/**
- * @return {string}
- */
-dotprod.sprites.LocalPlayer.prototype.getName = function() {
-  return this.name_;
 };

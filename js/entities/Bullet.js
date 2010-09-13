@@ -3,22 +3,22 @@
  * @author sharvil.nanavati@gmail.com (Sharvil Nanavati)
  */
 
-goog.provide('dotprod.sprites.Bullet');
+goog.provide('dotprod.entities.Bullet');
 
 goog.require('dotprod.Camera');
+goog.require('dotprod.entities.Entity');
 goog.require('dotprod.Map');
-goog.require('dotprod.sprites.Sprite');
 goog.require('dotprod.Vector');
 
 /**
  * @constructor
- * @extends {dotprod.sprites.Sprite}
+ * @extends {dotprod.entities.Entity}
  * @param {!dotprod.Map} map
  * @param {!dotprod.Vector} position
  * @param {!dotprod.Vector} velocity
  */
-dotprod.sprites.Bullet = function(map, position, velocity) {
-  dotprod.sprites.Sprite.call(this);
+dotprod.entities.Bullet = function(map, position, velocity) {
+  dotprod.entities.Entity.call(this);
 
   /**
    * @type {!dotprod.Map}
@@ -35,26 +35,26 @@ dotprod.sprites.Bullet = function(map, position, velocity) {
   this.position_ = position;
   this.velocity_ = velocity;
 };
-goog.inherits(dotprod.sprites.Bullet, dotprod.sprites.Sprite);
+goog.inherits(dotprod.entities.Bullet, dotprod.entities.Entity);
 
 /**
  * @type {number}
  * @private
  * @const
  */
-dotprod.sprites.Bullet.RADIUS_ = 5;
+dotprod.entities.Bullet.RADIUS_ = 5;
 
 /**
  * @return {boolean}
  */
-dotprod.sprites.Bullet.prototype.isAlive = function() {
+dotprod.entities.Bullet.prototype.isAlive = function() {
   return this.lifetime_ >= 0;
 };
 
 /**
  * @param {number} timeDiff
  */
-dotprod.sprites.Bullet.prototype.update = function(timeDiff) {
+dotprod.entities.Bullet.prototype.update = function(timeDiff) {
   this.lifetime_ -= timeDiff;
   if (!this.isAlive()) {
     return;
@@ -80,7 +80,7 @@ dotprod.sprites.Bullet.prototype.update = function(timeDiff) {
 /**
  * @param {!dotprod.Camera} camera
  */
-dotprod.sprites.Bullet.prototype.render = function(camera) {
+dotprod.entities.Bullet.prototype.render = function(camera) {
   if (!this.isAlive()) {
     return;
   }
@@ -91,15 +91,15 @@ dotprod.sprites.Bullet.prototype.render = function(camera) {
   var x = this.position_.getX() - dimensions.left;
   var y = this.position_.getY() - dimensions.top;
 
-  if (x + dotprod.sprites.Bullet.RADIUS_ < 0 || y + dotprod.sprites.Bullet.RADIUS_ < 0 || x >= dimensions.width || y >= dimensions.height) {
+  if (x + dotprod.entities.Bullet.RADIUS_ < 0 || y + dotprod.entities.Bullet.RADIUS_ < 0 || x >= dimensions.width || y >= dimensions.height) {
     return;
   }
 
   context.save();
-    var radgrad2 = context.createRadialGradient(x, y, 0, x, y, dotprod.sprites.Bullet.RADIUS_);
+    var radgrad2 = context.createRadialGradient(x, y, 0, x, y, dotprod.entities.Bullet.RADIUS_);
     radgrad2.addColorStop(0, '#fff');
     radgrad2.addColorStop(1, 'rgba(255,1,136,0)');
     context.fillStyle = radgrad2;
-    context.fillRect(x - dotprod.sprites.Bullet.RADIUS_, y - dotprod.sprites.Bullet.RADIUS_, dotprod.sprites.Bullet.RADIUS_ * 2, dotprod.sprites.Bullet.RADIUS_ * 2);
+    context.fillRect(x - dotprod.entities.Bullet.RADIUS_, y - dotprod.entities.Bullet.RADIUS_, dotprod.entities.Bullet.RADIUS_ * 2, dotprod.entities.Bullet.RADIUS_ * 2);
   context.restore();
 };

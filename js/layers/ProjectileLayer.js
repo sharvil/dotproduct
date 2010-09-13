@@ -9,7 +9,6 @@ goog.require('goog.array');
 goog.require('dotprod.Camera');
 goog.require('dotprod.layers.Layer');
 goog.require('dotprod.ProjectileIndex');
-goog.require('dotprod.sprites.Sprite');
 
 /**
  * @constructor

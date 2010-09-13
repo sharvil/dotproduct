@@ -3,22 +3,22 @@
  * @author sharvil.nanavati@gmail.com (Sharvil Nanavati)
  */
 
-goog.provide('dotprod.sprites.RemotePlayer');
+goog.provide('dotprod.entities.RemotePlayer');
 
 goog.require('dotprod.Camera');
+goog.require('dotprod.entities.Player');
 goog.require('dotprod.Map');
-goog.require('dotprod.sprites.Sprite');
 
 /**
  * @constructor
- * @extends {dotprod.sprites.Sprite}
+ * @extends {dotprod.entities.Player}
  * @param {!dotprod.Game} game
  * @param {!dotprod.Map} map
  * @param {string} name
  * @param {number} ship
  */
-dotprod.sprites.RemotePlayer = function(game, map, name, ship) {
-  dotprod.sprites.Sprite.call(this);
+dotprod.entities.RemotePlayer = function(game, map, name, ship) {
+  dotprod.entities.Player.call(this, name);
 
   /**
    * @type {!dotprod.Game}
@@ -33,12 +33,6 @@ dotprod.sprites.RemotePlayer = function(game, map, name, ship) {
   this.map_ = map;
 
   /**
-   * @type {string}
-   * @private
-   */
-  this.name_ = name;
-
-  /**
    * @type {number}
    * @private
    */
@@ -46,12 +40,12 @@ dotprod.sprites.RemotePlayer = function(game, map, name, ship) {
 
   this.image_ = game.getResourceManager().getTiledImage('ship' + ship);
 };
-goog.inherits(dotprod.sprites.RemotePlayer, dotprod.sprites.Sprite);
+goog.inherits(dotprod.entities.RemotePlayer, dotprod.entities.Player);
 
 /**
  * @param {!Object} packet
  */
-dotprod.sprites.RemotePlayer.prototype.positionUpdate = function(packet) {
+dotprod.entities.RemotePlayer.prototype.positionUpdate = function(packet) {
   this.angleInRadians_ = packet[1];
   this.position_ = new dotprod.Vector(packet[2], packet[3]);
   this.velocity_ = new dotprod.Vector(packet[4], packet[5]);
@@ -60,7 +54,7 @@ dotprod.sprites.RemotePlayer.prototype.positionUpdate = function(packet) {
 /**
  * @param {number} timeDiff
  */
-dotprod.sprites.RemotePlayer.prototype.update = function(timeDiff) {
+dotprod.entities.RemotePlayer.prototype.update = function(timeDiff) {
   // TODO(sharvil): grab from ship settings.
   var bounceFactor = 0.5;
 
@@ -84,7 +78,7 @@ dotprod.sprites.RemotePlayer.prototype.update = function(timeDiff) {
 /**
  * @param {!dotprod.Camera} camera
  */
-dotprod.sprites.RemotePlayer.prototype.render = function(camera) {
+dotprod.entities.RemotePlayer.prototype.render = function(camera) {
   var tileNum = Math.floor(this.angleInRadians_ / (2 * Math.PI) * this.image_.getNumTiles());
   var dimensions = camera.getDimensions();
   var context = camera.getContext();
@@ -100,11 +94,4 @@ dotprod.sprites.RemotePlayer.prototype.render = function(camera) {
     context.textAlign = 'center';
     context.fillText(this.name_, x + this.image_.getTileWidth() / 2, y + 3 / 2 * this.image_.getTileHeight());
   context.restore();
-};
-
-/**
- * @return {string}
- */
-dotprod.sprites.RemotePlayer.prototype.getName = function() {
-  return this.name_;
 };
