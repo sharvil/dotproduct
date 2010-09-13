@@ -7,50 +7,18 @@ goog.provide('dotprod.layers.ShipLayer');
 
 goog.require('dotprod.Camera');
 goog.require('dotprod.layers.Layer');
-goog.require('dotprod.sprites.Sprite');
+goog.require('dotprod.PlayerIndex');
 
 /**
  * @constructor
  * @implements {dotprod.layers.Layer}
  */
-dotprod.layers.ShipLayer = function() {
+dotprod.layers.ShipLayer = function(playerIndex) {
   /**
-   * @type {!Array.<dotprod.sprites.Sprite>}
+   * @type {!dotprod.PlayerIndex}
    * @private
    */
-  this.ships_ = [];
-};
-
-/**
- * @param {!dotprod.sprites.Sprite} ship
- */
-dotprod.layers.ShipLayer.prototype.addShip = function(ship) {
-  this.ships_.push(ship);
-};
-
-/**
- * @param {!dotprod.sprites.Sprite} ship
- */
-dotprod.layers.ShipLayer.prototype.removeShip = function(ship) {
-  for (var i = 0; i < this.ships_.length; ++i) {
-    if (this.ships_[i] == ship) {
-      this.ships_.splice(i, 1);
-      return;
-    }
-  }
-};
-
-// TODO(sharvil): super hack!!!!! Fix me!!
-/**
- * @param {string} name
- */
-dotprod.layers.ShipLayer.prototype.removeShipByName = function(name) {
-  for (var i = 0; i < this.ships_.length; ++i) {
-    if (this.ships_[i].name_ == name) {
-      this.ships_.splice(i, 1);
-      return;
-    }
-  }
+  this.playerIndex_ = playerIndex;
 };
 
 dotprod.layers.ShipLayer.prototype.updateShip = function(name, packet) {
@@ -67,8 +35,9 @@ dotprod.layers.ShipLayer.prototype.updateShip = function(name, packet) {
  * @override
  */
 dotprod.layers.ShipLayer.prototype.update = function(timeDiff) {
-  for (var i = 0; i < this.ships_.length; ++i) {
-    this.ships_[i].update(timeDiff);
+  var players = this.playerIndex_.getPlayers();
+  for (var i = 0; i < players.length; ++i) {
+    players[i].update(timeDiff);
   }
 };
 
@@ -77,7 +46,8 @@ dotprod.layers.ShipLayer.prototype.update = function(timeDiff) {
  * @override
  */
 dotprod.layers.ShipLayer.prototype.render = function(camera) {
-  for (var i = 0; i < this.ships_.length; ++i) {
-    this.ships_[i].render(camera);
+  var players = this.playerIndex_.getPlayers();
+  for (var i = 0; i < players.length; ++i) {
+    players[i].render(camera);
   }
 };

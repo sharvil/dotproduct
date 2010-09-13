@@ -31,7 +31,7 @@ dotprod.Image.prototype.isLoaded = function() {
 dotprod.Image.prototype.load = function(resourceName, opt_loadCb) {
   this.node_.src = resourceName;
   if (opt_loadCb) {
-    goog.events.listen(this.node_, 'load', goog.bind(opt_loadCb, resourceName));
+    goog.events.listen(this.node_, 'load', goog.bind(opt_loadCb, new String(resourceName)));
   }
 };
 

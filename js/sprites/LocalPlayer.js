@@ -3,13 +3,14 @@
  * @author sharvil.nanavati@gmail.com (Sharvil Nanavati)
  */
 
-goog.provide('dotprod.sprites.Player');
+goog.provide('dotprod.sprites.LocalPlayer');
 
 goog.require('goog.events');
 goog.require('dotprod.Camera');
 goog.require('dotprod.input.Keyboard');
-goog.require('dotprod.layers.MapLayer');
 goog.require('dotprod.layers.ProjectileLayer');
+goog.require('dotprod.Map');
+goog.require('dotprod.ProjectileIndex');
 goog.require('dotprod.sprites.Bullet');
 goog.require('dotprod.sprites.Sprite');
 goog.require('dotprod.Vector');
@@ -19,10 +20,11 @@ goog.require('dotprod.Vector');
  * @extends {dotprod.sprites.Sprite}
  * @param {!dotprod.Game} game
  * @param {!dotprod.Camera} camera
- * @param {!dotprod.layers.MapLayer} mapLayer
+ * @param {!dotprod.Map} map
+ * @param {!dotprod.ProjectileIndex} projectileIndex
  * @param {string} name
  */
-dotprod.sprites.Player = function(game, camera, mapLayer, projectileLayer, name) {
+dotprod.sprites.LocalPlayer = function(game, camera, map, projectileIndex, name) {
   dotprod.sprites.Sprite.call(this);
 
   /**
@@ -35,19 +37,19 @@ dotprod.sprites.Player = function(game, camera, mapLayer, projectileLayer, name)
    * @type {!Object}
    * @private
    */
-  this.settings_ = game.getConfig().getSettings();
+  this.settings_ = game.getSettings();
 
   /**
-   * @type {!dotprod.layers.MapLayer}
+   * @type {!dotprod.Map}
    * @private
    */
-  this.mapLayer_ = mapLayer;
+  this.map_ = map;
 
   /**
-   * @type {!dotprod.layers.ProjectileLayer}
+   * @type {!dotprod.ProjectileIndex}
    * @private
    */
-  this.projectileLayer_ = projectileLayer;
+  this.projectileIndex_ = projectileIndex;
 
   /**
    * @type {string}
@@ -100,12 +102,12 @@ dotprod.sprites.Player = function(game, camera, mapLayer, projectileLayer, name)
     self.game_.getProtocol().sendPosition(self.angleInRadians_, self.position_, self.velocity_);
   }, 250);
 };
-goog.inherits(dotprod.sprites.Player, dotprod.sprites.Sprite);
+goog.inherits(dotprod.sprites.LocalPlayer, dotprod.sprites.Sprite);
 
 /**
  * @param {number} ship
  */
-dotprod.sprites.Player.prototype.setShip = function(ship) {
+dotprod.sprites.LocalPlayer.prototype.setShip = function(ship) {
   this.ship_ = ship;
   this.shipSettings_ = this.settings_['ships'][this.ship_];
 
@@ -118,7 +120,7 @@ dotprod.sprites.Player.prototype.setShip = function(ship) {
 /**
  * @param {number} timeDiff
  */
-dotprod.sprites.Player.prototype.update = function(timeDiff) {
+dotprod.sprites.LocalPlayer.prototype.update = function(timeDiff) {
   var shipRotation = this.shipSettings_['rotationRadiansPerTick'];
   var shipSpeed = this.shipSettings_['speedPixelsPerTick'];
   var acceleration = this.shipSettings_['accelerationPerTick'];
@@ -135,7 +137,7 @@ dotprod.sprites.Player.prototype.update = function(timeDiff) {
     if (keyboard.isKeyPressed(goog.events.KeyCodes.CTRL)) {
       var front = new dotprod.Vector(0, -this.yRadius_).rotate(this.angleInRadians_).add(this.position_);
       var velocity = this.velocity_.add(dotprod.Vector.fromPolar(bulletSpeed, this.angleInRadians_));
-      this.projectileLayer_.addProjectile(this.name_, new dotprod.sprites.Bullet(this.mapLayer_, front, velocity));
+      this.projectileIndex_.addProjectile(this, new dotprod.sprites.Bullet(this.map_, front, velocity));
       this.projectileFireDelay_ = bulletFireDelay;
     }
   }
@@ -163,7 +165,7 @@ dotprod.sprites.Player.prototype.update = function(timeDiff) {
   }
 
   this.position_ = this.position_.add(this.velocity_.getXComponent().scale(timeDiff));
-  var collisionRect = this.mapLayer_.getCollision(this);
+  var collisionRect = this.map_.getCollision(this);
   if (collisionRect) {
     var xVel = this.velocity_.getX();
     this.position_ = new dotprod.Vector(xVel >= 0 ? collisionRect.left : collisionRect.right, this.position_.getY());
@@ -171,7 +173,7 @@ dotprod.sprites.Player.prototype.update = function(timeDiff) {
   }
 
   this.position_ = this.position_.add(this.velocity_.getYComponent().scale(timeDiff));
-  collisionRect = this.mapLayer_.getCollision(this);
+  collisionRect = this.map_.getCollision(this);
   if (collisionRect) {
     var yVel = this.velocity_.getY();
     this.position_ = new dotprod.Vector(this.position_.getX(), yVel >= 0 ? collisionRect.top : collisionRect.bottom);
@@ -184,7 +186,7 @@ dotprod.sprites.Player.prototype.update = function(timeDiff) {
 /**
  * @param {!dotprod.Camera} camera
  */
-dotprod.sprites.Player.prototype.render = function(camera) {
+dotprod.sprites.LocalPlayer.prototype.render = function(camera) {
   var tileNum = Math.floor(this.angleInRadians_ / (2 * Math.PI) * this.image_.getNumTiles());
   var dimensions = camera.getDimensions();
   var context = camera.getContext();
@@ -200,4 +202,11 @@ dotprod.sprites.Player.prototype.render = function(camera) {
     context.textAlign = 'center';
     context.fillText(this.name_, dimensions.width / 2, dimensions.height / 2 + this.image_.getTileHeight());
   context.restore();
+};
+
+/**
+ * @return {string}
+ */
+dotprod.sprites.LocalPlayer.prototype.getName = function() {
+  return this.name_;
 };

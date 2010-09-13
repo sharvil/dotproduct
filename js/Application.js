@@ -8,7 +8,6 @@ goog.provide('dotprod.Application');
 goog.require('goog.debug.Console');
 goog.require('goog.dom');
 goog.require('dotprod.Game');
-goog.require('dotprod.GameConfig');
 goog.require('dotprod.Protocol');
 goog.require('dotprod.ResourceManager');
 goog.require('dotprod.views.LoadingView');
@@ -40,15 +39,26 @@ dotprod.Application = function() {
   this.loginView_ = new dotprod.views.LoginView(this.protocol_, goog.bind(this.startGame_, this));
   this.loginView_.renderDom(/** @type {!HTMLDivElement} */ (goog.dom.$('login')));
 
+  /**
+   * @type {!dotprod.views.LoadingView}
+   * @private
+   */
   this.loadingView_ = new dotprod.views.LoadingView(this.resourceManager_, goog.bind(this.onLoadComplete_, this));
   this.loadingView_.renderDom(/** @type {!HTMLDivElement} */ (goog.dom.$('loading')));
   this.loadingView_.hide();
 
+
   /**
-   * @type {dotprod.GameConfig}
+   * @type {!Object}
    * @private
    */
-  this.gameConfig_;
+  this.settings_ = {};
+
+  /**
+   * @type {!Object.<number, number>}
+   * @private
+   */
+  this.mapData_ = {};
 
   /**
    * @type {dotprod.Game}
@@ -58,14 +68,17 @@ dotprod.Application = function() {
 };
 
 /**
- * @param {!dotprod.GameConfig} gameConfig
+ * @param {!Object.<string, !Object>} resources
+ * @param {!Object} settings
+ * @param {!Object.<number, number>} mapData
  */
-dotprod.Application.prototype.startGame_ = function(gameConfig) {
-  this.gameConfig_ = gameConfig;
+dotprod.Application.prototype.startGame_ = function(resources, settings, mapData) {
+  this.settings_ = settings;
+  this.mapData_ = mapData;
 
   this.loginView_.hide();
   this.loadingView_.show();
-  this.loadingView_.load(gameConfig.getResources());
+  this.loadingView_.load(resources);
 };
 
 dotprod.Application.prototype.onLoadComplete_ = function() {
@@ -76,7 +89,7 @@ dotprod.Application.prototype.onLoadComplete_ = function() {
     this.game_.dispose();
   }
 
-  this.game_ = new dotprod.Game(this.protocol_, this.resourceManager_, this.gameConfig_);
+  this.game_ = new dotprod.Game(this.protocol_, this.resourceManager_, this.settings_, this.mapData_);
   this.game_.renderDom(/** @type {!HTMLDivElement} */ (goog.dom.$('game')));
   this.game_.start();
 };

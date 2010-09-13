@@ -8,14 +8,17 @@ goog.provide('dotprod.Game');
 goog.require('goog.debug.ErrorHandler');
 goog.require('goog.dom');
 goog.require('dotprod.Camera');
-goog.require('dotprod.GameConfig');
 goog.require('dotprod.input.Keyboard');
 goog.require('dotprod.layers.NotificationLayer');
 goog.require('dotprod.layers.MapLayer');
 goog.require('dotprod.layers.ProjectileLayer');
 goog.require('dotprod.layers.ShipLayer');
 goog.require('dotprod.layers.StarLayer');
-goog.require('dotprod.sprites.Player');
+goog.require('dotprod.Map');
+goog.require('dotprod.Notifications');
+goog.require('dotprod.PlayerIndex');
+goog.require('dotprod.ProjectileIndex');
+goog.require('dotprod.sprites.LocalPlayer');
 goog.require('dotprod.sprites.RemotePlayer');
 goog.require('dotprod.Protocol');
 goog.require('dotprod.ResourceManager');
@@ -25,9 +28,10 @@ goog.require('dotprod.views.View');
  * @constructor
  * @extends {dotprod.views.View}
  * @param {!dotprod.Protocol} protocol
- * @param {!dotprod.GameConfig} gameConfig
+ * @param {!Object} settings
+ * @param {!Object.<number, number>} mapData
  */
-dotprod.Game = function(protocol, resourceManager, gameConfig) {
+dotprod.Game = function(protocol, resourceManager, settings, mapData) {
   /**
    * @type {!dotprod.Protocol}
    * @private
@@ -41,10 +45,10 @@ dotprod.Game = function(protocol, resourceManager, gameConfig) {
   this.resourceManager_ = resourceManager;
 
   /**
-   * @type {!dotprod.GameConfig}
+   * @type {!Object}
    * @private
    */
-  this.gameConfig_ = gameConfig;
+  this.settings_ = settings;
 
   /**
    * @type {!dotprod.input.Keyboard}
@@ -65,38 +69,44 @@ dotprod.Game = function(protocol, resourceManager, gameConfig) {
    * @type {!dotprod.Camera}
    * @private
    */
-  this.camera_ = new dotprod.Camera(this, this.canvas_.getContext('2d'))
+  this.camera_ = new dotprod.Camera(this, /** @type {!CanvasRenderingContext2D} */ (this.canvas_.getContext('2d')));
 
   /**
-   * @type {!dotprod.layers.StarLayer}
+   * @type {!dotprod.Map}
    * @private
    */
-  this.starLayer_ = new dotprod.layers.StarLayer();
+  this.map_ = new dotprod.Map(this, mapData);
 
   /**
-   * @type {!dotprod.layers.MapLayer}
+   * @type {!dotprod.ProjectileIndex}
    * @private
    */
-  this.mapLayer_ = new dotprod.layers.MapLayer(this);
+  this.projectileIndex_ = new dotprod.ProjectileIndex();
 
   /**
-   * @type {!dotprod.layers.ProjectileLayer}
+   * @type {!dotprod.PlayerIndex}
    * @private
    */
-  this.projectileLayer_ = new dotprod.layers.ProjectileLayer();
+  this.playerIndex_ = new dotprod.PlayerIndex();
+  this.playerIndex_.addPlayer(new dotprod.sprites.LocalPlayer(this, this.camera_, this.map_, this.projectileIndex_, this.settings_['name']));
 
   /**
-   * @type {!dotprod.layers.ShipLayer}
+   * @type {!dotprod.Notifications}
    * @private
    */
-  this.shipLayer_ = new dotprod.layers.ShipLayer();
-  this.shipLayer_.addShip(new dotprod.sprites.Player(this, this.camera_, this.mapLayer_, this.projectileLayer_, this.gameConfig_.getSettings()['name']));
+  this.notifications_ = new dotprod.Notifications();
 
   /**
-   * @type {!dotprod.layers.NotificationLayer}
+   * @type {!Array.<dotprod.layers.Layer>}
    * @private
    */
-  this.notificationLayer_ = new dotprod.layers.NotificationLayer();
+  this.layers_ = [
+      new dotprod.layers.StarLayer(),
+      new dotprod.layers.MapLayer(this, this.map_),
+      new dotprod.layers.ProjectileLayer(this.projectileIndex_),
+      new dotprod.layers.ShipLayer(this.playerIndex_),
+      new dotprod.layers.NotificationLayer(this.notifications_)
+    ];
 
   /**
    * @type {number|null}
@@ -186,10 +196,10 @@ dotprod.Game.prototype.getResourceManager = function() {
 };
 
 /**
- * @return {!dotprod.GameConfig}
+ * @return {!Object}
  */
-dotprod.Game.prototype.getConfig = function() {
-  return this.gameConfig_;
+dotprod.Game.prototype.getSettings = function() {
+  return this.settings_;
 };
 
 /**
@@ -202,22 +212,18 @@ dotprod.Game.prototype.renderingLoop_ = function() {
   timeDiff = Math.min(timeDiff, dotprod.Game.MAX_TICKS_PER_FRAME_);
 
   for (var i = 0; i < timeDiff; ++i) {
-    this.starLayer_.update(1);
-    this.mapLayer_.update(1);
-    this.projectileLayer_.update(1);
-    this.shipLayer_.update(1);
-    this.notificationLayer_.update(1);
+    for (var j = 0; j < this.layers_.length; ++j) {
+      this.layers_[j].update(1);
+    }
   }
 
   var context = this.camera_.getContext();
   context.save();
     context.fillStyle = '#000';
     context.fillRect(0, 0, this.canvas_.width, this.canvas_.height);
-    this.starLayer_.render(this.camera_);
-    this.mapLayer_.render(this.camera_);
-    this.projectileLayer_.render(this.camera_);
-    this.shipLayer_.render(this.camera_);
-    this.notificationLayer_.render(this.camera_);
+    for (var i = 0; i < this.layers_.length; ++i) {
+      this.layers_[i].render(this.camera_);
+    }
   context.restore();
 
   this.tickResidue_ += curTime - this.lastTime_;
@@ -231,8 +237,8 @@ dotprod.Game.prototype.renderingLoop_ = function() {
  */
 dotprod.Game.prototype.onPlayerEntered_ = function(packet) {
   var name = packet[0];
-  this.shipLayer_.addShip(new dotprod.sprites.RemotePlayer(this, this.mapLayer_, name, 0));
-  this.notificationLayer_.addMessage('Player entered: ' + name);
+  this.playerIndex_.addPlayer(new dotprod.sprites.RemotePlayer(this, this.map_, name, 0));
+  this.notifications_.addMessage('Player entered: ' + name);
 };
 
 /**
@@ -241,8 +247,11 @@ dotprod.Game.prototype.onPlayerEntered_ = function(packet) {
  */
 dotprod.Game.prototype.onPlayerLeft_ = function(packet) {
   var name = packet[0];
-  this.shipLayer_.removeShipByName(name);
-  this.notificationLayer_.addMessage('Player left: ' + name);
+  var player = this.playerIndex_.findByName(name);
+  if (player) {
+    this.playerIndex_.removePlayer(player);
+    this.notifications_.addMessage('Player left: ' + name);
+  }
 };
 
 /**
@@ -251,5 +260,8 @@ dotprod.Game.prototype.onPlayerLeft_ = function(packet) {
  */
 dotprod.Game.prototype.onPlayerPosition_ = function(packet) {
   var name = packet[0];
-  this.shipLayer_.updateShip(name, packet);
+  var player = this.playerIndex_.findByName(name);
+  if (player) {
+    player.positionUpdate(packet);
+  }
 };

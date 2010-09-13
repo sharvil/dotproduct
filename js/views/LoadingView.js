@@ -7,7 +7,6 @@ goog.provide('dotprod.views.LoadingView');
 
 goog.require('goog.events');
 goog.require('goog.events.EventType');
-goog.require('dotprod.GameConfig');
 goog.require('dotprod.ResourceManager');
 goog.require('dotprod.views.View');
 

@@ -16,7 +16,7 @@ goog.require('goog.events.KeyCodes');
  */
 dotprod.input.Keyboard = function() {
   /**
-   * @type {!Object.<goog.events.KeyCodes, boolean>}
+   * @type {!Object.<number, boolean>}
    * @private
    */
   this.keys_ = {};

@@ -7,7 +7,6 @@ goog.provide('dotprod.views.LoginView');
 
 goog.require('goog.events');
 goog.require('goog.events.EventType');
-goog.require('dotprod.GameConfig');
 goog.require('dotprod.Protocol');
 goog.require('dotprod.Protocol.S2CPacketType');
 goog.require('dotprod.views.View');
@@ -16,7 +15,7 @@ goog.require('dotprod.views.View');
  * @constructor
  * @extends {dotprod.views.View}
  * @param {!dotprod.Protocol} protocol
- * @param {function(!dotprod.GameConfig)} successCb
+ * @param {function(!Object.<string, !Object>, !Object, !Object.<number, number>)} successCb
  */
 dotprod.views.LoginView = function(protocol, successCb) {
   /**
@@ -43,7 +42,7 @@ dotprod.views.LoginView = function(protocol, successCb) {
   this.protocol_.registerHandler(dotprod.Protocol.S2CPacketType.LOGIN_REPLY, goog.bind(this.onLoginReply_, this));
 
   /**
-   * @type {function(!dotprod.GameConfig)}
+   * @type {function(!Object.<string, !Object>, !Object, !Object.<number, number>)}
    * @private
    */
   this.successCb_ = successCb;
@@ -101,7 +100,7 @@ dotprod.views.LoginView.prototype.onLoginReply_ = function(packet) {
 
     // TODO(sharvil): shoving the user name into the settings is pretty evil...
     settings['name'] = this.nameNode_.value;
-    this.successCb_(new dotprod.GameConfig(resources, settings, mapData));
+    this.successCb_(resources, settings, mapData);
   } else {
     alert('Login failure: ' + packet[1]);
     this.nameNode_.value = '';

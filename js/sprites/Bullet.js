@@ -6,25 +6,25 @@
 goog.provide('dotprod.sprites.Bullet');
 
 goog.require('dotprod.Camera');
-goog.require('dotprod.layers.MapLayer');
+goog.require('dotprod.Map');
 goog.require('dotprod.sprites.Sprite');
 goog.require('dotprod.Vector');
 
 /**
  * @constructor
  * @extends {dotprod.sprites.Sprite}
- * @param {!dotprod.layers.MapLayer} mapLayer
+ * @param {!dotprod.Map} map
  * @param {!dotprod.Vector} position
  * @param {!dotprod.Vector} velocity
  */
-dotprod.sprites.Bullet = function(mapLayer, position, velocity) {
+dotprod.sprites.Bullet = function(map, position, velocity) {
   dotprod.sprites.Sprite.call(this);
 
   /**
-   * @type {!dotprod.layers.MapLayer}
+   * @type {!dotprod.Map}
    * @private
    */
-  this.mapLayer_ = mapLayer;
+  this.map_ = map;
 
   /**
    * @type {number}
@@ -61,7 +61,7 @@ dotprod.sprites.Bullet.prototype.update = function(timeDiff) {
   }
 
   this.position_ = this.position_.add(this.velocity_.getXComponent().scale(timeDiff));
-  var collision = this.mapLayer_.getCollision(this);
+  var collision = this.map_.getCollision(this);
   if (collision) {
     var xVel = this.velocity_.getX();
     this.position_ = new dotprod.Vector(xVel >= 0 ? collision.left : collision.right, this.position_.getY());
@@ -69,7 +69,7 @@ dotprod.sprites.Bullet.prototype.update = function(timeDiff) {
   }
 
   this.position_ = this.position_.add(this.velocity_.getYComponent().scale(timeDiff));
-  collision = this.mapLayer_.getCollision(this);
+  collision = this.map_.getCollision(this);
   if (collision) {
     var yVel = this.velocity_.getY();
     this.position_ = new dotprod.Vector(this.position_.getX(), yVel >= 0 ? collision.top : collision.bottom);

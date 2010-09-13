@@ -5,39 +5,23 @@
 
 goog.provide('dotprod.layers.ProjectileLayer');
 
+goog.require('goog.array');
 goog.require('dotprod.Camera');
 goog.require('dotprod.layers.Layer');
+goog.require('dotprod.ProjectileIndex');
 goog.require('dotprod.sprites.Sprite');
 
 /**
  * @constructor
  * @implements {dotprod.layers.Layer}
+ * @param {!dotprod.ProjectileIndex} projectileIndex
  */
-dotprod.layers.ProjectileLayer = function() {
+dotprod.layers.ProjectileLayer = function(projectileIndex) {
   /**
-   * @type {!Object.<string, !Array.<dotprod.sprites.Sprite>>}
+   * @type {!dotprod.ProjectileIndex}
    * @private
    */
-  this.projectiles_ = {};
-};
-
-/**
- * @param {string} player
- * @param {!dotprod.sprites.Sprite} projectile
- */
-dotprod.layers.ProjectileLayer.prototype.addProjectile = function(player, projectile) {
-  if (!this.projectiles_[player]) {
-    this.projectiles_[player] = [projectile];
-  } else {
-    this.projectiles_[player].push(projectile);
-  }
-};
-
-/**
- * @param {string} player
- */
-dotprod.layers.ProjectileLayer.prototype.removeProjectiles = function(player) {
-  this.projectiles_[player] = [];
+  this.projectileIndex_ = projectileIndex;
 };
 
 /**
@@ -45,21 +29,9 @@ dotprod.layers.ProjectileLayer.prototype.removeProjectiles = function(player) {
  * @override
  */
 dotprod.layers.ProjectileLayer.prototype.update = function(timeDiff) {
-  for (var j in this.projectiles_) {
-    var newList = [];
-    for (var i = 0; i < this.projectiles_[j].length; ++i) {
-      this.projectiles_[j][i].update(timeDiff);
-      if (this.projectiles_[j][i].isAlive()) {
-        newList.push(this.projectiles_[j][i]);
-      }
-    }
-
-    // TODO(sharvil): does iteration break if we modify the object?
-    if (!newList.length) {
-      delete this.projectiles_[j];
-    } else {
-      this.projectiles_[j] = newList;
-    }
+  var projectiles = this.projectileIndex_.getProjectiles();
+  for (var i = 0; i < projectiles.length; ++i) {
+    projectiles[i].update(timeDiff);
   }
 };
 
@@ -68,9 +40,8 @@ dotprod.layers.ProjectileLayer.prototype.update = function(timeDiff) {
  * @override
  */
 dotprod.layers.ProjectileLayer.prototype.render = function(camera) {
-  for (var j in this.projectiles_) {
-    for (var i = 0; i < this.projectiles_[j].length; ++i) {
-      this.projectiles_[j][i].render(camera);
-    }
+  var projectiles = this.projectileIndex_.getProjectiles();
+  for (var i = 0; i < projectiles.length; ++i) {
+    projectiles[i].render(camera);
   }
 };
