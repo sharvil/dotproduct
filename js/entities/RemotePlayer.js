@@ -8,6 +8,7 @@ goog.provide('dotprod.entities.RemotePlayer');
 goog.require('dotprod.Camera');
 goog.require('dotprod.entities.Player');
 goog.require('dotprod.Map');
+goog.require('dotprod.TiledImage');
 
 /**
  * @constructor
@@ -32,12 +33,6 @@ dotprod.entities.RemotePlayer = function(game, map, name, ship) {
    */
   this.map_ = map;
 
-  /**
-   * @type {number}
-   * @private
-   */
-  this.angleInRadians_ = 0;
-
   this.image_ = game.getResourceManager().getTiledImage('ship' + ship);
 };
 goog.inherits(dotprod.entities.RemotePlayer, dotprod.entities.Player);
@@ -57,41 +52,5 @@ dotprod.entities.RemotePlayer.prototype.positionUpdate = function(packet) {
 dotprod.entities.RemotePlayer.prototype.update = function(timeDiff) {
   // TODO(sharvil): grab from ship settings.
   var bounceFactor = 0.5;
-
-  this.position_ = this.position_.add(this.velocity_.getXComponent().scale(timeDiff));
-  var collisionRect = this.map_.getCollision(this);
-  if (collisionRect) {
-    var xVel = this.velocity_.getX();
-    this.position_ = new dotprod.Vector(xVel >= 0 ? collisionRect.left : collisionRect.right, this.position_.getY());
-    this.velocity_ = new dotprod.Vector(-xVel * bounceFactor, this.velocity_.getY());
-  }
-
-  this.position_ = this.position_.add(this.velocity_.getYComponent().scale(timeDiff));
-  collisionRect = this.map_.getCollision(this);
-  if (collisionRect) {
-    var yVel = this.velocity_.getY();
-    this.position_ = new dotprod.Vector(this.position_.getX(), yVel >= 0 ? collisionRect.top : collisionRect.bottom);
-    this.velocity_ = new dotprod.Vector(this.velocity_.getX(), -yVel * bounceFactor);
-  }
-};
-
-/**
- * @param {!dotprod.Camera} camera
- */
-dotprod.entities.RemotePlayer.prototype.render = function(camera) {
-  var tileNum = Math.floor(this.angleInRadians_ / (2 * Math.PI) * this.image_.getNumTiles());
-  var dimensions = camera.getDimensions();
-  var context = camera.getContext();
-
-  var x = Math.floor(this.position_.getX() - dimensions.left - this.image_.getTileWidth() / 2);
-  var y = Math.floor(this.position_.getY() - dimensions.top - this.image_.getTileHeight() / 2);
-
-  this.image_.render(context, x, y, tileNum);
-
-  context.save();
-    context.font = '12pt Verdana';
-    context.fillStyle = 'rgb(200, 200, 200)';
-    context.textAlign = 'center';
-    context.fillText(this.name_, x + this.image_.getTileWidth() / 2, y + 3 / 2 * this.image_.getTileHeight());
-  context.restore();
+  this.updatePosition_(timeDiff, bounceFactor);
 };
