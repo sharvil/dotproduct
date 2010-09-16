@@ -1,4 +1,10 @@
 {
+  "network":
+  {
+    "sendPositionDelay": 250,
+    "fastSendPositionDelay": 3
+  },
+
   "map":
   {
     "width": 1024,

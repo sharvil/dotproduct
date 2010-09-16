@@ -51,12 +51,11 @@ dotprod.entities.LocalPlayer = function(game, camera, map, projectileIndex, name
    */
   this.projectileFireDelay_ = 0;
 
-  // TODO(sharvil): hack - fix me. Don't create a new timer and change frequency of updates
-  // based on player activity (i.e. more frequent updates when accelerating / rotating).
-  var self = this;
-  window.setInterval(function() {
-    self.game_.getProtocol().sendPosition(self.getAngle_(), self.position_, self.velocity_);
-  }, 250);
+  /**
+   * @type {number}
+   * @private
+   */
+  this.ticksSincePositionUpdate_ = 0;
 };
 goog.inherits(dotprod.entities.LocalPlayer, dotprod.entities.Player);
 
@@ -74,11 +73,15 @@ dotprod.entities.LocalPlayer.prototype.update = function(timeDiff) {
   var keyboard = this.game_.getKeyboard();
   var dimensions = this.camera_.getDimensions();
 
-  this.projectileFireDelay_ = Math.max(this.projectileFireDelay_ - 1, 0);
+  var oldAngle = this.angleInRadians_;
+  var oldVelocity = this.velocity_;
+
+  this.ticksSincePositionUpdate_ += timeDiff;
+  this.projectileFireDelay_ = Math.max(this.projectileFireDelay_ - timeDiff, 0);
 
   if (this.projectileFireDelay_ <= 0) {
     if (keyboard.isKeyPressed(goog.events.KeyCodes.CTRL)) {
-      var front = new dotprod.Vector(0, -this.yRadius_).rotate(this.angleInRadians_).add(this.position_);
+      var front = new dotprod.Vector(0, -this.yRadius_).rotate(this.getAngle_()).add(this.position_);
       var velocity = this.velocity_.add(dotprod.Vector.fromPolar(bulletSpeed, this.angleInRadians_));
       this.projectileIndex_.addProjectile(this, new dotprod.entities.Bullet(this.map_, front, velocity));
       this.projectileFireDelay_ = bulletFireDelay;
@@ -115,6 +118,24 @@ dotprod.entities.LocalPlayer.prototype.update = function(timeDiff) {
 
   this.updatePosition_(timeDiff, bounceFactor);
   this.camera_.setPosition(Math.floor(this.position_.getX()), Math.floor(this.position_.getY()));
+  this.sendPositionUpdate_(this.velocity_ != velocity || this.angleInRadians_ != oldAngle);
+};
+
+/**
+ * @type {boolean} isAccelerating
+ */
+dotprod.entities.LocalPlayer.prototype.sendPositionUpdate_ = function(isAccelerating) {
+  var sendPositionDelay = this.settings_['network']['sendPositionDelay'];
+  if (isAccelerating) {
+    sendPositionDelay = this.settings_['network']['fastSendPositionDelay'];
+  }
+
+  if (this.ticksSincePositionUpdate_ < sendPositionDelay) {
+    return;
+  }
+
+  this.game_.getProtocol().sendPosition(this.getAngle_(), this.position_, this.velocity_);
+  this.ticksSincePositionUpdate_ = 0;
 };
 
 /**
