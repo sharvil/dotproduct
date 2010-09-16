@@ -47,7 +47,7 @@ dotprod.layers.ShipLayer.prototype.update = function(timeDiff) {
  */
 dotprod.layers.ShipLayer.prototype.render = function(camera) {
   var players = this.playerIndex_.getPlayers();
-  for (var i = 0; i < players.length; ++i) {
+  for (var i = players.length - 1; i >= 0; --i) {
     players[i].render(camera);
   }
 };

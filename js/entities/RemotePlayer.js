@@ -19,7 +19,7 @@ goog.require('dotprod.TiledImage');
  * @param {number} ship
  */
 dotprod.entities.RemotePlayer = function(game, map, name, ship) {
-  dotprod.entities.Player.call(this, name);
+  dotprod.entities.Player.call(this, game, name);
 
   /**
    * @type {!dotprod.Game}
@@ -33,24 +33,54 @@ dotprod.entities.RemotePlayer = function(game, map, name, ship) {
    */
   this.map_ = map;
 
-  this.image_ = game.getResourceManager().getTiledImage('ship' + ship);
+  this.setShip(ship);
 };
 goog.inherits(dotprod.entities.RemotePlayer, dotprod.entities.Player);
 
 /**
- * @param {!Object} packet
+ * @type {number}
+ * @private
+ * @const
  */
-dotprod.entities.RemotePlayer.prototype.positionUpdate = function(packet) {
-  this.angleInRadians_ = packet[1];
-  this.position_ = new dotprod.Vector(packet[2], packet[3]);
-  this.velocity_ = new dotprod.Vector(packet[4], packet[5]);
+dotprod.entities.RemotePlayer.MAX_DRIFT_PIXELS_ = 64;
+
+/**
+ * @type {number}
+ * @private
+ * @const
+ */
+dotprod.entities.RemotePlayer.VELOCITY_ADJUST_PERIOD_ = 20;
+
+/**
+ * @param {number} timeDiff
+ * @param {number} angle
+ * @param {!dotprod.Vector} position
+ * @param {!dotprod.Vector} velocity
+ */
+dotprod.entities.RemotePlayer.prototype.positionUpdate = function(timeDiff, angle, position, velocity) {
+  var finalPosition = position.add(velocity.scale(timeDiff));
+  var distance = finalPosition.subtract(this.position_);
+
+  this.angleInRadians_ = angle;
+  this.velocity_ = velocity;
+
+  if (Math.abs(distance.getX()) >= dotprod.entities.RemotePlayer.MAX_DRIFT_PIXELS_) {
+    this.position_ = new dotprod.Vector(finalPosition.getX(), this.position_.getY());
+  } else {
+    this.velocity_ = this.velocity_.add(new dotprod.Vector(distance.getX(), 0).scale(1 / dotprod.entities.RemotePlayer.VELOCITY_ADJUST_PERIOD_));
+  }
+
+  if (Math.abs(distance.getY()) >= dotprod.entities.RemotePlayer.MAX_DRIFT_PIXELS_) {
+    this.position_ = new dotprod.Vector(this.position_.getX(), finalPosition.getY());
+  } else {
+    this.velocity_ = this.velocity_.add(new dotprod.Vector(0, distance.getY()).scale(1 / dotprod.entities.RemotePlayer.VELOCITY_ADJUST_PERIOD_));
+  }
 };
 
 /**
  * @param {number} timeDiff
  */
 dotprod.entities.RemotePlayer.prototype.update = function(timeDiff) {
-  // TODO(sharvil): grab from ship settings.
-  var bounceFactor = 0.5;
+  var bounceFactor = this.game_.getSettings()['ships'][this.ship_]['bounceFactor'];
   this.updatePosition_(timeDiff, bounceFactor);
 };

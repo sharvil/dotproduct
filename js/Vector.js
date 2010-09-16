@@ -98,3 +98,7 @@ dotprod.Vector.prototype.rotate = function(angle) {
 
   return new dotprod.Vector(x, y);
 };
+
+dotprod.Vector.prototype.toString = function() {
+  return "[" + this.x_ + ", " + this.y_ + "]";
+};

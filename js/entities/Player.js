@@ -11,9 +11,29 @@ goog.require('dotprod.TiledImage');
 /**
  * @constructor
  * @extends {dotprod.entities.Entity}
+ * @param {!dotprod.Game} game
+ * @param {string} name
  */
-dotprod.entities.Player = function(name) {
+dotprod.entities.Player = function(game, name) {
   dotprod.entities.Entity.call(this);
+
+  /**
+   * @type {!dotprod.Game}
+   * @protected
+   */
+  this.game_ = game;
+
+  /**
+   * @type {!Object}
+   * @protected
+   */
+  this.settings_ = game.getSettings();
+
+  /**
+   * @type {!Object}
+   * @protected
+   */
+  this.shipSettings_ = this.settings_['ships'][this.ship_];
 
   /**
    * @type {string}
@@ -28,10 +48,18 @@ dotprod.entities.Player = function(name) {
   this.angleInRadians_ = 0;
 
   /**
+   * @type {number}
+   * @protected
+   */
+  this.ship_ = 0;
+
+  /**
    * @type {!dotprod.TiledImage}
    * @protected
    */
   this.image_;
+
+  this.setShip(0);
 };
 goog.inherits(dotprod.entities.Player, dotprod.entities.Entity);
 
@@ -40,6 +68,19 @@ goog.inherits(dotprod.entities.Player, dotprod.entities.Entity);
  */
 dotprod.entities.Player.prototype.getName = function() {
   return this.name_;
+};
+
+/**
+ * @param {number} ship
+ */
+dotprod.entities.Player.prototype.setShip = function(ship) {
+  this.ship_ = ship;
+  this.shipSettings_ = this.settings_['ships'][this.ship_];
+
+  this.position_ = new dotprod.Vector(6000, 6000);
+  this.xRadius_ = this.shipSettings_['xRadius'];
+  this.yRadius_ = this.shipSettings_['yRadius'];
+  this.image_ = this.game_.getResourceManager().getTiledImage('ship' + this.ship_);
 };
 
 /**

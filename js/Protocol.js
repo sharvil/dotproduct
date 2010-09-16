@@ -8,6 +8,7 @@ goog.provide('dotprod.Protocol.S2CPacketType');
 
 goog.require('goog.debug.Logger');
 goog.require('goog.debug.Logger.Level');
+goog.require('dotprod.Timer');
 goog.require('dotprod.Vector');
 
 /**
@@ -47,6 +48,20 @@ dotprod.Protocol = function(url) {
   for (var i in dotprod.Protocol.S2CPacketType) {
     this.handlers_[dotprod.Protocol.S2CPacketType[i]] = [];
   }
+
+  /**
+   * @type {number}
+   * @private
+   */
+  this.syncTimer_ = 0;
+
+  /**
+   * @type {number}
+   * @private
+   */
+  this.serverTimeDelta_ = 0;
+
+  this.registerHandler(dotprod.Protocol.S2CPacketType.CLOCK_SYNC_REPLY, goog.bind(this.onClockSyncReply_, this));
 };
 
 /**
@@ -56,7 +71,8 @@ dotprod.Protocol = function(url) {
 dotprod.Protocol.C2SPacketType_ = {
   LOGIN: 1,
   BEGIN_GAME: 2,
-  POSITION: 3
+  POSITION: 3,
+  CLOCK_SYNC: 4
 };
 
 /**
@@ -66,7 +82,31 @@ dotprod.Protocol.S2CPacketType = {
   LOGIN_REPLY: 1,
   PLAYER_ENTERED: 2,
   PLAYER_LEFT: 3,
-  PLAYER_POSITION: 4
+  PLAYER_POSITION: 4,
+  CLOCK_SYNC_REPLY: 5
+};
+
+/**
+ * @type {number}
+ * @private
+ * @const
+ */
+dotprod.Protocol.CLOCK_SYNC_PERIOD_ = 2000;
+
+/**
+ * @param {number} timestamp
+ * @return {number} The number of milliseconds elapsed since the specified server timestamp.
+ */
+dotprod.Protocol.prototype.getMillisSinceServerTime = function(timestamp) {
+  var diff = timestamp - this.serverTimeDelta_;
+  if (diff < 0) {
+    diff += 0x100000000;
+  }
+  diff = this.asUint32_(goog.now()) - diff;
+  if (diff < 0) {
+    diff += 0x100000000;
+  }
+  return diff;
 };
 
 /**
@@ -86,6 +126,7 @@ dotprod.Protocol.prototype.login = function(username) {
 
 dotprod.Protocol.prototype.startGame = function() {
   this.send_([dotprod.Protocol.C2SPacketType_.BEGIN_GAME]);
+  this.syncClocks_();
 };
 
 /**
@@ -94,15 +135,38 @@ dotprod.Protocol.prototype.startGame = function() {
  * @param {dotprod.Vector} velocity
  */
 dotprod.Protocol.prototype.sendPosition = function(direction, position, velocity) {
-  this.send_([dotprod.Protocol.C2SPacketType_.POSITION, direction, position.getX(), position.getY(), velocity.getX(), velocity.getY()]);
+  this.send_([dotprod.Protocol.C2SPacketType_.POSITION, this.asRemoteTime_(goog.now()), direction, position.getX(), position.getY(), velocity.getX(), velocity.getY()]);
+};
+
+dotprod.Protocol.prototype.syncClocks_ = function() {
+  this.send_([dotprod.Protocol.C2SPacketType_.CLOCK_SYNC, this.asUint32_(goog.now())]);
+};
+
+dotprod.Protocol.prototype.onClockSyncReply_ = function(packet) {
+  var clientTime0 = packet[0];
+  var serverTime = packet[1];
+  var rtt = this.asUint32_(goog.now()) - clientTime0;
+
+  // Correct for integer overflow since clock sync timestamps are fixed precision 32-bit integers.
+  if (rtt < 0) {
+    rtt += 0x100000000;
+  }
+
+  // Assume 60% of RTT is C2S latency.
+  this.serverTimeDelta_ = Math.floor(serverTime - clientTime0 - 0.6 * rtt);
+
+  if (this.serverTimeDelta_ < 0) {
+    this.serverTimeDelta_ += 0x100000000;
+  }
 };
 
 dotprod.Protocol.prototype.onOpen_ = function() {
-  for (var i in this.packetQueue_) {
+  for (var i = 0; i < this.packetQueue_.length; ++i) {
     this.socket_.send(this.packetQueue_[i]);
   }
 
   this.packetQueue_ = [];
+  this.syncTimer_ = dotprod.Timer.setInterval(goog.bind(this.syncClocks_, this), dotprod.Protocol.CLOCK_SYNC_PERIOD_);
 };
 
 dotprod.Protocol.prototype.onError_ = function() {
@@ -111,6 +175,8 @@ dotprod.Protocol.prototype.onError_ = function() {
 };
 
 dotprod.Protocol.prototype.onClose_ = function() {
+  dotprod.Timer.clearInterval(this.syncTimer_);
+  this.syncTimer_ = 0;
   this.packetQueue_ = [];
   this.socket_ = null;
 
@@ -164,4 +230,20 @@ dotprod.Protocol.prototype.createSocket_ = function() {
   goog.events.listen(this.socket_, 'error', goog.bind(this.onError_, this));
   goog.events.listen(this.socket_, 'close', goog.bind(this.onClose_, this));
   goog.events.listen(this.socket_, 'message', goog.bind(this.onMessage_, this));
-}
+};
+
+/**
+ * @param {number} num
+ * @return {number}
+ * @private
+ */
+dotprod.Protocol.prototype.asUint32_ = function(num) {
+  return num >>> 0;
+};
+
+/**
+ * @return {number}
+ */
+dotprod.Protocol.prototype.asRemoteTime_ = function(timestamp) {
+  return this.asUint32_(timestamp + this.serverTimeDelta_);
+};

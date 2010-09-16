@@ -22,6 +22,7 @@ goog.require('dotprod.PlayerIndex');
 goog.require('dotprod.ProjectileIndex');
 goog.require('dotprod.Protocol');
 goog.require('dotprod.ResourceManager');
+goog.require('dotprod.Timer');
 goog.require('dotprod.views.View');
 
 /**
@@ -109,10 +110,10 @@ dotprod.Game = function(protocol, resourceManager, settings, mapData) {
     ];
 
   /**
-   * @type {number|null}
+   * @type {number}
    * @private
    */
-  this.intervalTimer_ = null;
+  this.intervalTimer_ = 0;
 
   /**
    * @type {number}
@@ -136,9 +137,8 @@ goog.inherits(dotprod.Game, dotprod.views.View);
 /**
  * @const
  * @type {number}
- * @private
  */
-dotprod.Game.ANIMATION_PERIOD_ = 10;
+dotprod.Game.TICK_PERIOD = 10;
 
 /**
  * @const
@@ -166,12 +166,12 @@ dotprod.Game.prototype.renderDom = function(rootNode) {
 dotprod.Game.prototype.start = function() {
   this.lastTime_ = goog.now();
   this.tickResidue_ = 0;
-  this.intervalTimer_ = window.setInterval(goog.bind(this.renderingLoop_, this), dotprod.Game.ANIMATION_PERIOD_);
+  this.intervalTimer_ = dotprod.Timer.setInterval(goog.bind(this.renderingLoop_, this), 1);
 };
 
 dotprod.Game.prototype.stop = function() {
-  window.clearInterval(this.intervalTimer_);
-  this.intervalTimer_ = null;
+  dotprod.Timer.clearInterval(this.intervalTimer_);
+  this.intervalTimer_ = 0;
 };
 
 /**
@@ -207,7 +207,7 @@ dotprod.Game.prototype.getSettings = function() {
  */
 dotprod.Game.prototype.renderingLoop_ = function() {
   var curTime = goog.now();
-  var timeDiff = Math.floor((curTime - this.lastTime_ + this.tickResidue_) / dotprod.Game.ANIMATION_PERIOD_);
+  var timeDiff = Math.floor(dotprod.Timer.millisToTicks(curTime - this.lastTime_ + this.tickResidue_));
 
   timeDiff = Math.min(timeDiff, dotprod.Game.MAX_TICKS_PER_FRAME_);
 
@@ -227,7 +227,7 @@ dotprod.Game.prototype.renderingLoop_ = function() {
   context.restore();
 
   this.tickResidue_ += curTime - this.lastTime_;
-  this.tickResidue_ -= timeDiff * dotprod.Game.ANIMATION_PERIOD_;
+  this.tickResidue_ -= dotprod.Timer.ticksToMillis(timeDiff);
   this.lastTime_ = curTime;
 };
 
@@ -259,9 +259,14 @@ dotprod.Game.prototype.onPlayerLeft_ = function(packet) {
  * @private
  */
 dotprod.Game.prototype.onPlayerPosition_ = function(packet) {
-  var name = packet[0];
+  var timeDiff = Math.floor(dotprod.Timer.millisToTicks(this.protocol_.getMillisSinceServerTime(packet[0])));
+  var name = packet[1];
+  var angle = packet[2];
+  var position = new dotprod.Vector(packet[3], packet[4]);
+  var velocity = new dotprod.Vector(packet[5], packet[6]);
+
   var player = this.playerIndex_.findByName(name);
   if (player) {
-    player.positionUpdate(packet);
+    player.positionUpdate(timeDiff, angle, position, velocity);
   }
 };

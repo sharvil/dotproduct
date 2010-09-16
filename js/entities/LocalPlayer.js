@@ -25,19 +25,7 @@ goog.require('dotprod.Vector');
  * @param {string} name
  */
 dotprod.entities.LocalPlayer = function(game, camera, map, projectileIndex, name) {
-  dotprod.entities.Player.call(this, name);
-
-  /**
-   * @type {!dotprod.Game}
-   * @private
-   */
-  this.game_ = game;
-
-  /**
-   * @type {!Object}
-   * @private
-   */
-  this.settings_ = game.getSettings();
+  dotprod.entities.Player.call(this, game, name);
 
   /**
    * @type {!dotprod.Map}
@@ -52,18 +40,6 @@ dotprod.entities.LocalPlayer = function(game, camera, map, projectileIndex, name
   this.projectileIndex_ = projectileIndex;
 
   /**
-   * @type {number}
-   * @private
-   */
-  this.ship_ = 0;
-
-  /**
-   * @type {!Object}
-   * @private
-   */
-  this.shipSettings_ = this.settings_['ships'][this.ship_];
-
-  /**
    * @type {!dotprod.Camera} camera
    * @private
    */
@@ -75,29 +51,14 @@ dotprod.entities.LocalPlayer = function(game, camera, map, projectileIndex, name
    */
   this.projectileFireDelay_ = 0;
 
-  this.setShip(0);
-
   // TODO(sharvil): hack - fix me. Don't create a new timer and change frequency of updates
   // based on player activity (i.e. more frequent updates when accelerating / rotating).
   var self = this;
   window.setInterval(function() {
-    self.game_.getProtocol().sendPosition(self.angleInRadians_, self.position_, self.velocity_);
+    self.game_.getProtocol().sendPosition(self.getAngle_(), self.position_, self.velocity_);
   }, 250);
 };
 goog.inherits(dotprod.entities.LocalPlayer, dotprod.entities.Player);
-
-/**
- * @param {number} ship
- */
-dotprod.entities.LocalPlayer.prototype.setShip = function(ship) {
-  this.ship_ = ship;
-  this.shipSettings_ = this.settings_['ships'][this.ship_];
-
-  this.position_ = new dotprod.Vector(8192, 8192);
-  this.xRadius_ = this.shipSettings_['xRadius'];
-  this.yRadius_ = this.shipSettings_['yRadius'];
-  this.image_ = this.game_.getResourceManager().getTiledImage('ship' + this.ship_);
-};
 
 /**
  * @param {number} timeDiff
@@ -124,6 +85,10 @@ dotprod.entities.LocalPlayer.prototype.update = function(timeDiff) {
     }
   }
 
+  if (keyboard.isKeyPressed(goog.events.KeyCodes.S)) {
+    this.velocity_ = new dotprod.Vector(0, 0);
+  }
+
   if (keyboard.isKeyPressed(goog.events.KeyCodes.LEFT)) {
     this.angleInRadians_ -= timeDiff * shipRotation;
   } else if (keyboard.isKeyPressed(goog.events.KeyCodes.RIGHT)) {
@@ -134,10 +99,12 @@ dotprod.entities.LocalPlayer.prototype.update = function(timeDiff) {
     this.angleInRadians_ -= Math.floor(this.angleInRadians_ / (2 * Math.PI)) * 2 * Math.PI;
   }
 
+  var angle = this.getAngle_();
+
   if (keyboard.isKeyPressed(goog.events.KeyCodes.UP)) {
-    this.velocity_ = this.velocity_.add(dotprod.Vector.fromPolar(acceleration * timeDiff, this.angleInRadians_));
+    this.velocity_ = this.velocity_.add(dotprod.Vector.fromPolar(acceleration * timeDiff, angle));
   } else if (keyboard.isKeyPressed(goog.events.KeyCodes.DOWN)) {
-    this.velocity_ = this.velocity_.subtract(dotprod.Vector.fromPolar(acceleration * timeDiff, this.angleInRadians_));
+    this.velocity_ = this.velocity_.subtract(dotprod.Vector.fromPolar(acceleration * timeDiff, angle));
   }
 
   // Magnitude of speed is greater than maximum ship speed - clamp.
@@ -148,4 +115,11 @@ dotprod.entities.LocalPlayer.prototype.update = function(timeDiff) {
 
   this.updatePosition_(timeDiff, bounceFactor);
   this.camera_.setPosition(Math.floor(this.position_.getX()), Math.floor(this.position_.getY()));
+};
+
+/**
+ * @return {number}
+ */
+dotprod.entities.LocalPlayer.prototype.getAngle_ = function() {
+  return 2 * Math.PI * Math.floor(this.angleInRadians_ / (2 * Math.PI) * this.image_.getNumTiles()) / this.image_.getNumTiles();
 };
