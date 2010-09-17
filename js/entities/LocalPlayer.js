@@ -79,8 +79,9 @@ dotprod.entities.LocalPlayer.prototype.update = function() {
 
   if (this.projectileFireDelay_ <= 0) {
     if (keyboard.isKeyPressed(goog.events.KeyCodes.CTRL)) {
-      var front = new dotprod.Vector(0, -this.yRadius_).rotate(this.getAngle_()).add(this.position_);
-      var velocity = this.velocity_.add(dotprod.Vector.fromPolar(bulletSpeed, this.angleInRadians_));
+      var angle = this.getAngle_();
+      var front = new dotprod.Vector(0, -this.yRadius_).rotate(angle).add(this.position_);
+      var velocity = this.velocity_.add(dotprod.Vector.fromPolar(bulletSpeed, angle));
       projectile = new dotprod.entities.Bullet(this.map_, front, velocity);
       this.projectileIndex_.addProjectile(this, projectile);
       this.projectileFireDelay_ = bulletFireDelay;
