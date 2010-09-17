@@ -219,7 +219,7 @@ dotprod.Protocol.prototype.send_ = function(data) {
 
   this.createSocket_();
 
-  if (this.socket_.readyState != WebSocket.OPEN) {
+  if (this.socket_.readyState != this.socket_.OPEN) {
     this.packetQueue_.push(packet);
   } else {
     this.socket_.send(packet);
