@@ -52,6 +52,9 @@ dotprod.entities.LocalPlayer = function(game, camera, projectileIndex, name) {
 };
 goog.inherits(dotprod.entities.LocalPlayer, dotprod.entities.Player);
 
+/**
+ * @param {!dotprod.Map} map
+ */
 dotprod.entities.LocalPlayer.prototype.update = function(map) {
   var shipRotation = this.shipSettings_['rotationRadiansPerTick'];
   var shipSpeed = this.shipSettings_['speedPixelsPerTick'];
@@ -115,8 +118,8 @@ dotprod.entities.LocalPlayer.prototype.update = function(map) {
 };
 
 /**
- * @type {boolean} isAccelerating
- * @type {!dotprod.entities.Bullet=} opt_projectile
+ * @param {boolean} isAccelerating
+ * @param {!dotprod.entities.Bullet=} opt_projectile
  */
 dotprod.entities.LocalPlayer.prototype.sendPositionUpdate_ = function(isAccelerating, opt_projectile) {
   var sendPositionDelay = this.settings_['network']['sendPositionDelay'];
