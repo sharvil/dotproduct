@@ -13,18 +13,11 @@ goog.require('dotprod.Vector');
 /**
  * @constructor
  * @extends {dotprod.entities.Entity}
- * @param {!dotprod.Map} map
  * @param {!dotprod.Vector} position
  * @param {!dotprod.Vector} velocity
  */
-dotprod.entities.Bullet = function(map, position, velocity) {
+dotprod.entities.Bullet = function(position, velocity) {
   dotprod.entities.Entity.call(this);
-
-  /**
-   * @type {!dotprod.Map}
-   * @private
-   */
-  this.map_ = map;
 
   /**
    * @type {number}
@@ -51,14 +44,17 @@ dotprod.entities.Bullet.prototype.isAlive = function() {
   return this.lifetime_ >= 0;
 };
 
-dotprod.entities.Bullet.prototype.update = function() {
+/**
+ * @param {!dotprod.Map}
+ */
+dotprod.entities.Bullet.prototype.update = function(map) {
   --this.lifetime_;
   if (!this.isAlive()) {
     return;
   }
 
   this.position_ = this.position_.add(this.velocity_.getXComponent());
-  var collision = this.map_.getCollision(this);
+  var collision = map.getCollision(this);
   if (collision) {
     var xVel = this.velocity_.getX();
     this.position_ = new dotprod.Vector(xVel >= 0 ? collision.left : collision.right, this.position_.getY());
@@ -66,7 +62,7 @@ dotprod.entities.Bullet.prototype.update = function() {
   }
 
   this.position_ = this.position_.add(this.velocity_.getYComponent());
-  collision = this.map_.getCollision(this);
+  collision = map.getCollision(this);
   if (collision) {
     var yVel = this.velocity_.getY();
     this.position_ = new dotprod.Vector(this.position_.getX(), yVel >= 0 ? collision.top : collision.bottom);

@@ -20,18 +20,11 @@ goog.require('dotprod.Vector');
  * @extends {dotprod.entities.Player}
  * @param {!dotprod.Game} game
  * @param {!dotprod.Camera} camera
- * @param {!dotprod.Map} map
  * @param {!dotprod.ProjectileIndex} projectileIndex
  * @param {string} name
  */
-dotprod.entities.LocalPlayer = function(game, camera, map, projectileIndex, name) {
+dotprod.entities.LocalPlayer = function(game, camera, projectileIndex, name) {
   dotprod.entities.Player.call(this, game, name);
-
-  /**
-   * @type {!dotprod.Map}
-   * @private
-   */
-  this.map_ = map;
 
   /**
    * @type {!dotprod.ProjectileIndex}
@@ -59,7 +52,7 @@ dotprod.entities.LocalPlayer = function(game, camera, map, projectileIndex, name
 };
 goog.inherits(dotprod.entities.LocalPlayer, dotprod.entities.Player);
 
-dotprod.entities.LocalPlayer.prototype.update = function() {
+dotprod.entities.LocalPlayer.prototype.update = function(map) {
   var shipRotation = this.shipSettings_['rotationRadiansPerTick'];
   var shipSpeed = this.shipSettings_['speedPixelsPerTick'];
   var acceleration = this.shipSettings_['accelerationPerTick'];
@@ -80,9 +73,9 @@ dotprod.entities.LocalPlayer.prototype.update = function() {
   if (this.projectileFireDelay_ <= 0) {
     if (keyboard.isKeyPressed(goog.events.KeyCodes.CTRL)) {
       var angle = this.getAngle_();
-      var front = new dotprod.Vector(0, -this.yRadius_).rotate(angle).add(this.position_);
+      var position = new dotprod.Vector(0, -this.yRadius_).rotate(angle).add(this.position_);
       var velocity = this.velocity_.add(dotprod.Vector.fromPolar(bulletSpeed, angle));
-      projectile = new dotprod.entities.Bullet(this.map_, front, velocity);
+      projectile = new dotprod.entities.Bullet(position, velocity);
       this.projectileIndex_.addProjectile(this, projectile);
       this.projectileFireDelay_ = bulletFireDelay;
     }
@@ -116,7 +109,7 @@ dotprod.entities.LocalPlayer.prototype.update = function() {
     this.velocity_ = this.velocity_.scale(shipSpeed / magnitude);
   }
 
-  this.updatePosition_(bounceFactor);
+  this.updatePosition_(map, bounceFactor);
   this.camera_.setPosition(Math.floor(this.position_.getX()), Math.floor(this.position_.getY()));
   this.sendPositionUpdate_(this.velocity_ != oldVelocity || this.angleInRadians_ != oldAngle, projectile);
 };

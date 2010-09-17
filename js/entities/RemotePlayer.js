@@ -15,11 +15,10 @@ goog.require('dotprod.Vector');
  * @constructor
  * @extends {dotprod.entities.Player}
  * @param {!dotprod.Game} game
- * @param {!dotprod.Map} map
  * @param {string} name
  * @param {number} ship
  */
-dotprod.entities.RemotePlayer = function(game, map, name, ship) {
+dotprod.entities.RemotePlayer = function(game, name, ship) {
   dotprod.entities.Player.call(this, game, name);
 
   /**
@@ -27,12 +26,6 @@ dotprod.entities.RemotePlayer = function(game, map, name, ship) {
    * @private
    */
   this.game_ = game;
-
-  /**
-   * @type {!dotprod.Map}
-   * @private
-   */
-  this.map_ = map;
 
   /**
    * @type {number}
@@ -92,11 +85,14 @@ dotprod.entities.RemotePlayer.prototype.positionUpdate = function(timeDiff, angl
   }
 };
 
-dotprod.entities.RemotePlayer.prototype.update = function() {
+/**
+ * @param {!dotprod.Map} map
+ */
+dotprod.entities.RemotePlayer.prototype.update = function(map) {
   var bounceFactor = this.game_.getSettings()['ships'][this.ship_]['bounceFactor'];
   --this.velocityAdjustTimer_;
   if (this.velocityAdjustTimer_ <= 0) {
     this.velocity_ = this.originalVelocity_;
   }
-  this.updatePosition_(bounceFactor);
+  this.updatePosition_(map, bounceFactor);
 };

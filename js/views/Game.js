@@ -89,7 +89,7 @@ dotprod.Game = function(protocol, resourceManager, settings, mapData) {
    * @private
    */
   this.playerIndex_ = new dotprod.PlayerIndex();
-  this.playerIndex_.addPlayer(new dotprod.entities.LocalPlayer(this, this.camera_, this.map_, this.projectileIndex_, this.settings_['name']));
+  this.playerIndex_.addPlayer(new dotprod.entities.LocalPlayer(this, this.camera_, this.projectileIndex_, this.settings_['name']));
 
   /**
    * @type {!dotprod.Notifications}
@@ -104,8 +104,8 @@ dotprod.Game = function(protocol, resourceManager, settings, mapData) {
   this.layers_ = [
       new dotprod.layers.StarLayer(),
       new dotprod.layers.MapLayer(this, this.map_),
-      new dotprod.layers.ProjectileLayer(this.projectileIndex_),
-      new dotprod.layers.ShipLayer(this.playerIndex_),
+      new dotprod.layers.ProjectileLayer(this.map_, this.projectileIndex_),
+      new dotprod.layers.ShipLayer(this.map_, this.playerIndex_),
       new dotprod.layers.NotificationLayer(this.notifications_)
     ];
 
@@ -237,7 +237,7 @@ dotprod.Game.prototype.renderingLoop_ = function() {
  */
 dotprod.Game.prototype.onPlayerEntered_ = function(packet) {
   var name = packet[0];
-  this.playerIndex_.addPlayer(new dotprod.entities.RemotePlayer(this, this.map_, name, 0));
+  this.playerIndex_.addPlayer(new dotprod.entities.RemotePlayer(this, name, 0));
   this.notifications_.addMessage('Player entered: ' + name);
 };
 
@@ -271,7 +271,7 @@ dotprod.Game.prototype.onPlayerPosition_ = function(packet) {
     if (packet.length > 7) {
       var bulletPos = new dotprod.Vector(packet[7], packet[8]);
       var bulletVel = new dotprod.Vector(packet[9], packet[10]);
-      this.projectileIndex_.addProjectile(player, new dotprod.entities.Bullet(this.map_, bulletPos, bulletVel));
+      this.projectileIndex_.addProjectile(player, new dotprod.entities.Bullet(bulletPos, bulletVel));
     }
   }
 };

@@ -6,6 +6,7 @@
 goog.provide('dotprod.entities.Player');
 
 goog.require('dotprod.entities.Entity');
+goog.require('dotprod.Map');
 goog.require('dotprod.TiledImage');
 
 /**
@@ -105,12 +106,13 @@ dotprod.entities.Player.prototype.render = function(camera) {
 };
 
 /**
+ * @param {!dotprod.Map} map
  * @param {number} bounceFactor
  * @protected
  */
-dotprod.entities.Player.prototype.updatePosition_ = function(bounceFactor) {
+dotprod.entities.Player.prototype.updatePosition_ = function(map, bounceFactor) {
   this.position_ = this.position_.add(this.velocity_.getXComponent());
-  var collisionRect = this.map_.getCollision(this);
+  var collisionRect = map.getCollision(this);
   if (collisionRect) {
     var xVel = this.velocity_.getX();
     this.position_ = new dotprod.Vector(xVel >= 0 ? collisionRect.left : collisionRect.right, this.position_.getY());
@@ -118,7 +120,7 @@ dotprod.entities.Player.prototype.updatePosition_ = function(bounceFactor) {
   }
 
   this.position_ = this.position_.add(this.velocity_.getYComponent());
-  collisionRect = this.map_.getCollision(this);
+  collisionRect = map.getCollision(this);
   if (collisionRect) {
     var yVel = this.velocity_.getY();
     this.position_ = new dotprod.Vector(this.position_.getX(), yVel >= 0 ? collisionRect.top : collisionRect.bottom);

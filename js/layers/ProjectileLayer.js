@@ -8,14 +8,22 @@ goog.provide('dotprod.layers.ProjectileLayer');
 goog.require('goog.array');
 goog.require('dotprod.Camera');
 goog.require('dotprod.layers.Layer');
+goog.require('dotprod.Map');
 goog.require('dotprod.ProjectileIndex');
 
 /**
  * @constructor
  * @implements {dotprod.layers.Layer}
+ * @param {!dotprod.Map} map
  * @param {!dotprod.ProjectileIndex} projectileIndex
  */
-dotprod.layers.ProjectileLayer = function(projectileIndex) {
+dotprod.layers.ProjectileLayer = function(map, projectileIndex) {
+  /**
+   * @type {!dotprod.Map}
+   * @private
+   */
+  this.map_ = map;
+
   /**
    * @type {!dotprod.ProjectileIndex}
    * @private
@@ -29,7 +37,7 @@ dotprod.layers.ProjectileLayer = function(projectileIndex) {
 dotprod.layers.ProjectileLayer.prototype.update = function() {
   var projectiles = this.projectileIndex_.getProjectiles();
   for (var i = 0; i < projectiles.length; ++i) {
-    projectiles[i].update();
+    projectiles[i].update(this.map_);
   }
 };
 
