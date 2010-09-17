@@ -104,7 +104,7 @@ dotprod.Game = function(protocol, resourceManager, settings, mapData) {
   this.layers_ = [
       new dotprod.layers.StarLayer(),
       new dotprod.layers.MapLayer(this, this.map_),
-      new dotprod.layers.ProjectileLayer(this.map_, this.projectileIndex_),
+      new dotprod.layers.ProjectileLayer(this.map_, this.playerIndex_, this.projectileIndex_),
       new dotprod.layers.ShipLayer(this.map_, this.playerIndex_),
       new dotprod.layers.NotificationLayer(this.notifications_)
     ];
@@ -271,7 +271,7 @@ dotprod.Game.prototype.onPlayerPosition_ = function(packet) {
     if (packet.length > 7) {
       var bulletPos = new dotprod.Vector(packet[7], packet[8]);
       var bulletVel = new dotprod.Vector(packet[9], packet[10]);
-      this.projectileIndex_.addProjectile(player, new dotprod.entities.Bullet(bulletPos, bulletVel));
+      this.projectileIndex_.addProjectile(player, new dotprod.entities.Bullet(player, bulletPos, bulletVel));
     }
   }
 };

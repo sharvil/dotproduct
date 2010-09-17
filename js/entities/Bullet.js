@@ -7,17 +7,26 @@ goog.provide('dotprod.entities.Bullet');
 
 goog.require('dotprod.Camera');
 goog.require('dotprod.entities.Entity');
+goog.require('dotprod.entities.Player');
 goog.require('dotprod.Map');
+goog.require('dotprod.PlayerIndex');
 goog.require('dotprod.Vector');
 
 /**
  * @constructor
  * @extends {dotprod.entities.Entity}
+ * @param {!dotprod.entities.Player} owner
  * @param {!dotprod.Vector} position
  * @param {!dotprod.Vector} velocity
  */
-dotprod.entities.Bullet = function(position, velocity) {
+dotprod.entities.Bullet = function(owner, position, velocity) {
   dotprod.entities.Entity.call(this);
+
+  /**
+   * @type {!dotprod.entities.Player}
+   * @private
+   */
+  this.owner_ = owner;
 
   /**
    * @type {number}
@@ -45,9 +54,10 @@ dotprod.entities.Bullet.prototype.isAlive = function() {
 };
 
 /**
- * @param {!dotprod.Map}
+ * @param {!dotprod.Map} map
+ * @param {!dotprod.PlayerIndex} playerIndex
  */
-dotprod.entities.Bullet.prototype.update = function(map) {
+dotprod.entities.Bullet.prototype.update = function(map, playerIndex) {
   --this.lifetime_;
   if (!this.isAlive()) {
     return;
@@ -67,6 +77,13 @@ dotprod.entities.Bullet.prototype.update = function(map) {
     var yVel = this.velocity_.getY();
     this.position_ = new dotprod.Vector(this.position_.getX(), yVel >= 0 ? collision.top : collision.bottom);
     this.velocity_ = new dotprod.Vector(this.velocity_.getX(), -yVel);
+  }
+
+  var players = playerIndex.getPlayers();
+  for (var i = 0; i < players.length; ++i) {
+    if (this.checkPlayerCollision_(players[i])) {
+      break;
+    }
   }
 };
 
@@ -95,4 +112,22 @@ dotprod.entities.Bullet.prototype.render = function(camera) {
     context.fillStyle = radgrad2;
     context.fillRect(x - dotprod.entities.Bullet.RADIUS_, y - dotprod.entities.Bullet.RADIUS_, dotprod.entities.Bullet.RADIUS_ * 2, dotprod.entities.Bullet.RADIUS_ * 2);
   context.restore();
+};
+
+/**
+ * @param {!dotprod.entities.Player} player
+ */
+dotprod.entities.Bullet.prototype.checkPlayerCollision_ = function(player) {
+  if (this.owner_ == player) {
+    return false;
+  }
+
+  var dimensions = player.getDimensions();
+  var x = this.position_.getX();
+  var y = this.position_.getY();
+  if (x >= dimensions.left && x <= dimensions.right && y >= dimensions.top && y <= dimensions.bottom) {
+    this.lifetime_ = 0;
+    return true;
+  }
+  return false;
 };
