@@ -37,6 +37,20 @@ dotprod.entities.Entity = function() {
 };
 
 /**
+ * @return {!dotprod.Vector}
+ */
+dotprod.entities.Entity.prototype.getPosition = function() {
+  return this.position_;
+};
+
+/**
+ * @return {!dotprod.Vector}
+ */
+dotprod.entities.Entity.prototype.getVelocity = function() {
+  return this.velocity_;
+};
+
+/**
  * return {!Object}
  */
 dotprod.entities.Entity.prototype.getDimensions = function() {

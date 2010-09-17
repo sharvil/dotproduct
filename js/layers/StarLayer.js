@@ -54,10 +54,9 @@ dotprod.layers.StarLayer.STAR_L1_COLOR_ = 'rgb(184, 184, 184)';
 dotprod.layers.StarLayer.STAR_L2_COLOR_ = 'rgb(96, 96, 96)';
 
 /**
- * @param {number} timeDiff
  * @override
  */
-dotprod.layers.StarLayer.prototype.update = function(timeDiff) {
+dotprod.layers.StarLayer.prototype.update = function() {
 };
 
 /**

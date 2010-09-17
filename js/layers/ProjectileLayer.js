@@ -24,13 +24,12 @@ dotprod.layers.ProjectileLayer = function(projectileIndex) {
 };
 
 /**
- * @param {number} timeDiff
  * @override
  */
-dotprod.layers.ProjectileLayer.prototype.update = function(timeDiff) {
+dotprod.layers.ProjectileLayer.prototype.update = function() {
   var projectiles = this.projectileIndex_.getProjectiles();
   for (var i = 0; i < projectiles.length; ++i) {
-    projectiles[i].update(timeDiff);
+    projectiles[i].update();
   }
 };
 

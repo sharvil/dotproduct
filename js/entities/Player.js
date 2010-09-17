@@ -105,12 +105,11 @@ dotprod.entities.Player.prototype.render = function(camera) {
 };
 
 /**
- * @param {number} timeDiff
  * @param {number} bounceFactor
  * @protected
  */
-dotprod.entities.Player.prototype.updatePosition_ = function(timeDiff, bounceFactor) {
-  this.position_ = this.position_.add(this.velocity_.getXComponent().scale(timeDiff));
+dotprod.entities.Player.prototype.updatePosition_ = function(bounceFactor) {
+  this.position_ = this.position_.add(this.velocity_.getXComponent());
   var collisionRect = this.map_.getCollision(this);
   if (collisionRect) {
     var xVel = this.velocity_.getX();
@@ -118,7 +117,7 @@ dotprod.entities.Player.prototype.updatePosition_ = function(timeDiff, bounceFac
     this.velocity_ = new dotprod.Vector(-xVel * bounceFactor, this.velocity_.getY());
   }
 
-  this.position_ = this.position_.add(this.velocity_.getYComponent().scale(timeDiff));
+  this.position_ = this.position_.add(this.velocity_.getYComponent());
   collisionRect = this.map_.getCollision(this);
   if (collisionRect) {
     var yVel = this.velocity_.getY();

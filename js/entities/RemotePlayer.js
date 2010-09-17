@@ -9,6 +9,7 @@ goog.require('dotprod.Camera');
 goog.require('dotprod.entities.Player');
 goog.require('dotprod.Map');
 goog.require('dotprod.TiledImage');
+goog.require('dotprod.Vector');
 
 /**
  * @constructor
@@ -32,6 +33,18 @@ dotprod.entities.RemotePlayer = function(game, map, name, ship) {
    * @private
    */
   this.map_ = map;
+
+  /**
+   * @type {number}
+   * @private
+   */
+  this.velocityAdjustTimer_ = 0;
+
+  /**
+   * @type {!dotprod.Vector}
+   * @private
+   */
+  this.originalVelocity_ = new dotprod.Vector(0, 0);
 
   this.setShip(ship);
 };
@@ -63,6 +76,8 @@ dotprod.entities.RemotePlayer.prototype.positionUpdate = function(timeDiff, angl
 
   this.angleInRadians_ = angle;
   this.velocity_ = velocity;
+  this.originalVelocity_ = velocity;
+  this.velocityAdjustTimer_ = dotprod.entities.RemotePlayer.VELOCITY_ADJUST_PERIOD_;
 
   if (Math.abs(distance.getX()) >= dotprod.entities.RemotePlayer.MAX_DRIFT_PIXELS_) {
     this.position_ = new dotprod.Vector(finalPosition.getX(), this.position_.getY());
@@ -77,10 +92,11 @@ dotprod.entities.RemotePlayer.prototype.positionUpdate = function(timeDiff, angl
   }
 };
 
-/**
- * @param {number} timeDiff
- */
-dotprod.entities.RemotePlayer.prototype.update = function(timeDiff) {
+dotprod.entities.RemotePlayer.prototype.update = function() {
   var bounceFactor = this.game_.getSettings()['ships'][this.ship_]['bounceFactor'];
-  this.updatePosition_(timeDiff, bounceFactor);
+  --this.velocityAdjustTimer_;
+  if (this.velocityAdjustTimer_ <= 0) {
+    this.velocity_ = this.originalVelocity_;
+  }
+  this.updatePosition_(bounceFactor);
 };

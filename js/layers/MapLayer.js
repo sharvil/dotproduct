@@ -39,10 +39,9 @@ dotprod.layers.MapLayer = function(game, map) {
 };
 
 /**
- * @param {number} timeDiff
  * @override
  */
-dotprod.layers.MapLayer.prototype.update = function(timeDiff) {
+dotprod.layers.MapLayer.prototype.update = function() {
 };
 
 /**

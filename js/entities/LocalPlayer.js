@@ -59,10 +59,7 @@ dotprod.entities.LocalPlayer = function(game, camera, map, projectileIndex, name
 };
 goog.inherits(dotprod.entities.LocalPlayer, dotprod.entities.Player);
 
-/**
- * @param {number} timeDiff
- */
-dotprod.entities.LocalPlayer.prototype.update = function(timeDiff) {
+dotprod.entities.LocalPlayer.prototype.update = function() {
   var shipRotation = this.shipSettings_['rotationRadiansPerTick'];
   var shipSpeed = this.shipSettings_['speedPixelsPerTick'];
   var acceleration = this.shipSettings_['accelerationPerTick'];
@@ -75,15 +72,17 @@ dotprod.entities.LocalPlayer.prototype.update = function(timeDiff) {
 
   var oldAngle = this.angleInRadians_;
   var oldVelocity = this.velocity_;
+  var projectile;
 
-  this.ticksSincePositionUpdate_ += timeDiff;
-  this.projectileFireDelay_ = Math.max(this.projectileFireDelay_ - timeDiff, 0);
+  ++this.ticksSincePositionUpdate_;
+  this.projectileFireDelay_ = Math.max(this.projectileFireDelay_ - 1, 0);
 
   if (this.projectileFireDelay_ <= 0) {
     if (keyboard.isKeyPressed(goog.events.KeyCodes.CTRL)) {
       var front = new dotprod.Vector(0, -this.yRadius_).rotate(this.getAngle_()).add(this.position_);
       var velocity = this.velocity_.add(dotprod.Vector.fromPolar(bulletSpeed, this.angleInRadians_));
-      this.projectileIndex_.addProjectile(this, new dotprod.entities.Bullet(this.map_, front, velocity));
+      projectile = new dotprod.entities.Bullet(this.map_, front, velocity);
+      this.projectileIndex_.addProjectile(this, projectile);
       this.projectileFireDelay_ = bulletFireDelay;
     }
   }
@@ -93,9 +92,9 @@ dotprod.entities.LocalPlayer.prototype.update = function(timeDiff) {
   }
 
   if (keyboard.isKeyPressed(goog.events.KeyCodes.LEFT)) {
-    this.angleInRadians_ -= timeDiff * shipRotation;
+    this.angleInRadians_ -= shipRotation;
   } else if (keyboard.isKeyPressed(goog.events.KeyCodes.RIGHT)) {
-    this.angleInRadians_ += timeDiff * shipRotation;
+    this.angleInRadians_ += shipRotation;
   }
 
   if (this.angleInRadians_ < 0 || this.angleInRadians_ >= Math.PI * 2) {
@@ -105,9 +104,9 @@ dotprod.entities.LocalPlayer.prototype.update = function(timeDiff) {
   var angle = this.getAngle_();
 
   if (keyboard.isKeyPressed(goog.events.KeyCodes.UP)) {
-    this.velocity_ = this.velocity_.add(dotprod.Vector.fromPolar(acceleration * timeDiff, angle));
+    this.velocity_ = this.velocity_.add(dotprod.Vector.fromPolar(acceleration, angle));
   } else if (keyboard.isKeyPressed(goog.events.KeyCodes.DOWN)) {
-    this.velocity_ = this.velocity_.subtract(dotprod.Vector.fromPolar(acceleration * timeDiff, angle));
+    this.velocity_ = this.velocity_.subtract(dotprod.Vector.fromPolar(acceleration, angle));
   }
 
   // Magnitude of speed is greater than maximum ship speed - clamp.
@@ -116,25 +115,26 @@ dotprod.entities.LocalPlayer.prototype.update = function(timeDiff) {
     this.velocity_ = this.velocity_.scale(shipSpeed / magnitude);
   }
 
-  this.updatePosition_(timeDiff, bounceFactor);
+  this.updatePosition_(bounceFactor);
   this.camera_.setPosition(Math.floor(this.position_.getX()), Math.floor(this.position_.getY()));
-  this.sendPositionUpdate_(this.velocity_ != velocity || this.angleInRadians_ != oldAngle);
+  this.sendPositionUpdate_(this.velocity_ != oldVelocity || this.angleInRadians_ != oldAngle, projectile);
 };
 
 /**
  * @type {boolean} isAccelerating
+ * @type {!dotprod.entities.Bullet=} opt_projectile
  */
-dotprod.entities.LocalPlayer.prototype.sendPositionUpdate_ = function(isAccelerating) {
+dotprod.entities.LocalPlayer.prototype.sendPositionUpdate_ = function(isAccelerating, opt_projectile) {
   var sendPositionDelay = this.settings_['network']['sendPositionDelay'];
   if (isAccelerating) {
     sendPositionDelay = this.settings_['network']['fastSendPositionDelay'];
   }
 
-  if (this.ticksSincePositionUpdate_ < sendPositionDelay) {
+  if (!opt_projectile && this.ticksSincePositionUpdate_ < sendPositionDelay) {
     return;
   }
 
-  this.game_.getProtocol().sendPosition(this.getAngle_(), this.position_, this.velocity_);
+  this.game_.getProtocol().sendPosition(this.getAngle_(), this.position_, this.velocity_, opt_projectile);
   this.ticksSincePositionUpdate_ = 0;
 };
 

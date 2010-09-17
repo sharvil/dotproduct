@@ -213,7 +213,7 @@ dotprod.Game.prototype.renderingLoop_ = function() {
 
   for (var i = 0; i < timeDiff; ++i) {
     for (var j = 0; j < this.layers_.length; ++j) {
-      this.layers_[j].update(1);
+      this.layers_[j].update();
     }
   }
 
@@ -268,5 +268,10 @@ dotprod.Game.prototype.onPlayerPosition_ = function(packet) {
   var player = this.playerIndex_.findByName(name);
   if (player) {
     player.positionUpdate(timeDiff, angle, position, velocity);
+    if (packet.length > 7) {
+      var bulletPos = new dotprod.Vector(packet[7], packet[8]);
+      var bulletVel = new dotprod.Vector(packet[9], packet[10]);
+      this.projectileIndex_.addProjectile(player, new dotprod.entities.Bullet(this.map_, bulletPos, bulletVel));
+    }
   }
 };

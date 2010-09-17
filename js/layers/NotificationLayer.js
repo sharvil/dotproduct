@@ -30,14 +30,13 @@ dotprod.layers.NotificationLayer = function(notifications) {
 dotprod.layers.NotificationLayer.MESSAGE_PERIOD_ = 200;
 
 /**
- * @param {number} timeDiff
  * @override
  */
-dotprod.layers.NotificationLayer.prototype.update = function(timeDiff) {
+dotprod.layers.NotificationLayer.prototype.update = function() {
   var messages = this.notifications_.getMessages();
   for (var i = 0; i < messages.length; ++i) {
     if (messages[i]) {
-      messages[i].ticks += timeDiff;
+      ++messages[i].ticks;
       if (messages[i].ticks >= dotprod.layers.NotificationLayer.MESSAGE_PERIOD_) {
         messages[i] = null;
       }

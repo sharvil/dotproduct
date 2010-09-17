@@ -51,16 +51,13 @@ dotprod.entities.Bullet.prototype.isAlive = function() {
   return this.lifetime_ >= 0;
 };
 
-/**
- * @param {number} timeDiff
- */
-dotprod.entities.Bullet.prototype.update = function(timeDiff) {
-  this.lifetime_ -= timeDiff;
+dotprod.entities.Bullet.prototype.update = function() {
+  --this.lifetime_;
   if (!this.isAlive()) {
     return;
   }
 
-  this.position_ = this.position_.add(this.velocity_.getXComponent().scale(timeDiff));
+  this.position_ = this.position_.add(this.velocity_.getXComponent());
   var collision = this.map_.getCollision(this);
   if (collision) {
     var xVel = this.velocity_.getX();
@@ -68,7 +65,7 @@ dotprod.entities.Bullet.prototype.update = function(timeDiff) {
     this.velocity_ = new dotprod.Vector(-xVel, this.velocity_.getY());
   }
 
-  this.position_ = this.position_.add(this.velocity_.getYComponent().scale(timeDiff));
+  this.position_ = this.position_.add(this.velocity_.getYComponent());
   collision = this.map_.getCollision(this);
   if (collision) {
     var yVel = this.velocity_.getY();
