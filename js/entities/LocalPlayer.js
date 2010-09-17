@@ -60,7 +60,10 @@ dotprod.entities.LocalPlayer.prototype.update = function(map) {
   var shipSpeed = this.shipSettings_['speedPixelsPerTick'];
   var acceleration = this.shipSettings_['accelerationPerTick'];
   var bounceFactor = this.shipSettings_['bounceFactor'];
+  var maxEnergy = this.shipSettings_['maxEnergy'];
+  var rechargeRate = this.shipSettings_['rechargeRate'];
   var bulletFireDelay = this.shipSettings_['bullet']['fireDelay'];
+  var bulletFireEnergy = this.shipSettings_['bullet']['fireEnergy'];
   var bulletSpeed = this.shipSettings_['bullet']['speed'];
 
   var keyboard = this.game_.getKeyboard();
@@ -72,15 +75,17 @@ dotprod.entities.LocalPlayer.prototype.update = function(map) {
 
   ++this.ticksSincePositionUpdate_;
   this.projectileFireDelay_ = Math.max(this.projectileFireDelay_ - 1, 0);
+  this.energy_ = Math.min(this.energy_ + rechargeRate, maxEnergy);
 
   if (this.projectileFireDelay_ <= 0) {
-    if (keyboard.isKeyPressed(goog.events.KeyCodes.CTRL)) {
+    if (keyboard.isKeyPressed(goog.events.KeyCodes.CTRL) && this.energy_ > bulletFireEnergy) {
       var angle = this.getAngle_();
       var position = new dotprod.Vector(0, -this.yRadius_).rotate(angle).add(this.position_);
       var velocity = this.velocity_.add(dotprod.Vector.fromPolar(bulletSpeed, angle));
       projectile = new dotprod.entities.Bullet(this, position, velocity);
       this.projectileIndex_.addProjectile(this, projectile);
       this.projectileFireDelay_ = bulletFireDelay;
+      this.energy_ -= bulletFireEnergy;
     }
   }
 
@@ -115,6 +120,23 @@ dotprod.entities.LocalPlayer.prototype.update = function(map) {
   this.updatePosition_(map, bounceFactor);
   this.camera_.setPosition(Math.floor(this.position_.getX()), Math.floor(this.position_.getY()));
   this.sendPositionUpdate_(this.velocity_ != oldVelocity || this.angleInRadians_ != oldAngle, projectile);
+};
+
+/**
+ * @param {!dotprod.Camera} camera
+ */
+dotprod.entities.LocalPlayer.prototype.render = function(camera) {
+  goog.base(this, 'render', camera);
+
+  var context = camera.getContext();
+  var dimensions = camera.getDimensions();
+  var barWidth = 300;
+  var barHeight = 10;
+
+  context.save();
+    context.fillStyle = 'rgba(255, 255, 255, 0.3)';
+    context.fillRect((dimensions.width - barWidth) / 2, 10, barWidth * this.energy_ / 1000, barHeight);
+  context.restore();
 };
 
 /**

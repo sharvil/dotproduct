@@ -21,9 +21,12 @@
       "bounceFactor": 0.5,
       "xRadius": 14,
       "yRadius": 14,
+      "maxEnergy": 1000,
+      "rechargeRate": 0.5,
       "bullet": {
         "speed": 3,
-        "fireDelay": 30
+        "fireDelay": 30,
+        "fireEnergy": 30
       }
     },
 
@@ -35,9 +38,12 @@
       "bounceFactor": 0.3,
       "xRadius": 14,
       "yRadius": 14,
+      "maxEnergy": 2000,
+      "rechargeRate": 0.5,
       "bullet": {
         "speed": 3,
-        "fireDelay": 10
+        "fireDelay": 10,
+        "fireEnergy": 60
       }
     }
   ]

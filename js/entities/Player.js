@@ -50,6 +50,12 @@ dotprod.entities.Player = function(game, name) {
 
   /**
    * @type {number}
+   * @private
+   */
+  this.energy_ = 0;
+
+  /**
+   * @type {number}
    * @protected
    */
   this.ship_ = 0;
@@ -79,6 +85,7 @@ dotprod.entities.Player.prototype.setShip = function(ship) {
   this.shipSettings_ = this.settings_['ships'][this.ship_];
 
   this.position_ = new dotprod.Vector(6000, 6000);
+  this.energy_ = this.shipSettings_['maxEnergy'];
   this.xRadius_ = this.shipSettings_['xRadius'];
   this.yRadius_ = this.shipSettings_['yRadius'];
   this.image_ = this.game_.getResourceManager().getTiledImage('ship' + this.ship_);
