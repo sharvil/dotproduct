@@ -130,12 +130,6 @@ dotprod.Game = function(protocol, resourceManager, settings, mapData) {
    * @type {number}
    * @private
    */
-  this.intervalTimer_ = 0;
-
-  /**
-   * @type {number}
-   * @private
-   */
   this.lastTime_ = goog.now();
 
   /**
@@ -150,6 +144,8 @@ dotprod.Game = function(protocol, resourceManager, settings, mapData) {
   this.protocol_.registerHandler(dotprod.Protocol.S2CPacketType.PLAYER_DIED, goog.bind(this.onPlayerDied_, this));
   this.protocol_.registerHandler(dotprod.Protocol.S2CPacketType.CHAT_MESSAGE, goog.bind(this.onChatMessage_, this));
   this.protocol_.startGame();
+
+  dotprod.Timer.setInterval(goog.bind(this.renderingLoop_, this), 1)
 };
 goog.inherits(dotprod.Game, dotprod.views.View);
 
@@ -182,17 +178,6 @@ dotprod.Game.prototype.renderDom = function(rootNode) {
 
   rootNode.appendChild(this.canvas_);
   this.chatView_.renderDom(rootNode);
-};
-
-dotprod.Game.prototype.start = function() {
-  this.lastTime_ = goog.now();
-  this.tickResidue_ = 0;
-  this.intervalTimer_ = dotprod.Timer.setInterval(goog.bind(this.renderingLoop_, this), 1);
-};
-
-dotprod.Game.prototype.stop = function() {
-  dotprod.Timer.clearInterval(this.intervalTimer_);
-  this.intervalTimer_ = 0;
 };
 
 /**

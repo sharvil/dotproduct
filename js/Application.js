@@ -84,14 +84,8 @@ dotprod.Application.prototype.startGame_ = function(resources, settings, mapData
 dotprod.Application.prototype.onLoadComplete_ = function() {
   this.loadingView_.hide();
 
-  if (this.game_) {
-    this.game_.stop();
-    this.game_.dispose();
-  }
-
   this.game_ = new dotprod.Game(this.protocol_, this.resourceManager_, this.settings_, this.mapData_);
   this.game_.renderDom(/** @type {!HTMLDivElement} */ (goog.dom.$('game')));
-  this.game_.start();
 };
 
 var _main = function() {
