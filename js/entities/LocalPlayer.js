@@ -115,7 +115,7 @@ dotprod.entities.LocalPlayer.prototype.update = function(map) {
       var angle = this.getAngle_();
       var position = new dotprod.Vector(0, -this.yRadius_).rotate(angle).add(this.position_);
       var velocity = this.velocity_.add(dotprod.Vector.fromPolar(bulletSpeed, angle));
-      projectile = new dotprod.entities.Bullet(this, position, velocity);
+      projectile = new dotprod.entities.Bullet(this.game_, this, position, velocity);
       this.projectileIndex_.addProjectile(this, projectile);
       this.projectileFireDelay_ = bulletFireDelay;
       this.energy_ -= bulletFireEnergy;

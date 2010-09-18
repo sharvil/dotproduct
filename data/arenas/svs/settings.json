@@ -25,9 +25,12 @@
       "rechargeRate": 0.5,
       "respawnDelay": 500,
       "bullet": {
+        "lifetime": 500,
         "speed": 3,
         "fireDelay": 30,
-        "fireEnergy": 30
+        "fireEnergy": 30,
+        "damage": 100,
+        "color": "rgba(255, 1, 136, 0)"
       }
     },
 
@@ -43,9 +46,12 @@
       "rechargeRate": 0.5,
       "respawnDelay": 500,
       "bullet": {
+        "lifetime": 500,
         "speed": 3,
         "fireDelay": 10,
-        "fireEnergy": 60
+        "fireEnergy": 60,
+        "damage": 150,
+        "color": "rgba(255, 1, 136, 0)"
       }
     }
   ]

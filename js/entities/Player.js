@@ -78,6 +78,13 @@ dotprod.entities.Player.prototype.getName = function() {
 };
 
 /**
+ * @return {number}
+ */
+dotprod.entities.Player.prototype.getShip = function() {
+  return this.ship_;
+};
+
+/**
  * @return {boolean}
  */
 dotprod.entities.Player.prototype.isAlive = function() {

@@ -15,11 +15,12 @@ goog.require('dotprod.Vector');
 /**
  * @constructor
  * @extends {dotprod.entities.Entity}
+ * @param {!dotprod.Game} game
  * @param {!dotprod.entities.Player} owner
  * @param {!dotprod.Vector} position
  * @param {!dotprod.Vector} velocity
  */
-dotprod.entities.Bullet = function(owner, position, velocity) {
+dotprod.entities.Bullet = function(game, owner, position, velocity) {
   dotprod.entities.Entity.call(this);
 
   /**
@@ -28,17 +29,25 @@ dotprod.entities.Bullet = function(owner, position, velocity) {
    */
   this.owner_ = owner;
 
-  /**
-   * @type {number}
-   * @private
-   */
-  this.energy_ = 100;
+  var shipSettings = game.getSettings()['ships'][owner.getShip()];
 
   /**
    * @type {number}
    * @private
    */
-  this.lifetime_ = 500;
+  this.energy_ = shipSettings['bullet']['damage'];
+
+  /**
+   * @type {number}
+   * @private
+   */
+  this.lifetime_ = shipSettings['bullet']['lifetime'];
+
+  /**
+   * @type {string}
+   * @private
+   */
+  this.color_ = shipSettings['bullet']['color'];
 
   this.position_ = position;
   this.velocity_ = velocity;
@@ -106,17 +115,18 @@ dotprod.entities.Bullet.prototype.render = function(camera) {
 
   var x = this.position_.getX() - dimensions.left;
   var y = this.position_.getY() - dimensions.top;
+  var r = dotprod.entities.Bullet.RADIUS_;
 
-  if (x + dotprod.entities.Bullet.RADIUS_ < 0 || y + dotprod.entities.Bullet.RADIUS_ < 0 || x >= dimensions.width || y >= dimensions.height) {
+  if (x + r < 0 || y + r < 0 || x - r >= dimensions.width || y - r >= dimensions.height) {
     return;
   }
 
   context.save();
-    var radgrad2 = context.createRadialGradient(x, y, 0, x, y, dotprod.entities.Bullet.RADIUS_);
-    radgrad2.addColorStop(0, '#fff');
-    radgrad2.addColorStop(1, 'rgba(255,1,136,0)');
-    context.fillStyle = radgrad2;
-    context.fillRect(x - dotprod.entities.Bullet.RADIUS_, y - dotprod.entities.Bullet.RADIUS_, dotprod.entities.Bullet.RADIUS_ * 2, dotprod.entities.Bullet.RADIUS_ * 2);
+    var gradient = context.createRadialGradient(x, y, 0, x, y, dotprod.entities.Bullet.RADIUS_);
+    gradient.addColorStop(0, '#fff');
+    gradient.addColorStop(1, this.color_);
+    context.fillStyle = gradient;
+    context.fillRect(x - r, y - r, r * 2, r * 2);
   context.restore();
 };
 

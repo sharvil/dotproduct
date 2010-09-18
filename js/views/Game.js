@@ -277,7 +277,7 @@ dotprod.Game.prototype.onPlayerPosition_ = function(packet) {
     if (packet.length > 7) {
       var bulletPos = new dotprod.Vector(packet[7], packet[8]);
       var bulletVel = new dotprod.Vector(packet[9], packet[10]);
-      this.projectileIndex_.addProjectile(player, new dotprod.entities.Bullet(player, bulletPos, bulletVel));
+      this.projectileIndex_.addProjectile(player, new dotprod.entities.Bullet(this, player, bulletPos, bulletVel));
     }
   }
 };
