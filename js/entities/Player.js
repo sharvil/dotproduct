@@ -78,12 +78,20 @@ dotprod.entities.Player.prototype.getName = function() {
 };
 
 /**
+ * @return {boolean}
+ */
+dotprod.entities.Player.prototype.isAlive = function() {
+  return this.energy_ > 0;
+};
+
+/**
  * @param {number} ship
  */
 dotprod.entities.Player.prototype.setShip = function(ship) {
   this.ship_ = ship;
   this.shipSettings_ = this.settings_['ships'][this.ship_];
 
+  this.angleInRadians_ = Math.random() * 2 * Math.PI;
   this.position_ = new dotprod.Vector(6000, 6000);
   this.energy_ = this.shipSettings_['maxEnergy'];
   this.xRadius_ = this.shipSettings_['xRadius'];
@@ -91,10 +99,16 @@ dotprod.entities.Player.prototype.setShip = function(ship) {
   this.image_ = this.game_.getResourceManager().getTiledImage('ship' + this.ship_);
 };
 
+dotprod.entities.Player.prototype.takeDamage = goog.nullFunction;
+
 /**
  * @param {!dotprod.Camera} camera
  */
 dotprod.entities.Player.prototype.render = function(camera) {
+  if (!this.isAlive()) {
+    return;
+  }
+
   var tileNum = Math.floor(this.angleInRadians_ / (2 * Math.PI) * this.image_.getNumTiles());
   var dimensions = camera.getDimensions();
   var context = camera.getContext();
@@ -118,6 +132,10 @@ dotprod.entities.Player.prototype.render = function(camera) {
  * @protected
  */
 dotprod.entities.Player.prototype.updatePosition_ = function(map, bounceFactor) {
+  if (!this.isAlive()) {
+    return;
+  }
+
   this.position_ = this.position_.add(this.velocity_.getXComponent());
   var collisionRect = map.getCollision(this);
   if (collisionRect) {

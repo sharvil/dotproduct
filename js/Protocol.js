@@ -72,7 +72,8 @@ dotprod.Protocol.C2SPacketType_ = {
   LOGIN: 1,
   BEGIN_GAME: 2,
   POSITION: 3,
-  CLOCK_SYNC: 4
+  CLOCK_SYNC: 4,
+  PLAYER_DIED: 5
 };
 
 /**
@@ -83,7 +84,8 @@ dotprod.Protocol.S2CPacketType = {
   PLAYER_ENTERED: 2,
   PLAYER_LEFT: 3,
   PLAYER_POSITION: 4,
-  CLOCK_SYNC_REPLY: 5
+  CLOCK_SYNC_REPLY: 5,
+  PLAYER_DIED: 6
 };
 
 /**
@@ -165,6 +167,13 @@ dotprod.Protocol.prototype.onClockSyncReply_ = function(packet) {
   if (this.serverTimeDelta_ < 0) {
     this.serverTimeDelta_ += 0x100000000;
   }
+};
+
+/**
+ * @param {string} killer
+ */
+dotprod.Protocol.prototype.sendDeath = function(killer) {
+  this.send_([dotprod.Protocol.C2SPacketType_.PLAYER_DIED, this.asRemoteTime_(goog.now()), killer]);
 };
 
 dotprod.Protocol.prototype.onOpen_ = function() {

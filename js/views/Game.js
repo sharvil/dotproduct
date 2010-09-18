@@ -130,6 +130,7 @@ dotprod.Game = function(protocol, resourceManager, settings, mapData) {
   this.protocol_.registerHandler(dotprod.Protocol.S2CPacketType.PLAYER_ENTERED, goog.bind(this.onPlayerEntered_, this));
   this.protocol_.registerHandler(dotprod.Protocol.S2CPacketType.PLAYER_LEFT, goog.bind(this.onPlayerLeft_, this));
   this.protocol_.registerHandler(dotprod.Protocol.S2CPacketType.PLAYER_POSITION, goog.bind(this.onPlayerPosition_, this));
+  this.protocol_.registerHandler(dotprod.Protocol.S2CPacketType.PLAYER_DIED, goog.bind(this.onPlayerDied_, this));
   this.protocol_.startGame();
 };
 goog.inherits(dotprod.Game, dotprod.views.View);
@@ -267,11 +268,27 @@ dotprod.Game.prototype.onPlayerPosition_ = function(packet) {
 
   var player = this.playerIndex_.findByName(name);
   if (player) {
-    player.positionUpdate(timeDiff, angle, position, velocity);
+    player.onPositionUpdate(timeDiff, angle, position, velocity);
     if (packet.length > 7) {
       var bulletPos = new dotprod.Vector(packet[7], packet[8]);
       var bulletVel = new dotprod.Vector(packet[9], packet[10]);
       this.projectileIndex_.addProjectile(player, new dotprod.entities.Bullet(player, bulletPos, bulletVel));
     }
   }
+};
+
+/**
+ * @param {!Object} packet
+ */
+dotprod.Game.prototype.onPlayerDied_ = function(packet) {
+  var timestamp = packet[0];
+  var killee = this.playerIndex_.findByName(packet[1]);
+  var killer = this.playerIndex_.findByName(packet[2]);
+
+  if (!killer || !killee) {
+    return;
+  }
+
+  killee.onDeath();
+  this.notifications_.addMessage(killee.getName() + ' killed by '+ killer.getName());
 };

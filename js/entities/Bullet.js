@@ -32,6 +32,12 @@ dotprod.entities.Bullet = function(owner, position, velocity) {
    * @type {number}
    * @private
    */
+  this.energy_ = 100;
+
+  /**
+   * @type {number}
+   * @private
+   */
   this.lifetime_ = 500;
 
   this.position_ = position;
@@ -118,7 +124,7 @@ dotprod.entities.Bullet.prototype.render = function(camera) {
  * @param {!dotprod.entities.Player} player
  */
 dotprod.entities.Bullet.prototype.checkPlayerCollision_ = function(player) {
-  if (this.owner_ == player) {
+  if (!player.isAlive() || this.owner_ == player) {
     return false;
   }
 
@@ -126,6 +132,7 @@ dotprod.entities.Bullet.prototype.checkPlayerCollision_ = function(player) {
   var x = this.position_.getX();
   var y = this.position_.getY();
   if (x >= dimensions.left && x <= dimensions.right && y >= dimensions.top && y <= dimensions.bottom) {
+    player.takeDamage(this.owner_, this, this.energy_);
     this.lifetime_ = 0;
     return true;
   }

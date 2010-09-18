@@ -23,6 +23,7 @@
       "yRadius": 14,
       "maxEnergy": 1000,
       "rechargeRate": 0.5,
+      "respawnDelay": 500,
       "bullet": {
         "speed": 3,
         "fireDelay": 30,
@@ -40,6 +41,7 @@
       "yRadius": 14,
       "maxEnergy": 2000,
       "rechargeRate": 0.5,
+      "respawnDelay": 500,
       "bullet": {
         "speed": 3,
         "fireDelay": 10,

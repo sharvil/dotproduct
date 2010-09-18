@@ -48,9 +48,33 @@ dotprod.entities.LocalPlayer = function(game, camera, projectileIndex, name) {
    * @type {number}
    * @private
    */
+  this.respawnTimer_ = 0;
+
+  /**
+   * @type {number}
+   * @private
+   */
   this.ticksSincePositionUpdate_ = 0;
 };
 goog.inherits(dotprod.entities.LocalPlayer, dotprod.entities.Player);
+
+/**
+ * @param {!dotprod.entities.Player} shooter
+ * @param {!dotprod.entities.Bullet} projectile
+ * @param {number} energy
+ * @override
+ */
+dotprod.entities.LocalPlayer.prototype.takeDamage = function(shooter, projectile, energy) {
+  this.energy_ -= energy;
+  if (this.energy_ <= 0) {
+    this.energy_ = 0;
+    this.respawnTimer_ = this.shipSettings_['respawnDelay'];
+    this.game_.getProtocol().sendDeath(shooter.getName());
+
+    // TODO(sharvil): we shouldn't reach into game's private member...
+    this.game_.notifications_.addMessage('You were killed by ' + shooter.getName() + '!');
+  }
+};
 
 /**
  * @param {!dotprod.Map} map
@@ -74,6 +98,15 @@ dotprod.entities.LocalPlayer.prototype.update = function(map) {
   var projectile;
 
   ++this.ticksSincePositionUpdate_;
+
+  if (this.respawnTimer_ > 0) {
+    if (--this.respawnTimer_ == 0) {
+      this.setShip(this.ship_);
+    } else {
+      return;
+    }
+  }
+
   this.projectileFireDelay_ = Math.max(this.projectileFireDelay_ - 1, 0);
   this.energy_ = Math.min(this.energy_ + rechargeRate, maxEnergy);
 
@@ -130,12 +163,26 @@ dotprod.entities.LocalPlayer.prototype.render = function(camera) {
 
   var context = camera.getContext();
   var dimensions = camera.getDimensions();
-  var barWidth = 300;
+
+  if (!this.isAlive()) {
+    var millis = dotprod.Timer.ticksToMillis(this.respawnTimer_);
+    var seconds = Math.floor(millis / 1000);
+    var tenths = Math.floor((millis % 1000) / 100);
+    var time = seconds + '.' + tenths;
+    context.save();
+      context.font = '10pt Verdana';
+      context.fillStyle = 'gold';
+      context.fillText(time, dimensions.width / 2, dimensions.height / 2);
+    context.restore();
+    return;
+  }
+
+  var barWidth = 300 * this.energy_ / 1000;
   var barHeight = 10;
 
   context.save();
     context.fillStyle = 'rgba(255, 255, 255, 0.3)';
-    context.fillRect((dimensions.width - barWidth) / 2, 10, barWidth * this.energy_ / 1000, barHeight);
+    context.fillRect((dimensions.width - barWidth) / 2, 10, barWidth, barHeight);
   context.restore();
 };
 

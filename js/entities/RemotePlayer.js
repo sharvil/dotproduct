@@ -63,7 +63,16 @@ dotprod.entities.RemotePlayer.VELOCITY_ADJUST_PERIOD_ = 20;
  * @param {!dotprod.Vector} position
  * @param {!dotprod.Vector} velocity
  */
-dotprod.entities.RemotePlayer.prototype.positionUpdate = function(timeDiff, angle, position, velocity) {
+dotprod.entities.RemotePlayer.prototype.onPositionUpdate = function(timeDiff, angle, position, velocity) {
+  if (!this.isAlive()) {
+    this.energy_ = 1;
+    this.angleInRadians_ = angle;
+    this.position_ = position;
+    this.velocity_ = velocity;
+    this.originalVelocity_ = velocity;
+    return;
+  }
+
   var finalPosition = position.add(velocity.scale(timeDiff));
   var distance = finalPosition.subtract(this.position_);
 
@@ -83,6 +92,10 @@ dotprod.entities.RemotePlayer.prototype.positionUpdate = function(timeDiff, angl
   } else {
     this.velocity_ = this.velocity_.add(new dotprod.Vector(0, distance.getY()).scale(1 / dotprod.entities.RemotePlayer.VELOCITY_ADJUST_PERIOD_));
   }
+};
+
+dotprod.entities.RemotePlayer.prototype.onDeath = function() {
+  this.energy_ = 0;
 };
 
 /**
