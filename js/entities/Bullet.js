@@ -6,42 +6,24 @@
 goog.provide('dotprod.entities.Bullet');
 
 goog.require('dotprod.Camera');
-goog.require('dotprod.entities.Entity');
 goog.require('dotprod.entities.Player');
+goog.require('dotprod.entities.Projectile');
 goog.require('dotprod.Map');
 goog.require('dotprod.PlayerIndex');
 goog.require('dotprod.Vector');
 
 /**
  * @constructor
- * @extends {dotprod.entities.Entity}
+ * @extends {dotprod.entities.Projectile}
  * @param {!dotprod.Game} game
  * @param {!dotprod.entities.Player} owner
  * @param {!dotprod.Vector} position
  * @param {!dotprod.Vector} velocity
  */
 dotprod.entities.Bullet = function(game, owner, position, velocity) {
-  dotprod.entities.Entity.call(this);
-
-  /**
-   * @type {!dotprod.entities.Player}
-   * @private
-   */
-  this.owner_ = owner;
-
   var shipSettings = game.getSettings()['ships'][owner.getShip()];
 
-  /**
-   * @type {number}
-   * @private
-   */
-  this.energy_ = shipSettings['bullet']['damage'];
-
-  /**
-   * @type {number}
-   * @private
-   */
-  this.lifetime_ = shipSettings['bullet']['lifetime'];
+  dotprod.entities.Projectile.call(this, game, owner, shipSettings['bullet']['lifetime'], shipSettings['bullet']['damage']);
 
   /**
    * @type {string}
@@ -52,7 +34,7 @@ dotprod.entities.Bullet = function(game, owner, position, velocity) {
   this.position_ = position;
   this.velocity_ = velocity;
 };
-goog.inherits(dotprod.entities.Bullet, dotprod.entities.Entity);
+goog.inherits(dotprod.entities.Bullet, dotprod.entities.Projectile);
 
 /**
  * @type {number}
@@ -60,13 +42,6 @@ goog.inherits(dotprod.entities.Bullet, dotprod.entities.Entity);
  * @const
  */
 dotprod.entities.Bullet.RADIUS_ = 5;
-
-/**
- * @return {boolean}
- */
-dotprod.entities.Bullet.prototype.isAlive = function() {
-  return this.lifetime_ >= 0;
-};
 
 /**
  * @param {!dotprod.Map} map
@@ -142,7 +117,7 @@ dotprod.entities.Bullet.prototype.checkPlayerCollision_ = function(player) {
   var x = this.position_.getX();
   var y = this.position_.getY();
   if (x >= dimensions.left && x <= dimensions.right && y >= dimensions.top && y <= dimensions.bottom) {
-    player.takeDamage(this.owner_, this, this.energy_);
+    player.takeDamage(this.owner_, this, this.damage_);
     this.lifetime_ = 0;
     return true;
   }

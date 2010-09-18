@@ -10,6 +10,7 @@ goog.require('goog.dom');
 goog.require('goog.events.BrowserEvent');
 goog.require('dotprod.Camera');
 goog.require('dotprod.ChatMessages');
+goog.require('dotprod.entities.Bullet');
 goog.require('dotprod.entities.LocalPlayer');
 goog.require('dotprod.entities.RemotePlayer');
 goog.require('dotprod.input.Keyboard');

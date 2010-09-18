@@ -9,6 +9,7 @@ goog.require('goog.events');
 goog.require('dotprod.Camera');
 goog.require('dotprod.entities.Bullet');
 goog.require('dotprod.entities.Player');
+goog.require('dotprod.entities.Projectile');
 goog.require('dotprod.input.Keyboard');
 goog.require('dotprod.layers.ProjectileLayer');
 goog.require('dotprod.Map');
@@ -186,7 +187,7 @@ dotprod.entities.LocalPlayer.prototype.render = function(camera) {
 
 /**
  * @param {boolean} isAccelerating
- * @param {!dotprod.entities.Bullet=} opt_projectile
+ * @param {!dotprod.entities.Projectile=} opt_projectile
  */
 dotprod.entities.LocalPlayer.prototype.sendPositionUpdate_ = function(isAccelerating, opt_projectile) {
   var sendPositionDelay = this.settings_['network']['sendPositionDelay'];
