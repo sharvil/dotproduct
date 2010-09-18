@@ -122,10 +122,6 @@ dotprod.entities.LocalPlayer.prototype.update = function(map) {
     }
   }
 
-  if (keyboard.isKeyPressed(goog.events.KeyCodes.S)) {
-    this.velocity_ = new dotprod.Vector(0, 0);
-  }
-
   if (keyboard.isKeyPressed(goog.events.KeyCodes.LEFT)) {
     this.angleInRadians_ -= shipRotation;
   } else if (keyboard.isKeyPressed(goog.events.KeyCodes.RIGHT)) {

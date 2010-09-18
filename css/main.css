@@ -57,6 +57,21 @@ input {
 }
 
 /**************************************
+              CHAT VIEW
+ **************************************/
+
+.cv-input {
+  color: #ccc;
+  background: #111;
+  border: 1px solid #222;
+  padding: 5px 9px;
+  margin: 0;
+  width: 788px;
+  opacity: 0;
+  -webkit-transition: opacity 0.2s linear;
+}
+
+/**************************************
             LOADING VIEW
  **************************************/
 

@@ -73,7 +73,8 @@ dotprod.Protocol.C2SPacketType_ = {
   BEGIN_GAME: 2,
   POSITION: 3,
   CLOCK_SYNC: 4,
-  PLAYER_DIED: 5
+  PLAYER_DIED: 5,
+  CHAT_MESSAGE: 6
 };
 
 /**
@@ -85,7 +86,8 @@ dotprod.Protocol.S2CPacketType = {
   PLAYER_LEFT: 3,
   PLAYER_POSITION: 4,
   CLOCK_SYNC_REPLY: 5,
-  PLAYER_DIED: 6
+  PLAYER_DIED: 6,
+  CHAT_MESSAGE: 7
 };
 
 /**
@@ -175,6 +177,13 @@ dotprod.Protocol.prototype.onClockSyncReply_ = function(packet) {
 dotprod.Protocol.prototype.sendDeath = function(killer) {
   this.send_([dotprod.Protocol.C2SPacketType_.PLAYER_DIED, this.asRemoteTime_(goog.now()), killer]);
 };
+
+/**
+ * @param {string} message
+ */
+dotprod.Protocol.prototype.sendChat = function(message) {
+  this.send_([dotprod.Protocol.C2SPacketType_.CHAT_MESSAGE, message]);
+}
 
 dotprod.Protocol.prototype.onOpen_ = function() {
   for (var i = 0; i < this.packetQueue_.length; ++i) {

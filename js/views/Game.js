@@ -7,10 +7,13 @@ goog.provide('dotprod.Game');
 
 goog.require('goog.debug.ErrorHandler');
 goog.require('goog.dom');
+goog.require('goog.events.BrowserEvent');
 goog.require('dotprod.Camera');
+goog.require('dotprod.ChatMessages');
 goog.require('dotprod.entities.LocalPlayer');
 goog.require('dotprod.entities.RemotePlayer');
 goog.require('dotprod.input.Keyboard');
+goog.require('dotprod.layers.ChatLayer');
 goog.require('dotprod.layers.NotificationLayer');
 goog.require('dotprod.layers.MapLayer');
 goog.require('dotprod.layers.ProjectileLayer');
@@ -23,6 +26,7 @@ goog.require('dotprod.ProjectileIndex');
 goog.require('dotprod.Protocol');
 goog.require('dotprod.ResourceManager');
 goog.require('dotprod.Timer');
+goog.require('dotprod.views.ChatView');
 goog.require('dotprod.views.View');
 
 /**
@@ -67,6 +71,18 @@ dotprod.Game = function(protocol, resourceManager, settings, mapData) {
   this.canvas_.height = 600;
 
   /**
+   * @type {!dotprod.ChatMessages}
+   * @private
+   */
+  this.chat_ = new dotprod.ChatMessages();
+
+  /**
+   * @type {!dotprod.views.ChatView}
+   * @private
+   */
+  this.chatView_ = new dotprod.views.ChatView(this, this.chat_);
+
+  /**
    * @type {!dotprod.Camera}
    * @private
    */
@@ -106,7 +122,8 @@ dotprod.Game = function(protocol, resourceManager, settings, mapData) {
       new dotprod.layers.MapLayer(this, this.map_),
       new dotprod.layers.ProjectileLayer(this.map_, this.playerIndex_, this.projectileIndex_),
       new dotprod.layers.ShipLayer(this.map_, this.playerIndex_),
-      new dotprod.layers.NotificationLayer(this.notifications_)
+      new dotprod.layers.NotificationLayer(this.notifications_),
+      new dotprod.layers.ChatLayer(this.chat_)
     ];
 
   /**
@@ -131,6 +148,7 @@ dotprod.Game = function(protocol, resourceManager, settings, mapData) {
   this.protocol_.registerHandler(dotprod.Protocol.S2CPacketType.PLAYER_LEFT, goog.bind(this.onPlayerLeft_, this));
   this.protocol_.registerHandler(dotprod.Protocol.S2CPacketType.PLAYER_POSITION, goog.bind(this.onPlayerPosition_, this));
   this.protocol_.registerHandler(dotprod.Protocol.S2CPacketType.PLAYER_DIED, goog.bind(this.onPlayerDied_, this));
+  this.protocol_.registerHandler(dotprod.Protocol.S2CPacketType.CHAT_MESSAGE, goog.bind(this.onChatMessage_, this));
   this.protocol_.startGame();
 };
 goog.inherits(dotprod.Game, dotprod.views.View);
@@ -161,7 +179,9 @@ dotprod.Game.CANVAS_CLASS_NAME_ = 'gv-map-canvas';
  */
 dotprod.Game.prototype.renderDom = function(rootNode) {
   goog.base(this, 'renderDom', rootNode);
+
   rootNode.appendChild(this.canvas_);
+  this.chatView_.renderDom(rootNode);
 };
 
 dotprod.Game.prototype.start = function() {
@@ -291,4 +311,14 @@ dotprod.Game.prototype.onPlayerDied_ = function(packet) {
 
   killee.onDeath();
   this.notifications_.addMessage(killee.getName() + ' killed by '+ killer.getName());
+};
+
+/**
+ * @param {!Object} packet
+ */
+dotprod.Game.prototype.onChatMessage_ = function(packet) {
+  var player = this.playerIndex_.findByName(packet[0]);
+  var message = packet[1];
+
+  this.chat_.addMessage('[' + player.getName() + '] ' + message);
 };
