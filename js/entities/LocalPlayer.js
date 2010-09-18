@@ -56,6 +56,12 @@ dotprod.entities.LocalPlayer = function(game, camera, projectileIndex, name) {
    * @private
    */
   this.ticksSincePositionUpdate_ = 0;
+
+  /**
+   * @type {number}
+   * @private
+   */
+  this.maxEnergy_;
 };
 goog.inherits(dotprod.entities.LocalPlayer, dotprod.entities.Player);
 
@@ -78,6 +84,15 @@ dotprod.entities.LocalPlayer.prototype.takeDamage = function(shooter, projectile
 };
 
 /**
+ * @override
+ */
+dotprod.entities.LocalPlayer.prototype.setShip = function(ship) {
+  goog.base(this, 'setShip', ship);
+
+  this.maxEnergy_ = this.shipSettings_['maxEnergy'];
+};
+
+/**
  * @param {!dotprod.Map} map
  */
 dotprod.entities.LocalPlayer.prototype.update = function(map) {
@@ -85,7 +100,6 @@ dotprod.entities.LocalPlayer.prototype.update = function(map) {
   var shipSpeed = this.shipSettings_['speedPixelsPerTick'];
   var acceleration = this.shipSettings_['accelerationPerTick'];
   var bounceFactor = this.shipSettings_['bounceFactor'];
-  var maxEnergy = this.shipSettings_['maxEnergy'];
   var rechargeRate = this.shipSettings_['rechargeRate'];
   var bulletFireDelay = this.shipSettings_['bullet']['fireDelay'];
   var bulletFireEnergy = this.shipSettings_['bullet']['fireEnergy'];
@@ -109,7 +123,7 @@ dotprod.entities.LocalPlayer.prototype.update = function(map) {
   }
 
   this.projectileFireDelay_ = Math.max(this.projectileFireDelay_ - 1, 0);
-  this.energy_ = Math.min(this.energy_ + rechargeRate, maxEnergy);
+  this.energy_ = Math.min(this.energy_ + rechargeRate, this.maxEnergy_);
 
   if (this.projectileFireDelay_ <= 0) {
     if (keyboard.isKeyPressed(goog.events.KeyCodes.CTRL) && this.energy_ > bulletFireEnergy) {
@@ -176,7 +190,7 @@ dotprod.entities.LocalPlayer.prototype.render = function(camera) {
     return;
   }
 
-  var barWidth = 300 * this.energy_ / 1000;
+  var barWidth = 300 * this.energy_ / this.maxEnergy_;
   var barHeight = 10;
 
   context.save();
