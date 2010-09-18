@@ -119,6 +119,8 @@ dotprod.entities.LocalPlayer.prototype.update = function(map) {
       this.projectileIndex_.addProjectile(this, projectile);
       this.projectileFireDelay_ = bulletFireDelay;
       this.energy_ -= bulletFireEnergy;
+
+      this.game_.getResourceManager().playSound('bullet');
     }
   }
 
