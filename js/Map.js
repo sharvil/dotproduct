@@ -7,6 +7,7 @@ goog.provide('dotprod.Map');
 
 goog.require('dotprod.entities.Entity');
 goog.require('dotprod.TiledImage');
+goog.require('dotprod.Vector');
 
 /**
  * @constructor
@@ -39,6 +40,12 @@ dotprod.Map = function(game, mapData) {
    * @type {number}
    * @private
    */
+  this.spawnRadius_ = settings['map']['spawnRadius'];
+
+  /**
+   * @type {number}
+   * @private
+   */
   this.tileWidth_ = tileset.getTileWidth();
 
   /**
@@ -54,6 +61,13 @@ dotprod.Map = function(game, mapData) {
  * @const
  */
 dotprod.Map.COLLISION_EPSILON_ = 0.0001;
+
+/**
+ * @type {number}
+ * @private
+ * @const
+ */
+dotprod.Map.MAX_SPAWN_LOCATION_ATTEMPTS_ = 10;
 
 /**
  * @return {number}
@@ -80,12 +94,48 @@ dotprod.Map.prototype.getTile = function(x, y) {
 };
 
 /**
- * @param {!dotprod.entities.Entity} sprite
+ * @param {!dotprod.entities.Entity} entity
+ * @return {!dotprod.Vector}
+ */
+dotprod.Map.prototype.getSpawnLocation = function(entity) {
+  var cX = this.width_ * this.tileWidth_ / 2;
+  var cY = this.height_ * this.tileHeight_ / 2;
+  var dimensions = entity.getDimensions();
+
+  var x;
+  var y;
+  var attempts = 0;
+
+  do {
+    var deltaX = Math.random() * this.spawnRadius_ * 2 - this.spawnRadius_;
+    var deltaY = Math.random() * this.spawnRadius_ * 2 - this.spawnRadius_;
+
+    x = Math.floor(cX + deltaX);
+    y = Math.floor(cY + deltaY);
+
+    dimensions.left = x - dimensions.xRadius;
+    dimensions.right = x + dimensions.xRadius;
+    dimensions.top = y - dimensions.yRadius;
+    dimensions.bottom = y + dimensions.yRadius;
+
+  } while (this.getCollision_(dimensions) && attempts++ < dotprod.Map.MAX_SPAWN_LOCATION_ATTEMPTS_);
+
+  return new dotprod.Vector(x, y);
+};
+
+/**
+ * @param {!dotprod.entities.Entity} entity
  * @return {Object}
  */
-dotprod.Map.prototype.getCollision = function(sprite) {
-  var dimensions = sprite.getDimensions();
+dotprod.Map.prototype.getCollision = function(entity) {
+  return this.getCollision_(entity.getDimensions());
+};
 
+/**
+ * @param {!Object} dimensions
+ * @return {Object}
+ */
+dotprod.Map.prototype.getCollision_ = function(dimensions) {
   var left = dimensions.left;
   var right = dimensions.right;
   var top = dimensions.top;
@@ -97,7 +147,7 @@ dotprod.Map.prototype.getCollision = function(sprite) {
   var totalHeight = this.height_ * this.tileHeight_;
 
   // Trivial case 1: left/top of map.
-  if (left < 0 || right < 0) {
+  if (left < 0 || top < 0) {
     return {
       left: -dotprod.Map.COLLISION_EPSILON_ - xRadius,
       right: this.tileWidth_ + xRadius,

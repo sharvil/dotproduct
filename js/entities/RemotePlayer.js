@@ -19,7 +19,7 @@ goog.require('dotprod.Vector');
  * @param {number} ship
  */
 dotprod.entities.RemotePlayer = function(game, name, ship) {
-  dotprod.entities.Player.call(this, game, name);
+  dotprod.entities.Player.call(this, game, name, ship);
 
   /**
    * @type {!dotprod.Game}
@@ -39,7 +39,9 @@ dotprod.entities.RemotePlayer = function(game, name, ship) {
    */
   this.originalVelocity_ = new dotprod.Vector(0, 0);
 
-  this.setShip(ship);
+  // The remote player isn't alive until we receive a position packet telling
+  // us otherwise.
+  this.energy_ = 0;
 };
 goog.inherits(dotprod.entities.RemotePlayer, dotprod.entities.Player);
 
@@ -98,14 +100,11 @@ dotprod.entities.RemotePlayer.prototype.onDeath = function() {
   this.energy_ = 0;
 };
 
-/**
- * @param {!dotprod.Map} map
- */
-dotprod.entities.RemotePlayer.prototype.update = function(map) {
+dotprod.entities.RemotePlayer.prototype.update = function() {
   var bounceFactor = this.game_.getSettings()['ships'][this.ship_]['bounceFactor'];
   --this.velocityAdjustTimer_;
   if (this.velocityAdjustTimer_ <= 0) {
     this.velocity_ = this.originalVelocity_;
   }
-  this.updatePosition_(map, bounceFactor);
+  this.updatePosition_(bounceFactor);
 };

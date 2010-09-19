@@ -25,7 +25,7 @@ goog.require('dotprod.Vector');
  * @param {string} name
  */
 dotprod.entities.LocalPlayer = function(game, camera, projectileIndex, name) {
-  dotprod.entities.Player.call(this, game, name);
+  dotprod.entities.Player.call(this, game, name, 0 /* ship */);
 
   /**
    * @type {!dotprod.ProjectileIndex}
@@ -55,13 +55,7 @@ dotprod.entities.LocalPlayer = function(game, camera, projectileIndex, name) {
    * @type {number}
    * @private
    */
-  this.ticksSincePositionUpdate_ = 0;
-
-  /**
-   * @type {number}
-   * @private
-   */
-  this.maxEnergy_;
+  this.ticksSincePositionUpdate_ = 999999;
 };
 goog.inherits(dotprod.entities.LocalPlayer, dotprod.entities.Player);
 
@@ -83,19 +77,7 @@ dotprod.entities.LocalPlayer.prototype.takeDamage = function(shooter, projectile
   }
 };
 
-/**
- * @override
- */
-dotprod.entities.LocalPlayer.prototype.setShip = function(ship) {
-  goog.base(this, 'setShip', ship);
-
-  this.maxEnergy_ = this.shipSettings_['maxEnergy'];
-};
-
-/**
- * @param {!dotprod.Map} map
- */
-dotprod.entities.LocalPlayer.prototype.update = function(map) {
+dotprod.entities.LocalPlayer.prototype.update = function() {
   var shipRotation = this.shipSettings_['rotationRadiansPerTick'];
   var shipSpeed = this.shipSettings_['speedPixelsPerTick'];
   var acceleration = this.shipSettings_['accelerationPerTick'];
@@ -163,7 +145,7 @@ dotprod.entities.LocalPlayer.prototype.update = function(map) {
     this.velocity_ = this.velocity_.scale(shipSpeed / magnitude);
   }
 
-  this.updatePosition_(map, bounceFactor);
+  this.updatePosition_(bounceFactor);
   this.camera_.setPosition(Math.floor(this.position_.getX()), Math.floor(this.position_.getY()));
   this.sendPositionUpdate_(this.velocity_ != oldVelocity || this.angleInRadians_ != oldAngle, projectile);
 };

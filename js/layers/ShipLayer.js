@@ -13,16 +13,9 @@ goog.require('dotprod.PlayerIndex');
 /**
  * @constructor
  * @implements {dotprod.layers.Layer}
- * @param {!dotprod.Map} map
  * @param {!dotprod.PlayerIndex} playerIndex
  */
-dotprod.layers.ShipLayer = function(map, playerIndex) {
-  /**
-   * @type {!dotprod.Map}
-   * @private
-   */
-  this.map_ = map;
-
+dotprod.layers.ShipLayer = function(playerIndex) {
   /**
    * @type {!dotprod.PlayerIndex}
    * @private
@@ -45,7 +38,7 @@ dotprod.layers.ShipLayer.prototype.updateShip = function(name, packet) {
 dotprod.layers.ShipLayer.prototype.update = function() {
   var players = this.playerIndex_.getPlayers();
   for (var i = 0; i < players.length; ++i) {
-    players[i].update(this.map_);
+    players[i].update();
   }
 };
 

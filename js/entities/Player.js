@@ -14,8 +14,9 @@ goog.require('dotprod.TiledImage');
  * @extends {dotprod.entities.Entity}
  * @param {!dotprod.Game} game
  * @param {string} name
+ * @param {number} ship
  */
-dotprod.entities.Player = function(game, name) {
+dotprod.entities.Player = function(game, name, ship) {
   dotprod.entities.Entity.call(this);
 
   /**
@@ -50,7 +51,7 @@ dotprod.entities.Player = function(game, name) {
 
   /**
    * @type {number}
-   * @private
+   * @protected
    */
   this.energy_ = 0;
 
@@ -58,7 +59,13 @@ dotprod.entities.Player = function(game, name) {
    * @type {number}
    * @protected
    */
-  this.ship_ = 0;
+  this.maxEnergy_ = 0;
+
+  /**
+   * @type {number}
+   * @protected
+   */
+  this.ship_ = ship;
 
   /**
    * @type {!dotprod.TiledImage}
@@ -66,7 +73,7 @@ dotprod.entities.Player = function(game, name) {
    */
   this.image_;
 
-  this.setShip(0);
+  this.setShip(this.ship_);
 };
 goog.inherits(dotprod.entities.Player, dotprod.entities.Entity);
 
@@ -99,8 +106,10 @@ dotprod.entities.Player.prototype.setShip = function(ship) {
   this.shipSettings_ = this.settings_['ships'][this.ship_];
 
   this.angleInRadians_ = Math.random() * 2 * Math.PI;
-  this.position_ = new dotprod.Vector(6000, 6000);
+  this.position_ = this.game_.getMap().getSpawnLocation(this);
+  this.velocity_ = new dotprod.Vector(0, 0);
   this.energy_ = this.shipSettings_['maxEnergy'];
+  this.maxEnergy_ = this.shipSettings_['maxEnergy'];
   this.xRadius_ = this.shipSettings_['xRadius'];
   this.yRadius_ = this.shipSettings_['yRadius'];
   this.image_ = this.game_.getResourceManager().getTiledImage('ship' + this.ship_);
@@ -134,17 +143,16 @@ dotprod.entities.Player.prototype.render = function(camera) {
 };
 
 /**
- * @param {!dotprod.Map} map
  * @param {number} bounceFactor
  * @protected
  */
-dotprod.entities.Player.prototype.updatePosition_ = function(map, bounceFactor) {
+dotprod.entities.Player.prototype.updatePosition_ = function(bounceFactor) {
   if (!this.isAlive()) {
     return;
   }
 
   this.position_ = this.position_.add(this.velocity_.getXComponent());
-  var collisionRect = map.getCollision(this);
+  var collisionRect = this.game_.getMap().getCollision(this);
   if (collisionRect) {
     var xVel = this.velocity_.getX();
     this.position_ = new dotprod.Vector(xVel >= 0 ? collisionRect.left : collisionRect.right, this.position_.getY());
@@ -152,7 +160,7 @@ dotprod.entities.Player.prototype.updatePosition_ = function(map, bounceFactor) 
   }
 
   this.position_ = this.position_.add(this.velocity_.getYComponent());
-  collisionRect = map.getCollision(this);
+  collisionRect = this.game_.getMap().getCollision(this);
   if (collisionRect) {
     var yVel = this.velocity_.getY();
     this.position_ = new dotprod.Vector(this.position_.getX(), yVel >= 0 ? collisionRect.top : collisionRect.bottom);

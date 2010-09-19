@@ -16,9 +16,8 @@ goog.require('dotprod.ResourceManager');
  * @constructor
  * @implements {dotprod.layers.Layer}
  * @param {!dotprod.Game} game
- * @param {!dotprod.Map} map
  */
-dotprod.layers.MapLayer = function(game, map) {
+dotprod.layers.MapLayer = function(game) {
   /**
    * @type {!dotprod.Game}
    * @private
@@ -30,12 +29,6 @@ dotprod.layers.MapLayer = function(game, map) {
    * @private
    */
   this.tileset_ = this.game_.getResourceManager().getTiledImage('tileset');
-
-  /**
-   * @type {!dotprod.Map}
-   * @private
-   */
-  this.map_ = map;
 };
 
 /**
@@ -49,6 +42,7 @@ dotprod.layers.MapLayer.prototype.update = function() {
  * @override
  */
 dotprod.layers.MapLayer.prototype.render = function(camera) {
+  var map = this.game_.getMap();
   var dimensions = camera.getDimensions();
   var context = camera.getContext();
 
@@ -69,17 +63,17 @@ dotprod.layers.MapLayer.prototype.render = function(camera) {
     leftTile = Math.max(leftTile, 0);
 
     // Don't draw tiles past the map width/height.
-    if (topTile + numVertTiles >= this.map_.getHeight()) {
-      numVertTiles = this.map_.getHeight() - topTile - 1;
+    if (topTile + numVertTiles >= map.getHeight()) {
+      numVertTiles = map.getHeight() - topTile - 1;
     }
 
-    if (leftTile + numHorizTiles >= this.map_.getWidth()) {
-      numHorizTiles = this.map_.getWidth() - leftTile - 1;
+    if (leftTile + numHorizTiles >= map.getWidth()) {
+      numHorizTiles = map.getWidth() - leftTile - 1;
     }
 
     for (var y = topTile; y <= topTile + numVertTiles; ++y) {
       for (var x = leftTile; x <= leftTile + numHorizTiles; ++x) {
-        var tileNum = this.map_.getTile(x, y);
+        var tileNum = map.getTile(x, y);
         if (tileNum == 0 || tileNum > this.tileset_.getNumTiles()) {
           continue;
         }

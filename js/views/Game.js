@@ -120,9 +120,9 @@ dotprod.Game = function(protocol, resourceManager, settings, mapData) {
    */
   this.layers_ = [
       new dotprod.layers.StarLayer(),
-      new dotprod.layers.MapLayer(this, this.map_),
+      new dotprod.layers.MapLayer(this),
       new dotprod.layers.ProjectileLayer(this.map_, this.playerIndex_, this.projectileIndex_),
-      new dotprod.layers.ShipLayer(this.map_, this.playerIndex_),
+      new dotprod.layers.ShipLayer(this.playerIndex_),
       new dotprod.layers.NotificationLayer(this.notifications_),
       new dotprod.layers.ChatLayer(this.chat_)
     ];
@@ -207,6 +207,13 @@ dotprod.Game.prototype.getResourceManager = function() {
  */
 dotprod.Game.prototype.getSettings = function() {
   return this.settings_;
+};
+
+/**
+ * @return {!dotprod.Map}
+ */
+dotprod.Game.prototype.getMap = function() {
+  return this.map_;
 };
 
 /**
