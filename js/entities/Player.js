@@ -6,8 +6,8 @@
 goog.provide('dotprod.entities.Player');
 
 goog.require('dotprod.entities.Entity');
+goog.require('dotprod.Image');
 goog.require('dotprod.Map');
-goog.require('dotprod.TiledImage');
 
 /**
  * @constructor
@@ -68,7 +68,7 @@ dotprod.entities.Player = function(game, name, ship) {
   this.ship_ = ship;
 
   /**
-   * @type {!dotprod.TiledImage}
+   * @type {!dotprod.Image}
    * @protected
    */
   this.image_;
@@ -110,7 +110,7 @@ dotprod.entities.Player.prototype.setShip = function(ship) {
   this.energy_ = 0;
   this.xRadius_ = this.shipSettings_['xRadius'];
   this.yRadius_ = this.shipSettings_['yRadius'];
-  this.image_ = this.game_.getResourceManager().getTiledImage('ship' + this.ship_);
+  this.image_ = this.game_.getResourceManager().getImage('ship' + this.ship_);
 };
 
 dotprod.entities.Player.prototype.takeDamage = goog.nullFunction;

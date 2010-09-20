@@ -6,7 +6,7 @@
 goog.provide('dotprod.Map');
 
 goog.require('dotprod.entities.Entity');
-goog.require('dotprod.TiledImage');
+goog.require('dotprod.Image');
 goog.require('dotprod.Vector');
 
 /**
@@ -16,7 +16,7 @@ goog.require('dotprod.Vector');
  */
 dotprod.Map = function(game, mapData) {
   var settings = game.getSettings();
-  var tileset = game.getResourceManager().getTiledImage('tileset');
+  var tileset = game.getResourceManager().getImage('tileset');
 
   /**
    * @type {!Object.<number, number>}

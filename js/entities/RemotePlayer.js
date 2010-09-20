@@ -8,7 +8,6 @@ goog.provide('dotprod.entities.RemotePlayer');
 goog.require('dotprod.Camera');
 goog.require('dotprod.entities.Player');
 goog.require('dotprod.Map');
-goog.require('dotprod.TiledImage');
 goog.require('dotprod.Vector');
 
 /**

@@ -8,6 +8,7 @@ goog.provide('dotprod.layers.MapLayer');
 goog.require('goog.dom');
 goog.require('goog.events');
 goog.require('dotprod.Camera');
+goog.require('dotprod.Image');
 goog.require('dotprod.layers.Layer');
 goog.require('dotprod.Map');
 goog.require('dotprod.ResourceManager');
@@ -25,10 +26,10 @@ dotprod.layers.MapLayer = function(game) {
   this.game_ = game;
 
   /**
-   * @type {!dotprod.TiledImage}
+   * @type {!dotprod.Image}
    * @private
    */
-  this.tileset_ = this.game_.getResourceManager().getTiledImage('tileset');
+  this.tileset_ = this.game_.getResourceManager().getImage('tileset');
 };
 
 /**

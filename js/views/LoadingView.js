@@ -86,10 +86,8 @@ dotprod.views.LoadingView.prototype.load = function(resources) {
 
   for (var name in resources['graphics']) {
     var resource = resources['graphics'][name];
-    if (resource['xTiles']) {
-      this.resourceManager_.loadTiledImage(name, resource['url'], resource['xTiles'], resource['yTiles'], completionCb);
-      ++totalResources;
-    }
+    this.resourceManager_.loadImage(name, resource['url'], resource['xTiles'], resource['yTiles'], completionCb);
+    ++totalResources;
   }
 
   for (var name in resources['sounds']) {

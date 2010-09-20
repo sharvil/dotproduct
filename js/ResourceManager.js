@@ -5,17 +5,17 @@
 
 goog.provide('dotprod.ResourceManager');
 
-goog.require('dotprod.TiledImage');
+goog.require('dotprod.Image');
 
 /**
  * @constructor
  */
 dotprod.ResourceManager = function() {
   /**
-   * @type {!Object.<string, !dotprod.TiledImage>}
+   * @type {!Object.<string, !dotprod.Image>}
    * @private
    */
-  this.tiledImages_ = {};
+  this.images_ = {};
 
   /**
    * @type {!Object.<string, Audio>}
@@ -24,9 +24,9 @@ dotprod.ResourceManager = function() {
   this.sounds_ = {};
 };
 
-dotprod.ResourceManager.prototype.loadTiledImage = function(name, url, xTiles, yTiles, loadCb) {
-  this.tiledImages_[name] = new dotprod.TiledImage(xTiles, yTiles);
-  this.tiledImages_[name].load(url, loadCb);
+dotprod.ResourceManager.prototype.loadImage = function(name, url, xTiles, yTiles, loadCb) {
+  this.images_[name] = new dotprod.Image(xTiles, yTiles);
+  this.images_[name].load(url, loadCb);
 };
 
 dotprod.ResourceManager.prototype.loadSound = function(name, url, loadCb) {
@@ -41,6 +41,6 @@ dotprod.ResourceManager.prototype.playSound = function(name) {
   this.sounds_[name].play();
 };
 
-dotprod.ResourceManager.prototype.getTiledImage = function(name) {
-  return this.tiledImages_[name];
+dotprod.ResourceManager.prototype.getImage = function(name) {
+  return this.images_[name];
 };
