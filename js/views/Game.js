@@ -144,7 +144,8 @@ dotprod.Game = function(protocol, resourceManager, settings, mapData) {
   this.protocol_.registerHandler(dotprod.Protocol.S2CPacketType.PLAYER_POSITION, goog.bind(this.onPlayerPosition_, this));
   this.protocol_.registerHandler(dotprod.Protocol.S2CPacketType.PLAYER_DIED, goog.bind(this.onPlayerDied_, this));
   this.protocol_.registerHandler(dotprod.Protocol.S2CPacketType.CHAT_MESSAGE, goog.bind(this.onChatMessage_, this));
-  this.protocol_.startGame();
+  this.protocol_.registerHandler(dotprod.Protocol.S2CPacketType.SHIP_CHANGE, goog.bind(this.onShipChanged_, this));
+  this.protocol_.startGame(0 /* ship */);
 
   dotprod.Timer.setInterval(goog.bind(this.renderingLoop_, this), 1)
 };
@@ -251,7 +252,8 @@ dotprod.Game.prototype.renderingLoop_ = function() {
  */
 dotprod.Game.prototype.onPlayerEntered_ = function(packet) {
   var name = packet[0];
-  this.playerIndex_.addPlayer(new dotprod.entities.RemotePlayer(this, name, 0));
+  var ship = packet[1];
+  this.playerIndex_.addPlayer(new dotprod.entities.RemotePlayer(this, name, ship));
   this.notifications_.addMessage('Player entered: ' + name);
 };
 
@@ -304,6 +306,18 @@ dotprod.Game.prototype.onPlayerDied_ = function(packet) {
 
   killee.onDeath();
   this.notifications_.addMessage(killee.getName() + ' killed by '+ killer.getName());
+};
+
+/**
+ * @param {!Object} packet
+ */
+dotprod.Game.prototype.onShipChanged_ = function(packet) {
+  var player = this.playerIndex_.findByName(packet[0]);
+  var ship = packet[1];
+
+  if (player) {
+    player.setShip(ship);
+  }
 };
 
 /**

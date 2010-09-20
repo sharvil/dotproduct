@@ -71,11 +71,12 @@ dotprod.Protocol = function(url) {
  */
 dotprod.Protocol.C2SPacketType_ = {
   LOGIN: 1,
-  BEGIN_GAME: 2,
+  START_GAME: 2,
   POSITION: 3,
   CLOCK_SYNC: 4,
   PLAYER_DIED: 5,
-  CHAT_MESSAGE: 6
+  CHAT_MESSAGE: 6,
+  SHIP_CHANGE: 7
 };
 
 /**
@@ -88,7 +89,8 @@ dotprod.Protocol.S2CPacketType = {
   PLAYER_POSITION: 4,
   CLOCK_SYNC_REPLY: 5,
   PLAYER_DIED: 6,
-  CHAT_MESSAGE: 7
+  CHAT_MESSAGE: 7,
+  SHIP_CHANGE: 8
 };
 
 /**
@@ -129,8 +131,11 @@ dotprod.Protocol.prototype.login = function(username) {
   this.send_([dotprod.Protocol.C2SPacketType_.LOGIN, username]);
 };
 
-dotprod.Protocol.prototype.startGame = function() {
-  this.send_([dotprod.Protocol.C2SPacketType_.BEGIN_GAME]);
+/**
+ * @param {number}
+ */
+dotprod.Protocol.prototype.startGame = function(ship) {
+  this.send_([dotprod.Protocol.C2SPacketType_.START_GAME, ship]);
   this.syncClocks_();
 };
 
@@ -184,7 +189,14 @@ dotprod.Protocol.prototype.sendDeath = function(killer) {
  */
 dotprod.Protocol.prototype.sendChat = function(message) {
   this.send_([dotprod.Protocol.C2SPacketType_.CHAT_MESSAGE, message]);
-}
+};
+
+/**
+ * @param {number} ship
+ */
+dotprod.Protocol.prototype.sendShipChange = function(ship) {
+  this.send_([dotprod.Protocol.C2SPacketType_.SHIP_CHANGE, ship]);
+};
 
 dotprod.Protocol.prototype.onOpen_ = function() {
   for (var i = 0; i < this.packetQueue_.length; ++i) {

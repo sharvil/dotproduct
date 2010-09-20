@@ -105,11 +105,9 @@ dotprod.entities.Player.prototype.setShip = function(ship) {
   this.ship_ = ship;
   this.shipSettings_ = this.settings_['ships'][this.ship_];
 
-  this.angleInRadians_ = Math.random() * 2 * Math.PI;
-  this.position_ = this.game_.getMap().getSpawnLocation(this);
+  this.position_ = new dotprod.Vector(0, 0);
   this.velocity_ = new dotprod.Vector(0, 0);
-  this.energy_ = this.shipSettings_['maxEnergy'];
-  this.maxEnergy_ = this.shipSettings_['maxEnergy'];
+  this.energy_ = 0;
   this.xRadius_ = this.shipSettings_['xRadius'];
   this.yRadius_ = this.shipSettings_['yRadius'];
   this.image_ = this.game_.getResourceManager().getTiledImage('ship' + this.ship_);
