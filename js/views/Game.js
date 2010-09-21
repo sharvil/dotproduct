@@ -305,6 +305,7 @@ dotprod.Game.prototype.onPlayerDied_ = function(packet) {
   }
 
   killee.onDeath();
+  this.projectileIndex_.removeProjectiles(killee);
   this.notifications_.addMessage(killee.getName() + ' killed by '+ killer.getName());
 };
 
@@ -317,6 +318,7 @@ dotprod.Game.prototype.onShipChanged_ = function(packet) {
 
   if (player) {
     player.setShip(ship);
+    this.projectileIndex_.removeProjectiles(player);
   }
 };
 

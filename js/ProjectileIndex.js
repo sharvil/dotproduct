@@ -32,8 +32,8 @@ dotprod.ProjectileIndex.prototype.addProjectile = function(player, projectile) {
  * @param {!dotprod.entities.Player} player
  */
 dotprod.ProjectileIndex.prototype.removeProjectiles = function(player) {
-  goog.array.removeIf(this.projectiles_, function(element) {
-    return element.player == player;
+  this.projectiles_ = goog.array.filter(this.projectiles_, function(element) {
+    return element.player != player;
   });
 };
 

@@ -26,8 +26,6 @@ goog.require('dotprod.Vector');
  * @param {string} name
  */
 dotprod.entities.LocalPlayer = function(game, camera, projectileIndex, name) {
-  dotprod.entities.Player.call(this, game, name, 0 /* ship */);
-
   /**
    * @type {!dotprod.ProjectileIndex}
    * @private
@@ -57,6 +55,8 @@ dotprod.entities.LocalPlayer = function(game, camera, projectileIndex, name) {
    * @private
    */
   this.ticksSincePositionUpdate_ = 999999;
+
+  dotprod.entities.Player.call(this, game, name, 0 /* ship */);
 };
 goog.inherits(dotprod.entities.LocalPlayer, dotprod.entities.Player);
 
@@ -90,6 +90,7 @@ dotprod.entities.LocalPlayer.prototype.setShip = function(ship) {
   this.velocity_ = new dotprod.Vector(0, 0);
   this.energy_ = this.shipSettings_['maxEnergy'];
   this.maxEnergy_ = this.shipSettings_['maxEnergy'];
+  this.projectileIndex_.removeProjectiles(this);
 };
 
 dotprod.entities.LocalPlayer.prototype.update = function() {
