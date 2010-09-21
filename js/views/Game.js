@@ -265,6 +265,7 @@ dotprod.Game.prototype.onPlayerLeft_ = function(packet) {
   var name = packet[0];
   var player = this.playerIndex_.findByName(name);
   if (player) {
+    this.projectileIndex_.removeProjectiles(player);
     this.playerIndex_.removePlayer(player);
     this.notifications_.addMessage('Player left: ' + name);
   }
