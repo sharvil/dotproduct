@@ -52,8 +52,102 @@
       "url": "data/shared/graphics/ship7.png",
       "xTiles": 10,
       "yTiles": 4
+    },
+
+    "exhaust": {
+      "url": "data/shared/graphics/exhaust.png",
+      "xTiles": 19,
+      "yTiles": 2
     }
   },
+
+	"videoensembles": {
+		"ship0_junk": {
+			"url": "data/shared/graphics/ship0_junk.png",
+			"xTiles": 10,
+			"yTiles": 9,
+			"frames": 10,
+			"period": 10
+		},
+
+		"ship1_junk": {
+			"url": "data/shared/graphics/ship1_junk.png",
+			"xTiles": 10,
+			"yTiles": 9,
+			"frames": 10,
+			"period": 10
+		},
+
+		"ship2_junk": {
+			"url": "data/shared/graphics/ship2_junk.png",
+			"xTiles": 10,
+			"yTiles": 9,
+			"frames": 10,
+			"period": 10
+		},
+
+		"ship3_junk": {
+			"url": "data/shared/graphics/ship3_junk.png",
+			"xTiles": 10,
+			"yTiles": 9,
+			"frames": 10,
+			"period": 10
+		},
+
+		"ship4_junk": {
+			"url": "data/shared/graphics/ship4_junk.png",
+			"xTiles": 10,
+			"yTiles": 9,
+			"frames": 10,
+			"period": 10
+		},
+
+		"ship5_junk": {
+			"url": "data/shared/graphics/ship5_junk.png",
+			"xTiles": 10,
+			"yTiles": 9,
+			"frames": 10,
+			"period": 10
+		},
+
+		"ship6_junk": {
+			"url": "data/shared/graphics/ship6_junk.png",
+			"xTiles": 10,
+			"yTiles": 9,
+			"frames": 10,
+			"period": 10
+		},
+
+		"ship7_junk": {
+			"url": "data/shared/graphics/ship7_junk.png",
+			"xTiles": 10,
+			"yTiles": 9,
+			"frames": 10,
+			"period": 10
+		},
+
+		"explode0": {
+		  "url": "data/shared/graphics/explode0.png",
+		  "xTiles": 7,
+		  "yTiles": 1,
+		  "frames": 7
+		},
+
+		"explode1": {
+		  "url": "data/shared/graphics/explode1.png",
+		  "xTiles": 6,
+		  "yTiles": 6,
+		  "frames": 36
+		},
+
+		"explode2": {
+		  "url": "data/shared/graphics/explode2.png",
+		  "xTiles": 4,
+		  "yTiles": 11,
+		  "frames": 44,
+			"period": 2
+		}
+	},
 
   "sounds": {
     "bounce": {

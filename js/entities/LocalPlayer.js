@@ -8,7 +8,9 @@ goog.provide('dotprod.entities.LocalPlayer');
 goog.require('goog.events');
 goog.require('goog.object');
 goog.require('dotprod.Camera');
+goog.require('dotprod.EffectIndex');
 goog.require('dotprod.entities.Bullet');
+goog.require('dotprod.entities.Exhaust');
 goog.require('dotprod.entities.Player');
 goog.require('dotprod.entities.Projectile');
 goog.require('dotprod.input.Keyboard');
@@ -21,11 +23,12 @@ goog.require('dotprod.Vector');
  * @constructor
  * @extends {dotprod.entities.Player}
  * @param {!dotprod.Game} game
+ * @param {string} name
+ * @param {number} ship
  * @param {!dotprod.Camera} camera
  * @param {!dotprod.ProjectileIndex} projectileIndex
- * @param {string} name
  */
-dotprod.entities.LocalPlayer = function(game, camera, projectileIndex, name) {
+dotprod.entities.LocalPlayer = function(game, name, ship, camera, projectileIndex, effectIndex) {
   /**
    * @type {!dotprod.ProjectileIndex}
    * @private
@@ -56,7 +59,7 @@ dotprod.entities.LocalPlayer = function(game, camera, projectileIndex, name) {
    */
   this.ticksSincePositionUpdate_ = 999999;
 
-  dotprod.entities.Player.call(this, game, name, 0 /* ship */);
+  dotprod.entities.Player.call(this, game, name, ship, effectIndex);
 };
 goog.inherits(dotprod.entities.LocalPlayer, dotprod.entities.Player);
 
@@ -69,13 +72,21 @@ goog.inherits(dotprod.entities.LocalPlayer, dotprod.entities.Player);
 dotprod.entities.LocalPlayer.prototype.takeDamage = function(shooter, projectile, energy) {
   this.energy_ -= energy;
   if (this.energy_ <= 0) {
-    this.energy_ = 0;
-    this.respawnTimer_ = this.shipSettings_['respawnDelay'];
+    this.onDeath();
     this.game_.getProtocol().sendDeath(shooter.getName());
 
     // TODO(sharvil): we shouldn't reach into game's private member...
     this.game_.notifications_.addMessage('You were killed by ' + shooter.getName() + '!');
   }
+};
+
+/**
+ * @override
+ */
+dotprod.entities.LocalPlayer.prototype.onDeath = function() {
+  this.energy_ = 0;
+  this.respawnTimer_ = this.shipSettings_['respawnDelay'];
+  goog.base(this, 'onDeath');
 };
 
 /**
@@ -150,6 +161,20 @@ dotprod.entities.LocalPlayer.prototype.update = function() {
     }
   }
 
+  if (this.projectileFireDelay_ <= 0 && keyboard.isKeyPressed(goog.events.KeyCodes.TAB)) {
+    var ensemble = this.game_.getResourceManager().getVideoEnsemble('explode2');
+    this.effectIndex_.addEffect(new dotprod.entities.Effect(ensemble.getAnimation(0), this.position_, this.velocity_));
+
+    ensemble = this.game_.getResourceManager().getVideoEnsemble('ship' + this.ship_ + '_junk');
+    for (var i = 0; i < ensemble.getNumAnimations(); ++i) {
+      var animation = ensemble.getAnimation(i);
+      var deltaVelocity = dotprod.Vector.fromPolar(Math.random() * 2, Math.random() * 2 * Math.PI);
+      var piece = new dotprod.entities.Effect(animation, this.position_, this.velocity_.add(deltaVelocity));
+      this.effectIndex_.addEffect(piece);
+    }
+    this.projectileFireDelay_ = 100;
+  }
+
   if (keyboard.isKeyPressed(goog.events.KeyCodes.LEFT)) {
     this.angleInRadians_ -= shipRotation;
   } else if (keyboard.isKeyPressed(goog.events.KeyCodes.RIGHT)) {
@@ -161,6 +186,17 @@ dotprod.entities.LocalPlayer.prototype.update = function() {
   }
 
   var angle = this.getAngle_();
+
+/*
+  var newExhaust = [];
+  for (var i = 0; i < this.exhaust_.length; ++i) {
+    this.exhaust_[i].update();
+    if (this.exhaust_[i].isAlive()) {
+      newExhaust.push(this.exhaust_[i]);
+    }
+  }
+  this.exhaust_ = newExhaust;
+*/
 
   if (keyboard.isKeyPressed(goog.events.KeyCodes.UP)) {
     this.velocity_ = this.velocity_.add(dotprod.Vector.fromPolar(acceleration, angle));
@@ -183,8 +219,6 @@ dotprod.entities.LocalPlayer.prototype.update = function() {
  * @param {!dotprod.Camera} camera
  */
 dotprod.entities.LocalPlayer.prototype.render = function(camera) {
-  goog.base(this, 'render', camera);
-
   var context = camera.getContext();
   var dimensions = camera.getDimensions();
 
@@ -200,6 +234,14 @@ dotprod.entities.LocalPlayer.prototype.render = function(camera) {
     context.restore();
     return;
   }
+
+/*
+  for (var i = 0; i < this.exhaust_.length; ++i) {
+    this.exhaust_[i].render(camera);
+  }
+*/
+
+  goog.base(this, 'render', camera);
 
   var barWidth = 300 * this.energy_ / this.maxEnergy_;
   var barHeight = 10;

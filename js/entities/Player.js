@@ -5,6 +5,7 @@
 
 goog.provide('dotprod.entities.Player');
 
+goog.require('dotprod.EffectIndex');
 goog.require('dotprod.entities.Entity');
 goog.require('dotprod.Image');
 goog.require('dotprod.Map');
@@ -15,8 +16,9 @@ goog.require('dotprod.Map');
  * @param {!dotprod.Game} game
  * @param {string} name
  * @param {number} ship
+ * @param {!dotprod.EffectIndex} effectIndex
  */
-dotprod.entities.Player = function(game, name, ship) {
+dotprod.entities.Player = function(game, name, ship, effectIndex) {
   dotprod.entities.Entity.call(this);
 
   /**
@@ -73,6 +75,12 @@ dotprod.entities.Player = function(game, name, ship) {
    */
   this.image_;
 
+  /**
+   * @type {!dotprod.EffectIndex}
+   * @private
+   */
+  this.effectIndex_ = effectIndex;
+
   this.setShip(this.ship_);
 };
 goog.inherits(dotprod.entities.Player, dotprod.entities.Entity);
@@ -114,6 +122,19 @@ dotprod.entities.Player.prototype.setShip = function(ship) {
 };
 
 dotprod.entities.Player.prototype.takeDamage = goog.nullFunction;
+
+dotprod.entities.Player.prototype.onDeath = function() {
+  var ensemble = this.game_.getResourceManager().getVideoEnsemble('explode2');
+  this.effectIndex_.addEffect(new dotprod.entities.Effect(ensemble.getAnimation(0), this.position_, this.velocity_));
+
+  ensemble = this.game_.getResourceManager().getVideoEnsemble('ship' + this.ship_ + '_junk');
+  for (var i = 0; i < ensemble.getNumAnimations(); ++i) {
+    var animation = ensemble.getAnimation(i);
+    var deltaVelocity = dotprod.Vector.fromPolar(Math.random() * 2, Math.random() * 2 * Math.PI);
+    var piece = new dotprod.entities.Effect(animation, this.position_, this.velocity_.add(deltaVelocity));
+    this.effectIndex_.addEffect(piece);
+  }
+};
 
 /**
  * @param {!dotprod.Camera} camera

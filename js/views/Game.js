@@ -10,11 +10,13 @@ goog.require('goog.dom');
 goog.require('goog.events.BrowserEvent');
 goog.require('dotprod.Camera');
 goog.require('dotprod.ChatMessages');
+goog.require('dotprod.EffectIndex');
 goog.require('dotprod.entities.Bullet');
 goog.require('dotprod.entities.LocalPlayer');
 goog.require('dotprod.entities.RemotePlayer');
 goog.require('dotprod.input.Keyboard');
 goog.require('dotprod.layers.ChatLayer');
+goog.require('dotprod.layers.EffectLayer');
 goog.require('dotprod.layers.NotificationLayer');
 goog.require('dotprod.layers.MapLayer');
 goog.require('dotprod.layers.ProjectileLayer');
@@ -106,7 +108,12 @@ dotprod.Game = function(protocol, resourceManager, settings, mapData) {
    * @private
    */
   this.playerIndex_ = new dotprod.PlayerIndex();
-  this.playerIndex_.addPlayer(new dotprod.entities.LocalPlayer(this, this.camera_, this.projectileIndex_, this.settings_['name']));
+
+  /**
+   * @type {!dotprod.EffectIndex}
+   * @private
+   */
+  this.effectIndex_ = new dotprod.EffectIndex();
 
   /**
    * @type {!dotprod.Notifications}
@@ -123,6 +130,7 @@ dotprod.Game = function(protocol, resourceManager, settings, mapData) {
       new dotprod.layers.MapLayer(this),
       new dotprod.layers.ProjectileLayer(this.map_, this.playerIndex_, this.projectileIndex_),
       new dotprod.layers.ShipLayer(this.playerIndex_),
+      new dotprod.layers.EffectLayer(this.effectIndex_),
       new dotprod.layers.NotificationLayer(this.notifications_),
       new dotprod.layers.ChatLayer(this.chat_)
     ];
@@ -138,6 +146,8 @@ dotprod.Game = function(protocol, resourceManager, settings, mapData) {
    * @private
    */
   this.tickResidue_ = 0;
+
+  this.playerIndex_.addPlayer(new dotprod.entities.LocalPlayer(this, this.settings_['name'], 0 /* ship */, this.camera_, this.projectileIndex_, this.effectIndex_));
 
   this.protocol_.registerHandler(dotprod.Protocol.S2CPacketType.PLAYER_ENTERED, goog.bind(this.onPlayerEntered_, this));
   this.protocol_.registerHandler(dotprod.Protocol.S2CPacketType.PLAYER_LEFT, goog.bind(this.onPlayerLeft_, this));
@@ -253,7 +263,7 @@ dotprod.Game.prototype.renderingLoop_ = function() {
 dotprod.Game.prototype.onPlayerEntered_ = function(packet) {
   var name = packet[0];
   var ship = packet[1];
-  this.playerIndex_.addPlayer(new dotprod.entities.RemotePlayer(this, name, ship));
+  this.playerIndex_.addPlayer(new dotprod.entities.RemotePlayer(this, name, ship, this.effectIndex_));
   this.notifications_.addMessage('Player entered: ' + name);
 };
 
@@ -307,7 +317,7 @@ dotprod.Game.prototype.onPlayerDied_ = function(packet) {
 
   killee.onDeath();
   this.projectileIndex_.removeProjectiles(killee);
-  this.notifications_.addMessage(killee.getName() + ' killed by '+ killer.getName());
+  this.notifications_.addMessage(killee.getName() + ' killed by ' + killer.getName());
 };
 
 /**

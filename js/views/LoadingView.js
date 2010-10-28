@@ -90,6 +90,12 @@ dotprod.views.LoadingView.prototype.load = function(resources) {
     ++totalResources;
   }
 
+  for (var name in resources['videoensembles']) {
+    var resource = resources['videoensembles'][name];
+    this.resourceManager_.loadVideoEnsemble(name, resource['url'], resource['xTiles'], resource['yTiles'], resource['frames'], resource['period'], completionCb);
+    ++totalResources;
+  }
+
   for (var name in resources['sounds']) {
     var resource = resources['sounds'][name];
     this.resourceManager_.loadSound(name, resource['url'], completionCb);

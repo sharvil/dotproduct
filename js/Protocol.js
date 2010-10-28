@@ -132,7 +132,7 @@ dotprod.Protocol.prototype.login = function(username) {
 };
 
 /**
- * @param {number}
+ * @param {number} ship
  */
 dotprod.Protocol.prototype.startGame = function(ship) {
   this.send_([dotprod.Protocol.C2SPacketType_.START_GAME, ship]);

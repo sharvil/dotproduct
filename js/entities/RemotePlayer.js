@@ -6,6 +6,7 @@
 goog.provide('dotprod.entities.RemotePlayer');
 
 goog.require('dotprod.Camera');
+goog.require('dotprod.EffectIndex');
 goog.require('dotprod.entities.Player');
 goog.require('dotprod.Map');
 goog.require('dotprod.Vector');
@@ -16,15 +17,10 @@ goog.require('dotprod.Vector');
  * @param {!dotprod.Game} game
  * @param {string} name
  * @param {number} ship
+ * @param {!dotprod.EffectIndex} effectIndex
  */
-dotprod.entities.RemotePlayer = function(game, name, ship) {
-  dotprod.entities.Player.call(this, game, name, ship);
-
-  /**
-   * @type {!dotprod.Game}
-   * @private
-   */
-  this.game_ = game;
+dotprod.entities.RemotePlayer = function(game, name, ship, effectIndex) {
+  dotprod.entities.Player.call(this, game, name, ship, effectIndex);
 
   /**
    * @type {number}
@@ -95,8 +91,12 @@ dotprod.entities.RemotePlayer.prototype.onPositionUpdate = function(timeDiff, an
   }
 };
 
+/**
+ * @override
+ */
 dotprod.entities.RemotePlayer.prototype.onDeath = function() {
   this.energy_ = 0;
+  goog.base(this, 'onDeath');
 };
 
 dotprod.entities.RemotePlayer.prototype.update = function() {
