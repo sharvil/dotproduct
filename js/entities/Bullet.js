@@ -6,6 +6,8 @@
 goog.provide('dotprod.entities.Bullet');
 
 goog.require('dotprod.Camera');
+goog.require('dotprod.EffectIndex');
+goog.require('dotprod.entities.Effect');
 goog.require('dotprod.entities.Player');
 goog.require('dotprod.entities.Projectile');
 goog.require('dotprod.Map');
@@ -21,15 +23,15 @@ goog.require('dotprod.Vector');
  * @param {!dotprod.Vector} velocity
  */
 dotprod.entities.Bullet = function(game, owner, position, velocity) {
-  var shipSettings = game.getSettings()['ships'][owner.getShip()];
+  var bulletSettings = game.getSettings()['ships'][owner.getShip()]['bullet'];
 
-  dotprod.entities.Projectile.call(this, game, owner, shipSettings['bullet']['lifetime'], shipSettings['bullet']['damage']);
+  dotprod.entities.Projectile.call(this, game, owner, bulletSettings['lifetime'], bulletSettings['damage']);
 
   /**
    * @type {string}
    * @private
    */
-  this.color_ = shipSettings['bullet']['color'];
+  this.color_ = bulletSettings['color'];
 
   this.position_ = position;
   this.velocity_ = velocity;
@@ -117,6 +119,9 @@ dotprod.entities.Bullet.prototype.checkPlayerCollision_ = function(player) {
   var x = this.position_.getX();
   var y = this.position_.getY();
   if (x >= dimensions.left && x <= dimensions.right && y >= dimensions.top && y <= dimensions.bottom) {
+    var animation = this.game_.getResourceManager().getVideoEnsemble('explode0').getAnimation(0);
+    var explosion = new dotprod.entities.Effect(animation, this.position_, new dotprod.Vector(0, 0));
+    this.game_.getEffectIndex().addEffect(explosion);
     player.takeDamage(this.owner_, this, this.damage_);
     this.lifetime_ = 0;
     return true;

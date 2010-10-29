@@ -130,14 +130,16 @@
 		  "url": "data/shared/graphics/explode0.png",
 		  "xTiles": 7,
 		  "yTiles": 1,
-		  "frames": 7
+		  "frames": 7,
+		  "period": 5
 		},
 
 		"explode1": {
 		  "url": "data/shared/graphics/explode1.png",
 		  "xTiles": 6,
 		  "yTiles": 6,
-		  "frames": 36
+		  "frames": 36,
+		  "period": 2
 		},
 
 		"explode2": {

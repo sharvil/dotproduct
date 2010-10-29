@@ -16,7 +16,6 @@ goog.require('dotprod.Map');
  * @param {!dotprod.Game} game
  * @param {string} name
  * @param {number} ship
- * @param {!dotprod.EffectIndex} effectIndex
  */
 dotprod.entities.Player = function(game, name, ship, effectIndex) {
   dotprod.entities.Entity.call(this);
@@ -79,7 +78,7 @@ dotprod.entities.Player = function(game, name, ship, effectIndex) {
    * @type {!dotprod.EffectIndex}
    * @private
    */
-  this.effectIndex_ = effectIndex;
+  this.effectIndex_ = this.game_.getEffectIndex();
 
   this.setShip(this.ship_);
 };

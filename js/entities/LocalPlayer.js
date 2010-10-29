@@ -26,14 +26,13 @@ goog.require('dotprod.Vector');
  * @param {string} name
  * @param {number} ship
  * @param {!dotprod.Camera} camera
- * @param {!dotprod.ProjectileIndex} projectileIndex
  */
-dotprod.entities.LocalPlayer = function(game, name, ship, camera, projectileIndex, effectIndex) {
+dotprod.entities.LocalPlayer = function(game, name, ship, camera) {
   /**
    * @type {!dotprod.ProjectileIndex}
    * @private
    */
-  this.projectileIndex_ = projectileIndex;
+  this.projectileIndex_ = game.getProjectileIndex();
 
   /**
    * @type {!dotprod.Camera} camera
@@ -59,7 +58,7 @@ dotprod.entities.LocalPlayer = function(game, name, ship, camera, projectileInde
    */
   this.ticksSincePositionUpdate_ = 999999;
 
-  dotprod.entities.Player.call(this, game, name, ship, effectIndex);
+  dotprod.entities.Player.call(this, game, name, ship);
 };
 goog.inherits(dotprod.entities.LocalPlayer, dotprod.entities.Player);
 
@@ -159,20 +158,6 @@ dotprod.entities.LocalPlayer.prototype.update = function() {
 
       this.game_.getResourceManager().playSound('bullet');
     }
-  }
-
-  if (this.projectileFireDelay_ <= 0 && keyboard.isKeyPressed(goog.events.KeyCodes.TAB)) {
-    var ensemble = this.game_.getResourceManager().getVideoEnsemble('explode2');
-    this.effectIndex_.addEffect(new dotprod.entities.Effect(ensemble.getAnimation(0), this.position_, this.velocity_));
-
-    ensemble = this.game_.getResourceManager().getVideoEnsemble('ship' + this.ship_ + '_junk');
-    for (var i = 0; i < ensemble.getNumAnimations(); ++i) {
-      var animation = ensemble.getAnimation(i);
-      var deltaVelocity = dotprod.Vector.fromPolar(Math.random() * 2, Math.random() * 2 * Math.PI);
-      var piece = new dotprod.entities.Effect(animation, this.position_, this.velocity_.add(deltaVelocity));
-      this.effectIndex_.addEffect(piece);
-    }
-    this.projectileFireDelay_ = 100;
   }
 
   if (keyboard.isKeyPressed(goog.events.KeyCodes.LEFT)) {

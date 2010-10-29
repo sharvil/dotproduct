@@ -228,6 +228,27 @@ dotprod.Game.prototype.getMap = function() {
 };
 
 /**
+ * @return {!dotprod.PlayerIndex}
+ */
+dotprod.Game.prototype.getPlayerIndex = function() {
+  return this.playerIndex_;
+};
+
+/**
+ * @return {!dotprod.ProjectileIndex}
+ */
+dotprod.Game.prototype.getProjectileIndex = function() {
+  return this.projectileIndex_;
+};
+
+/**
+ * @return {!dotprod.EffectIndex}
+ */
+dotprod.Game.prototype.getEffectIndex = function() {
+  return this.effectIndex_;
+};
+
+/**
  * @private
  */
 dotprod.Game.prototype.renderingLoop_ = function() {
@@ -292,13 +313,22 @@ dotprod.Game.prototype.onPlayerPosition_ = function(packet) {
   var position = new dotprod.Vector(packet[3], packet[4]);
   var velocity = new dotprod.Vector(packet[5], packet[6]);
 
+  timeDiff = Math.min(timeDiff, 150);
+
   var player = this.playerIndex_.findByName(name);
   if (player) {
     player.onPositionUpdate(timeDiff, angle, position, velocity);
     if (packet.length > 7) {
       var bulletPos = new dotprod.Vector(packet[7], packet[8]);
       var bulletVel = new dotprod.Vector(packet[9], packet[10]);
-      this.projectileIndex_.addProjectile(player, new dotprod.entities.Bullet(this, player, bulletPos, bulletVel));
+      var bullet = new dotprod.entities.Bullet(this, player, bulletPos, bulletVel);
+      this.projectileIndex_.addProjectile(player, bullet);
+
+      // TODO(sharvil): we need a better way to account for latency than directly
+      // calling update on the projectile.
+      for (var i = 0; i < timeDiff; ++i) {
+        bullet.update(this.map_, this.playerIndex_);
+      }
     }
   }
 };
