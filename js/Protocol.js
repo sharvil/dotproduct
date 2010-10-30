@@ -256,7 +256,7 @@ dotprod.Protocol.prototype.onMessage_ = function(event) {
       this.logger_.warning('Invalid packet from server: ' + obj);
     }
   } catch (e) {
-    this.logger_.error('Error parsing JSON: ' + event.getBrowserEvent().data, e);
+    this.logger_.severe('Error parsing JSON: ' + event.getBrowserEvent().data, e);
   }
 };
 
