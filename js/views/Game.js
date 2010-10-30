@@ -71,8 +71,8 @@ dotprod.Game = function(protocol, resourceManager, settings, mapData) {
    */
   this.canvas_ = /** @type {!HTMLCanvasElement} */ (goog.dom.createElement('canvas'));
   this.canvas_.className = dotprod.Game.CANVAS_CLASS_NAME_;
-  this.canvas_.width = 800;
-  this.canvas_.height = 600;
+  this.canvas_.width = dotprod.Game.WIDTH_;
+  this.canvas_.height = dotprod.Game.HEIGHT_;
 
   /**
    * @type {!dotprod.ChatMessages}
@@ -180,6 +180,20 @@ dotprod.Game.TICK_PERIOD = 10;
  * @private
  */
 dotprod.Game.MAX_TICKS_PER_FRAME_ = 150;
+
+/**
+ * @const
+ * @type {number}
+ * @private
+ */
+dotprod.Game.WIDTH_ = 1024;
+
+/**
+ * @const
+ * @type {number}
+ * @private
+ */
+dotprod.Game.HEIGHT_ = 768;
 
 /**
  * @const
