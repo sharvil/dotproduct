@@ -47,7 +47,6 @@ dotprod.Application = function() {
   this.loadingView_.renderDom(/** @type {!HTMLDivElement} */ (goog.dom.$('loading')));
   this.loadingView_.hide();
 
-
   /**
    * @type {!Object}
    * @private
