@@ -39,6 +39,12 @@ dotprod.views.ChatView = function(game, messages) {
   this.messages_ = messages;
 
   /**
+   * @type {!Object.<string, function(string)>}
+   * @private
+   */
+  this.handlers_ = {};
+
+  /**
    * @type {!HTMLInputElement}
    * @private
    */
@@ -61,7 +67,19 @@ dotprod.views.ChatView.prototype.renderDom = function(rootNode) {
 
   var chatDiv = goog.dom.createElement('div');
   chatDiv.appendChild(this.chatBox_);
-  rootNode.appendChild(chatDiv)
+  rootNode.appendChild(chatDiv);
+};
+
+/**
+ * @param {string} name
+ * @param {function(string)} handler
+ */
+dotprod.views.ChatView.prototype.registerHandler = function(name, handler) {
+  if (this.handlers_[name]) {
+    this.handlers_[name].push(handler);
+  } else {
+    this.handlers_[name] = [handler];
+  }
 };
 
 /**
@@ -80,20 +98,30 @@ dotprod.views.ChatView.prototype.onChatLostFocus_ = function(event) {
  * @private
  */
 dotprod.views.ChatView.prototype.onKeyPress_ = function(event) {
-  if (event.keyCode == goog.events.KeyCodes.ENTER) {
-    if (this.chatBox_.style.opacity == 0) {
-      this.chatBox_.value = '';
-      this.chatBox_.style.opacity = 1;
-      this.chatBox_.focus();
-    } else {
-      if (this.chatBox_.value != '') {
-        var message = this.chatBox_.value;
-        this.protocol_.sendChat(message);
-        this.messages_.addMessage('[' + this.settings_['name'] + '] ' + message);
+  if (event.keyCode != goog.events.KeyCodes.ENTER) {
+    return;
+  }
+
+  // The chat box is hidden -- show it and set focus on enter press.
+  if (this.chatBox_.style.opacity == 0) {
+    this.chatBox_.value = '';
+    this.chatBox_.style.opacity = 1;
+    this.chatBox_.focus();
+    return;
+  }
+
+  var message = this.chatBox_.value.trim();
+  if (message != '') {
+    var command = message.split(' ')[0];
+    if (this.handlers_[command]) {
+      for (var i in this.handlers_[command]) {
+        this.handlers_[command][i](message);
       }
-      this.chatBox_.value = '';
-      this.chatBox_.style.opacity = 0;
+    } else {
+      this.protocol_.sendChat(message);
+      this.messages_.addMessage('[' + this.settings_['name'] + '] ' + message);
     }
   }
+  this.chatBox_.value = '';
+  this.chatBox_.style.opacity = 0;
 };
-
