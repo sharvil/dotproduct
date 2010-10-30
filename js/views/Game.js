@@ -30,6 +30,7 @@ goog.require('dotprod.Protocol');
 goog.require('dotprod.ResourceManager');
 goog.require('dotprod.Timer');
 goog.require('dotprod.views.ChatView');
+goog.require('dotprod.views.DebugView');
 goog.require('dotprod.views.View');
 
 /**
@@ -84,6 +85,12 @@ dotprod.Game = function(protocol, resourceManager, settings, mapData) {
    * @private
    */
   this.chatView_ = new dotprod.views.ChatView(this, this.chat_);
+
+  /**
+   * @type {!dotprod.views.DebugView}
+   * @private
+   */
+  this.debugView_ = new dotprod.views.DebugView(this);
 
   /**
    * @type {!dotprod.Camera}
@@ -157,7 +164,7 @@ dotprod.Game = function(protocol, resourceManager, settings, mapData) {
   this.protocol_.registerHandler(dotprod.Protocol.S2CPacketType.SHIP_CHANGE, goog.bind(this.onShipChanged_, this));
   this.protocol_.startGame(0 /* ship */);
 
-  dotprod.Timer.setInterval(goog.bind(this.renderingLoop_, this), 1)
+  dotprod.Timer.setInterval(goog.bind(this.renderingLoop_, this), 1);
 };
 goog.inherits(dotprod.Game, dotprod.views.View);
 
@@ -190,6 +197,7 @@ dotprod.Game.prototype.renderDom = function(rootNode) {
 
   rootNode.appendChild(this.canvas_);
   this.chatView_.renderDom(rootNode);
+  this.debugView_.renderDom(rootNode);
 };
 
 /**
@@ -271,6 +279,8 @@ dotprod.Game.prototype.renderingLoop_ = function() {
       this.layers_[i].render(this.camera_);
     }
   context.restore();
+
+  this.debugView_.update();
 
   this.tickResidue_ += curTime - this.lastTime_;
   this.tickResidue_ -= dotprod.Timer.ticksToMillis(timeDiff);

@@ -62,6 +62,12 @@ dotprod.Protocol = function(url) {
    */
   this.serverTimeDelta_ = 0;
 
+  /**
+   * @type {number}
+   * @private
+   */
+  this.roundTripTime_ = 0;
+
   this.registerHandler(dotprod.Protocol.S2CPacketType.CLOCK_SYNC_REPLY, goog.bind(this.onClockSyncReply_, this));
 };
 
@@ -117,6 +123,13 @@ dotprod.Protocol.prototype.getMillisSinceServerTime = function(timestamp) {
 };
 
 /**
+ * @return {number}
+ */
+dotprod.Protocol.prototype.getRoundTripTime = function() {
+  return this.roundTripTime_;
+};
+
+/**
  * @param {dotprod.Protocol.S2CPacketType} packetType
  * @param {function()} cb
  */
@@ -168,6 +181,8 @@ dotprod.Protocol.prototype.onClockSyncReply_ = function(packet) {
   if (rtt < 0) {
     rtt += 0x100000000;
   }
+
+  this.roundTripTime_ = rtt;
 
   // Assume 60% of RTT is C2S latency.
   this.serverTimeDelta_ = Math.floor(serverTime - clientTime0 - 0.6 * rtt);
@@ -227,17 +242,21 @@ dotprod.Protocol.prototype.onClose_ = function() {
  * @private
  */
 dotprod.Protocol.prototype.onMessage_ = function(event) {
-  var msg = /** @type {string} */ (event.getBrowserEvent().data);
-  var obj = window.JSON.parse(msg);
-  var packetHandlers = this.handlers_[obj[0]];
+  try {
+    var msg = /** @type {string} */ (event.getBrowserEvent().data);
+    var obj = window.JSON.parse(msg);
+    var packetHandlers = this.handlers_[obj[0]];
 
-  if (packetHandlers) {
-    var slicedObj = obj.slice(1);
-    for (var i = 0; packetHandlers[i]; ++i) {
-      packetHandlers[i](slicedObj);
+    if (packetHandlers) {
+      var slicedObj = obj.slice(1);
+      for (var i = 0; packetHandlers[i]; ++i) {
+        packetHandlers[i](slicedObj);
+      }
+    } else {
+      this.logger_.warning('Invalid packet from server: ' + obj);
     }
-  } else {
-    this.logger_.log(goog.debug.Logger.Level.WARNING, 'Invalid packet from server: ' + obj);
+  } catch (e) {
+    this.logger_.error('Error parsing JSON: ' + event.getBrowserEvent().data, e);
   }
 };
 
