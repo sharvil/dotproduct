@@ -133,6 +133,13 @@ dotprod.entities.Player.prototype.onDeath = function() {
     var piece = new dotprod.entities.Effect(animation, this.position_, this.velocity_.add(deltaVelocity));
     this.effectIndex_.addEffect(piece);
   }
+
+  this.energy_ = 0;
+};
+
+dotprod.entities.Player.prototype.warpFlash = function() {
+  var animation = this.game_.getResourceManager().getVideoEnsemble('warp').getAnimation(0);
+  this.effectIndex_.addEffect(new dotprod.entities.Effect(animation, this.position_, new dotprod.Vector(0, 0)));
 };
 
 /**

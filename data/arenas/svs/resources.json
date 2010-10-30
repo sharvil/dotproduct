@@ -148,7 +148,15 @@
 		  "yTiles": 11,
 		  "frames": 44,
 			"period": 2
-		}
+		},
+
+    "warp": {
+      "url": "data/shared/graphics/warp.png",
+      "xTiles": 6,
+      "yTiles": 3,
+      "frames": 18,
+      "period": 3
+    }
 	},
 
   "sounds": {

@@ -83,9 +83,19 @@ dotprod.entities.LocalPlayer.prototype.takeDamage = function(shooter, projectile
  * @override
  */
 dotprod.entities.LocalPlayer.prototype.onDeath = function() {
-  this.energy_ = 0;
-  this.respawnTimer_ = this.shipSettings_['respawnDelay'];
   goog.base(this, 'onDeath');
+  this.respawnTimer_ = this.shipSettings_['respawnDelay'];
+};
+
+dotprod.entities.LocalPlayer.prototype.respawn = function() {
+  this.angleInRadians_ = Math.random() * 2 * Math.PI;
+  this.position_ = this.game_.getMap().getSpawnLocation(this);
+  this.velocity_ = new dotprod.Vector(0, 0);
+  this.energy_ = this.shipSettings_['maxEnergy'];
+  this.maxEnergy_ = this.shipSettings_['maxEnergy'];
+  this.projectileIndex_.removeProjectiles(this);
+
+  this.warpFlash();
 };
 
 /**
@@ -93,14 +103,7 @@ dotprod.entities.LocalPlayer.prototype.onDeath = function() {
  */
 dotprod.entities.LocalPlayer.prototype.setShip = function(ship) {
   goog.base(this, 'setShip', ship);
-
-  // Respawn the ship.
-  this.angleInRadians_ = Math.random() * 2 * Math.PI;
-  this.position_ = this.game_.getMap().getSpawnLocation(this);
-  this.velocity_ = new dotprod.Vector(0, 0);
-  this.energy_ = this.shipSettings_['maxEnergy'];
-  this.maxEnergy_ = this.shipSettings_['maxEnergy'];
-  this.projectileIndex_.removeProjectiles(this);
+  this.respawn();
 };
 
 dotprod.entities.LocalPlayer.prototype.update = function() {

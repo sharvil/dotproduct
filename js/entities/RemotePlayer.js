@@ -66,6 +66,7 @@ dotprod.entities.RemotePlayer.prototype.onPositionUpdate = function(timeDiff, an
     this.position_ = position;
     this.velocity_ = velocity;
     this.originalVelocity_ = velocity;
+    this.warpFlash();
     return;
   }
 
@@ -88,14 +89,6 @@ dotprod.entities.RemotePlayer.prototype.onPositionUpdate = function(timeDiff, an
   } else {
     this.velocity_ = this.velocity_.add(new dotprod.Vector(0, distance.getY()).scale(1 / dotprod.entities.RemotePlayer.VELOCITY_ADJUST_PERIOD_));
   }
-};
-
-/**
- * @override
- */
-dotprod.entities.RemotePlayer.prototype.onDeath = function() {
-  this.energy_ = 0;
-  goog.base(this, 'onDeath');
 };
 
 dotprod.entities.RemotePlayer.prototype.update = function() {
