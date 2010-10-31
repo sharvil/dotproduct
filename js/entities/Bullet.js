@@ -6,12 +6,8 @@
 goog.provide('dotprod.entities.Bullet');
 
 goog.require('dotprod.Camera');
-goog.require('dotprod.EffectIndex');
 goog.require('dotprod.entities.Effect');
-goog.require('dotprod.entities.Player');
 goog.require('dotprod.entities.Projectile');
-goog.require('dotprod.Map');
-goog.require('dotprod.PlayerIndex');
 goog.require('dotprod.Vector');
 
 /**

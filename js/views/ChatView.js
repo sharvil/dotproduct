@@ -39,7 +39,7 @@ dotprod.views.ChatView = function(game, messages) {
   this.messages_ = messages;
 
   /**
-   * @type {!Object.<string, function(string)>}
+   * @type {!Object.<string, !Array.<function(string)>>}
    * @private
    */
   this.handlers_ = {};
@@ -90,7 +90,7 @@ dotprod.views.ChatView.prototype.onChatLostFocus_ = function(event) {
   var node = event.target;
   window.setTimeout(function() {
     node.focus();
-  });
+  }, 0);
 };
 
 /**

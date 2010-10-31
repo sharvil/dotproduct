@@ -14,7 +14,7 @@ goog.require('dotprod.VideoEnsemble');
  */
 dotprod.ResourceManager = function() {
   /**
-   * @type {!goog.logger.Logger}
+   * @type {!goog.debug.Logger}
    * @private
    */
   this.logger_ = goog.debug.Logger.getLogger('dotprod.ResourceManager');
@@ -90,7 +90,7 @@ dotprod.ResourceManager.prototype.loadSound = function(name, url, loadCb) {
   };
 
   this.logger_.info('Loading sound: "' + name + '" using URL: ' + url);
-  this.sounds_[name] = new Audio();
+//  this.sounds_[name] = new Audio();
   this.sounds_[name].src = url;
   this.sounds_[name].addEventListener('error', callback);
   this.sounds_[name].addEventListener('progress', callback);

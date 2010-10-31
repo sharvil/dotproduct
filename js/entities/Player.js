@@ -69,7 +69,7 @@ dotprod.entities.Player = function(game, name, ship) {
   this.ship_ = ship;
 
   /**
-   * @type {!dotprod.Image}
+   * @type {dotprod.Image}
    * @protected
    */
   this.image_;
@@ -120,7 +120,12 @@ dotprod.entities.Player.prototype.setShip = function(ship) {
   this.image_ = this.game_.getResourceManager().getImage('ship' + this.ship_);
 };
 
-dotprod.entities.Player.prototype.takeDamage = goog.nullFunction;
+/**
+ * @param {!dotprod.entities.Player} player
+ * @param {!dotprod.entities.Projectile} projectile
+ * @param {number} damage
+ */
+dotprod.entities.Player.prototype.takeDamage = function(player, projectile, damage) {};
 
 dotprod.entities.Player.prototype.onDeath = function() {
   var ensemble = this.game_.getResourceManager().getVideoEnsemble('explode2');

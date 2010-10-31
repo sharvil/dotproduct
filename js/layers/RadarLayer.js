@@ -12,7 +12,7 @@ goog.require('dotprod.layers.Layer');
 /**
  * @constructor
  * @implements {dotprod.layers.Layer}
- * @param {!dotprod.Game}
+ * @param {!dotprod.Game} game
  */
 dotprod.layers.RadarLayer = function(game) {
   /**
@@ -45,7 +45,6 @@ dotprod.layers.RadarLayer = function(game) {
    */
   this.blinkAlpha_ = 1;
 };
-goog.inherits(dotprod.layers.RadarLayer, dotprod.layers.Layer);
 
 /**
  * @const

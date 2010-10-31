@@ -7,16 +7,9 @@ goog.provide('dotprod.entities.LocalPlayer');
 
 goog.require('goog.events');
 goog.require('goog.object');
-goog.require('dotprod.Camera');
-goog.require('dotprod.EffectIndex');
 goog.require('dotprod.entities.Bullet');
 goog.require('dotprod.entities.Exhaust');
 goog.require('dotprod.entities.Player');
-goog.require('dotprod.entities.Projectile');
-goog.require('dotprod.input.Keyboard');
-goog.require('dotprod.layers.ProjectileLayer');
-goog.require('dotprod.Map');
-goog.require('dotprod.ProjectileIndex');
 goog.require('dotprod.Vector');
 
 /**
@@ -64,7 +57,7 @@ goog.inherits(dotprod.entities.LocalPlayer, dotprod.entities.Player);
 
 /**
  * @param {!dotprod.entities.Player} shooter
- * @param {!dotprod.entities.Bullet} projectile
+ * @param {!dotprod.entities.Projectile} projectile
  * @param {number} energy
  * @override
  */

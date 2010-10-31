@@ -6,8 +6,6 @@
 goog.provide('dotprod.PlayerIndex');
 
 goog.require('goog.object');
-goog.require('dotprod.entities.LocalPlayer');
-goog.require('dotprod.entities.Player');
 
 /**
  * @constructor

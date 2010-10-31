@@ -308,7 +308,7 @@ dotprod.Game.prototype.renderingLoop_ = function() {
 dotprod.Game.prototype.onPlayerEntered_ = function(packet) {
   var name = packet[0];
   var ship = packet[1];
-  this.playerIndex_.addPlayer(new dotprod.entities.RemotePlayer(this, name, ship, this.effectIndex_));
+  this.playerIndex_.addPlayer(new dotprod.entities.RemotePlayer(this, name, ship));
   this.notifications_.addMessage('Player entered: ' + name);
 };
 
