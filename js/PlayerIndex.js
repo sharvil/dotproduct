@@ -6,17 +6,27 @@
 goog.provide('dotprod.PlayerIndex');
 
 goog.require('goog.object');
+goog.require('dotprod.entities.LocalPlayer');
 goog.require('dotprod.entities.Player');
 
 /**
  * @constructor
+ * @param {!dotprod.entities.LocalPlayer} localPlayer
  */
-dotprod.PlayerIndex = function() {
+dotprod.PlayerIndex = function(localPlayer) {
   /**
    * @type {!Object.<string, !dotprod.entities.Player>}
    * @private
    */
   this.players_ = {};
+
+  /**
+   * @type {!dotprod.entities.LocalPlayer}
+   * @private
+   */
+  this.localPlayer_ = localPlayer;
+
+  this.addPlayer(localPlayer);
 };
 
 /**
@@ -46,4 +56,11 @@ dotprod.PlayerIndex.prototype.findByName = function(name) {
  */
 dotprod.PlayerIndex.prototype.getPlayers = function() {
   return goog.object.getValues(this.players_);
+};
+
+/**
+ * @return {!dotprod.entities.LocalPlayer}
+ */
+dotprod.PlayerIndex.prototype.getLocalPlayer = function() {
+  return this.localPlayer_;
 };

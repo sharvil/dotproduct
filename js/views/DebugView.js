@@ -5,14 +5,16 @@
 
 goog.provide('dotprod.views.DebugView');
 
+goog.require('dotprod.Camera');
 goog.require('dotprod.views.View');
 
 /**
  * @constructor
  * @extends {dotprod.views.View}
  * @param {!dotprod.Game} game
+ * @param {!dotprod.Camera} camera
  */
-dotprod.views.DebugView = function(game) {
+dotprod.views.DebugView = function(game, camera) {
   dotprod.views.View.call(this);
 
   /**
@@ -20,6 +22,12 @@ dotprod.views.DebugView = function(game) {
    * @private
    */
   this.game_ = game;
+
+  /**
+   * @type {!dotprod.Camera}
+   * @private
+   */
+  this.camera_ = camera;
 
   /**
    * @type {!HTMLDivElement}
@@ -32,6 +40,12 @@ dotprod.views.DebugView = function(game) {
    * @private
    */
   this.framerate_ = /** @type {!HTMLDivElement} */ (goog.dom.createElement('div'));
+
+  /**
+   * @type {!HTMLDivElement}
+   * @private
+   */
+  this.position_ = /** @type {!HTMLDivElement} */ (goog.dom.createElement('div'));
 
   /**
    * @type {!HTMLDivElement}
@@ -67,11 +81,15 @@ dotprod.views.DebugView.prototype.renderDom = function(rootNode) {
 
   rootNode.appendChild(this.latency_);
   rootNode.appendChild(this.framerate_);
+  rootNode.appendChild(this.position_);
   rootNode.appendChild(this.players_);
   rootNode.appendChild(this.projectiles_);
 };
 
 dotprod.views.DebugView.prototype.update = function() {
+  var dimensions = this.camera_.getDimensions();
+  this.position_.innerText = dimensions.x + ', ' + dimensions.y + ' (' + Math.floor(dimensions.x / 16) + ', ' + Math.floor(dimensions.y / 16) + ')';
+
   ++this.frames_;
 
   var now = goog.now();

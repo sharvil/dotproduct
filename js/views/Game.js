@@ -20,6 +20,7 @@ goog.require('dotprod.layers.EffectLayer');
 goog.require('dotprod.layers.NotificationLayer');
 goog.require('dotprod.layers.MapLayer');
 goog.require('dotprod.layers.ProjectileLayer');
+goog.require('dotprod.layers.RadarLayer');
 goog.require('dotprod.layers.ShipLayer');
 goog.require('dotprod.layers.StarLayer');
 goog.require('dotprod.Map');
@@ -75,24 +76,6 @@ dotprod.Game = function(protocol, resourceManager, settings, mapData) {
   this.canvas_.height = dotprod.Game.HEIGHT_;
 
   /**
-   * @type {!dotprod.ChatMessages}
-   * @private
-   */
-  this.chat_ = new dotprod.ChatMessages();
-
-  /**
-   * @type {!dotprod.views.ChatView}
-   * @private
-   */
-  this.chatView_ = new dotprod.views.ChatView(this, this.chat_);
-
-  /**
-   * @type {!dotprod.views.DebugView}
-   * @private
-   */
-  this.debugView_ = new dotprod.views.DebugView(this);
-
-  /**
    * @type {!dotprod.Camera}
    * @private
    */
@@ -105,16 +88,16 @@ dotprod.Game = function(protocol, resourceManager, settings, mapData) {
   this.map_ = new dotprod.Map(this, mapData);
 
   /**
+   * @type {!dotprod.ChatMessages}
+   * @private
+   */
+  this.chat_ = new dotprod.ChatMessages();
+
+  /**
    * @type {!dotprod.ProjectileIndex}
    * @private
    */
   this.projectileIndex_ = new dotprod.ProjectileIndex();
-
-  /**
-   * @type {!dotprod.PlayerIndex}
-   * @private
-   */
-  this.playerIndex_ = new dotprod.PlayerIndex();
 
   /**
    * @type {!dotprod.EffectIndex}
@@ -129,6 +112,24 @@ dotprod.Game = function(protocol, resourceManager, settings, mapData) {
   this.notifications_ = new dotprod.Notifications();
 
   /**
+   * @type {!dotprod.PlayerIndex}
+   * @private
+   */
+  this.playerIndex_ = new dotprod.PlayerIndex(new dotprod.entities.LocalPlayer(this, this.settings_['name'], 0 /* ship */, this.camera_));
+
+  /**
+   * @type {!dotprod.views.ChatView}
+   * @private
+   */
+  this.chatView_ = new dotprod.views.ChatView(this, this.chat_);
+
+  /**
+   * @type {!dotprod.views.DebugView}
+   * @private
+   */
+  this.debugView_ = new dotprod.views.DebugView(this, this.camera_);
+
+  /**
    * @type {!Array.<dotprod.layers.Layer>}
    * @private
    */
@@ -139,7 +140,8 @@ dotprod.Game = function(protocol, resourceManager, settings, mapData) {
       new dotprod.layers.ShipLayer(this.playerIndex_),
       new dotprod.layers.EffectLayer(this.effectIndex_),
       new dotprod.layers.NotificationLayer(this.notifications_),
-      new dotprod.layers.ChatLayer(this.chat_)
+      new dotprod.layers.ChatLayer(this.chat_),
+      new dotprod.layers.RadarLayer(this)
     ];
 
   /**
@@ -153,8 +155,6 @@ dotprod.Game = function(protocol, resourceManager, settings, mapData) {
    * @private
    */
   this.tickResidue_ = 0;
-
-  this.playerIndex_.addPlayer(new dotprod.entities.LocalPlayer(this, this.settings_['name'], 0 /* ship */, this.camera_, this.projectileIndex_, this.effectIndex_));
 
   this.protocol_.registerHandler(dotprod.Protocol.S2CPacketType.PLAYER_ENTERED, goog.bind(this.onPlayerEntered_, this));
   this.protocol_.registerHandler(dotprod.Protocol.S2CPacketType.PLAYER_LEFT, goog.bind(this.onPlayerLeft_, this));

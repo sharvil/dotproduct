@@ -17,7 +17,7 @@ goog.require('dotprod.Map');
  * @param {string} name
  * @param {number} ship
  */
-dotprod.entities.Player = function(game, name, ship, effectIndex) {
+dotprod.entities.Player = function(game, name, ship) {
   dotprod.entities.Entity.call(this);
 
   /**
