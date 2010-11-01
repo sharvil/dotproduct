@@ -70,6 +70,180 @@
         "damage": 750,
         "damageUpgrade": 50
       }
+    },
+
+    {
+      "name": "Spider",
+      "xRadius": 14,
+      "yRadius": 14,
+      "bounceFactor": 0.727,
+      "rotationRadiansPerTick": 0.03141592,
+      "speedPixelsPerTick": 2.01,
+      "maxEnergy": 1000,
+      "accelerationPerTick": 0.015,
+      "rechargeRate": 0.4,
+      "respawnDelay": 500,
+      "bullet": {
+        "fireEnergy": 10,
+        "speed": 2,
+        "fireDelay": 15,
+        "lifetime": 550,
+        "damage": 200,
+        "damageUpgrade": 100
+      },
+      "bomb": {
+        "fireEnergy": 300,
+        "speed": 2,
+        "fireDelay": 150,
+        "lifetime": 6000,
+        "damage": 750,
+        "damageUpgrade": 50
+      }
+    },
+
+    {
+      "name": "Leviathan",
+      "xRadius": 14,
+      "yRadius": 14,
+      "bounceFactor": 0.727,
+      "rotationRadiansPerTick": 0.03141592,
+      "speedPixelsPerTick": 2.01,
+      "maxEnergy": 1000,
+      "accelerationPerTick": 0.015,
+      "rechargeRate": 0.4,
+      "respawnDelay": 500,
+      "bullet": {
+        "fireEnergy": 10,
+        "speed": 2,
+        "fireDelay": 15,
+        "lifetime": 550,
+        "damage": 200,
+        "damageUpgrade": 100
+      },
+      "bomb": {
+        "fireEnergy": 300,
+        "speed": 2,
+        "fireDelay": 150,
+        "lifetime": 6000,
+        "damage": 750,
+        "damageUpgrade": 50
+      }
+    },
+
+    {
+      "name": "Terrier",
+      "xRadius": 14,
+      "yRadius": 14,
+      "bounceFactor": 0.727,
+      "rotationRadiansPerTick": 0.03141592,
+      "speedPixelsPerTick": 2.01,
+      "maxEnergy": 1000,
+      "accelerationPerTick": 0.015,
+      "rechargeRate": 0.4,
+      "respawnDelay": 500,
+      "bullet": {
+        "fireEnergy": 10,
+        "speed": 2,
+        "fireDelay": 15,
+        "lifetime": 550,
+        "damage": 200,
+        "damageUpgrade": 100
+      },
+      "bomb": {
+        "fireEnergy": 300,
+        "speed": 2,
+        "fireDelay": 150,
+        "lifetime": 6000,
+        "damage": 750,
+        "damageUpgrade": 50
+      }
+    },
+
+    {
+      "name": "Weasel",
+      "xRadius": 14,
+      "yRadius": 14,
+      "bounceFactor": 0.727,
+      "rotationRadiansPerTick": 0.03141592,
+      "speedPixelsPerTick": 2.01,
+      "maxEnergy": 1000,
+      "accelerationPerTick": 0.015,
+      "rechargeRate": 0.4,
+      "respawnDelay": 500,
+      "bullet": {
+        "fireEnergy": 10,
+        "speed": 2,
+        "fireDelay": 15,
+        "lifetime": 550,
+        "damage": 200,
+        "damageUpgrade": 100
+      },
+      "bomb": {
+        "fireEnergy": 300,
+        "speed": 2,
+        "fireDelay": 150,
+        "lifetime": 6000,
+        "damage": 750,
+        "damageUpgrade": 50
+      }
+    },
+
+    {
+      "name": "Leviathan",
+      "xRadius": 14,
+      "yRadius": 14,
+      "bounceFactor": 0.727,
+      "rotationRadiansPerTick": 0.03141592,
+      "speedPixelsPerTick": 2.01,
+      "maxEnergy": 1000,
+      "accelerationPerTick": 0.015,
+      "rechargeRate": 0.4,
+      "respawnDelay": 500,
+      "bullet": {
+        "fireEnergy": 10,
+        "speed": 2,
+        "fireDelay": 15,
+        "lifetime": 550,
+        "damage": 200,
+        "damageUpgrade": 100
+      },
+      "bomb": {
+        "fireEnergy": 300,
+        "speed": 2,
+        "fireDelay": 150,
+        "lifetime": 6000,
+        "damage": 750,
+        "damageUpgrade": 50
+      }
+    },
+
+    {
+      "name": "Shark",
+      "xRadius": 14,
+      "yRadius": 14,
+      "bounceFactor": 0.727,
+      "rotationRadiansPerTick": 0.03141592,
+      "speedPixelsPerTick": 2.01,
+      "maxEnergy": 1000,
+      "accelerationPerTick": 0.015,
+      "rechargeRate": 0.4,
+      "respawnDelay": 500,
+      "bullet": {
+        "fireEnergy": 10,
+        "speed": 2,
+        "fireDelay": 15,
+        "lifetime": 550,
+        "damage": 200,
+        "damageUpgrade": 100
+      },
+      "bomb": {
+        "fireEnergy": 300,
+        "speed": 2,
+        "fireDelay": 150,
+        "lifetime": 6000,
+        "damage": 750,
+        "damageUpgrade": 50
+      }
     }
   ]
 }
