@@ -170,6 +170,11 @@ dotprod.layers.RadarLayer.prototype.renderPlayers_ = function(context, dimension
   var localPlayer = this.game_.getPlayerIndex().getLocalPlayer();
   var localPlayerColor = 'rgba(250, 239, 151, ' + this.blinkAlpha_ + ')';
 
+  var SCALE_FACTOR = dotprod.layers.RadarLayer.SCALE_FACTOR_;
+  var ZOOM_FACTOR = dotprod.layers.RadarLayer.ZOOM_FACTOR_;
+  var actualXScale = (Math.floor(this.tileWidth_ * SCALE_FACTOR / ZOOM_FACTOR) || 1) / this.tileWidth_;
+  var actualYScale = (Math.floor(this.tileHeight_ * SCALE_FACTOR / ZOOM_FACTOR) || 1) / this.tileHeight_;
+
   for (var i = 0; i < players.length; ++i) {
     var player = players[i];
     if (!player.isAlive()) {
@@ -177,8 +182,10 @@ dotprod.layers.RadarLayer.prototype.renderPlayers_ = function(context, dimension
     }
 
     var position = player.getPosition();
-    var x = Math.floor((position.getX() - dimensions.x) * dotprod.layers.RadarLayer.SCALE_FACTOR_ / dotprod.layers.RadarLayer.ZOOM_FACTOR_ + radarWidth / 2);
-    var y = Math.floor((position.getY() - dimensions.y) * dotprod.layers.RadarLayer.SCALE_FACTOR_ / dotprod.layers.RadarLayer.ZOOM_FACTOR_ + radarHeight / 2);
+    var xPixels = Math.floor(position.getX() * actualXScale) - (dimensions.x * actualXScale);
+    var yPixels = Math.floor(position.getY() * actualYScale) - (dimensions.y * actualYScale);
+    var x = Math.floor(xPixels + radarWidth / 2);
+    var y = Math.floor(yPixels + radarHeight / 2);
 
     context.fillStyle = (player == localPlayer) ? localPlayerColor : '#96859d';
     context.fillRect(x - 1, y - 1, 3, 3);
