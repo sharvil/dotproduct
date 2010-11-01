@@ -3,7 +3,7 @@
  * @author sharvil.nanavati@gmail.com (Sharvil Nanavati)
  */
 
-goog.provide('dotprod.entities.Bullet');
+goog.provide('dotprod.entities.Bomb');
 
 goog.require('dotprod.Camera');
 goog.require('dotprod.entities.Effect');
@@ -18,8 +18,8 @@ goog.require('dotprod.Vector');
  * @param {!dotprod.Vector} position
  * @param {!dotprod.Vector} velocity
  */
-dotprod.entities.Bullet = function(game, owner, position, velocity) {
-  var bulletSettings = game.getSettings()['ships'][owner.getShip()]['bullet'];
+dotprod.entities.Bomb = function(game, owner, position, velocity) {
+  var bulletSettings = game.getSettings()['ships'][owner.getShip()]['bomb'];
 
   dotprod.entities.Projectile.call(this, game, owner, bulletSettings['lifetime'], bulletSettings['damage']);
 
@@ -30,16 +30,16 @@ dotprod.entities.Bullet = function(game, owner, position, velocity) {
    * @type {!dotprod.Animation}
    * @private
    */
-  this.animation_ = game.getResourceManager().getVideoEnsemble('bullets').getAnimation(0);
+  this.animation_ = game.getResourceManager().getVideoEnsemble('bombs').getAnimation(0);
   this.animation_.setRepeatCount(-1);
 };
-goog.inherits(dotprod.entities.Bullet, dotprod.entities.Projectile);
+goog.inherits(dotprod.entities.Bomb, dotprod.entities.Projectile);
 
 /**
  * @param {!dotprod.Map} map
  * @param {!dotprod.PlayerIndex} playerIndex
  */
-dotprod.entities.Bullet.prototype.update = function(map, playerIndex) {
+dotprod.entities.Bomb.prototype.update = function(map, playerIndex) {
   --this.lifetime_;
   if (!this.isAlive()) {
     return;
@@ -74,7 +74,7 @@ dotprod.entities.Bullet.prototype.update = function(map, playerIndex) {
 /**
  * @param {!dotprod.Camera} camera
  */
-dotprod.entities.Bullet.prototype.render = function(camera) {
+dotprod.entities.Bomb.prototype.render = function(camera) {
   if (!this.isAlive()) {
     return;
   }
@@ -89,7 +89,7 @@ dotprod.entities.Bullet.prototype.render = function(camera) {
 /**
  * @param {!dotprod.entities.Player} player
  */
-dotprod.entities.Bullet.prototype.checkPlayerCollision_ = function(player) {
+dotprod.entities.Bomb.prototype.checkPlayerCollision_ = function(player) {
   if (!player.isAlive() || this.owner_ == player) {
     return false;
   }
@@ -98,7 +98,7 @@ dotprod.entities.Bullet.prototype.checkPlayerCollision_ = function(player) {
   var x = this.position_.getX();
   var y = this.position_.getY();
   if (x >= dimensions.left && x <= dimensions.right && y >= dimensions.top && y <= dimensions.bottom) {
-    var animation = this.game_.getResourceManager().getVideoEnsemble('explode0').getAnimation(0);
+    var animation = this.game_.getResourceManager().getVideoEnsemble('explode1').getAnimation(0);
     var explosion = new dotprod.entities.Effect(animation, this.position_, new dotprod.Vector(0, 0));
     this.game_.getEffectIndex().addEffect(explosion);
     player.takeDamage(this.owner_, this, this.damage_);

@@ -7,6 +7,7 @@ goog.provide('dotprod.entities.LocalPlayer');
 
 goog.require('goog.events');
 goog.require('goog.object');
+goog.require('dotprod.entities.Bomb');
 goog.require('dotprod.entities.Bullet');
 goog.require('dotprod.entities.Exhaust');
 goog.require('dotprod.entities.Player');
@@ -134,6 +135,9 @@ dotprod.entities.LocalPlayer.prototype.update = function() {
   var bulletFireDelay = this.shipSettings_['bullet']['fireDelay'];
   var bulletFireEnergy = this.shipSettings_['bullet']['fireEnergy'];
   var bulletSpeed = this.shipSettings_['bullet']['speed'];
+  var bombFireDelay = this.shipSettings_['bomb']['fireDelay'];
+  var bombFireEnergy = this.shipSettings_['bomb']['fireEnergy'];
+  var bombSpeed = this.shipSettings_['bomb']['speed'];
 
   var oldAngle = this.angleInRadians_;
   var oldVelocity = this.velocity_;
@@ -153,6 +157,16 @@ dotprod.entities.LocalPlayer.prototype.update = function() {
       this.energy_ -= bulletFireEnergy;
 
       this.game_.getResourceManager().playSound('bullet');
+    } else if (keyboard.isKeyPressed(goog.events.KeyCodes.TAB) && this.energy_ > bombFireEnergy) {
+      var angle = this.getAngle_();
+      var position = new dotprod.Vector(0, -this.yRadius_).rotate(angle).add(this.position_);
+      var velocity = this.velocity_.add(dotprod.Vector.fromPolar(bombSpeed, angle));
+      projectile = new dotprod.entities.Bomb(this.game_, this, position, velocity);
+      this.projectileIndex_.addProjectile(this, projectile);
+      this.projectileFireDelay_ = bombFireDelay;
+      this.energy_ -= bombFireEnergy;
+
+      this.game_.getResourceManager().playSound('bomb');
     }
   }
 

@@ -11,7 +11,6 @@ goog.require('goog.events.BrowserEvent');
 goog.require('dotprod.Camera');
 goog.require('dotprod.ChatMessages');
 goog.require('dotprod.EffectIndex');
-goog.require('dotprod.entities.Bullet');
 goog.require('dotprod.entities.LocalPlayer');
 goog.require('dotprod.entities.RemotePlayer');
 goog.require('dotprod.input.Keyboard');
@@ -343,15 +342,16 @@ dotprod.Game.prototype.onPlayerPosition_ = function(packet) {
   if (player) {
     player.onPositionUpdate(timeDiff, angle, position, velocity);
     if (packet.length > 7) {
-      var bulletPos = new dotprod.Vector(packet[7], packet[8]);
-      var bulletVel = new dotprod.Vector(packet[9], packet[10]);
-      var bullet = new dotprod.entities.Bullet(this, player, bulletPos, bulletVel);
-      this.projectileIndex_.addProjectile(player, bullet);
+      var type = packet[7];
+      position = new dotprod.Vector(packet[8], packet[9]);
+      velocity = new dotprod.Vector(packet[10], packet[11]);
+      var projectile = dotprod.entities.Projectile.deserialize(this, player, type, position, velocity);
+      this.projectileIndex_.addProjectile(player, projectile);
 
       // TODO(sharvil): we need a better way to account for latency than directly
       // calling update on the projectile.
       for (var i = 0; i < timeDiff; ++i) {
-        bullet.update(this.map_, this.playerIndex_);
+        projectile.update(this.map_, this.playerIndex_);
       }
     }
   }

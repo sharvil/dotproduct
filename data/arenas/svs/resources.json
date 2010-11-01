@@ -150,6 +150,22 @@
 			"period": 2
 		},
 
+    "bullets": {
+      "url": "data/shared/graphics/bullets.png",
+      "xTiles": 4,
+      "yTiles": 10,
+      "frames": 4,
+      "period": 10
+    },
+
+    "bombs": {
+      "url": "data/shared/graphics/bombs.png",
+      "xTiles": 10,
+      "yTiles": 13,
+      "frames": 10,
+      "period": 10
+    },
+
     "warp": {
       "url": "data/shared/graphics/warp.png",
       "xTiles": 6,

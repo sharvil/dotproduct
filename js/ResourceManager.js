@@ -5,6 +5,7 @@
 
 goog.provide('dotprod.ResourceManager');
 
+goog.require('goog.asserts');
 goog.require('goog.debug.Logger');
 goog.require('dotprod.Image');
 goog.require('dotprod.VideoEnsemble');
@@ -108,16 +109,18 @@ dotprod.ResourceManager.prototype.playSound = function(name) {
 
 /**
  * @param {string} name
- * @return {(!dotprod.Image|undefined)}
+ * @return {!dotprod.Image}
  */
 dotprod.ResourceManager.prototype.getImage = function(name) {
+  goog.asserts.assert(this.images_[name], 'Requesting missing image resource: ' + name);
   return this.images_[name];
 };
 
 /**
  * @param {string} name
- * @return {(!dotprod.VideoEnsemble|undefined)}
+ * @return {!dotprod.VideoEnsemble}
  */
 dotprod.ResourceManager.prototype.getVideoEnsemble = function(name) {
+  goog.asserts.assert(this.videoEnsembles_[name], 'Requesting missing video ensemble: ' + name);
   return this.videoEnsembles_[name];
 };

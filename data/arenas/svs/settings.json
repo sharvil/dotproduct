@@ -31,8 +31,15 @@
         "fireDelay": 25,
         "lifetime": 550,
         "damage": 200,
-        "damageUpgrade": 100,
-        "color": "rgba(255, 1, 136, 0)"
+        "damageUpgrade": 100
+      },
+      "bomb": {
+        "fireEnergy": 300,
+        "speed": 2,
+        "fireDelay": 150,
+        "lifetime": 6000,
+        "damage": 750,
+        "damageUpgrade": 50
       }
     },
 
@@ -48,13 +55,20 @@
       "rechargeRate": 0.4,
       "respawnDelay": 500,
       "bullet": {
-        "fireEnergy": 20,
+        "fireEnergy": 10,
         "speed": 2,
-        "fireDelay": 25,
+        "fireDelay": 15,
         "lifetime": 550,
         "damage": 200,
-        "damageUpgrade": 100,
-        "color": "rgba(255, 1, 136, 0)"
+        "damageUpgrade": 100
+      },
+      "bomb": {
+        "fireEnergy": 300,
+        "speed": 2,
+        "fireDelay": 150,
+        "lifetime": 6000,
+        "damage": 750,
+        "damageUpgrade": 50
       }
     }
   ]
