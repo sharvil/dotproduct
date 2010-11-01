@@ -117,7 +117,7 @@ dotprod.entities.LocalPlayer.prototype.update = function() {
 
   // Check for ship change before we read any ship settings.
   for (var i = 0; i < this.settings_['ships'].length; ++i) {
-    if (keyboard.isKeyPressed(goog.events.KeyCodes.F1 + i)) {
+    if (keyboard.isKeyPressed(goog.events.KeyCodes.ONE + i)) {
       if (i != this.ship_ && this.energy_ >= this.maxEnergy_) {
         this.setShip(i);
         this.game_.getProtocol().sendShipChange(this.ship_);

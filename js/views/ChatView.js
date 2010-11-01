@@ -6,6 +6,7 @@
 goog.provide('dotprod.views.ChatView');
 
 goog.require('goog.events.BrowserEvent');
+goog.require('goog.events.Event');
 goog.require('goog.events.EventType');
 goog.require('dotprod.ChatMessages');
 goog.require('dotprod.Protocol');
@@ -51,7 +52,9 @@ dotprod.views.ChatView = function(game, messages) {
   this.chatBox_ = /** @type {!HTMLInputElement} */ (goog.dom.createElement('input'));
   this.chatBox_.className = dotprod.views.ChatView.CHAT_BOX_CLASS_NAME_;
   goog.events.listen(this.chatBox_, 'blur', goog.bind(this.onChatLostFocus_, this));
-  goog.events.listen(window, goog.events.EventType.KEYPRESS, goog.bind(this.onKeyPress_, this));
+  goog.events.listen(window, goog.events.EventType.KEYPRESS, goog.bind(this.onKeyPress_, this), true);
+  goog.events.listen(window, goog.events.EventType.KEYDOWN, goog.bind(this.keyFilter_, this), true);
+  goog.events.listen(window, goog.events.EventType.KEYUP, goog.bind(this.keyFilter_, this), true);
 };
 goog.inherits(dotprod.views.ChatView, dotprod.views.View);
 
@@ -124,4 +127,14 @@ dotprod.views.ChatView.prototype.onKeyPress_ = function(event) {
   }
   this.chatBox_.value = '';
   this.chatBox_.style.opacity = 0;
+};
+
+/**
+ * @param {!goog.events.BrowserEvent} event
+ * @private
+ */
+dotprod.views.ChatView.prototype.keyFilter_ = function(event) {
+  if (this.chatBox_.style.opacity == 1) {
+    event.stopPropagation();
+  }
 };
