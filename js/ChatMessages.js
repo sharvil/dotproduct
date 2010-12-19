@@ -21,13 +21,6 @@ dotprod.ChatMessages = function() {
  * @private
  * @const
  */
-dotprod.ChatMessages.MAX_MESSAGES_ = 5;
-
-/**
- * @type {number}
- * @private
- * @const
- */
 dotprod.ChatMessages.MAX_MESSAGES = 8;
 
 dotprod.ChatMessages.prototype.addMessage = function(message) {
