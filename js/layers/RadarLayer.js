@@ -143,19 +143,15 @@ dotprod.layers.RadarLayer.prototype.renderMap_ = function(context, dimensions, r
   rightTile = Math.min(rightTile, map.getWidth());
   bottomTile = Math.min(bottomTile, map.getHeight());
 
-  for (var j = topTile; j <= bottomTile; ++j) {
-    for (var i = leftTile; i <= rightTile; ++i) {
-      if (!map.getTile(i, j)) {
-        continue;
-      }
+  var tiles = map.getTiles(leftTile, topTile, rightTile, bottomTile);
+  for (var i = 0; i < tiles.length; ++i) {
+    var tile = tiles[i];
+    var xPixels = (tile.x - dimensions.x / tileWidth) * scaledTileWidth;
+    var yPixels = (tile.y - dimensions.y / tileHeight) * scaledTileHeight;
+    var x = Math.floor(xPixels + radarWidth / 2);
+    var y = Math.floor(yPixels + radarHeight / 2);
 
-      var xPixels = (i - dimensions.x / tileWidth) * scaledTileWidth;
-      var yPixels = (j - dimensions.y / tileHeight) * scaledTileHeight;
-      var x = Math.floor(xPixels + radarWidth / 2);
-      var y = Math.floor(yPixels + radarHeight / 2);
-
-      context.fillRect(x, y, scaledTileWidth, scaledTileHeight);
-    }
+    context.fillRect(x, y, scaledTileWidth, scaledTileHeight);
   }
 };
 

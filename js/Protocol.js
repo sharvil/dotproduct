@@ -7,7 +7,6 @@ goog.provide('dotprod.Protocol');
 goog.provide('dotprod.Protocol.S2CPacketType');
 
 goog.require('goog.debug.Logger');
-goog.require('goog.debug.Logger.Level');
 goog.require('dotprod.entities.Projectile');
 goog.require('dotprod.Timer');
 goog.require('dotprod.Vector');
@@ -224,7 +223,7 @@ dotprod.Protocol.prototype.onOpen_ = function() {
 
 dotprod.Protocol.prototype.onError_ = function() {
   // TODO(sharvil): drop connection, retry w/ binary exponential backoff
-  this.logger_.log(goog.debug.Logger.Level.WARNING, 'Error communicating with server.');
+  this.logger_.warning('Error communicating with server.');
 };
 
 dotprod.Protocol.prototype.onClose_ = function() {
@@ -234,7 +233,7 @@ dotprod.Protocol.prototype.onClose_ = function() {
   this.socket_ = null;
 
   // TODO(sharvil): retry connection w/ binary exponential backoff
-  this.logger_.log(goog.debug.Logger.Level.WARNING, 'Connection to server terminated.');
+  this.logger_.warning('Connection to server terminated.');
 };
 
 /**
