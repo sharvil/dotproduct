@@ -15,8 +15,9 @@ goog.require('dotprod.views.LoginView');
 
 /**
  * @constructor
+ * @param {!Object} settings
  */
-dotprod.Application = function() {
+dotprod.Application = function(settings) {
   // Make sure all logging output goes to console.
   new goog.debug.Console().setCapturing(true);
 
@@ -24,7 +25,7 @@ dotprod.Application = function() {
    * @type {!dotprod.Protocol}
    * @private
    */
-  this.protocol_ = new dotprod.Protocol('ws://dev.nanavati.net:8000/dotproduct');
+  this.protocol_ = new dotprod.Protocol(settings['url']);
 
   /**
    * @type {!dotprod.ResourceManager}
@@ -51,7 +52,7 @@ dotprod.Application = function() {
    * @type {!Object}
    * @private
    */
-  this.settings_ = {};
+  this.settings_ = settings;
 
   /**
    * @type {!Object.<number, number>}
@@ -87,6 +88,6 @@ dotprod.Application.prototype.onLoadComplete_ = function() {
   this.game_.renderDom(/** @type {!HTMLDivElement} */ (goog.dom.$('game')));
 };
 
-var _main = function() {
-  new dotprod.Application();
+var _main = function(settings) {
+  new dotprod.Application(settings);
 };
