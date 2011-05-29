@@ -26,6 +26,13 @@ dotprod.layers.MapLayer = function(game) {
   this.game_ = game;
 
   /**
+   * @type {!dotprod.Animation}
+   * @private
+   */
+  this.prize_ = this.game_.getResourceManager().getVideoEnsemble('prize').getAnimation(0);
+  this.prize_.setRepeatCount(-1);
+
+  /**
    * @type {!dotprod.Image}
    * @private
    */
@@ -36,6 +43,7 @@ dotprod.layers.MapLayer = function(game) {
  * @override
  */
 dotprod.layers.MapLayer.prototype.update = function() {
+  this.prize_.update();
 };
 
 /**
@@ -75,13 +83,14 @@ dotprod.layers.MapLayer.prototype.render = function(camera) {
     for (var y = topTile; y <= topTile + numVertTiles; ++y) {
       for (var x = leftTile; x <= leftTile + numHorizTiles; ++x) {
         var tileNum = map.getTile(x, y);
-        if (tileNum == 0 || tileNum > this.tileset_.getNumTiles()) {
+        if (tileNum == 0) {
           continue;
+        } else if (tileNum <= this.tileset_.getNumTiles()){
+          this.tileset_.render(context,
+                              x * tileWidth - dimensions.x + halfWidth,
+                              y * tileHeight - dimensions.y + halfHeight,
+                              tileNum - 1);
         }
-        this.tileset_.render(context,
-                            x * tileWidth - dimensions.x + halfWidth,
-                            y * tileHeight - dimensions.y + halfHeight,
-                            tileNum - 1);
       }
     }
 

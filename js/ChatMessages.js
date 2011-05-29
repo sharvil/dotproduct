@@ -2,7 +2,7 @@
  * @fileoverview Description of this file.
  * @author sharvil.nanavati@gmail.com (Sharvil Nanavati)
  */
- 
+
 goog.provide('dotprod.ChatMessages');
 
 /**

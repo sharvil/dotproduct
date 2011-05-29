@@ -8,6 +8,7 @@ goog.provide('dotprod.Map');
 goog.require('dotprod.entities.Entity');
 goog.require('dotprod.Image');
 goog.require('dotprod.Quadtree');
+goog.require('dotprod.Rect');
 goog.require('dotprod.Vector');
 
 /**
@@ -101,14 +102,11 @@ dotprod.Map.prototype.getTile = function(x, y) {
 };
 
 /**
- * @param {number} x 
- * @param {number} y
- * @param {number} endX
- * @param {number} endY
+ * @param {!dotprod.Rect} rect
  * @return {!Array.<!Object>}
  */
-dotprod.Map.prototype.getTiles = function(x, y, endX, endY) {
-  return this.quadtree_.tilesForViewport({left: x, right: endX, top: y, bottom: endY});
+dotprod.Map.prototype.getTiles = function(rect) {
+  return this.quadtree_.tilesForViewport(rect);
 };
 
 /**

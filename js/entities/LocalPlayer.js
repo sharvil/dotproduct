@@ -11,6 +11,7 @@ goog.require('dotprod.entities.Bomb');
 goog.require('dotprod.entities.Bullet');
 goog.require('dotprod.entities.Exhaust');
 goog.require('dotprod.entities.Player');
+goog.require('dotprod.Palette');
 goog.require('dotprod.Vector');
 
 /**
@@ -52,7 +53,7 @@ dotprod.entities.LocalPlayer = function(game, name, ship, camera) {
    */
   this.ticksSincePositionUpdate_ = 999999;
 
-  dotprod.entities.Player.call(this, game, name, ship);
+  dotprod.entities.Player.call(this, game, name, ship, 0 /* bounty */);
 };
 goog.inherits(dotprod.entities.LocalPlayer, dotprod.entities.Player);
 
@@ -65,7 +66,10 @@ goog.inherits(dotprod.entities.LocalPlayer, dotprod.entities.Player);
 dotprod.entities.LocalPlayer.prototype.takeDamage = function(shooter, projectile, energy) {
   this.energy_ -= energy;
   if (this.energy_ <= 0) {
+    var bountyGained = this.bounty_;
     this.onDeath();
+    shooter.onKill(this, bountyGained);
+
     this.game_.getProtocol().sendDeath(shooter.getName());
 
     // TODO(sharvil): we shouldn't reach into game's private member...
@@ -223,8 +227,8 @@ dotprod.entities.LocalPlayer.prototype.render = function(camera) {
     var tenths = Math.floor((millis % 1000) / 100);
     var time = seconds + '.' + tenths;
     context.save();
-      context.font = '10pt Verdana';
-      context.fillStyle = 'gold';
+      context.font = dotprod.FontFoundry.playerFont();
+      context.fillStyle = dotprod.Palette.friendColor();
       context.fillText(time, dimensions.width / 2, dimensions.height / 2);
     context.restore();
     return;

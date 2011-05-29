@@ -5,9 +5,10 @@
 
 goog.provide('dotprod.layers.ChatLayer');
 
-goog.require('dotprod.Camera');
 goog.require('dotprod.ChatMessages');
+goog.require('dotprod.FontFoundry');
 goog.require('dotprod.layers.Layer');
+goog.require('dotprod.Palette');
 
 /**
  * @constructor
@@ -28,7 +29,7 @@ dotprod.layers.ChatLayer = function(messages) {
 dotprod.layers.ChatLayer.prototype.update = goog.nullFunction;
 
 /**
- * @param {dotprod.Camera} camera
+ * @param {!dotprod.Camera} camera
  * @override
  */
 dotprod.layers.ChatLayer.prototype.render = function(camera) {
@@ -37,10 +38,10 @@ dotprod.layers.ChatLayer.prototype.render = function(camera) {
   var messages = this.messages_.getMessages();
 
   context.save();
-    context.font = '12px "Courier New"';
+    context.font = dotprod.FontFoundry.chatFont();
 
     for (var i = 0; i < messages.length; ++i) {
-      context.fillStyle = '#fff';
+      context.fillStyle = dotprod.Palette.chatColor();
       context.fillText(messages[i], 5, dimensions.height - 5 - 12 * i);
     }
 

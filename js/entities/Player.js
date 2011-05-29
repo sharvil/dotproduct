@@ -6,9 +6,11 @@
 goog.provide('dotprod.entities.Player');
 
 goog.require('dotprod.EffectIndex');
+goog.require('dotprod.FontFoundry');
 goog.require('dotprod.entities.Entity');
 goog.require('dotprod.Image');
 goog.require('dotprod.Map');
+goog.require('dotprod.Palette');
 
 /**
  * @constructor
@@ -16,8 +18,9 @@ goog.require('dotprod.Map');
  * @param {!dotprod.Game} game
  * @param {string} name
  * @param {number} ship
+ * @param {number} bounty
  */
-dotprod.entities.Player = function(game, name, ship) {
+dotprod.entities.Player = function(game, name, ship, bounty) {
   dotprod.entities.Entity.call(this);
 
   /**
@@ -69,6 +72,30 @@ dotprod.entities.Player = function(game, name, ship) {
   this.ship_ = ship;
 
   /**
+   * @type {number}
+   * @protected
+   */
+  this.bounty_ = bounty;
+
+  /**
+   * @type {number}
+   * @protected
+   */
+  this.points_ = 0;
+
+  /**
+   * @type {number}
+   * @protected
+   */
+  this.wins_ = 0;
+
+  /**
+   * @type {number}
+   * @protected
+   */
+  this.losses_ = 0;
+
+  /**
    * @type {dotprod.Image}
    * @protected
    */
@@ -115,6 +142,7 @@ dotprod.entities.Player.prototype.setShip = function(ship) {
   this.position_ = new dotprod.Vector(0, 0);
   this.velocity_ = new dotprod.Vector(0, 0);
   this.energy_ = 0;
+  this.bounty_ = 0;
   this.xRadius_ = this.shipSettings_['xRadius'];
   this.yRadius_ = this.shipSettings_['yRadius'];
   this.image_ = this.game_.getResourceManager().getImage('ship' + this.ship_);
@@ -127,6 +155,9 @@ dotprod.entities.Player.prototype.setShip = function(ship) {
  */
 dotprod.entities.Player.prototype.takeDamage = function(player, projectile, damage) {};
 
+/**
+ * Called when this player is killed by another one.
+ */
 dotprod.entities.Player.prototype.onDeath = function() {
   var ensemble = this.game_.getResourceManager().getVideoEnsemble('explode2');
   this.effectIndex_.addEffect(new dotprod.entities.Effect(ensemble.getAnimation(0), this.position_, this.velocity_));
@@ -139,7 +170,41 @@ dotprod.entities.Player.prototype.onDeath = function() {
     this.effectIndex_.addEffect(piece);
   }
 
+  ++this.losses_;
+  this.bounty_ = 0;
   this.energy_ = 0;
+};
+
+/**
+ * Called when this player kills another one.
+ * @param {!dotprod.entities.Player} killee The player who we just killed.
+ * @param {number} bountyGained How much bounty was gained by killing this player.
+ */
+dotprod.entities.Player.prototype.onKill = function(killee, bountyGained) {
+  this.points_ += bountyGained;
+  ++this.wins_;
+  ++this.bounty_;
+};
+
+/**
+ * Called when this player's score gets updated from the server.
+ * @param {number} points
+ * @param {number} wins
+ * @param {number} losses
+ */
+dotprod.entities.Player.prototype.onScoreUpdate = function(points, wins, losses) {
+  this.points_ = points;
+  this.wins_ = wins;
+  this.losses_ = losses;
+};
+
+/**
+ * Returns true if this player is a friend (on the same team) of the other player.
+ * @param {!dotprod.entities.Player} other
+ * @return {boolean}
+ */
+dotprod.entities.Player.prototype.isFriend = function(other) {
+  return this == other;
 };
 
 dotprod.entities.Player.prototype.warpFlash = function() {
@@ -155,6 +220,7 @@ dotprod.entities.Player.prototype.render = function(camera) {
     return;
   }
 
+  var localPlayer = this.game_.getPlayerIndex().getLocalPlayer();
   var tileNum = Math.floor(this.angleInRadians_ / (2 * Math.PI) * this.image_.getNumTiles());
   var dimensions = camera.getDimensions();
   var context = camera.getContext();
@@ -165,10 +231,11 @@ dotprod.entities.Player.prototype.render = function(camera) {
   this.image_.render(context, x, y, tileNum);
 
   context.save();
-    context.font = '12pt Verdana';
-    context.fillStyle = 'rgb(200, 200, 200)';
+    context.font = dotprod.FontFoundry.playerFont();
+    context.fillStyle = this.isFriend(localPlayer) ? dotprod.Palette.friendColor() : dotprod.Palette.foeColor();
     context.textAlign = 'center';
-    context.fillText(this.name_, x + this.image_.getTileWidth() / 2, y + 3 / 2 * this.image_.getTileHeight());
+    context.textBaseline = 'top';
+    context.fillText(this.name_ + '(' + this.bounty_ + ')', x + this.image_.getTileWidth() / 2, y + this.image_.getTileHeight());
   context.restore();
 };
 

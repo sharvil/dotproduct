@@ -81,7 +81,9 @@ dotprod.Protocol.C2SPacketType_ = {
   CLOCK_SYNC: 4,
   PLAYER_DIED: 5,
   CHAT_MESSAGE: 6,
-  SHIP_CHANGE: 7
+  SHIP_CHANGE: 7,
+  QUERY_NAME: 8,
+  REGISTER_NAME: 9
 };
 
 /**
@@ -95,7 +97,10 @@ dotprod.Protocol.S2CPacketType = {
   CLOCK_SYNC_REPLY: 5,
   PLAYER_DIED: 6,
   CHAT_MESSAGE: 7,
-  SHIP_CHANGE: 8
+  SHIP_CHANGE: 8,
+  SCORE_UPDATE: 9,
+  QUERY_NAME_REPLY: 10,
+  REGISTER_NAME_REPLY: 11
 };
 
 /**
@@ -137,10 +142,10 @@ dotprod.Protocol.prototype.registerHandler = function(packetType, cb) {
 };
 
 /**
- * @param {string} username
+ * @param {!Object} loginData
  */
-dotprod.Protocol.prototype.login = function(username) {
-  this.send_([dotprod.Protocol.C2SPacketType_.LOGIN, username]);
+dotprod.Protocol.prototype.login = function(loginData) {
+  this.send_([dotprod.Protocol.C2SPacketType_.LOGIN, loginData]);
 };
 
 /**
@@ -149,6 +154,7 @@ dotprod.Protocol.prototype.login = function(username) {
 dotprod.Protocol.prototype.startGame = function(ship) {
   this.send_([dotprod.Protocol.C2SPacketType_.START_GAME, ship]);
   this.syncClocks_();
+  this.syncTimer_ = dotprod.Timer.setInterval(goog.bind(this.syncClocks_, this), dotprod.Protocol.CLOCK_SYNC_PERIOD_);
 };
 
 /**
@@ -212,13 +218,26 @@ dotprod.Protocol.prototype.sendShipChange = function(ship) {
   this.send_([dotprod.Protocol.C2SPacketType_.SHIP_CHANGE, ship]);
 };
 
+/**
+ * @param {string} name
+ */
+dotprod.Protocol.prototype.queryName = function(name) {
+  this.send_([dotprod.Protocol.C2SPacketType_.QUERY_NAME, name]);
+};
+
+/**
+ * @param {string} name
+ */
+dotprod.Protocol.prototype.registerName = function(name) {
+  this.send_([dotprod.Protocol.C2SPacketType_.REGISTER_NAME, name]);
+};
+
 dotprod.Protocol.prototype.onOpen_ = function() {
   for (var i = 0; i < this.packetQueue_.length; ++i) {
     this.socket_.send(this.packetQueue_[i]);
   }
 
   this.packetQueue_ = [];
-  this.syncTimer_ = dotprod.Timer.setInterval(goog.bind(this.syncClocks_, this), dotprod.Protocol.CLOCK_SYNC_PERIOD_);
 };
 
 dotprod.Protocol.prototype.onError_ = function() {

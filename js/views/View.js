@@ -7,26 +7,21 @@ goog.provide('dotprod.views.View');
 
 /**
  * @constructor
+ * @param {HTMLDivElement=} opt_rootNode
  */
-dotprod.views.View = function() {
+dotprod.views.View = function(opt_rootNode) {
   /**
    * @type {HTMLElement}
    */
-  this.rootNode_;
+  this.rootNode_ = opt_rootNode;
 };
 
 dotprod.views.View.prototype.renderDom = function(rootNode) {
   this.rootNode_ = rootNode;
 };
 
-dotprod.views.View.prototype.dispose = function() {
-  while (this.rootNode_.childNodes.length) {
-    this.rootNode_.removeChild(this.rootNode_.firstChild);
-  }
-};
-
 dotprod.views.View.prototype.show = function() {
-  this.rootNode_.style.display = '';
+  this.rootNode_.style.display = 'block';
 };
 
 dotprod.views.View.prototype.hide = function() {

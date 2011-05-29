@@ -18,8 +18,8 @@ goog.require('dotprod.Vector');
  * @param {string} name
  * @param {number} ship
  */
-dotprod.entities.RemotePlayer = function(game, name, ship) {
-  dotprod.entities.Player.call(this, game, name, ship);
+dotprod.entities.RemotePlayer = function(game, name, ship, bounty) {
+  dotprod.entities.Player.call(this, game, name, ship, bounty);
 
   /**
    * @type {number}
@@ -62,6 +62,7 @@ dotprod.entities.RemotePlayer.VELOCITY_ADJUST_PERIOD_ = 20;
 dotprod.entities.RemotePlayer.prototype.onPositionUpdate = function(timeDiff, angle, position, velocity) {
   if (!this.isAlive()) {
     this.energy_ = 1;
+    this.bounty_ = 0;
     this.angleInRadians_ = angle;
     this.position_ = position;
     this.velocity_ = velocity;

@@ -1,3 +1,50 @@
+/*
+  #A839B2
+  #FF0071
+  #ACD030
+  #58AA00
+  #00AA78
+  #0074AE
+
+  text:
+    #5c5c5c
+*/
+
+@font-face {
+  font-family: 'SubSpace Tiny';
+  src: url('../data/shared/fonts/Tiny.eot');
+  src: local('☺'),
+       url('../data/shared/fonts/Tiny.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'SubSpace Small';
+  src: url('../data/shared/fonts/Small.eot');
+  src: local('☺'),
+       url('../data/shared/fonts/Small.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'SubSpace Regular';
+  src: url('../data/shared/fonts/Regular.eot');
+  src: local('☺'),
+       url('../data/shared/fonts/Regular.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'SubSpace Large';
+  src: url('../data/shared/fonts/Large.eot');
+  src: local('☺'),
+       url('../data/shared/fonts/Large.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'SubSpace Huge';
+  src: url('../data/shared/fonts/Huge.eot');
+  src: local('☺'),
+       url('../data/shared/fonts/Huge.ttf') format('truetype');
+}
+
 body {
   margin: 0;
   background: #000;
@@ -23,6 +70,16 @@ input {
 /*  color: #36ade1;*/
 }
 
+.content {
+  margin: 0 0 0 80px;
+}
+
+.signin {
+  font-size: 26px;
+  color: #36ade1;
+  margin: 0 0 10px 0;
+}
+
 .title .dot {
   color: #fff;
 }
@@ -31,18 +88,22 @@ input {
               LOGIN VIEW
  **************************************/
 
+#lv {
+    display: none;
+}
+
 .lv-name {
-  text-align: center;
-  color: #ccc;
-  background: #111;
-  border: 1px solid #222;
+  color: #a0a0a0;
+  background: #2d2d2d;
+  border: 1px solid #3c3c3c;
   padding: 5px 9px;
   margin: 0;
 }
 
 .lv-login-button {
   border: none;
-  background: #80d850;
+  background: #00AA78;
+/*  background: #80d850;*/
   color: #fff;
   padding: 5px 9px;
   margin: 0 0 0 5px;
