@@ -47,7 +47,7 @@ dotprod.entities.Bullet.prototype.update = function(map, playerIndex) {
 
   this.position_ = this.position_.add(this.velocity_.getXComponent());
   var collision = map.getCollision(this);
-  if (collision) {
+  if (collision && collision.tileValue != 255) {
     var xVel = this.velocity_.getX();
     this.position_ = new dotprod.Vector(xVel >= 0 ? collision.left : collision.right, this.position_.getY());
     this.velocity_ = new dotprod.Vector(-xVel, this.velocity_.getY());
@@ -55,7 +55,7 @@ dotprod.entities.Bullet.prototype.update = function(map, playerIndex) {
 
   this.position_ = this.position_.add(this.velocity_.getYComponent());
   collision = map.getCollision(this);
-  if (collision) {
+  if (collision && collision.tileValue != 255) {
     var yVel = this.velocity_.getY();
     this.position_ = new dotprod.Vector(this.position_.getX(), yVel >= 0 ? collision.top : collision.bottom);
     this.velocity_ = new dotprod.Vector(this.velocity_.getX(), -yVel);

@@ -630,11 +630,12 @@ goog.addDependency("../../dotproduct/js/ChatMessages.js", ['dotprod.ChatMessages
 goog.addDependency("../../dotproduct/js/EffectIndex.js", ['dotprod.EffectIndex'], ['goog.array', 'dotprod.entities.Effect']);
 goog.addDependency("../../dotproduct/js/FontFoundry.js", ['dotprod.FontFoundry', 'dotprod.Font'], []);
 goog.addDependency("../../dotproduct/js/Image.js", ['dotprod.Image'], []);
-goog.addDependency("../../dotproduct/js/Map.js", ['dotprod.Map'], ['dotprod.entities.Entity', 'dotprod.Image', 'dotprod.Quadtree', 'dotprod.Rect', 'dotprod.Vector']);
+goog.addDependency("../../dotproduct/js/Map.js", ['dotprod.Map'], ['dotprod.entities.Entity', 'dotprod.Image', 'dotprod.Quadtree', 'dotprod.Rect', 'dotprod.Vector', 'goog.asserts']);
 goog.addDependency("../../dotproduct/js/Notifications.js", ['dotprod.Notifications'], []);
 goog.addDependency("../../dotproduct/js/Palette.js", ['dotprod.Palette'], []);
 goog.addDependency("../../dotproduct/js/PlayerIndex.js", ['dotprod.PlayerIndex'], ['goog.object']);
 goog.addDependency("../../dotproduct/js/Prize.js", ['dotprod.Prize'], []);
+goog.addDependency("../../dotproduct/js/PrizeIndex.js", ['dotprod.PrizeIndex'], ['dotprod.Prize', 'dotprod.Prng']);
 goog.addDependency("../../dotproduct/js/Prng.js", ['dotprod.Prng'], []);
 goog.addDependency("../../dotproduct/js/ProjectileIndex.js", ['dotprod.ProjectileIndex'], ['goog.array', 'dotprod.entities.Player', 'dotprod.entities.Projectile']);
 goog.addDependency("../../dotproduct/js/Protocol.js", ['dotprod.Protocol', 'dotprod.Protocol.S2CPacketType'], ['goog.debug.Logger', 'dotprod.entities.Projectile', 'dotprod.Timer', 'dotprod.Vector']);
@@ -670,7 +671,7 @@ goog.addDependency("../../dotproduct/js/layers/ShipLayer.js", ['dotprod.layers.S
 goog.addDependency("../../dotproduct/js/layers/StarLayer.js", ['dotprod.layers.StarLayer'], ['dotprod.Camera', 'dotprod.layers.Layer']);
 goog.addDependency("../../dotproduct/js/views/ChatView.js", ['dotprod.views.ChatView'], ['goog.events.BrowserEvent', 'goog.events.Event', 'goog.events.EventType', 'dotprod.ChatMessages', 'dotprod.Protocol', 'dotprod.views.View']);
 goog.addDependency("../../dotproduct/js/views/DebugView.js", ['dotprod.views.DebugView'], ['dotprod.Camera', 'dotprod.views.View']);
-goog.addDependency("../../dotproduct/js/views/Game.js", ['dotprod.Game'], ['goog.debug.ErrorHandler', 'goog.dom', 'goog.events.BrowserEvent', 'dotprod.Camera', 'dotprod.ChatMessages', 'dotprod.EffectIndex', 'dotprod.entities.LocalPlayer', 'dotprod.entities.RemotePlayer', 'dotprod.input.Keyboard', 'dotprod.layers.ChatLayer', 'dotprod.layers.EffectLayer', 'dotprod.layers.NotificationLayer', 'dotprod.layers.MapLayer', 'dotprod.layers.ProjectileLayer', 'dotprod.layers.RadarLayer', 'dotprod.layers.ScoreboardLayer', 'dotprod.layers.ShipLayer', 'dotprod.layers.StarLayer', 'dotprod.Map', 'dotprod.Notifications', 'dotprod.PlayerIndex', 'dotprod.ProjectileIndex', 'dotprod.Protocol', 'dotprod.Timer', 'dotprod.views.ChatView', 'dotprod.views.DebugView', 'dotprod.views.View']);
+goog.addDependency("../../dotproduct/js/views/Game.js", ['dotprod.Game'], ['goog.debug.ErrorHandler', 'goog.dom', 'goog.events.BrowserEvent', 'dotprod.Camera', 'dotprod.ChatMessages', 'dotprod.EffectIndex', 'dotprod.entities.LocalPlayer', 'dotprod.entities.RemotePlayer', 'dotprod.input.Keyboard', 'dotprod.layers.ChatLayer', 'dotprod.layers.EffectLayer', 'dotprod.layers.NotificationLayer', 'dotprod.layers.MapLayer', 'dotprod.layers.ProjectileLayer', 'dotprod.layers.RadarLayer', 'dotprod.layers.ScoreboardLayer', 'dotprod.layers.ShipLayer', 'dotprod.layers.StarLayer', 'dotprod.Map', 'dotprod.Notifications', 'dotprod.PlayerIndex', 'dotprod.PrizeIndex', 'dotprod.ProjectileIndex', 'dotprod.Protocol', 'dotprod.Timer', 'dotprod.views.ChatView', 'dotprod.views.DebugView', 'dotprod.views.View']);
 goog.addDependency("../../dotproduct/js/views/LoadingView.js", ['dotprod.views.LoadingView'], ['goog.events', 'goog.events.EventType', 'dotprod.ResourceManager', 'dotprod.views.View']);
 goog.addDependency("../../dotproduct/js/views/LoginView.js", ['dotprod.views.LoginView'], ['goog.dom', 'goog.events', 'goog.events.EventType', 'dotprod.Protocol', 'dotprod.Protocol.S2CPacketType', 'dotprod.views.View']);
 goog.addDependency("../../dotproduct/js/views/View.js", ['dotprod.views.View'], []);

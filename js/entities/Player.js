@@ -5,7 +5,6 @@
 
 goog.provide('dotprod.entities.Player');
 
-goog.require('dotprod.EffectIndex');
 goog.require('dotprod.FontFoundry');
 goog.require('dotprod.entities.Entity');
 goog.require('dotprod.Image');
@@ -249,18 +248,39 @@ dotprod.entities.Player.prototype.updatePosition_ = function(bounceFactor) {
   }
 
   this.position_ = this.position_.add(this.velocity_.getXComponent());
-  var collisionRect = this.game_.getMap().getCollision(this);
-  if (collisionRect) {
-    var xVel = this.velocity_.getX();
-    this.position_ = new dotprod.Vector(xVel >= 0 ? collisionRect.left : collisionRect.right, this.position_.getY());
-    this.velocity_ = new dotprod.Vector(-xVel * bounceFactor, this.velocity_.getY());
+  var collision = this.game_.getMap().getCollision(this);
+  if (collision) {
+    if (collision.tileValue == 255) {
+      this.collectPrize_(collision.xTile, collision.yTile);
+    } else {
+      var xVel = this.velocity_.getX();
+      this.position_ = new dotprod.Vector(xVel >= 0 ? collision.left : collision.right, this.position_.getY());
+      this.velocity_ = new dotprod.Vector(-xVel * bounceFactor, this.velocity_.getY());
+    }
   }
 
   this.position_ = this.position_.add(this.velocity_.getYComponent());
-  collisionRect = this.game_.getMap().getCollision(this);
-  if (collisionRect) {
-    var yVel = this.velocity_.getY();
-    this.position_ = new dotprod.Vector(this.position_.getX(), yVel >= 0 ? collisionRect.top : collisionRect.bottom);
-    this.velocity_ = new dotprod.Vector(this.velocity_.getX(), -yVel * bounceFactor);
+  collision = this.game_.getMap().getCollision(this);
+  if (collision) {
+    if (collision.tileValue == 255) {
+      this.collectPrize_(collision.xTile, collision.yTile);
+    } else {
+      var yVel = this.velocity_.getY();
+      this.position_ = new dotprod.Vector(this.position_.getX(), yVel >= 0 ? collision.top : collision.bottom);
+      this.velocity_ = new dotprod.Vector(this.velocity_.getX(), -yVel * bounceFactor);
+    }
   }
 };
+
+/**
+ * @param {number} xTile
+ * @param {number} yTile
+ */
+dotprod.entities.Player.prototype.collectPrize_ = function(xTile, yTile) {
+  var prize = this.game_.getPrizeIndex().removePrize(xTile, yTile);
+  if (prize) {
+    this.collectPrize(prize);
+  }
+};
+
+dotprod.entities.Player.prototype.collectPrize = goog.nullFunction;

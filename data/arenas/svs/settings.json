@@ -12,6 +12,10 @@
     "spawnRadius": 500
   },
 
+  "prize": {
+    "count": 1000
+  },
+
   "ships":
   [
     {

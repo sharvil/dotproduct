@@ -83,7 +83,8 @@ dotprod.Protocol.C2SPacketType_ = {
   CHAT_MESSAGE: 6,
   SHIP_CHANGE: 7,
   QUERY_NAME: 8,
-  REGISTER_NAME: 9
+  REGISTER_NAME: 9,
+  PRIZE_COLLECTED: 10
 };
 
 /**
@@ -100,7 +101,9 @@ dotprod.Protocol.S2CPacketType = {
   SHIP_CHANGE: 8,
   SCORE_UPDATE: 9,
   QUERY_NAME_REPLY: 10,
-  REGISTER_NAME_REPLY: 11
+  REGISTER_NAME_REPLY: 11,
+  PRIZE_SEED_UPDATE: 12,
+  PRIZE_COLLECTED: 13
 };
 
 /**
@@ -171,6 +174,15 @@ dotprod.Protocol.prototype.sendPosition = function(direction, position, velocity
     packet = packet.concat([opt_projectile.getType(), position.getX(), position.getY(), velocity.getX(), velocity.getY()]);
   }
   this.send_(packet);
+};
+
+/**
+ * @param {number} type
+ * @param {number} x
+ * @param {number} y
+ */
+dotprod.Protocol.prototype.sendPrizeCollected = function(type, x, y) {
+  this.send_([dotprod.Protocol.C2SPacketType_.PRIZE_COLLECTED, type, x, y]);
 };
 
 dotprod.Protocol.prototype.syncClocks_ = function() {
@@ -260,21 +272,23 @@ dotprod.Protocol.prototype.onClose_ = function() {
  * @private
  */
 dotprod.Protocol.prototype.onMessage_ = function(event) {
+  var obj;
   try {
     var msg = /** @type {string} */ (event.getBrowserEvent().data);
-    var obj = window.JSON.parse(msg);
-    var packetHandlers = this.handlers_[obj[0]];
-
-    if (packetHandlers) {
-      var slicedObj = obj.slice(1);
-      for (var i = 0; packetHandlers[i]; ++i) {
-        packetHandlers[i](slicedObj);
-      }
-    } else {
-      this.logger_.warning('Invalid packet from server: ' + obj);
-    }
+    obj = window.JSON.parse(msg);
   } catch (e) {
-    this.logger_.severe('Error parsing JSON: ' + event.getBrowserEvent().data, e);
+    this.logger_.severe('Error parsing JSON: ' + event.getBrowserEvent().data + '\n' + e);
+    return;
+  }
+
+  var packetHandlers = this.handlers_[obj[0]];
+  if (packetHandlers) {
+    var slicedObj = obj.slice(1);
+    for (var i = 0; packetHandlers[i]; ++i) {
+      packetHandlers[i](slicedObj);
+    }
+  } else {
+    this.logger_.warning('Invalid packet from server: ' + obj);
   }
 };
 

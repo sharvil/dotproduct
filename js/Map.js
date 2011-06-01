@@ -10,6 +10,7 @@ goog.require('dotprod.Image');
 goog.require('dotprod.Quadtree');
 goog.require('dotprod.Rect');
 goog.require('dotprod.Vector');
+goog.require('goog.asserts');
 
 /**
  * @constructor
@@ -102,6 +103,23 @@ dotprod.Map.prototype.getTile = function(x, y) {
 };
 
 /**
+ * @param {number} x X-coordinate in tile units.
+ * @param {number} y Y-coordinate in tile units.
+ * @param {number} value New tile value.
+ */
+dotprod.Map.prototype.setTile = function(x, y, value) {
+  goog.asserts.assert(x >= 0 && x < this.width_, 'Invalid x coordinate.');
+  goog.asserts.assert(y >= 0 && y < this.height_, 'Invalid y coordinate');
+
+  var index = x + y * this.width_;
+  if (value == 0) {
+    delete this.mapData_[index];
+  } else {
+    this.mapData_[index] = value;
+  }
+};
+
+/**
  * @param {!dotprod.Rect} rect
  * @return {!Array.<!Object>}
  */
@@ -168,7 +186,10 @@ dotprod.Map.prototype.getCollision_ = function(dimensions) {
       left: -dotprod.Map.COLLISION_EPSILON_ - xRadius,
       right: this.tileWidth_ + xRadius,
       top: -dotprod.Map.COLLISION_EPSILON_ - yRadius,
-      bottom: this.tileHeight_ + yRadius
+      bottom: this.tileHeight_ + yRadius,
+      xTile: 0,
+      yTile: 0,
+      tileValue: 1
     };
   }
 
@@ -178,7 +199,10 @@ dotprod.Map.prototype.getCollision_ = function(dimensions) {
       left: totalWidth - this.tileWidth_ - dotprod.Map.COLLISION_EPSILON_ - xRadius,
       right: totalWidth + xRadius,
       top: totalHeight - this.tileHeight_ - dotprod.Map.COLLISION_EPSILON_ - yRadius,
-      bottom: totalHeight + yRadius
+      bottom: totalHeight + yRadius,
+      xTile: this.width_,
+      yTile: this.height_,
+      tileValue: 1
     };
   }
 
@@ -189,12 +213,16 @@ dotprod.Map.prototype.getCollision_ = function(dimensions) {
 
   for (var yTile = topTile; yTile <= bottomTile; ++yTile) {
     for (var xTile = leftTile; xTile <= rightTile; ++xTile) {
-      if (this.getTile(xTile, yTile) != 0) {
+      var tileValue = this.getTile(xTile, yTile);
+      if (tileValue != 0) {
         return {
           left: xTile * this.tileWidth_ - dotprod.Map.COLLISION_EPSILON_ - xRadius,
           right: (xTile + 1) * this.tileWidth_ + xRadius,
           top: yTile * this.tileHeight_ - dotprod.Map.COLLISION_EPSILON_ - yRadius,
-          bottom: (yTile + 1) * this.tileHeight_ + yRadius
+          bottom: (yTile + 1) * this.tileHeight_ + yRadius,
+          xTile: xTile,
+          yTile: yTile,
+          tileValue: tileValue
         };
       }
     }

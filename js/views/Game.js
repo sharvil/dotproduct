@@ -26,6 +26,7 @@ goog.require('dotprod.layers.StarLayer');
 goog.require('dotprod.Map');
 goog.require('dotprod.Notifications');
 goog.require('dotprod.PlayerIndex');
+goog.require('dotprod.PrizeIndex');
 goog.require('dotprod.ProjectileIndex');
 goog.require('dotprod.Protocol');
 goog.require('dotprod.Timer');
@@ -92,6 +93,12 @@ dotprod.Game = function(protocol, resourceManager, settings, mapData) {
    * @private
    */
   this.chat_ = new dotprod.ChatMessages();
+
+  /**
+   * @type {!dotprod.PrizeIndex}
+   * @private
+   */
+  this.prizeIndex_ = new dotprod.PrizeIndex(this);
 
   /**
    * @type {!dotprod.ProjectileIndex}
@@ -164,6 +171,8 @@ dotprod.Game = function(protocol, resourceManager, settings, mapData) {
   this.protocol_.registerHandler(dotprod.Protocol.S2CPacketType.CHAT_MESSAGE, goog.bind(this.onChatMessage_, this));
   this.protocol_.registerHandler(dotprod.Protocol.S2CPacketType.SHIP_CHANGE, goog.bind(this.onShipChanged_, this));
   this.protocol_.registerHandler(dotprod.Protocol.S2CPacketType.SCORE_UPDATE, goog.bind(this.onScoreUpdated_, this));
+  this.protocol_.registerHandler(dotprod.Protocol.S2CPacketType.PRIZE_SEED_UPDATE, goog.bind(this.onPrizeSeedUpdated_, this));
+  this.protocol_.registerHandler(dotprod.Protocol.S2CPacketType.PRIZE_COLLECTED, goog.bind(this.onPrizeCollected_, this));
   this.protocol_.startGame(0 /* ship */);
 
   dotprod.Timer.setInterval(goog.bind(this.renderingLoop_, this), 1);
@@ -256,6 +265,13 @@ dotprod.Game.prototype.getMap = function() {
  */
 dotprod.Game.prototype.getPlayerIndex = function() {
   return this.playerIndex_;
+};
+
+/**
+ * @return {!dotprod.PrizeIndex}
+ */
+dotprod.Game.prototype.getPrizeIndex = function() {
+  return this.prizeIndex_;
 };
 
 /**
@@ -416,4 +432,22 @@ dotprod.Game.prototype.onScoreUpdated_ = function(packet) {
   if(player) {
     player.onScoreUpdate(points, wins, losses);
   }
+};
+
+dotprod.Game.prototype.onPrizeSeedUpdated_ = function(packet) {
+  var seed = packet[1];
+  var timeDeltaMillis = this.protocol_.getMillisSinceServerTime(packet[2]);
+
+  var ticks = Math.floor(dotprod.Timer.millisToTicks(timeDeltaMillis));
+  this.prizeIndex_.onSeedUpdate(seed, ticks);
+};
+
+dotprod.Game.prototype.onPrizeCollected_ = function(packet) {
+  var player = this.playerIndex_.findByName(packet[0]);
+  var type = packet[1];
+  var xTile = packet[2];
+  var yTile = packet[3];
+
+  this.prizeIndex_.removePrize(xTile, yTile);
+  // TODO(sharvil): add to player's bounty.
 };

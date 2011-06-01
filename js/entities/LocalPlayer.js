@@ -57,6 +57,26 @@ dotprod.entities.LocalPlayer = function(game, name, ship, camera) {
 };
 goog.inherits(dotprod.entities.LocalPlayer, dotprod.entities.Player);
 
+dotprod.entities.LocalPlayer.prototype.collectPrize = function(prize) {
+  // TODO(sharvil): we shouldn't reach into game's private member...
+  switch (prize.getType()) {
+    case dotprod.Prize.Type.NONE:
+      this.game_.notifications_.addMessage('No prize for you. Sadface.');
+      break;
+    case dotprod.Prize.Type.GUN_UPGRADE:
+      this.game_.notifications_.addMessage('Guns upgraded! (to be implemented)');
+      break;
+    case dotprod.Prize.Type.BOMB_UPGRADE:
+      this.game_.notifications_.addMessage('Bombs upgraded! (to be implemented)');
+      break;
+    case dotprod.Prize.Type.FULL_ENERGY:
+      this.game_.notifications_.addMessage('Full charge!');
+      this.energy_ = this.maxEnergy_;
+      break;
+  }
+  this.game_.getProtocol().sendPrizeCollected(prize.getType(), prize.getX(), prize.getY());
+};
+
 /**
  * @param {!dotprod.entities.Player} shooter
  * @param {!dotprod.entities.Projectile} projectile

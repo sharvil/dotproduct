@@ -26,11 +26,17 @@ dotprod.layers.MapLayer = function(game) {
   this.game_ = game;
 
   /**
+   * @type {!dotprod.PrizeIndex}
+   * @private
+   */
+  this.prizeIndex_ = game.getPrizeIndex();
+
+  /**
    * @type {!dotprod.Animation}
    * @private
    */
-  this.prize_ = this.game_.getResourceManager().getVideoEnsemble('prize').getAnimation(0);
-  this.prize_.setRepeatCount(-1);
+  this.prizeAnimation_ = this.game_.getResourceManager().getVideoEnsemble('prize').getAnimation(0);
+  this.prizeAnimation_.setRepeatCount(-1);
 
   /**
    * @type {!dotprod.Image}
@@ -43,7 +49,8 @@ dotprod.layers.MapLayer = function(game) {
  * @override
  */
 dotprod.layers.MapLayer.prototype.update = function() {
-  this.prize_.update();
+  this.prizeIndex_.update();
+  this.prizeAnimation_.update();
 };
 
 /**
@@ -85,6 +92,10 @@ dotprod.layers.MapLayer.prototype.render = function(camera) {
         var tileNum = map.getTile(x, y);
         if (tileNum == 0) {
           continue;
+        } else if (tileNum == 255) {
+          this.prizeAnimation_.render(context,
+                                      x * tileWidth - dimensions.x + halfWidth,
+                                      y * tileHeight - dimensions.y + halfHeight);
         } else if (tileNum <= this.tileset_.getNumTiles()){
           this.tileset_.render(context,
                               x * tileWidth - dimensions.x + halfWidth,

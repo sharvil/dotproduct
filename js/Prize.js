@@ -23,3 +23,36 @@ dotprod.Prize.Type = {
   BOMB_UPGRADE: 2,
   FULL_ENERGY: 3
 };
+
+dotprod.Prize.NUM_PRIZE_TYPES = 4;
+
+/**
+ * @return {dotprod.Prize.Type}
+ */
+dotprod.Prize.prototype.getType = function() {
+  return this.type_;
+};
+
+/**
+ * @return {number}
+ */
+dotprod.Prize.prototype.getX = function() {
+  return this.xTile_;
+};
+
+/**
+ * @return {number}
+ */
+dotprod.Prize.prototype.getY = function() {
+  return this.yTile_;
+};
+
+dotprod.Prize.prototype.update = function() {
+};
+
+/**
+ * @return {boolean}
+ */
+dotprod.Prize.prototype.isAlive = function() {
+  return true;
+};
