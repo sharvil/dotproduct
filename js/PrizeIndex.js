@@ -11,13 +11,13 @@ goog.require('goog.array');
 
 /**
  * @constructor
- * @param {!dotprod.Game}
+ * @param {!dotprod.Game} game
  */
 dotprod.PrizeIndex = function(game) {
   /**
    * @type {!Object}
    */
-  this.settings_ = game.getSettings();
+  this.prizeSettings_ = game.getSettings()['prize'];
 
   /**
    * @type {!dotprod.Map}
@@ -55,8 +55,8 @@ dotprod.PrizeIndex.prototype.onSeedUpdate = function(seed, fastForwardTicks) {
   this.prng_.seed(seed);
 
   // Create prizes using new seed.
-  for (var i = 0; i < this.settings_['prize']['count']; ++i) {
-    var type = this.prng_.random() % dotprod.Prize.NUM_PRIZE_TYPES;
+  for (var i = 0; i < this.prizeSettings_['count']; ++i) {
+    var type = this.generatePrizeType_(this.prng_);
     var xTile = this.prng_.random() % this.map_.getWidth();
     var yTile = this.prng_.random() % this.map_.getHeight();
 
@@ -103,4 +103,31 @@ dotprod.PrizeIndex.prototype.update = function() {
       }
     }
   }
+};
+
+/**
+ * @param {!dotprod.Prng} prng
+ * @return {!dotprod.Prize.Type}
+ */
+dotprod.PrizeIndex.prototype.generatePrizeType_ = function(prng) {
+  var prizeWeights = this.prizeSettings_['weights'];
+  goog.asserts.assert(prizeWeights.length == dotprod.Prize.NUM_PRIZE_TYPES, 'Prize weights do not match prize types.');
+
+  var sum = 0;
+  for (var i = 0; i < prizeWeights.length; ++i) {
+    sum += prizeWeights[i];
+  }
+
+  goog.asserts.assert(sum > 0, 'Prize weights must be greater than 0.');
+
+  var type;
+  var variate = prng.random() % sum;
+  for (type = 0, sum = 0; type < prizeWeights.length; ++type) {
+    sum += prizeWeights[type];
+    if (sum > variate) {
+      break;
+    }
+  }
+
+  return /** @type {!dotprod.Prize.Type} */ (type);
 };

@@ -4,9 +4,10 @@
  */
 
 goog.provide('dotprod.Prize');
+goog.provide('dotprod.Prize.Type');
 
 /**
- * @contstructor
+ * @constructor
  * @param {!dotprod.Prize.Type} type
  * @param {number} xTile
  * @param {number} yTile
@@ -17,6 +18,9 @@ dotprod.Prize = function(type, xTile, yTile) {
   this.yTile_ = yTile;
 };
 
+/**
+ * @enum {number}
+ */
 dotprod.Prize.Type = {
   NONE: 0,
   GUN_UPGRADE: 1,

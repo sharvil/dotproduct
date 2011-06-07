@@ -364,16 +364,12 @@ dotprod.Game.prototype.onPlayerPosition_ = function(packet) {
     player.onPositionUpdate(timeDiff, angle, position, velocity);
     if (packet.length > 7) {
       var type = packet[7];
-      position = new dotprod.Vector(packet[8], packet[9]);
-      velocity = new dotprod.Vector(packet[10], packet[11]);
-      var projectile = dotprod.entities.Projectile.deserialize(this, player, type, position, velocity);
-      this.projectileIndex_.addProjectile(player, projectile);
+      var level = packet[8];
+      console.log('level = ' + level);
+      position = new dotprod.Vector(packet[9], packet[10]);
+      velocity = new dotprod.Vector(packet[11], packet[12]);
 
-      // TODO(sharvil): we need a better way to account for latency than directly
-      // calling update on the projectile.
-      for (var i = 0; i < timeDiff; ++i) {
-        projectile.update(this.map_, this.playerIndex_);
-      }
+      player.fireWeapon(timeDiff, type, level, position, velocity);
     }
   }
 };

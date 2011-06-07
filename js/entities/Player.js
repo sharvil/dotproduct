@@ -9,6 +9,9 @@ goog.require('dotprod.FontFoundry');
 goog.require('dotprod.entities.Entity');
 goog.require('dotprod.Image');
 goog.require('dotprod.Map');
+goog.require('dotprod.model.BombBay');
+goog.require('dotprod.model.Gun');
+goog.require('dotprod.model.Weapon.Type');
 goog.require('dotprod.Palette');
 
 /**
@@ -38,7 +41,19 @@ dotprod.entities.Player = function(game, name, ship, bounty) {
    * @type {!Object}
    * @protected
    */
-  this.shipSettings_ = this.settings_['ships'][this.ship_];
+  this.shipSettings_ = this.settings_['ships'][ship];
+
+  /**
+   * @type {!dotprod.model.Gun}
+   * @protected
+   */
+  this.gun_ = new dotprod.model.Gun(game, this.shipSettings_['bullet'], this);
+
+  /**
+   * @type {!dotprod.model.BombBay}
+   * @protected
+   */
+  this.bombBay_ = new dotprod.model.BombBay(game, this.shipSettings_['bomb'], this);
 
   /**
    * @type {string}
@@ -137,6 +152,8 @@ dotprod.entities.Player.prototype.isAlive = function() {
 dotprod.entities.Player.prototype.setShip = function(ship) {
   this.ship_ = ship;
   this.shipSettings_ = this.settings_['ships'][this.ship_];
+  this.gun_ = new dotprod.model.Gun(this.game_, this.shipSettings_['bullet'], this);
+  this.bombBay_ = new dotprod.model.BombBay(this.game_, this.shipSettings_['bomb'], this);
 
   this.position_ = new dotprod.Vector(0, 0);
   this.velocity_ = new dotprod.Vector(0, 0);
@@ -284,3 +301,33 @@ dotprod.entities.Player.prototype.collectPrize_ = function(xTile, yTile) {
 };
 
 dotprod.entities.Player.prototype.collectPrize = goog.nullFunction;
+
+/**
+ * @param {number} timeDiff
+ * @param {number} type
+ * @param {number} level
+ * @param {!dotprod.Vector} position
+ * @param {!dotprod.Vector} velocity
+ */
+dotprod.entities.Player.prototype.fireWeapon = function(timeDiff, type, level, position, velocity) {
+  var projectile;
+  switch (type) {
+    case dotprod.model.Weapon.Type.BULLET:
+      projectile = this.gun_.fireSynthetic(level, position, velocity);
+      break;
+    case dotprod.model.Weapon.Type.BOMB:
+      // TODO(sharvil): switch to a bomb bay instead of firing projectiles directly
+      projectile = this.bombBay_.fireSynthetic(level, position, velocity);
+      break;
+    default:
+      return;
+  }
+
+  // TODO(sharvil): we need a better way to account for latency than directly
+  // calling update on the projectile.
+  var map = this.game_.getMap();
+  var playerIndex = this.game_.getPlayerIndex();
+  for (var i = 0; i < timeDiff; ++i) {
+    projectile.update(map, playerIndex);
+  }
+};

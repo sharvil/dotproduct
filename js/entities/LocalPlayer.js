@@ -64,10 +64,12 @@ dotprod.entities.LocalPlayer.prototype.collectPrize = function(prize) {
       this.game_.notifications_.addMessage('No prize for you. Sadface.');
       break;
     case dotprod.Prize.Type.GUN_UPGRADE:
-      this.game_.notifications_.addMessage('Guns upgraded! (to be implemented)');
+      this.gun_.upgrade();
+      this.game_.notifications_.addMessage('Guns upgraded!');
       break;
     case dotprod.Prize.Type.BOMB_UPGRADE:
-      this.game_.notifications_.addMessage('Bombs upgraded! (to be implemented)');
+      this.bombBay_.upgrade();
+      this.game_.notifications_.addMessage('Bombs upgraded!');
       break;
     case dotprod.Prize.Type.FULL_ENERGY:
       this.game_.notifications_.addMessage('Full charge!');
@@ -171,26 +173,32 @@ dotprod.entities.LocalPlayer.prototype.update = function() {
   this.energy_ = Math.min(this.energy_ + rechargeRate, this.maxEnergy_);
 
   if (this.projectileFireDelay_ <= 0) {
-    if (keyboard.isKeyPressed(goog.events.KeyCodes.CTRL) && this.energy_ > bulletFireEnergy) {
+    if (keyboard.isKeyPressed(goog.events.KeyCodes.CTRL)) {
       var angle = this.getAngle_();
       var position = new dotprod.Vector(0, -this.yRadius_).rotate(angle).add(this.position_);
-      var velocity = this.velocity_.add(dotprod.Vector.fromPolar(bulletSpeed, angle));
-      projectile = new dotprod.entities.Bullet(this.game_, this, position, velocity);
-      this.projectileIndex_.addProjectile(this, projectile);
-      this.projectileFireDelay_ = bulletFireDelay;
-      this.energy_ -= bulletFireEnergy;
+      var velocity = this.velocity_;
 
-      this.game_.getResourceManager().playSound('bullet');
-    } else if (keyboard.isKeyPressed(goog.events.KeyCodes.TAB) && this.energy_ > bombFireEnergy) {
+      projectile = this.gun_.fire(angle, position, velocity, goog.bind(function(fireEnergy, fireDelay) {
+        if (this.energy_ > fireEnergy) {
+          this.energy_ -= fireEnergy;
+          this.projectileFireDelay_ = fireDelay;
+          return true;
+        }
+        return false;
+      }, this));
+    } else if (keyboard.isKeyPressed(goog.events.KeyCodes.TAB)) {
       var angle = this.getAngle_();
       var position = new dotprod.Vector(0, -this.yRadius_).rotate(angle).add(this.position_);
-      var velocity = this.velocity_.add(dotprod.Vector.fromPolar(bombSpeed, angle));
-      projectile = new dotprod.entities.Bomb(this.game_, this, position, velocity);
-      this.projectileIndex_.addProjectile(this, projectile);
-      this.projectileFireDelay_ = bombFireDelay;
-      this.energy_ -= bombFireEnergy;
+      var velocity = this.velocity_;
 
-      this.game_.getResourceManager().playSound('bomb');
+      projectile = this.bombBay_.fire(angle, position, velocity, goog.bind(function(fireEnergy, fireDelay) {
+        if (this.energy_ > fireEnergy) {
+          this.energy_ -= fireEnergy;
+          this.projectileFireDelay_ = fireDelay;
+          return true;
+        }
+        return false;
+      }, this));
     }
   }
 
@@ -288,7 +296,7 @@ dotprod.entities.LocalPlayer.prototype.sendPositionUpdate_ = function(forceSendU
     }
   }
 
-  this.game_.getProtocol().sendPosition(this.getAngle_(), this.position_, this.velocity_, opt_projectile);
+  this.game_.getProtocol().sendPosition(this.angleInRadians_, this.position_, this.velocity_, opt_projectile);
   this.ticksSincePositionUpdate_ = 0;
 };
 

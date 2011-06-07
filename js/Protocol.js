@@ -171,7 +171,7 @@ dotprod.Protocol.prototype.sendPosition = function(direction, position, velocity
   if (opt_projectile) {
     position = opt_projectile.getPosition();
     velocity = opt_projectile.getVelocity();
-    packet = packet.concat([opt_projectile.getType(), position.getX(), position.getY(), velocity.getX(), velocity.getY()]);
+    packet = packet.concat([opt_projectile.getType(), opt_projectile.getLevel(), position.getX(), position.getY(), velocity.getX(), velocity.getY()]);
   }
   this.send_(packet);
 };
