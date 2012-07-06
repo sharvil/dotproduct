@@ -19,18 +19,17 @@ var bootstrapSettings = {};
     return ret;
   }
 
-  var name = '../deps.py?app=dotproduct';
+  var name = '../deps.js';
   bootstrapSettings = splitHash();
 
   if (bootstrapSettings['offline']) {
-    name = 'js/bootstrap/deps.js';
     if (!bootstrapSettings['url']) {
-      bootstrapSettings['url'] = 'ws://localhost:8000/dotproduct';
+      bootstrapSettings['url'] = 'ws://localhost:8000/dotproduct/v1/';
     }
   }
 
   if (!bootstrapSettings['url']) {
-    bootstrapSettings['url'] = 'ws://dev.nanavati.net:8000/dotproduct';
+    bootstrapSettings['url'] = 'ws://dev.nanavati.net:8000/dotproduct/v1/';
   }
 
   document.write('<script type="text/javascript" src="' + name + '"></script>');

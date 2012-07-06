@@ -71,6 +71,12 @@ dotprod.Protocol = function(url) {
 };
 
 /**
+ * @type {string}
+ * @private
+ */
+dotprod.Protocol.PROTOCOL_VERSION_ = 'dotproduct.v1';
+
+/**
  * @enum {number}
  * @private
  */
@@ -280,7 +286,7 @@ dotprod.Protocol.prototype.createSocket_ = function() {
     return;
   }
 
-  this.socket_ = new WebSocket(this.url_);
+  this.socket_ = new WebSocket(this.url_, dotprod.Protocol.PROTOCOL_NAME_);
 
   goog.events.listen(this.socket_, 'open', goog.bind(this.onOpen_, this));
   goog.events.listen(this.socket_, 'error', goog.bind(this.onError_, this));
