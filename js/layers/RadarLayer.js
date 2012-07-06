@@ -8,6 +8,8 @@ goog.provide('dotprod.layers.RadarLayer');
 goog.require('dotprod.entities.LocalPlayer');
 goog.require('dotprod.entities.Player');
 goog.require('dotprod.layers.Layer');
+goog.require('dotprod.Palette');
+goog.require('dotprod.Rect');
 
 /**
  * @constructor
@@ -99,7 +101,7 @@ dotprod.layers.RadarLayer.prototype.render = function(camera) {
 
     // Render border. The Canvas API is retarded with strokes -- apparently it draws
     // half a pixel *around* the stroke path so we have to offset coordinates by 0.5px.
-    context.strokeStyle = '#222';
+    context.strokeStyle = dotprod.Palette.borderColor();
     context.strokeRect(-0.5, -0.5, radarWidth, radarHeight);
 
     // Set clipping region
@@ -108,7 +110,7 @@ dotprod.layers.RadarLayer.prototype.render = function(camera) {
     context.clip();
 
     // Draw radar background
-    context.fillStyle = 'rgba(0, 0, 0, 0.65)';
+    context.fillStyle = dotprod.Palette.radarBgColor();
     context.fillRect(0, 0, radarWidth, radarHeight);
 
     this.renderMap_(context, dimensions, radarWidth, radarHeight);
@@ -132,7 +134,7 @@ dotprod.layers.RadarLayer.prototype.renderMap_ = function(context, dimensions, r
   var scaledTileWidth = Math.floor(tileWidth * SCALE_FACTOR / ZOOM_FACTOR) || 1;
   var scaledTileHeight = Math.floor(tileHeight * SCALE_FACTOR / ZOOM_FACTOR) || 1;
 
-  context.fillStyle = 'rgba(255, 255, 255, 0.3)';
+  context.fillStyle = dotprod.Palette.radarTileColor();
   var leftTile = Math.floor(dimensions.x / tileWidth - (radarWidth / 2 / scaledTileWidth));
   var topTile = Math.floor(dimensions.y / tileHeight - (radarHeight / 2 / scaledTileHeight));
   var rightTile = Math.ceil(dimensions.x / tileWidth + (radarWidth / 2 / scaledTileWidth));
@@ -143,7 +145,7 @@ dotprod.layers.RadarLayer.prototype.renderMap_ = function(context, dimensions, r
   rightTile = Math.min(rightTile, map.getWidth());
   bottomTile = Math.min(bottomTile, map.getHeight());
 
-  var tiles = map.getTiles(leftTile, topTile, rightTile, bottomTile);
+  var tiles = map.getTiles(dotprod.Rect.fromBox(leftTile, topTile, rightTile, bottomTile));
   for (var i = 0; i < tiles.length; ++i) {
     var tile = tiles[i];
     var xPixels = (tile.x - dimensions.x / tileWidth) * scaledTileWidth;
@@ -164,7 +166,6 @@ dotprod.layers.RadarLayer.prototype.renderMap_ = function(context, dimensions, r
 dotprod.layers.RadarLayer.prototype.renderPlayers_ = function(context, dimensions, radarWidth, radarHeight) {
   var players = this.game_.getPlayerIndex().getPlayers();
   var localPlayer = this.game_.getPlayerIndex().getLocalPlayer();
-  var localPlayerColor = 'rgba(250, 239, 151, ' + this.blinkAlpha_ + ')';
 
   var SCALE_FACTOR = dotprod.layers.RadarLayer.SCALE_FACTOR_;
   var ZOOM_FACTOR = dotprod.layers.RadarLayer.ZOOM_FACTOR_;
@@ -183,7 +184,7 @@ dotprod.layers.RadarLayer.prototype.renderPlayers_ = function(context, dimension
     var x = Math.floor(xPixels + radarWidth / 2);
     var y = Math.floor(yPixels + radarHeight / 2);
 
-    context.fillStyle = (player == localPlayer) ? localPlayerColor : '#96859d';
+    context.fillStyle = player.isFriend(localPlayer) ? dotprod.Palette.friendColor(this.blinkAlpha_) : dotprod.Palette.foeColor();
     context.fillRect(x - 1, y - 1, 3, 3);
   }
 };

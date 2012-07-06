@@ -7,17 +7,18 @@ goog.provide('dotprod.entities.Projectile');
 
 goog.require('goog.asserts');
 goog.require('dotprod.entities.Entity');
-goog.require('dotprod.entities.Player');
+goog.require('dotprod.model.Weapon.Type');
 
 /**
  * @constructor
  * @extends {dotprod.entities.Entity}
  * @param {!dotprod.Game} game
  * @param {!dotprod.entities.Player} owner
+ * @param {number} level
  * @param {number} lifetime
  * @param {number} damage
  */
-dotprod.entities.Projectile = function(game, owner, lifetime, damage) {
+dotprod.entities.Projectile = function(game, owner, level, lifetime, damage) {
   dotprod.entities.Entity.call(this);
 
   /**
@@ -31,6 +32,12 @@ dotprod.entities.Projectile = function(game, owner, lifetime, damage) {
    * @protected
    */
   this.owner_ = owner;
+
+  /**
+   * @type {number}
+   * @protected
+   */
+  this.level_ = level;
 
   /**
    * @type {number}
@@ -53,23 +60,11 @@ dotprod.entities.Projectile.prototype.isAlive = function() {
   return this.lifetime_ >= 0;
 };
 
-dotprod.entities.Projectile.prototype.getType = function() {
-  if (this instanceof dotprod.entities.Bullet) {
-    return 1;
-  } else if (this instanceof dotprod.entities.Bomb) {
-    return 2;
-  } else {
-    goog.asserts.assert(false, 'Requesting type of unknown projectile.');
-  }
+/**
+ * @return {number}
+ */
+dotprod.entities.Projectile.prototype.getLevel = function() {
+  return this.level_;
 };
 
-dotprod.entities.Projectile.deserialize = function(game, owner, type, position, velocity) {
-  switch (type) {
-    case 1:
-      return new dotprod.entities.Bullet(game, owner, position, velocity);
-    case 2:
-      return new dotprod.entities.Bomb(game, owner, position, velocity);
-    default:
-      goog.asserts.assert(false, 'Unhandled projectile type in deserialize: ' + type);
-  }
-};
+dotprod.entities.Projectile.prototype.getType = goog.abstractMethod;

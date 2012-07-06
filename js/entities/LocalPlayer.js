@@ -11,6 +11,7 @@ goog.require('dotprod.entities.Bomb');
 goog.require('dotprod.entities.Bullet');
 goog.require('dotprod.entities.Exhaust');
 goog.require('dotprod.entities.Player');
+goog.require('dotprod.Palette');
 goog.require('dotprod.Vector');
 
 /**
@@ -52,9 +53,31 @@ dotprod.entities.LocalPlayer = function(game, name, ship, camera) {
    */
   this.ticksSincePositionUpdate_ = 999999;
 
-  dotprod.entities.Player.call(this, game, name, ship);
+  dotprod.entities.Player.call(this, game, name, ship, 0 /* bounty */);
 };
 goog.inherits(dotprod.entities.LocalPlayer, dotprod.entities.Player);
+
+dotprod.entities.LocalPlayer.prototype.collectPrize = function(prize) {
+  // TODO(sharvil): we shouldn't reach into game's private member...
+  switch (prize.getType()) {
+    case dotprod.Prize.Type.NONE:
+      this.game_.notifications_.addMessage('No prize for you. Sadface.');
+      break;
+    case dotprod.Prize.Type.GUN_UPGRADE:
+      this.gun_.upgrade();
+      this.game_.notifications_.addMessage('Guns upgraded!');
+      break;
+    case dotprod.Prize.Type.BOMB_UPGRADE:
+      this.bombBay_.upgrade();
+      this.game_.notifications_.addMessage('Bombs upgraded!');
+      break;
+    case dotprod.Prize.Type.FULL_ENERGY:
+      this.game_.notifications_.addMessage('Full charge!');
+      this.energy_ = this.maxEnergy_;
+      break;
+  }
+  this.game_.getProtocol().sendPrizeCollected(prize.getType(), prize.getX(), prize.getY());
+};
 
 /**
  * @param {!dotprod.entities.Player} shooter
@@ -65,7 +88,10 @@ goog.inherits(dotprod.entities.LocalPlayer, dotprod.entities.Player);
 dotprod.entities.LocalPlayer.prototype.takeDamage = function(shooter, projectile, energy) {
   this.energy_ -= energy;
   if (this.energy_ <= 0) {
+    var bountyGained = this.bounty_;
     this.onDeath();
+    shooter.onKill(this, bountyGained);
+
     this.game_.getProtocol().sendDeath(shooter.getName());
 
     // TODO(sharvil): we shouldn't reach into game's private member...
@@ -147,26 +173,32 @@ dotprod.entities.LocalPlayer.prototype.update = function() {
   this.energy_ = Math.min(this.energy_ + rechargeRate, this.maxEnergy_);
 
   if (this.projectileFireDelay_ <= 0) {
-    if (keyboard.isKeyPressed(goog.events.KeyCodes.CTRL) && this.energy_ > bulletFireEnergy) {
+    if (keyboard.isKeyPressed(goog.events.KeyCodes.CTRL)) {
       var angle = this.getAngle_();
       var position = new dotprod.Vector(0, -this.yRadius_).rotate(angle).add(this.position_);
-      var velocity = this.velocity_.add(dotprod.Vector.fromPolar(bulletSpeed, angle));
-      projectile = new dotprod.entities.Bullet(this.game_, this, position, velocity);
-      this.projectileIndex_.addProjectile(this, projectile);
-      this.projectileFireDelay_ = bulletFireDelay;
-      this.energy_ -= bulletFireEnergy;
+      var velocity = this.velocity_;
 
-      this.game_.getResourceManager().playSound('bullet');
-    } else if (keyboard.isKeyPressed(goog.events.KeyCodes.TAB) && this.energy_ > bombFireEnergy) {
+      projectile = this.gun_.fire(angle, position, velocity, goog.bind(function(fireEnergy, fireDelay) {
+        if (this.energy_ > fireEnergy) {
+          this.energy_ -= fireEnergy;
+          this.projectileFireDelay_ = fireDelay;
+          return true;
+        }
+        return false;
+      }, this));
+    } else if (keyboard.isKeyPressed(goog.events.KeyCodes.TAB)) {
       var angle = this.getAngle_();
       var position = new dotprod.Vector(0, -this.yRadius_).rotate(angle).add(this.position_);
-      var velocity = this.velocity_.add(dotprod.Vector.fromPolar(bombSpeed, angle));
-      projectile = new dotprod.entities.Bomb(this.game_, this, position, velocity);
-      this.projectileIndex_.addProjectile(this, projectile);
-      this.projectileFireDelay_ = bombFireDelay;
-      this.energy_ -= bombFireEnergy;
+      var velocity = this.velocity_;
 
-      this.game_.getResourceManager().playSound('bomb');
+      projectile = this.bombBay_.fire(angle, position, velocity, goog.bind(function(fireEnergy, fireDelay) {
+        if (this.energy_ > fireEnergy) {
+          this.energy_ -= fireEnergy;
+          this.projectileFireDelay_ = fireDelay;
+          return true;
+        }
+        return false;
+      }, this));
     }
   }
 
@@ -223,8 +255,8 @@ dotprod.entities.LocalPlayer.prototype.render = function(camera) {
     var tenths = Math.floor((millis % 1000) / 100);
     var time = seconds + '.' + tenths;
     context.save();
-      context.font = '10pt Verdana';
-      context.fillStyle = 'gold';
+      context.font = dotprod.FontFoundry.playerFont();
+      context.fillStyle = dotprod.Palette.friendColor();
       context.fillText(time, dimensions.width / 2, dimensions.height / 2);
     context.restore();
     return;
@@ -264,7 +296,7 @@ dotprod.entities.LocalPlayer.prototype.sendPositionUpdate_ = function(forceSendU
     }
   }
 
-  this.game_.getProtocol().sendPosition(this.getAngle_(), this.position_, this.velocity_, opt_projectile);
+  this.game_.getProtocol().sendPosition(this.angleInRadians_, this.position_, this.velocity_, opt_projectile);
   this.ticksSincePositionUpdate_ = 0;
 };
 

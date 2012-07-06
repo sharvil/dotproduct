@@ -6,6 +6,8 @@
 goog.provide('dotprod.Quadtree');
 goog.provide('dotprod.Quadtree.Node');
 
+goog.require('dotprod.Rect');
+
 /**
  * @constructor
  * @param {!Object.<number, number>} mapData
@@ -17,7 +19,7 @@ dotprod.Quadtree = function(mapData, width, height) {
    * @type {!dotprod.Quadtree.Node}
    * @private
    */
-  this.rootNode_ = new dotprod.Quadtree.Node(mapData, width, { left: 0, right: width - 1, top: 0, bottom: height - 1 });
+  this.rootNode_ = new dotprod.Quadtree.Node(mapData, width, new dotprod.Rect(0, 0, width, height));
 };
 
 /**
@@ -35,7 +37,7 @@ dotprod.Quadtree.MIN_SIZE_ = 4;
 dotprod.Quadtree.MIN_TILES_ = 16;
 
 /**
- * @param {!Object} viewport
+ * @param {!dotprod.Rect} viewport
  * @return {!Array.<!Object>}
  */
 dotprod.Quadtree.prototype.tilesForViewport = function(viewport) {
@@ -46,11 +48,11 @@ dotprod.Quadtree.prototype.tilesForViewport = function(viewport) {
  * @constructor
  * @param {!Object.<number, number>} mapData
  * @param {number} stride
- * @param {!Object} rect
+ * @param {!dotprod.Rect} rect
  */
 dotprod.Quadtree.Node = function(mapData, stride, rect) {
   /**
-   * @type {!Object}
+   * @type {!dotprod.Rect}
    * @private
    */
   this.rect_ = rect;
@@ -73,20 +75,20 @@ dotprod.Quadtree.Node = function(mapData, stride, rect) {
    */
   this.count_ = 0;
 
-  var width = rect.right - rect.left;
-  var height = rect.bottom - rect.top;
+  var width = rect.width();
+  var height = rect.height();
   if (width > dotprod.Quadtree.MIN_SIZE_ && height > dotprod.Quadtree.MIN_SIZE_) {
-    var midX = rect.left + Math.floor(width / 2);
-    var midY = rect.top + Math.floor(height / 2);
-    this.children_.push(new dotprod.Quadtree.Node(mapData, stride, { left: rect.left, right: midX,       top: rect.top, bottom: midY }));
-    this.children_.push(new dotprod.Quadtree.Node(mapData, stride, { left: midX + 1,  right: rect.right, top: rect.top, bottom: midY }));
-    this.children_.push(new dotprod.Quadtree.Node(mapData, stride, { left: rect.left, right: midX,       top: midY + 1, bottom: rect.bottom }));
-    this.children_.push(new dotprod.Quadtree.Node(mapData, stride, { left: midX + 1,  right: rect.right, top: midY + 1, bottom: rect.bottom }));
+    var midX = rect.left() + Math.floor(width / 2);
+    var midY = rect.top() + Math.floor(height / 2);
+    this.children_.push(new dotprod.Quadtree.Node(mapData, stride, dotprod.Rect.fromBox(rect.left(), rect.top(), midX,         midY)));
+    this.children_.push(new dotprod.Quadtree.Node(mapData, stride, dotprod.Rect.fromBox(midX + 1,    rect.top(), rect.right(), midY)));
+    this.children_.push(new dotprod.Quadtree.Node(mapData, stride, dotprod.Rect.fromBox(rect.left(), midY + 1,   midX,         rect.bottom())));
+    this.children_.push(new dotprod.Quadtree.Node(mapData, stride, dotprod.Rect.fromBox(midX + 1,    midY + 1,   rect.right(), rect.bottom())));
     this.merge_();
     this.prune_();
   } else {
-    for (var y = rect.top; y <= rect.bottom; ++y) {
-      for (var x = rect.left; x <= rect.right; ++x) {
+    for (var y = rect.top(); y <= rect.bottom(); ++y) {
+      for (var x = rect.left(); x <= rect.right(); ++x) {
         var tileValue = mapData[y * stride + x];
         if (tileValue) {
           this.tiles_.push({x: x, y: y, tileValue: tileValue});
@@ -98,7 +100,7 @@ dotprod.Quadtree.Node = function(mapData, stride, rect) {
 };
 
 /**
- * @param {!Object} viewport
+ * @param {!dotprod.Rect} viewport
  * @return {!Array.<!Object>}
  */
 dotprod.Quadtree.Node.prototype.tilesForViewport = function(viewport) {
@@ -146,10 +148,10 @@ dotprod.Quadtree.Node.prototype.prune_ = function() {
 };
 
 /**
- * @param {!Object} viewport
+ * @param {!dotprod.Rect} viewport
  * @return {boolean}
  * @private
  */
 dotprod.Quadtree.Node.prototype.overlaps_ = function(viewport) {
-  return !(this.rect_.right < viewport.left || this.rect_.bottom < viewport.top || this.rect_.left > viewport.right || this.rect_.top > viewport.bottom);
+  return !(this.rect_.right() < viewport.left() || this.rect_.bottom() < viewport.top() || this.rect_.left() > viewport.right() || this.rect_.top() > viewport.bottom());
 };

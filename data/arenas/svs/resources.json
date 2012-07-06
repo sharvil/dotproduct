@@ -172,6 +172,14 @@
       "yTiles": 3,
       "frames": 18,
       "period": 3
+    },
+
+    "prize": {
+      "url": "data/shared/graphics/prize.png",
+      "xTiles": 10,
+      "yTiles": 1,
+      "frames": 10,
+      "period": 5
     }
 	},
 

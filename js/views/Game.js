@@ -20,14 +20,15 @@ goog.require('dotprod.layers.NotificationLayer');
 goog.require('dotprod.layers.MapLayer');
 goog.require('dotprod.layers.ProjectileLayer');
 goog.require('dotprod.layers.RadarLayer');
+goog.require('dotprod.layers.ScoreboardLayer');
 goog.require('dotprod.layers.ShipLayer');
 goog.require('dotprod.layers.StarLayer');
 goog.require('dotprod.Map');
 goog.require('dotprod.Notifications');
 goog.require('dotprod.PlayerIndex');
+goog.require('dotprod.PrizeIndex');
 goog.require('dotprod.ProjectileIndex');
 goog.require('dotprod.Protocol');
-goog.require('dotprod.ResourceManager');
 goog.require('dotprod.Timer');
 goog.require('dotprod.views.ChatView');
 goog.require('dotprod.views.DebugView');
@@ -37,6 +38,7 @@ goog.require('dotprod.views.View');
  * @constructor
  * @extends {dotprod.views.View}
  * @param {!dotprod.Protocol} protocol
+ * @param {!dotprod.ResourceManager} resourceManager
  * @param {!Object} settings
  * @param {!Object.<number, number>} mapData
  */
@@ -93,6 +95,12 @@ dotprod.Game = function(protocol, resourceManager, settings, mapData) {
   this.chat_ = new dotprod.ChatMessages();
 
   /**
+   * @type {!dotprod.PrizeIndex}
+   * @private
+   */
+  this.prizeIndex_ = new dotprod.PrizeIndex(this);
+
+  /**
    * @type {!dotprod.ProjectileIndex}
    * @private
    */
@@ -140,7 +148,8 @@ dotprod.Game = function(protocol, resourceManager, settings, mapData) {
       new dotprod.layers.EffectLayer(this.effectIndex_),
       new dotprod.layers.NotificationLayer(this.notifications_),
       new dotprod.layers.ChatLayer(this.chat_),
-      new dotprod.layers.RadarLayer(this)
+      new dotprod.layers.RadarLayer(this),
+      new dotprod.layers.ScoreboardLayer(this)
     ];
 
   /**
@@ -161,6 +170,9 @@ dotprod.Game = function(protocol, resourceManager, settings, mapData) {
   this.protocol_.registerHandler(dotprod.Protocol.S2CPacketType.PLAYER_DIED, goog.bind(this.onPlayerDied_, this));
   this.protocol_.registerHandler(dotprod.Protocol.S2CPacketType.CHAT_MESSAGE, goog.bind(this.onChatMessage_, this));
   this.protocol_.registerHandler(dotprod.Protocol.S2CPacketType.SHIP_CHANGE, goog.bind(this.onShipChanged_, this));
+  this.protocol_.registerHandler(dotprod.Protocol.S2CPacketType.SCORE_UPDATE, goog.bind(this.onScoreUpdated_, this));
+  this.protocol_.registerHandler(dotprod.Protocol.S2CPacketType.PRIZE_SEED_UPDATE, goog.bind(this.onPrizeSeedUpdated_, this));
+  this.protocol_.registerHandler(dotprod.Protocol.S2CPacketType.PRIZE_COLLECTED, goog.bind(this.onPrizeCollected_, this));
   this.protocol_.startGame(0 /* ship */);
 
   dotprod.Timer.setInterval(goog.bind(this.renderingLoop_, this), 1);
@@ -256,6 +268,13 @@ dotprod.Game.prototype.getPlayerIndex = function() {
 };
 
 /**
+ * @return {!dotprod.PrizeIndex}
+ */
+dotprod.Game.prototype.getPrizeIndex = function() {
+  return this.prizeIndex_;
+};
+
+/**
  * @return {!dotprod.ProjectileIndex}
  */
 dotprod.Game.prototype.getProjectileIndex = function() {
@@ -307,7 +326,9 @@ dotprod.Game.prototype.renderingLoop_ = function() {
 dotprod.Game.prototype.onPlayerEntered_ = function(packet) {
   var name = packet[0];
   var ship = packet[1];
-  this.playerIndex_.addPlayer(new dotprod.entities.RemotePlayer(this, name, ship));
+  var bounty = packet[2];
+
+  this.playerIndex_.addPlayer(new dotprod.entities.RemotePlayer(this, name, ship, bounty));
   this.notifications_.addMessage('Player entered: ' + name);
 };
 
@@ -343,16 +364,12 @@ dotprod.Game.prototype.onPlayerPosition_ = function(packet) {
     player.onPositionUpdate(timeDiff, angle, position, velocity);
     if (packet.length > 7) {
       var type = packet[7];
-      position = new dotprod.Vector(packet[8], packet[9]);
-      velocity = new dotprod.Vector(packet[10], packet[11]);
-      var projectile = dotprod.entities.Projectile.deserialize(this, player, type, position, velocity);
-      this.projectileIndex_.addProjectile(player, projectile);
+      var level = packet[8];
+      console.log('level = ' + level);
+      position = new dotprod.Vector(packet[9], packet[10]);
+      velocity = new dotprod.Vector(packet[11], packet[12]);
 
-      // TODO(sharvil): we need a better way to account for latency than directly
-      // calling update on the projectile.
-      for (var i = 0; i < timeDiff; ++i) {
-        projectile.update(this.map_, this.playerIndex_);
-      }
+      player.fireWeapon(timeDiff, type, level, position, velocity);
     }
   }
 };
@@ -364,14 +381,16 @@ dotprod.Game.prototype.onPlayerDied_ = function(packet) {
   var timestamp = packet[0];
   var killee = this.playerIndex_.findByName(packet[1]);
   var killer = this.playerIndex_.findByName(packet[2]);
+  var bountyGained = packet[3];
 
   if (!killer || !killee) {
     return;
   }
 
   killee.onDeath();
+  killer.onKill(killee, bountyGained);
   this.projectileIndex_.removeProjectiles(killee);
-  this.notifications_.addMessage(killee.getName() + ' killed by ' + killer.getName());
+  this.notifications_.addMessage(killee.getName() + '(' + bountyGained + ') killed by: ' + killer.getName());
 };
 
 /**
@@ -395,4 +414,36 @@ dotprod.Game.prototype.onChatMessage_ = function(packet) {
   var message = packet[1];
 
   this.chat_.addMessage('[' + player.getName() + '] ' + message);
+};
+
+/**
+ * @param {!Object} packet
+ */
+dotprod.Game.prototype.onScoreUpdated_ = function(packet) {
+  var player = this.playerIndex_.findByName(packet[0]);
+  var points = packet[1];
+  var wins = packet[2];
+  var losses = packet[3];
+
+  if(player) {
+    player.onScoreUpdate(points, wins, losses);
+  }
+};
+
+dotprod.Game.prototype.onPrizeSeedUpdated_ = function(packet) {
+  var seed = packet[1];
+  var timeDeltaMillis = this.protocol_.getMillisSinceServerTime(packet[2]);
+
+  var ticks = Math.floor(dotprod.Timer.millisToTicks(timeDeltaMillis));
+  this.prizeIndex_.onSeedUpdate(seed, ticks);
+};
+
+dotprod.Game.prototype.onPrizeCollected_ = function(packet) {
+  var player = this.playerIndex_.findByName(packet[0]);
+  var type = packet[1];
+  var xTile = packet[2];
+  var yTile = packet[3];
+
+  this.prizeIndex_.removePrize(xTile, yTile);
+  // TODO(sharvil): add to player's bounty.
 };

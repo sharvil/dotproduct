@@ -87,7 +87,10 @@ dotprod.Protocol.C2SPacketType_ = {
   CLOCK_SYNC: 4,
   PLAYER_DIED: 5,
   CHAT_MESSAGE: 6,
-  SHIP_CHANGE: 7
+  SHIP_CHANGE: 7,
+  QUERY_NAME: 8,
+  REGISTER_NAME: 9,
+  PRIZE_COLLECTED: 10
 };
 
 /**
@@ -101,7 +104,12 @@ dotprod.Protocol.S2CPacketType = {
   CLOCK_SYNC_REPLY: 5,
   PLAYER_DIED: 6,
   CHAT_MESSAGE: 7,
-  SHIP_CHANGE: 8
+  SHIP_CHANGE: 8,
+  SCORE_UPDATE: 9,
+  QUERY_NAME_REPLY: 10,
+  REGISTER_NAME_REPLY: 11,
+  PRIZE_SEED_UPDATE: 12,
+  PRIZE_COLLECTED: 13
 };
 
 /**
@@ -143,10 +151,10 @@ dotprod.Protocol.prototype.registerHandler = function(packetType, cb) {
 };
 
 /**
- * @param {string} username
+ * @param {!Object} loginData
  */
-dotprod.Protocol.prototype.login = function(username) {
-  this.send_([dotprod.Protocol.C2SPacketType_.LOGIN, username]);
+dotprod.Protocol.prototype.login = function(loginData) {
+  this.send_([dotprod.Protocol.C2SPacketType_.LOGIN, loginData]);
 };
 
 /**
@@ -155,6 +163,7 @@ dotprod.Protocol.prototype.login = function(username) {
 dotprod.Protocol.prototype.startGame = function(ship) {
   this.send_([dotprod.Protocol.C2SPacketType_.START_GAME, ship]);
   this.syncClocks_();
+  this.syncTimer_ = dotprod.Timer.setInterval(goog.bind(this.syncClocks_, this), dotprod.Protocol.CLOCK_SYNC_PERIOD_);
 };
 
 /**
@@ -168,9 +177,18 @@ dotprod.Protocol.prototype.sendPosition = function(direction, position, velocity
   if (opt_projectile) {
     position = opt_projectile.getPosition();
     velocity = opt_projectile.getVelocity();
-    packet = packet.concat([opt_projectile.getType(), position.getX(), position.getY(), velocity.getX(), velocity.getY()]);
+    packet = packet.concat([opt_projectile.getType(), opt_projectile.getLevel(), position.getX(), position.getY(), velocity.getX(), velocity.getY()]);
   }
   this.send_(packet);
+};
+
+/**
+ * @param {number} type
+ * @param {number} x
+ * @param {number} y
+ */
+dotprod.Protocol.prototype.sendPrizeCollected = function(type, x, y) {
+  this.send_([dotprod.Protocol.C2SPacketType_.PRIZE_COLLECTED, type, x, y]);
 };
 
 dotprod.Protocol.prototype.syncClocks_ = function() {
@@ -218,13 +236,26 @@ dotprod.Protocol.prototype.sendShipChange = function(ship) {
   this.send_([dotprod.Protocol.C2SPacketType_.SHIP_CHANGE, ship]);
 };
 
+/**
+ * @param {string} name
+ */
+dotprod.Protocol.prototype.queryName = function(name) {
+  this.send_([dotprod.Protocol.C2SPacketType_.QUERY_NAME, name]);
+};
+
+/**
+ * @param {string} name
+ */
+dotprod.Protocol.prototype.registerName = function(name) {
+  this.send_([dotprod.Protocol.C2SPacketType_.REGISTER_NAME, name]);
+};
+
 dotprod.Protocol.prototype.onOpen_ = function() {
   for (var i = 0; i < this.packetQueue_.length; ++i) {
     this.socket_.send(this.packetQueue_[i]);
   }
 
   this.packetQueue_ = [];
-  this.syncTimer_ = dotprod.Timer.setInterval(goog.bind(this.syncClocks_, this), dotprod.Protocol.CLOCK_SYNC_PERIOD_);
 };
 
 dotprod.Protocol.prototype.onError_ = function() {
@@ -247,21 +278,23 @@ dotprod.Protocol.prototype.onClose_ = function() {
  * @private
  */
 dotprod.Protocol.prototype.onMessage_ = function(event) {
+  var obj;
   try {
     var msg = /** @type {string} */ (event.getBrowserEvent().data);
-    var obj = window.JSON.parse(msg);
-    var packetHandlers = this.handlers_[obj[0]];
-
-    if (packetHandlers) {
-      var slicedObj = obj.slice(1);
-      for (var i = 0; packetHandlers[i]; ++i) {
-        packetHandlers[i](slicedObj);
-      }
-    } else {
-      this.logger_.warning('Invalid packet from server: ' + obj);
-    }
+    obj = window.JSON.parse(msg);
   } catch (e) {
-    this.logger_.severe('Error parsing JSON: ' + event.getBrowserEvent().data, e);
+    this.logger_.severe('Error parsing JSON: ' + event.getBrowserEvent().data + '\n' + e);
+    return;
+  }
+
+  var packetHandlers = this.handlers_[obj[0]];
+  if (packetHandlers) {
+    var slicedObj = obj.slice(1);
+    for (var i = 0; packetHandlers[i]; ++i) {
+      packetHandlers[i](slicedObj);
+    }
+  } else {
+    this.logger_.warning('Invalid packet from server: ' + obj);
   }
 };
 
@@ -286,7 +319,7 @@ dotprod.Protocol.prototype.createSocket_ = function() {
     return;
   }
 
-  this.socket_ = new WebSocket(this.url_, dotprod.Protocol.PROTOCOL_NAME_);
+  this.socket_ = new WebSocket(this.url_, dotprod.Protocol.PROTOCOL_VERSION_);
 
   goog.events.listen(this.socket_, 'open', goog.bind(this.onOpen_, this));
   goog.events.listen(this.socket_, 'error', goog.bind(this.onError_, this));
