@@ -54,18 +54,11 @@ dotprod.Application = function(settings) {
    */
   this.game_;
 
-  var loginData = {};
-  for (var i in settings) {
-    if (i.indexOf('openid.') == 0) {
-      loginData[i] = settings[i];
-    }
-  }
-
   /**
    * @type {!dotprod.views.LoginView}
    * @private
    */
-  this.loginView_ = new dotprod.views.LoginView(loginData, this.protocol_, goog.bind(this.startGame_, this));
+  this.loginView_ = new dotprod.views.LoginView({ 'accessToken': settings.accessToken }, this.protocol_, goog.bind(this.startGame_, this));
 
   /**
    * @type {!dotprod.views.LoadingView}
@@ -102,9 +95,7 @@ dotprod.Application.prototype.onLoadComplete_ = function() {
 
 var _main = function(isOffline) {
   var settings = dotprod.QueryString.toObject(window.location.hash.substr(1));
-  if (!settings['url']) {
-    settings['url'] = isOffline ? 'ws://localhost:8000/dotproduct/v1/' : 'ws://dev.nanavati.net:8000/dotproduct/v1/';
-  }
+  settings['url'] = 'ws://' + window.location.host + '/dotproduct/v1/';
   window.location.hash = '';
   new dotprod.Application(settings);
 };
