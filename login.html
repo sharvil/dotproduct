@@ -23,6 +23,16 @@
          xfbml      : true
        });
 
+       FB.getLoginStatus(function(response) {
+         if (response.status === 'connected') {
+           window.location.href = './#accessToken=' + response.authResponse.accessToken;
+         } else if (response.status === 'not_authorized') {
+           document.getElementById('content').style.display = 'block';
+         } else {
+           document.getElementById('content').style.display = 'block';
+         }
+       });
+
        // listen for and handle auth.statusChange events
        FB.Event.subscribe('auth.statusChange', function(response) {
          if (response.authResponse) {
