@@ -25,10 +25,11 @@ dotprod.Prize.Type = {
   NONE: 0,
   GUN_UPGRADE: 1,
   BOMB_UPGRADE: 2,
-  FULL_ENERGY: 3
+  FULL_ENERGY: 3,
+  BOUNCING_BULLETS: 4
 };
 
-dotprod.Prize.NUM_PRIZE_TYPES = 4;
+dotprod.Prize.NUM_PRIZE_TYPES = 5;
 
 /**
  * @return {dotprod.Prize.Type}

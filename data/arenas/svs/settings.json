@@ -14,7 +14,7 @@
 
   "prize": {
     "count": 1000,
-    "weights": [0, 4, 4, 1]
+    "weights": [0, 4, 4, 1, 2]
   },
 
   "ships":
@@ -37,7 +37,8 @@
         "lifetime": 550,
         "damage": 200,
         "damageUpgrade": 100,
-        "maxLevel": 3
+        "maxLevel": 3,
+        "bounces": true
       },
       "bomb": {
         "fireEnergy": 300,
@@ -68,7 +69,8 @@
         "lifetime": 550,
         "damage": 200,
         "damageUpgrade": 100,
-        "maxLevel": 3
+        "maxLevel": 3,
+        "bounces": true
       },
       "bomb": {
         "fireEnergy": 300,
@@ -99,7 +101,8 @@
         "lifetime": 550,
         "damage": 200,
         "damageUpgrade": 100,
-        "maxLevel": 3
+        "maxLevel": 3,
+        "bounces": true
       },
       "bomb": {
         "fireEnergy": 300,
@@ -130,7 +133,8 @@
         "lifetime": 550,
         "damage": 200,
         "damageUpgrade": 100,
-        "maxLevel": 3
+        "maxLevel": 3,
+        "bounces": true
       },
       "bomb": {
         "fireEnergy": 300,
@@ -161,7 +165,8 @@
         "lifetime": 550,
         "damage": 200,
         "damageUpgrade": 100,
-        "maxLevel": 3
+        "maxLevel": 3,
+        "bounces": true
       },
       "bomb": {
         "fireEnergy": 300,
@@ -192,7 +197,8 @@
         "lifetime": 550,
         "damage": 200,
         "damageUpgrade": 100,
-        "maxLevel": 3
+        "maxLevel": 3,
+        "bounces": true
       },
       "bomb": {
         "fireEnergy": 300,
@@ -223,7 +229,8 @@
         "lifetime": 550,
         "damage": 200,
         "damageUpgrade": 100,
-        "maxLevel": 3
+        "maxLevel": 3,
+        "bounces": true
       },
       "bomb": {
         "fireEnergy": 300,
@@ -254,7 +261,8 @@
         "lifetime": 550,
         "damage": 200,
         "damageUpgrade": 100,
-        "maxLevel": 3
+        "maxLevel": 3,
+        "bounces": true
       },
       "bomb": {
         "fireEnergy": 300,

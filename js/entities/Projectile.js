@@ -17,8 +17,9 @@ goog.require('dotprod.model.Weapon.Type');
  * @param {number} level
  * @param {number} lifetime
  * @param {number} damage
+ * @param {number} bounceCount
  */
-dotprod.entities.Projectile = function(game, owner, level, lifetime, damage) {
+dotprod.entities.Projectile = function(game, owner, level, lifetime, damage, bounceCount) {
   dotprod.entities.Entity.call(this);
 
   /**
@@ -50,6 +51,12 @@ dotprod.entities.Projectile = function(game, owner, level, lifetime, damage) {
    * @protected
    */
   this.damage_ = damage;
+
+  /**
+   * @type {number}
+   * @protected
+   */
+  this.bounceCount_ = bounceCount;
 };
 goog.inherits(dotprod.entities.Projectile, dotprod.entities.Entity);
 
@@ -65,6 +72,13 @@ dotprod.entities.Projectile.prototype.isAlive = function() {
  */
 dotprod.entities.Projectile.prototype.getLevel = function() {
   return this.level_;
+};
+
+/**
+ * @return {number}
+ */
+dotprod.entities.Projectile.prototype.getBounceCount = function() {
+  return this.bounceCount_;
 };
 
 dotprod.entities.Projectile.prototype.getType = goog.abstractMethod;

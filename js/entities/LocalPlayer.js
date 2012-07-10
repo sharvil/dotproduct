@@ -75,6 +75,10 @@ dotprod.entities.LocalPlayer.prototype.collectPrize = function(prize) {
       this.game_.notifications_.addMessage('Full charge!');
       this.energy_ = this.maxEnergy_;
       break;
+    case dotprod.Prize.Type.BOUNCING_BULLETS:
+      this.game_.notifications_.addMessage('Bouncing bullets!');
+      this.gun_.setBounces(true);
+      break;
   }
   this.game_.getProtocol().sendPrizeCollected(prize.getType(), prize.getX(), prize.getY());
 };

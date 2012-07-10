@@ -24,7 +24,7 @@ goog.require('dotprod.Vector');
  * @param {number} bounceCount
  */
 dotprod.entities.Bomb = function(game, owner, level, position, velocity, lifetime, damage, bounceCount) {
-  dotprod.entities.Projectile.call(this, game, owner, level, lifetime, damage);
+  dotprod.entities.Projectile.call(this, game, owner, level, lifetime, damage, bounceCount);
 
   this.position_ = position;
   this.velocity_ = velocity;
@@ -35,12 +35,6 @@ dotprod.entities.Bomb = function(game, owner, level, position, velocity, lifetim
    */
   this.animation_ = game.getResourceManager().getVideoEnsemble('bombs').getAnimation(level);
   this.animation_.setRepeatCount(-1);
-
-  /**
-   * @type {number}
-   * @private
-   */
-  this.bounceCount_ = bounceCount;
 };
 goog.inherits(dotprod.entities.Bomb, dotprod.entities.Projectile);
 

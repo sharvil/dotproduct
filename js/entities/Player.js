@@ -306,18 +306,18 @@ dotprod.entities.Player.prototype.collectPrize = goog.nullFunction;
  * @param {number} timeDiff
  * @param {number} type
  * @param {number} level
+ * @param {number} bounceCount
  * @param {!dotprod.Vector} position
  * @param {!dotprod.Vector} velocity
  */
-dotprod.entities.Player.prototype.fireWeapon = function(timeDiff, type, level, position, velocity) {
+dotprod.entities.Player.prototype.fireWeapon = function(timeDiff, type, level, bounceCount, position, velocity) {
   var projectile;
   switch (type) {
     case dotprod.model.Weapon.Type.BULLET:
-      projectile = this.gun_.fireSynthetic(level, position, velocity);
+      projectile = this.gun_.fireSynthetic(level, bounceCount, position, velocity);
       break;
     case dotprod.model.Weapon.Type.BOMB:
-      // TODO(sharvil): switch to a bomb bay instead of firing projectiles directly
-      projectile = this.bombBay_.fireSynthetic(level, position, velocity);
+      projectile = this.bombBay_.fireSynthetic(level, bounceCount, position, velocity);
       break;
     default:
       return;

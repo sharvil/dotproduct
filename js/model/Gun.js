@@ -37,10 +37,23 @@ dotprod.model.Gun = function(game, gunSettings, owner) {
    * @private
    */
   this.level_ = 0;
+
+  /**
+   * @type {boolean}
+   * @private
+   */
+  this.bouncingBullets_ = false;
 };
 
 dotprod.model.Gun.prototype.upgrade = function() {
   this.level_ = Math.min(this.level_ + 1, this.gunSettings_['maxLevel']);
+};
+
+/**
+ * @param {boolean} bounces
+ */
+dotprod.model.Gun.prototype.setBounces = function(bounces) {
+  this.bouncingBullets_ = bounces;
 };
 
 /**
@@ -60,8 +73,9 @@ dotprod.model.Gun.prototype.fire = function(angle, position, velocity, commitFir
 
   var lifetime = this.getLifetime_();
   var damage = this.getDamage_();
+  var bounceCount = this.getBounceCount_();
   var newVelocity = velocity.add(dotprod.Vector.fromPolar(this.getBulletSpeed_(), angle));
-  var projectile = new dotprod.entities.Bullet(this.game_, this.owner_, this.level_, position, newVelocity, lifetime, damage, 0);
+  var projectile = new dotprod.entities.Bullet(this.game_, this.owner_, this.level_, position, newVelocity, lifetime, damage, bounceCount);
 
   // TODO(sharvil): this should probably happen in the projectile base class' constructor.
   this.game_.getProjectileIndex().addProjectile(this.owner_, projectile);
@@ -72,17 +86,18 @@ dotprod.model.Gun.prototype.fire = function(angle, position, velocity, commitFir
 
 /**
  * @param {number} level
+ * @param {number} bounceCount
  * @param {!dotprod.Vector} position
  * @param {!dotprod.Vector} velocity
  * @return {dotprod.entities.Projectile}
  */
-dotprod.model.Gun.prototype.fireSynthetic = function(level, position, velocity) {
+dotprod.model.Gun.prototype.fireSynthetic = function(level, bounceCount, position, velocity) {
   this.level_ = level;
 
   var lifetime = this.getLifetime_();
   var damage = this.getDamage_();
 
-  var projectile = new dotprod.entities.Bullet(this.game_, this.owner_, this.level_, position, velocity, lifetime, damage, 0);
+  var projectile = new dotprod.entities.Bullet(this.game_, this.owner_, this.level_, position, velocity, lifetime, damage, bounceCount);
   this.game_.getProjectileIndex().addProjectile(this.owner_, projectile);
   return projectile;
 };
@@ -125,4 +140,12 @@ dotprod.model.Gun.prototype.getLifetime_ = function() {
  */
 dotprod.model.Gun.prototype.getDamage_ = function() {
   return this.gunSettings_['damage'] + this.level_ * this.gunSettings_['damageUpgrade'];
+};
+
+/**
+ * @return {number}
+ * @private
+ */
+dotprod.model.Gun.prototype.getBounceCount_ = function() {
+  return this.gunSettings_['bounces'] && this.bouncingBullets_ ? -1 : 0;
 };

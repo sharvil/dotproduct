@@ -24,7 +24,7 @@ goog.require('dotprod.Vector');
  * @param {number} bounceCount
  */
 dotprod.entities.Bullet = function(game, owner, level, position, velocity, lifetime, damage, bounceCount) {
-  dotprod.entities.Projectile.call(this, game, owner, level, lifetime, damage);
+  dotprod.entities.Projectile.call(this, game, owner, level, lifetime, damage, bounceCount);
 
   this.position_ = position;
   this.velocity_ = velocity;
@@ -37,10 +37,11 @@ dotprod.entities.Bullet = function(game, owner, level, position, velocity, lifet
   this.animation_.setRepeatCount(-1);
 
   /**
-   * @type {number}
+   * @type {!dotprod.Animation}
    * @private
    */
-  this.bounceCount_ = bounceCount;
+   this.bouncingAnimation_ = game.getResourceManager().getVideoEnsemble('bullets').getAnimation(4 + level);
+   this.bouncingAnimation_.setRepeatCount(-1);
 };
 goog.inherits(dotprod.entities.Bullet, dotprod.entities.Projectile);
 
@@ -100,8 +101,9 @@ dotprod.entities.Bullet.prototype.render = function(camera) {
   var dimensions = camera.getDimensions();
   var x = Math.floor(this.position_.getX() - dimensions.left - this.animation_.getWidth() / 2);
   var y = Math.floor(this.position_.getY() - dimensions.top - this.animation_.getHeight() / 2);
+  var animation = this.bounceCount_ ? this.bouncingAnimation_ : this.animation_;
 
-  this.animation_.render(camera.getContext(), x, y);
+  animation.render(camera.getContext(), x, y);
 };
 
 /**
