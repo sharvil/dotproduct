@@ -72,17 +72,18 @@ dotprod.model.BombBay.prototype.fire = function(angle, position, velocity, commi
 
 /**
  * @param {number} level
+ * @param {number} bounceCount
  * @param {!dotprod.Vector} position
  * @param {!dotprod.Vector} velocity
  * @return {dotprod.entities.Projectile}
  */
-dotprod.model.BombBay.prototype.fireSynthetic = function(level, position, velocity) {
+dotprod.model.BombBay.prototype.fireSynthetic = function(level, bounceCount, position, velocity) {
   this.level_ = level;
 
   var lifetime = this.getLifetime_();
   var damage = this.getDamage_();
 
-  var projectile = new dotprod.entities.Bomb(this.game_, this.owner_, this.level_, position, velocity, lifetime, damage, 0);
+  var projectile = new dotprod.entities.Bomb(this.game_, this.owner_, this.level_, position, velocity, lifetime, damage, bounceCount);
   this.game_.getProjectileIndex().addProjectile(this.owner_, projectile);
   return projectile;
 };
