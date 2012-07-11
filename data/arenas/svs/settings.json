@@ -37,7 +37,7 @@
         "lifetime": 550,
         "damage": 200,
         "damageUpgrade": 100,
-        "maxLevel": 3,
+        "maxLevel": 2,
         "bounces": true
       },
       "bomb": {
@@ -47,7 +47,7 @@
         "lifetime": 6000,
         "damage": 750,
         "damageUpgrade": 50,
-        "maxLevel": 3
+        "maxLevel": 2
       }
     },
 
@@ -69,7 +69,7 @@
         "lifetime": 550,
         "damage": 200,
         "damageUpgrade": 100,
-        "maxLevel": 3,
+        "maxLevel": 2,
         "bounces": true
       },
       "bomb": {
@@ -79,7 +79,7 @@
         "lifetime": 6000,
         "damage": 750,
         "damageUpgrade": 50,
-        "maxLevel": 3
+        "maxLevel": 2
       }
     },
 
@@ -101,7 +101,7 @@
         "lifetime": 550,
         "damage": 200,
         "damageUpgrade": 100,
-        "maxLevel": 3,
+        "maxLevel": 2,
         "bounces": true
       },
       "bomb": {
@@ -111,7 +111,7 @@
         "lifetime": 6000,
         "damage": 750,
         "damageUpgrade": 50,
-        "maxLevel": 3
+        "maxLevel": 2
       }
     },
 
@@ -133,7 +133,7 @@
         "lifetime": 550,
         "damage": 200,
         "damageUpgrade": 100,
-        "maxLevel": 3,
+        "maxLevel": 2,
         "bounces": true
       },
       "bomb": {
@@ -143,7 +143,7 @@
         "lifetime": 6000,
         "damage": 750,
         "damageUpgrade": 50,
-        "maxLevel": 3
+        "maxLevel": 2
       }
     },
 
@@ -165,7 +165,7 @@
         "lifetime": 550,
         "damage": 200,
         "damageUpgrade": 100,
-        "maxLevel": 3,
+        "maxLevel": 2,
         "bounces": true
       },
       "bomb": {
@@ -175,7 +175,7 @@
         "lifetime": 6000,
         "damage": 750,
         "damageUpgrade": 50,
-        "maxLevel": 3
+        "maxLevel": 2
       }
     },
 
@@ -197,7 +197,7 @@
         "lifetime": 550,
         "damage": 200,
         "damageUpgrade": 100,
-        "maxLevel": 3,
+        "maxLevel": 2,
         "bounces": true
       },
       "bomb": {
@@ -207,7 +207,7 @@
         "lifetime": 6000,
         "damage": 750,
         "damageUpgrade": 50,
-        "maxLevel": 3
+        "maxLevel": 2
       }
     },
 
@@ -229,7 +229,7 @@
         "lifetime": 550,
         "damage": 200,
         "damageUpgrade": 100,
-        "maxLevel": 3,
+        "maxLevel": 2,
         "bounces": true
       },
       "bomb": {
@@ -239,7 +239,7 @@
         "lifetime": 6000,
         "damage": 750,
         "damageUpgrade": 50,
-        "maxLevel": 3
+        "maxLevel": 2
       }
     },
 
@@ -261,7 +261,7 @@
         "lifetime": 550,
         "damage": 200,
         "damageUpgrade": 100,
-        "maxLevel": 3,
+        "maxLevel": 2,
         "bounces": true
       },
       "bomb": {
@@ -271,7 +271,7 @@
         "lifetime": 6000,
         "damage": 750,
         "damageUpgrade": 50,
-        "maxLevel": 3
+        "maxLevel": 2
       }
     }
   ]
