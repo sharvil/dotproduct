@@ -40,7 +40,7 @@ dotprod.entities.Bullet = function(game, owner, level, position, velocity, lifet
    * @type {!dotprod.Animation}
    * @private
    */
-   this.bouncingAnimation_ = game.getResourceManager().getVideoEnsemble('bullets').getAnimation(4 + level);
+   this.bouncingAnimation_ = game.getResourceManager().getVideoEnsemble('bullets').getAnimation(5 + level);
    this.bouncingAnimation_.setRepeatCount(-1);
 };
 goog.inherits(dotprod.entities.Bullet, dotprod.entities.Projectile);
