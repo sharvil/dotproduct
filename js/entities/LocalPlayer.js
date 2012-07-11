@@ -45,6 +45,12 @@ dotprod.entities.LocalPlayer = function(game, name, ship, camera) {
    * @type {number}
    * @private
    */
+  this.shipChangeDelay_ = 0;
+
+  /**
+   * @type {number}
+   * @private
+   */
   this.respawnTimer_ = 0;
 
   /**
@@ -146,14 +152,23 @@ dotprod.entities.LocalPlayer.prototype.update = function() {
   }
 
   // Check for ship change before we read any ship settings.
-  for (var i = 0; i < this.settings_['ships'].length; ++i) {
-    if (keyboard.isKeyPressed(goog.events.KeyCodes.ONE + i)) {
-      if (i != this.ship_ && this.energy_ >= this.maxEnergy_) {
-        this.setShip(i);
-        this.game_.getProtocol().sendShipChange(this.ship_);
-        forceSendUpdate = true;
+  this.shipChangeDelay_ = Math.max(this.shipChangeDelay_ - 1, 0);
+  if (this.shipChangeDelay_ <= 0) {
+    for (var i = 0; i < this.settings_['ships'].length; ++i) {
+      if (keyboard.isKeyPressed(goog.events.KeyCodes.ONE + i)) {
+        if (i != this.ship_) {
+          if (this.energy_ >= this.maxEnergy_) {
+            this.setShip(i);
+            this.game_.getProtocol().sendShipChange(this.ship_);
+            forceSendUpdate = true;
+          } else {
+            // TODO(sharvil): we shouldn't reach into game's private member...
+            this.game_.notifications_.addMessage('You must have full energy to change ships.');
+          }
+          this.shipChangeDelay_ = 300;  // 3 seconds.
+        }
+        break;
       }
-      break;
     }
   }
 
