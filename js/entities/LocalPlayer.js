@@ -177,7 +177,7 @@ dotprod.entities.LocalPlayer.prototype.update = function() {
   this.energy_ = Math.min(this.energy_ + rechargeRate, this.maxEnergy_);
 
   if (this.projectileFireDelay_ <= 0) {
-    if (keyboard.isKeyPressed(goog.events.KeyCodes.CTRL)) {
+    if (keyboard.isKeyPressed(goog.events.KeyCodes.CTRL) || keyboard.isKeyPressed(goog.events.KeyCodes.ALT)) {
       var angle = this.getAngle_();
       var position = new dotprod.Vector(0, -this.yRadius_).rotate(angle).add(this.position_);
       var velocity = this.velocity_;
