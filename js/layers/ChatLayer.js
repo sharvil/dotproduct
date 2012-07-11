@@ -35,15 +35,15 @@ dotprod.layers.ChatLayer.prototype.update = goog.nullFunction;
 dotprod.layers.ChatLayer.prototype.render = function(camera) {
   var context = camera.getContext();
   var dimensions = camera.getDimensions();
-  var messages = this.messages_.getMessages();
 
   context.save();
     context.font = dotprod.FontFoundry.chatFont();
+    context.fillStyle = dotprod.Palette.chatColor();
 
-    for (var i = 0; i < messages.length; ++i) {
-      context.fillStyle = dotprod.Palette.chatColor();
-      context.fillText(messages[i], 5, dimensions.height - 5 - 12 * i);
-    }
+    var i = 0;
+    this.messages_.forEach(function(item) {
+      context.fillText('[' + item.player.getName() + '] ' + item.message, 5, dimensions.height - 5 - 12 * i++);
+    });
 
   context.restore();
 };

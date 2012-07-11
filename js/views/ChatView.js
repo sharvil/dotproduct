@@ -22,6 +22,12 @@ dotprod.views.ChatView = function(game, messages) {
   dotprod.views.View.call(this);
 
   /**
+   * @type {dotprod.PlayerIndex}
+   * @private
+   */
+  this.playerIndex_ = game.getPlayerIndex();
+
+  /**
    * @type {!Object}
    * @private
    */
@@ -122,7 +128,7 @@ dotprod.views.ChatView.prototype.onKeyPress_ = function(event) {
       }
     } else {
       this.protocol_.sendChat(message);
-      this.messages_.addMessage('[' + this.settings_['name'] + '] ' + message);
+      this.messages_.addMessage(this.playerIndex_.getLocalPlayer(), message);
     }
   }
   this.chatBox_.value = '';
