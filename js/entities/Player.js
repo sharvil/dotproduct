@@ -194,12 +194,11 @@ dotprod.entities.Player.prototype.onDeath = function() {
 /**
  * Called when this player kills another one.
  * @param {!dotprod.entities.Player} killee The player who we just killed.
- * @param {number} bountyGained How much bounty was gained by killing this player.
+ * @param {number} extraPoints How many points were gained by killing this player.
  */
-dotprod.entities.Player.prototype.onKill = function(killee, bountyGained) {
-  this.points_ += bountyGained;
+dotprod.entities.Player.prototype.onKill = function(killee, extraPoints) {
+  this.points_ += this.settings_['game']['killPoints'] + extraPoints;
   ++this.wins_;
-  ++this.bounty_;
 };
 
 /**

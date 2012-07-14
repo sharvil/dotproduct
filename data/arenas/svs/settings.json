@@ -1,4 +1,9 @@
 {
+  "game":
+  {
+    "killPoints": 20
+  },
+
   "network":
   {
     "sendPositionDelay": 250,
