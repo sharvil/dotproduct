@@ -390,7 +390,6 @@ dotprod.Game.prototype.onPlayerDied_ = function(packet) {
 
   killee.onDeath();
   killer.onKill(killee, bountyGained);
-  this.projectileIndex_.removeProjectiles(killee);
   this.notifications_.addMessage(killee.getName() + '(' + bountyGained + ') killed by: ' + killer.getName());
 };
 
