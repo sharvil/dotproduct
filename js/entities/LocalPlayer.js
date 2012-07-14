@@ -252,6 +252,12 @@ dotprod.entities.LocalPlayer.prototype.update = function() {
     this.velocity_ = this.velocity_.subtract(dotprod.Vector.fromPolar(acceleration, angle));
   }
 
+  if (keyboard.isKeyPressed(goog.events.KeyCodes.A)) {
+    this.velocity_ = this.velocity_.add(dotprod.Vector.fromPolar(-acceleration, angle + Math.PI / 2));
+  } else if (keyboard.isKeyPressed(goog.events.KeyCodes.D)) {
+    this.velocity_ = this.velocity_.add(dotprod.Vector.fromPolar(acceleration, angle + Math.PI / 2));
+  }
+
   // Magnitude of speed is greater than maximum ship speed - clamp.
   var magnitude = this.velocity_.magnitude();
   if (magnitude >= shipSpeed) {
