@@ -299,7 +299,12 @@ dotprod.entities.Player.prototype.collectPrize_ = function(xTile, yTile) {
   }
 };
 
-dotprod.entities.Player.prototype.collectPrize = goog.nullFunction;
+/**
+ * @param {!dotprod.Prize} prize
+ */
+dotprod.entities.Player.prototype.collectPrize = function(prize) {
+  ++this.bounty_;
+};
 
 /**
  * @param {number} timeDiff

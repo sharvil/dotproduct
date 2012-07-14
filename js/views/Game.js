@@ -26,6 +26,7 @@ goog.require('dotprod.layers.StarLayer');
 goog.require('dotprod.Map');
 goog.require('dotprod.Notifications');
 goog.require('dotprod.PlayerIndex');
+goog.require('dotprod.Prize');
 goog.require('dotprod.PrizeIndex');
 goog.require('dotprod.ProjectileIndex');
 goog.require('dotprod.Protocol');
@@ -444,6 +445,6 @@ dotprod.Game.prototype.onPrizeCollected_ = function(packet) {
   var xTile = packet[2];
   var yTile = packet[3];
 
+  player.onPrizeCollected(new dotprod.Prize(type, xTile, yTile));
   this.prizeIndex_.removePrize(xTile, yTile);
-  // TODO(sharvil): add to player's bounty.
 };

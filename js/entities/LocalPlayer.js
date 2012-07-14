@@ -64,6 +64,8 @@ dotprod.entities.LocalPlayer = function(game, name, ship, camera) {
 goog.inherits(dotprod.entities.LocalPlayer, dotprod.entities.Player);
 
 dotprod.entities.LocalPlayer.prototype.collectPrize = function(prize) {
+  goog.base(this, 'collectPrize', prize);
+
   // TODO(sharvil): we shouldn't reach into game's private member...
   switch (prize.getType()) {
     case dotprod.Prize.Type.NONE:
