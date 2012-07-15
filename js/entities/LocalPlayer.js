@@ -63,8 +63,11 @@ dotprod.entities.LocalPlayer = function(game, name, ship, camera) {
 };
 goog.inherits(dotprod.entities.LocalPlayer, dotprod.entities.Player);
 
-dotprod.entities.LocalPlayer.prototype.collectPrize = function(prize) {
-  goog.base(this, 'collectPrize', prize);
+/**
+ * @override
+ */
+dotprod.entities.LocalPlayer.prototype.collectPrize_ = function(prize) {
+  goog.base(this, 'collectPrize_', prize);
 
   // TODO(sharvil): we shouldn't reach into game's private member...
   switch (prize.getType()) {
@@ -89,6 +92,7 @@ dotprod.entities.LocalPlayer.prototype.collectPrize = function(prize) {
       break;
   }
   this.game_.getProtocol().sendPrizeCollected(prize.getType(), prize.getX(), prize.getY());
+  ++this.bounty_;
 };
 
 /**

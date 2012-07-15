@@ -267,7 +267,8 @@ dotprod.entities.Player.prototype.updatePosition_ = function(bounceFactor) {
   var collision = this.game_.getMap().getCollision(this);
   if (collision) {
     if (collision.tileValue == 255) {
-      this.collectPrize_(collision.xTile, collision.yTile);
+      var prize = this.game_.getPrizeIndex().removePrize(collision.xTile, collision.yTile);
+      this.collectPrize_(prize);
     } else {
       var xVel = this.velocity_.getX();
       this.position_ = new dotprod.Vector(xVel >= 0 ? collision.left : collision.right, this.position_.getY());
@@ -279,7 +280,8 @@ dotprod.entities.Player.prototype.updatePosition_ = function(bounceFactor) {
   collision = this.game_.getMap().getCollision(this);
   if (collision) {
     if (collision.tileValue == 255) {
-      this.collectPrize_(collision.xTile, collision.yTile);
+      var prize = this.game_.getPrizeIndex().removePrize(collision.xTile, collision.yTile);
+      this.collectPrize_(prize);
     } else {
       var yVel = this.velocity_.getY();
       this.position_ = new dotprod.Vector(this.position_.getX(), yVel >= 0 ? collision.top : collision.bottom);
@@ -289,20 +291,12 @@ dotprod.entities.Player.prototype.updatePosition_ = function(bounceFactor) {
 };
 
 /**
- * @param {number} xTile
- * @param {number} yTile
+ * @protected
  */
-dotprod.entities.Player.prototype.collectPrize_ = function(xTile, yTile) {
-  var prize = this.game_.getPrizeIndex().removePrize(xTile, yTile);
-  if (prize) {
-    this.collectPrize(prize);
-  }
-};
+dotprod.entities.Player.prototype.collectPrize_ = goog.nullFunction;
 
-/**
- * @param {!dotprod.Prize} prize
- */
-dotprod.entities.Player.prototype.collectPrize = function(prize) {
+// Called when the server tells us that this player collected a prize.
+dotprod.entities.Player.prototype.onPrizeCollected = function() {
   ++this.bounty_;
 };
 
