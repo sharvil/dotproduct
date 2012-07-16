@@ -14,14 +14,29 @@ goog.require('dotprod.layers.Layer');
  */
 dotprod.layers.StarLayer = function() {
   /**
+   * Pattern for L1 stars (stars closer in distance).
+   *
    * @type {!Array.<Object>}
    * @private
    */
   this.stars_ = [];
+
+  /**
+   * Pattern for L2 stars (stars further away in distance).
+   *
+   * @type {!Array.<Object>}
+   * @private
+   */
+  this.stars2_ = [];
+
   for (var i = 0; i < dotprod.layers.StarLayer.STAR_DENSITY_; ++i) {
-    var x = Math.round(Math.random() * dotprod.layers.StarLayer.STAR_TILE_SIZE_);
-    var y = Math.round(Math.random() * dotprod.layers.StarLayer.STAR_TILE_SIZE_);
-    this.stars_.push({x: x, y: y});
+    var x1 = Math.round(Math.random() * dotprod.layers.StarLayer.STAR_TILE_SIZE_);
+    var y1 = Math.round(Math.random() * dotprod.layers.StarLayer.STAR_TILE_SIZE_);
+    this.stars_.push({x: x1, y: y1});
+
+    var x2 = Math.round(Math.random() * dotprod.layers.StarLayer.STAR_TILE_SIZE_);
+    var y2 = Math.round(Math.random() * dotprod.layers.StarLayer.STAR_TILE_SIZE_);
+    this.stars2_.push({x: x2, y: y2});
   }
 };
 
@@ -98,9 +113,9 @@ dotprod.layers.StarLayer.prototype.render = function(camera) {
     context.fillStyle = dotprod.layers.StarLayer.STAR_L2_COLOR_;
     for (var yTile = topTile; yTile <= bottomTile; ++yTile) {
       for (var xTile = leftTile; xTile <= rightTile; ++xTile) {
-        for (var i = 0; i < this.stars_.length; ++i) {
-          var dx = Math.floor((xTile * dotprod.layers.StarLayer.STAR_TILE_SIZE_ + this.stars_[i].x - x) / 3 + w / 2);
-          var dy = Math.floor((yTile * dotprod.layers.StarLayer.STAR_TILE_SIZE_ + this.stars_[i].y - y) / 3 + h / 2);
+        for (var i = 0; i < this.stars2_.length; ++i) {
+          var dx = Math.floor((xTile * dotprod.layers.StarLayer.STAR_TILE_SIZE_ + this.stars2_[i].x - x) / 3 + w / 2);
+          var dy = Math.floor((yTile * dotprod.layers.StarLayer.STAR_TILE_SIZE_ + this.stars2_[i].y - y) / 3 + h / 2);
           context.fillRect(dx, dy, 1, 1);
         }
       }
