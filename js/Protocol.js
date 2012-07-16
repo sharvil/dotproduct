@@ -216,10 +216,11 @@ dotprod.Protocol.prototype.onClockSyncReply_ = function(packet) {
 };
 
 /**
+ * @param {!dotprod.Vector} position The position of the local player at the time of death.
  * @param {string} killer
  */
-dotprod.Protocol.prototype.sendDeath = function(killer) {
-  this.send_([dotprod.Protocol.C2SPacketType_.PLAYER_DIED, this.asRemoteTime_(goog.now()), killer]);
+dotprod.Protocol.prototype.sendDeath = function(position, killer) {
+  this.send_([dotprod.Protocol.C2SPacketType_.PLAYER_DIED, this.asRemoteTime_(goog.now()), position.getX(), position.getY(), killer]);
 };
 
 /**

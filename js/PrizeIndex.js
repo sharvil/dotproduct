@@ -32,10 +32,37 @@ dotprod.PrizeIndex = function(game) {
   this.prng_ = new dotprod.Prng();
 
   /**
+   * This PRNG doesn't need to be synchronized across clients. We use
+   * it to generate kill prize types and to avoid getting this.prng_
+   * out of sync.
+   *
+   * @type {!dotprod.Prng}
+   * @private
+   */
+  this.killPrng_ = new dotprod.Prng();
+
+  /**
    * @type {!Array.<dotprod.Prize>}
    * @private
    */
   this.prizes_ = [];
+};
+
+/**
+ * @param {number} x
+ * @param {number} y
+ */
+dotprod.PrizeIndex.prototype.addKillPrize = function(x, y) {
+  var coordinates = this.map_.toTileCoordinates(new dotprod.Vector(x, y));
+  var xTile = coordinates.getX();
+  var yTile = coordinates.getY();
+
+  if (this.map_.getTile(xTile, yTile) == 0) {
+    var type = this.generatePrizeType_(this.killPrng_);
+    var prize = new dotprod.Prize(type, xTile, yTile);
+    this.map_.setTile(xTile, yTile, 255);
+    this.prizes_.push(prize);
+  }
 };
 
 /**
@@ -53,6 +80,7 @@ dotprod.PrizeIndex.prototype.onSeedUpdate = function(seed, fastForwardTicks) {
 
   // Set the seed.
   this.prng_.seed(seed);
+  this.killPrng_.seed(this.killPrng_.random() ^ seed);
 
   // Create prizes using new seed.
   for (var i = 0; i < this.prizeSettings_['count']; ++i) {

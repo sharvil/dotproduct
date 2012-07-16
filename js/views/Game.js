@@ -380,9 +380,11 @@ dotprod.Game.prototype.onPlayerPosition_ = function(packet) {
  */
 dotprod.Game.prototype.onPlayerDied_ = function(packet) {
   var timestamp = packet[0];
-  var killee = this.playerIndex_.findByName(packet[1]);
-  var killer = this.playerIndex_.findByName(packet[2]);
-  var bountyGained = packet[3];
+  var x = packet[1];
+  var y = packet[2];
+  var killee = this.playerIndex_.findByName(packet[3]);
+  var killer = this.playerIndex_.findByName(packet[4]);
+  var bountyGained = packet[5];
 
   if (!killer || !killee) {
     return;
@@ -390,6 +392,7 @@ dotprod.Game.prototype.onPlayerDied_ = function(packet) {
 
   killee.onDeath();
   killer.onKill(killee, bountyGained);
+  this.prizeIndex_.addKillPrize(x, y);
   this.notifications_.addMessage(killee.getName() + '(' + bountyGained + ') killed by: ' + killer.getName());
 };
 

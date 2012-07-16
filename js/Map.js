@@ -93,6 +93,20 @@ dotprod.Map.prototype.getHeight = function() {
 };
 
 /**
+ * @param {!dotprod.Vector} vector A vector in pixel coordinates.
+ * @return {!dotprod.Vector} A vector in map tile coordinates.
+ */
+dotprod.Map.prototype.toTileCoordinates = function(vector) {
+  var xTile = Math.floor(vector.getX() / this.tileWidth_);
+  var yTile = Math.floor(vector.getY() / this.tileHeight_);
+
+  goog.asserts.assert(xTile >= 0 && xTile < this.width_, 'Invalid x coordinate.');
+  goog.asserts.assert(yTile >= 0 && yTile < this.height_, 'Invalid y coordinate.');
+
+  return new dotprod.Vector(xTile, yTile);
+};
+
+/**
  * @param {number} x X-coordinate in tile units.
  * @param {number} y Y-coordinate in tile units.
  * @return {number}
@@ -109,7 +123,7 @@ dotprod.Map.prototype.getTile = function(x, y) {
  */
 dotprod.Map.prototype.setTile = function(x, y, value) {
   goog.asserts.assert(x >= 0 && x < this.width_, 'Invalid x coordinate.');
-  goog.asserts.assert(y >= 0 && y < this.height_, 'Invalid y coordinate');
+  goog.asserts.assert(y >= 0 && y < this.height_, 'Invalid y coordinate.');
 
   var index = x + y * this.width_;
   if (value == 0) {
