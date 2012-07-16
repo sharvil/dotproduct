@@ -36,13 +36,26 @@ dotprod.layers.ChatLayer.prototype.render = function(camera) {
   var context = camera.getContext();
   var dimensions = camera.getDimensions();
 
+  var gradient = context.createLinearGradient(0, dimensions.height - 8 - 8 * 12, 0, dimensions.height);
+  gradient.addColorStop(0, 'rgba(0, 0, 0, 0)');
+  gradient.addColorStop(1, 'rgba(0, 0, 0, 0.8)');
+
   context.save();
+    context.fillStyle = gradient;
+    context.fillRect(0, dimensions.height - 8 - 8 * 12, dimensions.width, dimensions.height);
     context.font = dotprod.FontFoundry.chatFont();
-    context.fillStyle = dotprod.Palette.chatColor();
 
     var i = 0;
     this.messages_.forEach(function(item) {
-      context.fillText('[' + item.player.getName() + '] ' + item.message, 5, dimensions.height - 5 - 12 * i++);
+      var y = dimensions.height - 8 - 12 * i++;
+      var nameField = item.player.getName() + ': ';
+      var nameFieldLength = context.measureText(nameField).width;
+
+      context.fillStyle = dotprod.Palette.chatNameColor();
+      context.fillText(nameField, 8, y);
+
+      context.fillStyle = dotprod.Palette.chatTextColor();
+      context.fillText(item.message, 8 + nameFieldLength, y);
     });
 
   context.restore();

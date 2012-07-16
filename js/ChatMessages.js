@@ -21,7 +21,14 @@ dotprod.ChatMessages = function() {
  * @private
  * @const
  */
-dotprod.ChatMessages.MAX_MESSAGES = 8;
+dotprod.ChatMessages.MAX_MESSAGES_ = 8;
+
+/**
+ * @return {number}
+ */
+dotprod.ChatMessages.prototype.count = function() {
+  return this.messages_.length;
+};
 
 /**
  * @param {dotprod.Player} player
@@ -30,8 +37,8 @@ dotprod.ChatMessages.MAX_MESSAGES = 8;
 dotprod.ChatMessages.prototype.addMessage = function(player, message) {
   var item = { player: player, message: message };
   this.messages_.unshift(item);
-  if (this.messages_.length >= dotprod.ChatMessages.MAX_MESSAGES) {
-    this.messages_ = this.messages_.slice(0, dotprod.ChatMessages.MAX_MESSAGES - 1);
+  if (this.messages_.length >= dotprod.ChatMessages.MAX_MESSAGES_) {
+    this.messages_ = this.messages_.slice(0, dotprod.ChatMessages.MAX_MESSAGES_ - 1);
   }
 };
 

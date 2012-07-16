@@ -36,7 +36,14 @@ dotprod.Palette.foeColor = function() {
 /**
  * @return {string}
  */
-dotprod.Palette.chatColor = function() {
+dotprod.Palette.chatNameColor = function() {
+  return 'rgba(155, 215, 254, 1)';
+};
+
+/**
+ * @return {string}
+ */
+dotprod.Palette.chatTextColor = function() {
   return 'rgba(190, 190, 190, 1)';
 };
 
