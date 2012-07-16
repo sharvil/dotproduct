@@ -304,6 +304,9 @@ dotprod.Game.prototype.renderingLoop_ = function() {
     }
   }
 
+  this.canvas_.width = window.innerWidth - this.canvas_.offsetLeft * 2;
+  this.canvas_.height = window.innerHeight - this.canvas_.offsetTop - 48;
+
   var context = this.camera_.getContext();
   context.save();
     context.fillStyle = '#000';
