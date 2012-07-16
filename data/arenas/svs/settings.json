@@ -19,7 +19,7 @@
 
   "prize": {
     "count": 1000,
-    "weights": [0, 4, 4, 1, 2]
+    "weights": [0, 6, 5, 8, 3]
   },
 
   "ships":
@@ -52,7 +52,7 @@
         "lifetime": 6000,
         "damage": 750,
         "damageUpgrade": 50,
-        "maxLevel": 2
+        "maxLevel": 1
       }
     },
 
@@ -68,9 +68,9 @@
       "rechargeRate": 0.4,
       "respawnDelay": 500,
       "bullet": {
-        "fireEnergy": 10,
+        "fireEnergy": 20,
         "speed": 2,
-        "fireDelay": 15,
+        "fireDelay": 25,
         "lifetime": 550,
         "damage": 200,
         "damageUpgrade": 100,
@@ -84,7 +84,7 @@
         "lifetime": 6000,
         "damage": 750,
         "damageUpgrade": 50,
-        "maxLevel": 2
+        "maxLevel": 1
       }
     },
 
@@ -100,9 +100,9 @@
       "rechargeRate": 0.4,
       "respawnDelay": 500,
       "bullet": {
-        "fireEnergy": 10,
+        "fireEnergy": 20,
         "speed": 2,
-        "fireDelay": 15,
+        "fireDelay": 25,
         "lifetime": 550,
         "damage": 200,
         "damageUpgrade": 100,
@@ -116,7 +116,7 @@
         "lifetime": 6000,
         "damage": 750,
         "damageUpgrade": 50,
-        "maxLevel": 2
+        "maxLevel": 1
       }
     },
 
@@ -132,9 +132,9 @@
       "rechargeRate": 0.4,
       "respawnDelay": 500,
       "bullet": {
-        "fireEnergy": 10,
+        "fireEnergy": 20,
         "speed": 2,
-        "fireDelay": 15,
+        "fireDelay": 25,
         "lifetime": 550,
         "damage": 200,
         "damageUpgrade": 100,
@@ -164,9 +164,9 @@
       "rechargeRate": 0.4,
       "respawnDelay": 500,
       "bullet": {
-        "fireEnergy": 10,
+        "fireEnergy": 20,
         "speed": 2,
-        "fireDelay": 15,
+        "fireDelay": 30,
         "lifetime": 550,
         "damage": 200,
         "damageUpgrade": 100,
@@ -180,7 +180,7 @@
         "lifetime": 6000,
         "damage": 750,
         "damageUpgrade": 50,
-        "maxLevel": 2
+        "maxLevel": 1
       }
     },
 
@@ -196,9 +196,9 @@
       "rechargeRate": 0.4,
       "respawnDelay": 500,
       "bullet": {
-        "fireEnergy": 10,
+        "fireEnergy": 20,
         "speed": 2,
-        "fireDelay": 15,
+        "fireDelay": 25,
         "lifetime": 550,
         "damage": 200,
         "damageUpgrade": 100,
@@ -212,7 +212,7 @@
         "lifetime": 6000,
         "damage": 750,
         "damageUpgrade": 50,
-        "maxLevel": 2
+        "maxLevel": 1
       }
     },
 
@@ -228,9 +228,9 @@
       "rechargeRate": 0.4,
       "respawnDelay": 500,
       "bullet": {
-        "fireEnergy": 10,
+        "fireEnergy": 20,
         "speed": 2,
-        "fireDelay": 15,
+        "fireDelay": 25,
         "lifetime": 550,
         "damage": 200,
         "damageUpgrade": 100,
@@ -244,7 +244,7 @@
         "lifetime": 6000,
         "damage": 750,
         "damageUpgrade": 50,
-        "maxLevel": 2
+        "maxLevel": 1
       }
     },
 
@@ -260,9 +260,9 @@
       "rechargeRate": 0.4,
       "respawnDelay": 500,
       "bullet": {
-        "fireEnergy": 10,
+        "fireEnergy": 20,
         "speed": 2,
-        "fireDelay": 15,
+        "fireDelay": 25,
         "lifetime": 550,
         "damage": 200,
         "damageUpgrade": 100,
@@ -276,7 +276,7 @@
         "lifetime": 6000,
         "damage": 750,
         "damageUpgrade": 50,
-        "maxLevel": 2
+        "maxLevel": 1
       }
     }
   ]
