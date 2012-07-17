@@ -139,7 +139,7 @@ dotprod.entities.Bomb.prototype.explode_ = function(directHit) {
   this.lifetime_ = 0;
 
   // Add an explosion animation.
-  var animation = this.game_.getResourceManager().getVideoEnsemble('explode1').getAnimation(0);
+  var animation = this.game_.getResourceManager().getVideoEnsemble('explode2').getAnimation(0);
   var explosion = new dotprod.entities.Effect(animation, this.position_, new dotprod.Vector(0, 0));
   this.game_.getEffectIndex().addEffect(explosion);
 

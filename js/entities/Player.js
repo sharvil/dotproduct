@@ -175,7 +175,7 @@ dotprod.entities.Player.prototype.takeDamage = function(player, projectile, dama
  * Called when this player is killed by another one.
  */
 dotprod.entities.Player.prototype.onDeath = function() {
-  var ensemble = this.game_.getResourceManager().getVideoEnsemble('explode2');
+  var ensemble = this.game_.getResourceManager().getVideoEnsemble('explode1');
   this.effectIndex_.addEffect(new dotprod.entities.Effect(ensemble.getAnimation(0), this.position_, this.velocity_));
 
   ensemble = this.game_.getResourceManager().getVideoEnsemble('ship' + this.ship_ + '_junk');
