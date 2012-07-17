@@ -60,8 +60,9 @@ dotprod.model.BombBay.prototype.fire = function(angle, position, velocity, commi
 
   var lifetime = this.getLifetime_();
   var damage = this.getDamage_();
+  var blastRadius = this.getBlastRadius_();
   var newVelocity = velocity.add(dotprod.Vector.fromPolar(this.getBombSpeed_(), angle));
-  var projectile = new dotprod.entities.Bomb(this.game_, this.owner_, this.level_, position, newVelocity, lifetime, damage, 0);
+  var projectile = new dotprod.entities.Bomb(this.game_, this.owner_, this.level_, position, newVelocity, lifetime, damage, 0, blastRadius);
 
   // TODO(sharvil): this should probably happen in the projectile base class' constructor.
   this.game_.getProjectileIndex().addProjectile(this.owner_, projectile);
@@ -82,8 +83,9 @@ dotprod.model.BombBay.prototype.fireSynthetic = function(level, bounceCount, pos
 
   var lifetime = this.getLifetime_();
   var damage = this.getDamage_();
+  var blastRadius = this.getBlastRadius_();
 
-  var projectile = new dotprod.entities.Bomb(this.game_, this.owner_, this.level_, position, velocity, lifetime, damage, bounceCount);
+  var projectile = new dotprod.entities.Bomb(this.game_, this.owner_, this.level_, position, velocity, lifetime, damage, bounceCount, blastRadius);
   this.game_.getProjectileIndex().addProjectile(this.owner_, projectile);
   return projectile;
 };
@@ -128,3 +130,10 @@ dotprod.model.BombBay.prototype.getDamage_ = function() {
   return this.bombBaySettings_['damage'] + this.level_ * this.bombBaySettings_['damageUpgrade'];
 };
 
+/**
+ * @return {number}
+ * @private
+ */
+dotprod.model.BombBay.prototype.getBlastRadius_ = function() {
+  return this.bombBaySettings_['blastRadius'] + this.level_ * this.bombBaySettings_['blastRadiusUpgrade'];
+};

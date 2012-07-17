@@ -52,7 +52,9 @@
         "lifetime": 6000,
         "damage": 750,
         "damageUpgrade": 50,
-        "maxLevel": 1
+        "maxLevel": 1,
+        "blastRadius": 100,
+        "blastRadiusUpgrade": 50
       }
     },
 
@@ -84,7 +86,9 @@
         "lifetime": 6000,
         "damage": 750,
         "damageUpgrade": 50,
-        "maxLevel": 1
+        "maxLevel": 1,
+        "blastRadius": 100,
+        "blastRadiusUpgrade": 50
       }
     },
 
@@ -116,7 +120,9 @@
         "lifetime": 6000,
         "damage": 750,
         "damageUpgrade": 50,
-        "maxLevel": 1
+        "maxLevel": 1,
+        "blastRadius": 100,
+        "blastRadiusUpgrade": 50
       }
     },
 
@@ -148,7 +154,9 @@
         "lifetime": 6000,
         "damage": 750,
         "damageUpgrade": 50,
-        "maxLevel": 2
+        "maxLevel": 2,
+        "blastRadius": 100,
+        "blastRadiusUpgrade": 50
       }
     },
 
@@ -180,7 +188,9 @@
         "lifetime": 6000,
         "damage": 750,
         "damageUpgrade": 50,
-        "maxLevel": 1
+        "maxLevel": 1,
+        "blastRadius": 100,
+        "blastRadiusUpgrade": 50
       }
     },
 
@@ -212,7 +222,9 @@
         "lifetime": 6000,
         "damage": 750,
         "damageUpgrade": 50,
-        "maxLevel": 1
+        "maxLevel": 1,
+        "blastRadius": 100,
+        "blastRadiusUpgrade": 50
       }
     },
 
@@ -244,7 +256,9 @@
         "lifetime": 6000,
         "damage": 750,
         "damageUpgrade": 50,
-        "maxLevel": 1
+        "maxLevel": 1,
+        "blastRadius": 200,
+        "blastRadiusUpgrade": 10
       }
     },
 
@@ -276,7 +290,9 @@
         "lifetime": 6000,
         "damage": 750,
         "damageUpgrade": 50,
-        "maxLevel": 1
+        "maxLevel": 1,
+        "blastRadius": 100,
+        "blastRadiusUpgrade": 50
       }
     }
   ]

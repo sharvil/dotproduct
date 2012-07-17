@@ -23,7 +23,7 @@ goog.require('dotprod.Vector');
  * @param {number} damage
  * @param {number} bounceCount
  */
-dotprod.entities.Bomb = function(game, owner, level, position, velocity, lifetime, damage, bounceCount) {
+dotprod.entities.Bomb = function(game, owner, level, position, velocity, lifetime, damage, bounceCount, blastRadius) {
   dotprod.entities.Projectile.call(this, game, owner, level, lifetime, damage, bounceCount);
 
   this.position_ = position;
@@ -35,6 +35,12 @@ dotprod.entities.Bomb = function(game, owner, level, position, velocity, lifetim
    */
   this.animation_ = game.getResourceManager().getVideoEnsemble('bombs').getAnimation(level);
   this.animation_.setRepeatCount(-1);
+
+  /**
+   * @type {number}
+   * @private
+   */
+  this.blastRadius_ = blastRadius;
 };
 goog.inherits(dotprod.entities.Bomb, dotprod.entities.Projectile);
 
@@ -110,9 +116,7 @@ dotprod.entities.Bomb.prototype.checkPlayerCollision_ = function(player) {
   var x = this.position_.getX();
   var y = this.position_.getY();
   if (x >= dimensions.left && x <= dimensions.right && y >= dimensions.top && y <= dimensions.bottom) {
-    player.takeDamage(this.owner_, this, this.damage_);
-    this.lifetime_ = 0;
-    this.explode_();
+    this.explode_(player == this.game_.getPlayerIndex().getLocalPlayer());
     return true;
   }
   return false;
@@ -120,16 +124,35 @@ dotprod.entities.Bomb.prototype.checkPlayerCollision_ = function(player) {
 
 dotprod.entities.Bomb.prototype.bounce_ = function() {
   if (this.bounceCount_ == 0) {
-    this.velocity_ = new dotprod.Vector(0, 0);
-    this.lifetime_ = 0;
-    this.explode_();
+    this.explode_(false);
   } else if (this.bounceCount_ > 0) {
     --this.bounceCount_;
   }
 };
 
-dotprod.entities.Bomb.prototype.explode_ = function() {
+/**
+ * @param {boolean} directHit True if the local player was hit directly by the bomb, false otherwise.
+ */
+dotprod.entities.Bomb.prototype.explode_ = function(directHit) {
+  // Reset bomb state.
+  this.velocity_ = new dotprod.Vector(0, 0);
+  this.lifetime_ = 0;
+
+  // Add an explosion animation.
   var animation = this.game_.getResourceManager().getVideoEnsemble('explode1').getAnimation(0);
   var explosion = new dotprod.entities.Effect(animation, this.position_, new dotprod.Vector(0, 0));
   this.game_.getEffectIndex().addEffect(explosion);
+
+  // Figure out how much damage the local player is going to take from this bomb explosion.
+  var damageRatio;
+  var player = this.game_.getPlayerIndex().getLocalPlayer();
+  if (directHit) {
+    damageRatio = 1;
+  } else {
+    var delta = this.position_.subtract(player.getPosition());
+    var distance = Math.sqrt(delta.getX() * delta.getX() + delta.getY() * delta.getY()) / this.blastRadius_;
+    damageRatio = Math.max(1 - distance, 0);
+  }
+
+  player.takeDamage(this.owner_, this, this.damage_ * damageRatio);
 };
