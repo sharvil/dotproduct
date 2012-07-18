@@ -145,6 +145,7 @@ dotprod.views.ChatView.prototype.addMessage = function(player, message) {
   var textNode = goog.dom.createElement('span');
   textNode.classList.add(dotprod.views.ChatView.TEX_MESSAGE_CLASS_NAME_);
   textNode.innerText = message;
+  textNode.innerHTML = window.linkify(textNode.innerHTML);
 
   messageNode.appendChild(nameNode);
   messageNode.appendChild(textNode);

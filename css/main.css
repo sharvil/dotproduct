@@ -140,6 +140,10 @@ body {
   color: rgba(190, 190, 190, 1);
 }
 
+.cv-text-message > a:link {
+  color: rgba(190, 190, 190, 1);
+}
+
 .cv-input {
   font-family: 'SubSpace Regular';
   font-size: 12px;
