@@ -33,31 +33,8 @@ dotprod.views.DebugView = function(game, camera) {
    * @type {!HTMLDivElement}
    * @private
    */
-  this.latency_ = /** @type {!HTMLDivElement} */ (goog.dom.createElement('div'));
-
-  /**
-   * @type {!HTMLDivElement}
-   * @private
-   */
-  this.framerate_ = /** @type {!HTMLDivElement} */ (goog.dom.createElement('div'));
-
-  /**
-   * @type {!HTMLDivElement}
-   * @private
-   */
-  this.position_ = /** @type {!HTMLDivElement} */ (goog.dom.createElement('div'));
-
-  /**
-   * @type {!HTMLDivElement}
-   * @private
-   */
-  this.players_ = /** @type {!HTMLDivElement} */ (goog.dom.createElement('div'));
-
-  /**
-   * @type {!HTMLDivElement}
-   * @private
-   */
-  this.projectiles_ = /** @type {!HTMLDivElement} */ (goog.dom.createElement('div'));
+  this.view_ = /** @type {!HTMLDivElement} */ (goog.dom.createElement('div'));
+  this.view_.classList.add(dotprod.views.DebugView.VIEW_CLASS_NAME_);
 
   /**
    * @type {number}
@@ -74,22 +51,22 @@ dotprod.views.DebugView = function(game, camera) {
 goog.inherits(dotprod.views.DebugView, dotprod.views.View);
 
 /**
+ * @type {string}
+ * @private
+ * @const
+ */
+dotprod.views.DebugView.VIEW_CLASS_NAME_ = 'dv';
+
+/**
  * @override
  */
 dotprod.views.DebugView.prototype.renderDom = function(rootNode) {
   goog.base(this, 'renderDom', rootNode);
 
-  rootNode.appendChild(this.latency_);
-  rootNode.appendChild(this.framerate_);
-  rootNode.appendChild(this.position_);
-  rootNode.appendChild(this.players_);
-  rootNode.appendChild(this.projectiles_);
+  rootNode.appendChild(this.view_);
 };
 
 dotprod.views.DebugView.prototype.update = function() {
-  var dimensions = this.camera_.getDimensions();
-  this.position_.innerText = dimensions.x + ', ' + dimensions.y + ' (' + Math.floor(dimensions.x / 16) + ', ' + Math.floor(dimensions.y / 16) + ')';
-
   ++this.frames_;
 
   var now = goog.now();
@@ -97,10 +74,10 @@ dotprod.views.DebugView.prototype.update = function() {
     return;
   }
 
-  this.latency_.innerText = this.game_.getProtocol().getRoundTripTime() + 'ms latency';
-  this.framerate_.innerText = this.frames_ + ' fps';
-  this.players_.innerText = this.game_.getPlayerIndex().getPlayers().length + ' players';
-  this.projectiles_.innerText = this.game_.getProjectileIndex().getProjectiles().length + ' projectiles';
+  this.view_.innerText = this.game_.getProtocol().getRoundTripTime() + 'ms, ' +
+                         this.frames_ + 'fps, ' +
+                         this.game_.getPlayerIndex().getPlayers().length + ' // ' +
+                         this.game_.getProjectileIndex().getProjectiles().length;
 
   this.frames_ = 0;
   this.lastTime_ = now;

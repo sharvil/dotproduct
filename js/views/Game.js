@@ -198,7 +198,7 @@ dotprod.Game.prototype.renderDom = function(rootNode) {
 
   rootNode.appendChild(this.canvas_);
   this.chatView_.renderDom(rootNode);
-  // this.debugView_.renderDom(rootNode);
+  this.debugView_.renderDom(rootNode);
 };
 
 /**

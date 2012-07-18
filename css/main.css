@@ -173,3 +173,18 @@ body {
   background: #444;
   width: 0;
 }
+
+/**************************************
+              DEBUG VIEW
+ **************************************/
+
+.dv {
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  font-family: 'SubSpace Regular';
+  font-size: 12px;
+  font-smooth: never;
+  color: #FF0071;
+  padding: 5px 5px 0 0;
+}
