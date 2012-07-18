@@ -9,12 +9,10 @@ goog.require('goog.debug.ErrorHandler');
 goog.require('goog.dom');
 goog.require('goog.events.BrowserEvent');
 goog.require('dotprod.Camera');
-goog.require('dotprod.ChatMessages');
 goog.require('dotprod.EffectIndex');
 goog.require('dotprod.entities.LocalPlayer');
 goog.require('dotprod.entities.RemotePlayer');
 goog.require('dotprod.input.Keyboard');
-goog.require('dotprod.layers.ChatLayer');
 goog.require('dotprod.layers.EffectLayer');
 goog.require('dotprod.layers.NotificationLayer');
 goog.require('dotprod.layers.MapLayer');
@@ -74,8 +72,6 @@ dotprod.Game = function(protocol, resourceManager, settings, mapData) {
    */
   this.canvas_ = /** @type {!HTMLCanvasElement} */ (goog.dom.createElement('canvas'));
   this.canvas_.className = dotprod.Game.CANVAS_CLASS_NAME_;
-  this.canvas_.width = dotprod.Game.WIDTH_;
-  this.canvas_.height = dotprod.Game.HEIGHT_;
 
   /**
    * @type {!dotprod.Camera}
@@ -88,12 +84,6 @@ dotprod.Game = function(protocol, resourceManager, settings, mapData) {
    * @private
    */
   this.map_ = new dotprod.Map(this, mapData);
-
-  /**
-   * @type {!dotprod.ChatMessages}
-   * @private
-   */
-  this.chat_ = new dotprod.ChatMessages();
 
   /**
    * @type {!dotprod.PrizeIndex}
@@ -129,7 +119,7 @@ dotprod.Game = function(protocol, resourceManager, settings, mapData) {
    * @type {!dotprod.views.ChatView}
    * @private
    */
-  this.chatView_ = new dotprod.views.ChatView(this, this.chat_);
+  this.chatView_ = new dotprod.views.ChatView(this);
 
   /**
    * @type {!dotprod.views.DebugView}
@@ -148,7 +138,6 @@ dotprod.Game = function(protocol, resourceManager, settings, mapData) {
       new dotprod.layers.ShipLayer(this.playerIndex_),
       new dotprod.layers.EffectLayer(this.effectIndex_),
       new dotprod.layers.NotificationLayer(this.notifications_),
-      new dotprod.layers.ChatLayer(this.chat_),
       new dotprod.layers.RadarLayer(this),
       new dotprod.layers.ScoreboardLayer(this)
     ];
@@ -195,20 +184,6 @@ dotprod.Game.MAX_TICKS_PER_FRAME_ = 150;
 
 /**
  * @const
- * @type {number}
- * @private
- */
-dotprod.Game.WIDTH_ = 1024;
-
-/**
- * @const
- * @type {number}
- * @private
- */
-dotprod.Game.HEIGHT_ = 768;
-
-/**
- * @const
  * @type {string}
  * @private
  */
@@ -223,7 +198,7 @@ dotprod.Game.prototype.renderDom = function(rootNode) {
 
   rootNode.appendChild(this.canvas_);
   this.chatView_.renderDom(rootNode);
-  this.debugView_.renderDom(rootNode);
+  // this.debugView_.renderDom(rootNode);
 };
 
 /**
@@ -304,8 +279,8 @@ dotprod.Game.prototype.renderingLoop_ = function() {
     }
   }
 
-  this.canvas_.width = window.innerWidth - this.canvas_.offsetLeft * 2;
-  this.canvas_.height = window.innerHeight - this.canvas_.offsetTop - 48;
+  this.canvas_.width = window.innerWidth - this.canvas_.parentNode.offsetLeft;
+  this.canvas_.height = window.innerHeight - this.canvas_.parentNode.offsetTop;
 
   var context = this.camera_.getContext();
   context.save();
@@ -419,7 +394,7 @@ dotprod.Game.prototype.onChatMessage_ = function(packet) {
   var player = this.playerIndex_.findByName(packet[0]);
   var message = packet[1];
 
-  this.chat_.addMessage(player, message);
+  this.chatView_.addMessage(player, message);
 };
 
 /**

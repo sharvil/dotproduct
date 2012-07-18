@@ -53,13 +53,7 @@ body {
   color: #ccc;
 }
 
-input {
-  outline: none;
-  font-size: inherit;
-}
-
 .title {
-  margin: 0 0 30px 0;
   padding: 40px 0 40px 80px;
   font-size: 55px;
   font-weight: 100;
@@ -71,7 +65,6 @@ input {
 }
 
 .content {
-  margin: 0 0 0 80px;
 }
 
 .signin {
@@ -113,24 +106,58 @@ input {
               GAME VIEW
  **************************************/
 
+#game {
+  position: relative;
+}
+
 .gv-map-canvas {
-  text-align: center;
-  border: 3px solid #222;
 }
 
 /**************************************
               CHAT VIEW
  **************************************/
 
+.cv {
+  font-family: 'SubSpace Regular';
+  font-size: 12px;
+  font-smooth: never;
+  -webkit-font-smoothing: none;
+  width: 80%;
+  height: 80px;
+  overflow: scroll;
+  position: absolute;
+  left: 0px;
+  bottom: 0px;
+  padding: 0 0 0 5px;
+  background: -webkit-linear-gradient(transparent, rgba(0, 0, 0, 0.8));
+}
+
+.cv-text-name {
+  color: rgba(155, 215, 254, 1);
+}
+
+.cv-text-message {
+  color: rgba(190, 190, 190, 1);
+}
+
 .cv-input {
-  color: #ccc;
-  background: #111;
-  border: 1px solid #222;
-  padding: 5px 9px;
-  margin: 0;
-  width: 788px;
+  font-family: 'SubSpace Regular';
+  font-size: 12px;
+  font-smooth: never;
+  -webkit-font-smoothing: none;
+  color: rgba(190, 190, 190, 1);
+  background: rgba(0, 0, 0, 0);
+  border: none;
+  width: 80%;
+  outline: none;
+}
+
+.cv-hidden {
   opacity: 0;
-  -webkit-transition: opacity 0.2s linear;
+}
+
+.cv-visible {
+  opacity: 1;
 }
 
 /**************************************
@@ -138,6 +165,7 @@ input {
  **************************************/
 
 .ldv-progress {
+  margin: 40px 80px 0 80px;
   border: 3px solid #222;
 }
 

@@ -8,7 +8,6 @@ goog.provide('dotprod.views.ChatView');
 goog.require('goog.events.BrowserEvent');
 goog.require('goog.events.Event');
 goog.require('goog.events.EventType');
-goog.require('dotprod.ChatMessages');
 goog.require('dotprod.Protocol');
 goog.require('dotprod.views.View');
 
@@ -16,9 +15,8 @@ goog.require('dotprod.views.View');
  * @constructor
  * @extends {dotprod.views.View}
  * @param {!dotprod.Game} game
- * @param {!dotprod.ChatMessages} messages
  */
-dotprod.views.ChatView = function(game, messages) {
+dotprod.views.ChatView = function(game) {
   dotprod.views.View.call(this);
 
   /**
@@ -40,23 +38,33 @@ dotprod.views.ChatView = function(game, messages) {
   this.protocol_ = game.getProtocol();
 
   /**
-   * @type {!dotprod.ChatMessages}
-   * @private
-   */
-  this.messages_ = messages;
-
-  /**
    * @type {!Object.<string, !Array.<function(string)>>}
    * @private
    */
   this.handlers_ = {};
 
   /**
+   * @type {!HTMLDivElement}
+   * @private
+   */
+  this.view_ = /** @type {!HTMLDivElement} */ (goog.dom.createElement('div'));
+  this.view_.classList.add(dotprod.views.ChatView.CHAT_VIEW_CLASS_NAME_);
+
+  /**
+   * @type {!HTMLDivElement}
+   * @private
+   */
+  this.text_ = /** @type {!HTMLDivElement} */ (goog.dom.createElement('div'));
+  this.text_.classList.add(dotprod.views.ChatView.TEXT_CLASS_NAME_);
+
+  /**
    * @type {!HTMLInputElement}
    * @private
    */
   this.chatBox_ = /** @type {!HTMLInputElement} */ (goog.dom.createElement('input'));
-  this.chatBox_.className = dotprod.views.ChatView.CHAT_BOX_CLASS_NAME_;
+  this.chatBox_.classList.add(dotprod.views.ChatView.CHAT_BOX_CLASS_NAME_);
+  this.chatBox_.classList.add(dotprod.views.ChatView.CHAT_BOX_HIDDEN_CLASS_NAME_);
+
   goog.events.listen(this.chatBox_, 'blur', goog.bind(this.onChatLostFocus_, this));
   goog.events.listen(window, goog.events.EventType.KEYPRESS, goog.bind(this.onKeyPress_, this), true);
   goog.events.listen(window, goog.events.EventType.KEYDOWN, goog.bind(this.keyFilter_, this), true);
@@ -69,25 +77,82 @@ goog.inherits(dotprod.views.ChatView, dotprod.views.View);
  * @private
  * @const
  */
+dotprod.views.ChatView.CHAT_VIEW_CLASS_NAME_ = 'cv';
+
+/**
+ * @type {string}
+ * @private
+ * @const
+ */
+dotprod.views.ChatView.TEXT_CLASS_NAME_ = 'cv-text';
+
+/**
+ * @type {string}
+ * @private
+ * @const
+ */
+dotprod.views.ChatView.TEXT_NAME_CLASS_NAME_ = 'cv-text-name';
+
+/**
+ * @type {string}
+ * @private
+ * @const
+ */
+dotprod.views.ChatView.TEX_MESSAGE_CLASS_NAME_ = 'cv-text-message';
+
+/**
+ * @type {string}
+ * @private
+ * @const
+ */
 dotprod.views.ChatView.CHAT_BOX_CLASS_NAME_ = 'cv-input';
+
+/**
+ * @type {string}
+ * @private
+ * @const
+ */
+dotprod.views.ChatView.CHAT_BOX_HIDDEN_CLASS_NAME_ = 'cv-hidden';
+
+/**
+ * @type {string}
+ * @private
+ * @const
+ */
+dotprod.views.ChatView.CHAT_BOX_VISIBLE_CLASS_NAME_ = 'cv-visible';
 
 dotprod.views.ChatView.prototype.renderDom = function(rootNode) {
   goog.base(this, 'renderDom', rootNode);
 
-  var chatDiv = goog.dom.createElement('div');
-  chatDiv.appendChild(this.chatBox_);
-  rootNode.appendChild(chatDiv);
+  this.view_.appendChild(this.text_);
+  this.view_.appendChild(this.chatBox_);
+  rootNode.appendChild(this.view_);
 };
 
 /**
- * @param {string} name
- * @param {function(string)} handler
+ * @param {!dotprod.entities.Player} player
+ * @param {string} message
  */
-dotprod.views.ChatView.prototype.registerHandler = function(name, handler) {
-  if (this.handlers_[name]) {
-    this.handlers_[name].push(handler);
-  } else {
-    this.handlers_[name] = [handler];
+dotprod.views.ChatView.prototype.addMessage = function(player, message) {
+  var isAtBottom = this.view_.scrollTop + this.view_.offsetHeight >= this.view_.scrollHeight;
+
+  var messageNode = goog.dom.createElement('div');
+
+  var nameNode = goog.dom.createElement('span');
+  nameNode.classList.add(dotprod.views.ChatView.TEXT_NAME_CLASS_NAME_);
+  nameNode.innerText = player.getName() + ': ';
+
+  var textNode = goog.dom.createElement('span');
+  textNode.classList.add(dotprod.views.ChatView.TEX_MESSAGE_CLASS_NAME_);
+  textNode.innerText = message;
+
+  messageNode.appendChild(nameNode);
+  messageNode.appendChild(textNode);
+
+  this.text_.appendChild(messageNode);
+
+  if (isAtBottom) {
+    this.view_.scrollTop = this.view_.scrollHeight;
   }
 };
 
@@ -111,10 +176,12 @@ dotprod.views.ChatView.prototype.onKeyPress_ = function(event) {
     return;
   }
 
-  // The chat box is hidden -- show it and set focus on enter press.
-  if (this.chatBox_.style.opacity == 0) {
+  this.chatBox_.classList.toggle(dotprod.views.ChatView.CHAT_BOX_VISIBLE_CLASS_NAME_);
+  this.chatBox_.classList.toggle(dotprod.views.ChatView.CHAT_BOX_HIDDEN_CLASS_NAME_);
+
+  // The chat box was just shown -- clear any internal state and set focus on it.
+  if (this.chatBox_.classList.contains(dotprod.views.ChatView.CHAT_BOX_VISIBLE_CLASS_NAME_)) {
     this.chatBox_.value = '';
-    this.chatBox_.style.opacity = 1;
     this.chatBox_.focus();
     return;
   }
@@ -128,11 +195,10 @@ dotprod.views.ChatView.prototype.onKeyPress_ = function(event) {
       }
     } else {
       this.protocol_.sendChat(message);
-      this.messages_.addMessage(this.playerIndex_.getLocalPlayer(), message);
+      this.addMessage(this.playerIndex_.getLocalPlayer(), message);
     }
   }
   this.chatBox_.value = '';
-  this.chatBox_.style.opacity = 0;
 };
 
 /**
@@ -140,7 +206,7 @@ dotprod.views.ChatView.prototype.onKeyPress_ = function(event) {
  * @private
  */
 dotprod.views.ChatView.prototype.keyFilter_ = function(event) {
-  if (this.chatBox_.style.opacity == 1) {
+  if (this.chatBox_.classList.contains(dotprod.views.ChatView.CHAT_BOX_VISIBLE_CLASS_NAME_)) {
     event.stopPropagation();
   }
 };
