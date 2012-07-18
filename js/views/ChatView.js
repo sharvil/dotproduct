@@ -62,10 +62,10 @@ dotprod.views.ChatView = function(game) {
    * @private
    */
   this.chatBox_ = /** @type {!HTMLInputElement} */ (goog.dom.createElement('input'));
+  this.chatBox_.type = 'text';
   this.chatBox_.classList.add(dotprod.views.ChatView.CHAT_BOX_CLASS_NAME_);
   this.chatBox_.classList.add(dotprod.views.ChatView.CHAT_BOX_HIDDEN_CLASS_NAME_);
 
-  goog.events.listen(this.chatBox_, 'blur', goog.bind(this.onChatLostFocus_, this));
   goog.events.listen(window, goog.events.EventType.KEYPRESS, goog.bind(this.onKeyPress_, this), true);
   goog.events.listen(window, goog.events.EventType.KEYDOWN, goog.bind(this.keyFilter_, this), true);
   goog.events.listen(window, goog.events.EventType.KEYUP, goog.bind(this.keyFilter_, this), true);
@@ -161,17 +161,6 @@ dotprod.views.ChatView.prototype.addMessage = function(player, message) {
  * @param {!goog.events.BrowserEvent} event
  * @private
  */
-dotprod.views.ChatView.prototype.onChatLostFocus_ = function(event) {
-  var node = event.target;
-  window.setTimeout(function() {
-    node.focus();
-  }, 0);
-};
-
-/**
- * @param {!goog.events.BrowserEvent} event
- * @private
- */
 dotprod.views.ChatView.prototype.onKeyPress_ = function(event) {
   if (event.keyCode != goog.events.KeyCodes.ENTER) {
     return;
@@ -182,7 +171,6 @@ dotprod.views.ChatView.prototype.onKeyPress_ = function(event) {
 
   // The chat box was just shown -- clear any internal state and set focus on it.
   if (this.chatBox_.classList.contains(dotprod.views.ChatView.CHAT_BOX_VISIBLE_CLASS_NAME_)) {
-    this.chatBox_.value = '';
     this.chatBox_.focus();
     return;
   }
