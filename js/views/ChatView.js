@@ -164,6 +164,10 @@ dotprod.views.ChatView.prototype.addMessage = function(player, message) {
  */
 dotprod.views.ChatView.prototype.onKeyPress_ = function(event) {
   if (event.keyCode != goog.events.KeyCodes.ENTER) {
+    // Don't accumulate characters in the input buffer if the chat box isn't currently visible.
+    if (!this.chatBox_.classList.contains(dotprod.views.ChatView.CHAT_BOX_VISIBLE_CLASS_NAME_)) {
+      event.preventDefault();
+    }
     return;
   }
 
