@@ -40,7 +40,7 @@ dotprod.input.Keyboard.prototype.isKeyPressed = function(keyCode) {
 dotprod.input.Keyboard.prototype.keyPressed_ = function(e) {
   if (e.keyCode == goog.events.KeyCodes.LEFT || e.keyCode == goog.events.KeyCodes.RIGHT ||
       e.keyCode == goog.events.KeyCodes.UP   || e.keyCode == goog.events.KeyCodes.DOWN ||
-      e.keyCode == goog.events.KeyCodes.TAB) {
+      e.keyCode == goog.events.KeyCodes.TAB  || e.keyCode == goog.events.KeyCodes.BACKSPACE) {
     e.preventDefault();
   }
   this.keys_[e.keyCode] = true;
