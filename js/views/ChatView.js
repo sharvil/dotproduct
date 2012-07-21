@@ -201,6 +201,15 @@ dotprod.views.ChatView.prototype.onKeyPress_ = function(event) {
  * @private
  */
 dotprod.views.ChatView.prototype.keyFilter_ = function(event) {
+  // Chrome doesn't fire keypress events for the escape key so we have to handle it here instead.
+  if (event.keyCode == goog.events.KeyCodes.ESC) {
+    this.chatBox_.value = '';
+    this.chatBox_.classList.add(dotprod.views.ChatView.CHAT_BOX_HIDDEN_CLASS_NAME_);
+    this.chatBox_.classList.remove(dotprod.views.ChatView.CHAT_BOX_VISIBLE_CLASS_NAME_);
+    this.chatBox_.blur();
+    return;
+  }
+
   if (this.chatBox_.classList.contains(dotprod.views.ChatView.CHAT_BOX_VISIBLE_CLASS_NAME_)) {
     event.stopPropagation();
   }
@@ -214,5 +223,5 @@ dotprod.views.ChatView.prototype.onNameClicked_ = function(player) {
   this.chatBox_.classList.remove(dotprod.views.ChatView.CHAT_BOX_HIDDEN_CLASS_NAME_);
   this.chatBox_.classList.add(dotprod.views.ChatView.CHAT_BOX_VISIBLE_CLASS_NAME_);
   this.chatBox_.focus();
-  this.chatBox_.value += "@" + player.getName();
+  this.chatBox_.value += '@' + player.getName();
 };
