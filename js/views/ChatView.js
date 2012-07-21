@@ -142,6 +142,7 @@ dotprod.views.ChatView.prototype.addMessage = function(player, message) {
   var nameNode = goog.dom.createElement('span');
   nameNode.classList.add(dotprod.views.ChatView.TEXT_NAME_CLASS_NAME_);
   nameNode.innerText = player.getName() + ': ';
+  goog.events.listen(nameNode, goog.events.EventType.CLICK, goog.bind(this.onNameClicked_, this, player));
 
   var textNode = goog.dom.createElement('span');
   textNode.classList.add(dotprod.views.ChatView.TEX_MESSAGE_CLASS_NAME_);
@@ -203,4 +204,15 @@ dotprod.views.ChatView.prototype.keyFilter_ = function(event) {
   if (this.chatBox_.classList.contains(dotprod.views.ChatView.CHAT_BOX_VISIBLE_CLASS_NAME_)) {
     event.stopPropagation();
   }
+};
+
+/**
+ * @param {!dotprod.entities.Player} player
+ * @private
+ */
+dotprod.views.ChatView.prototype.onNameClicked_ = function(player) {
+  this.chatBox_.classList.remove(dotprod.views.ChatView.CHAT_BOX_HIDDEN_CLASS_NAME_);
+  this.chatBox_.classList.add(dotprod.views.ChatView.CHAT_BOX_VISIBLE_CLASS_NAME_);
+  this.chatBox_.focus();
+  this.chatBox_.value += "@" + player.getName();
 };
