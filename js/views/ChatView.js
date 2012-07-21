@@ -5,6 +5,7 @@
 
 goog.provide('dotprod.views.ChatView');
 
+goog.require('goog.dom');
 goog.require('goog.events.BrowserEvent');
 goog.require('goog.events.Event');
 goog.require('goog.events.EventType');

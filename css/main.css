@@ -64,6 +64,12 @@ body {
 /*  color: #36ade1;*/
 }
 
+.social {
+  float: right;
+  margin-left: 4px;
+  margin-right: 8px;
+}
+
 .content {
 }
 
@@ -75,6 +81,26 @@ body {
 
 .title .dot {
   color: #fff;
+}
+
+/**************************************
+              SCROLLBARS
+ **************************************/
+
+::-webkit-scrollbar {
+  width: 5px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(30, 30, 30, 0.8);
+}
+
+::-webkit-scrollbar-thumb:window-inactive {
+	background: rgba(30, 30, 30, 0.4);
+}
+
+::-webkit-scrollbar-corner {
+  background: transparent;
 }
 
 /**************************************
@@ -108,6 +134,10 @@ body {
 
 #game {
   position: relative;
+  font-family: 'SubSpace Regular';
+  font-size: 12px;
+  font-smooth: never;
+  -webkit-font-smoothing: none;
 }
 
 .gv-map-canvas {
@@ -118,10 +148,6 @@ body {
  **************************************/
 
 .cv {
-  font-family: 'SubSpace Regular';
-  font-size: 12px;
-  font-smooth: never;
-  -webkit-font-smoothing: none;
   width: 80%;
   height: 80px;
   overflow: scroll;
@@ -165,6 +191,43 @@ body {
 }
 
 /**************************************
+            SCOREBOARD VIEW
+ **************************************/
+
+.sv {
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  width: 20%;
+  height: 100%;
+  padding: 5px;
+  overflow: scroll;
+  background: rgba(30, 30, 30, 0.5);
+  -moz-transition: left 1s;
+  -webkit-transition: left 1s;
+  -ms-transition: left 1s;
+}
+
+.sv-hidden {
+  left: -100%;
+  -moz-transition: left 1s;
+  -webkit-transition: left 1s;
+  -ms-transition: left 1s;
+}
+
+.sv-row-friend {
+  color: rgba(255, 206, 99, 1);
+}
+
+.sv-row-foe {
+  color: rgba(198, 198, 247, 1);
+}
+
+.sv-score {
+  float: right;
+}
+
+/**************************************
             LOADING VIEW
  **************************************/
 
@@ -186,9 +249,6 @@ body {
   position: absolute;
   top: 0px;
   right: 0px;
-  font-family: 'SubSpace Regular';
-  font-size: 12px;
-  font-smooth: never;
   color: #FF0071;
   padding: 5px 5px 0 0;
 }

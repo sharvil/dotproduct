@@ -7,7 +7,9 @@ goog.provide('dotprod.Game');
 
 goog.require('goog.debug.ErrorHandler');
 goog.require('goog.dom');
+goog.require('goog.events');
 goog.require('goog.events.BrowserEvent');
+goog.require('goog.events.EventType');
 goog.require('dotprod.Camera');
 goog.require('dotprod.EffectIndex');
 goog.require('dotprod.entities.LocalPlayer');
@@ -18,7 +20,6 @@ goog.require('dotprod.layers.NotificationLayer');
 goog.require('dotprod.layers.MapLayer');
 goog.require('dotprod.layers.ProjectileLayer');
 goog.require('dotprod.layers.RadarLayer');
-goog.require('dotprod.layers.ScoreboardLayer');
 goog.require('dotprod.layers.ShipLayer');
 goog.require('dotprod.layers.StarLayer');
 goog.require('dotprod.Map');
@@ -31,6 +32,7 @@ goog.require('dotprod.Protocol');
 goog.require('dotprod.Timer');
 goog.require('dotprod.views.ChatView');
 goog.require('dotprod.views.DebugView');
+goog.require('dotprod.views.ScoreboardView');
 goog.require('dotprod.views.View');
 
 /**
@@ -122,6 +124,12 @@ dotprod.Game = function(protocol, resourceManager, settings, mapData) {
   this.chatView_ = new dotprod.views.ChatView(this);
 
   /**
+   * @type {!dotprod.views.ScoreboardView}
+   * @private
+   */
+  this.scoreboardView_ = new dotprod.views.ScoreboardView(this);
+
+  /**
    * @type {!dotprod.views.DebugView}
    * @private
    */
@@ -138,8 +146,7 @@ dotprod.Game = function(protocol, resourceManager, settings, mapData) {
       new dotprod.layers.ShipLayer(this.playerIndex_),
       new dotprod.layers.EffectLayer(this.effectIndex_),
       new dotprod.layers.NotificationLayer(this.notifications_),
-      new dotprod.layers.RadarLayer(this),
-      new dotprod.layers.ScoreboardLayer(this)
+      new dotprod.layers.RadarLayer(this)
     ];
 
   /**
@@ -165,6 +172,7 @@ dotprod.Game = function(protocol, resourceManager, settings, mapData) {
   this.protocol_.registerHandler(dotprod.Protocol.S2CPacketType.PRIZE_COLLECTED, goog.bind(this.onPrizeCollected_, this));
   this.protocol_.startGame(0 /* ship */);
 
+  goog.events.listen(this.canvas_, goog.events.EventType.MOUSEMOVE, goog.bind(this.onMouseMoved_, this));
   dotprod.Timer.setInterval(goog.bind(this.renderingLoop_, this), 1);
 };
 goog.inherits(dotprod.Game, dotprod.views.View);
@@ -199,6 +207,7 @@ dotprod.Game.prototype.renderDom = function(rootNode) {
   rootNode.appendChild(this.canvas_);
   this.chatView_.renderDom(rootNode);
   this.debugView_.renderDom(rootNode);
+  this.scoreboardView_.renderDom(rootNode);
 };
 
 /**
@@ -291,6 +300,7 @@ dotprod.Game.prototype.renderingLoop_ = function() {
     }
   context.restore();
 
+  this.scoreboardView_.update();
   this.debugView_.update();
 
   this.tickResidue_ += curTime - this.lastTime_;
@@ -427,4 +437,16 @@ dotprod.Game.prototype.onPrizeCollected_ = function(packet) {
 
   player.onPrizeCollected();
   this.prizeIndex_.removePrize(xTile, yTile);
+};
+
+/**
+ * @param {!goog.events.BrowserEvent} event
+ * @private
+ */
+dotprod.Game.prototype.onMouseMoved_ = function(event) {
+  if (event.offsetX < 10) {
+    this.scoreboardView_.show();
+  } else {
+    this.scoreboardView_.hide();
+  }
 };
