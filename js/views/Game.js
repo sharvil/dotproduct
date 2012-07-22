@@ -69,13 +69,6 @@ dotprod.Game = function(protocol, resourceManager, settings, mapData) {
   this.keyboard_ = new dotprod.input.Keyboard();
 
   /**
-   * @type {!HTMLElement}
-   * @private
-   */
-  this.fullscreenToggle_ = /** @type {!HTMLElement} */ (goog.dom.$('fullscreenToggle'));
-  this.fullscreenToggle_.style.display = (window == window.top) ? '' : 'none';
-
-  /**
    * @type {!HTMLCanvasElement}
    * @private
    */
@@ -180,7 +173,6 @@ dotprod.Game = function(protocol, resourceManager, settings, mapData) {
   this.protocol_.startGame(0 /* ship */);
 
   goog.events.listen(this.canvas_, goog.events.EventType.MOUSEMOVE, goog.bind(this.onMouseMoved_, this));
-  goog.events.listen(this.fullscreenToggle_, goog.events.EventType.CLICK, goog.bind(this.onFullscreenToggleClicked_, this));
 
   dotprod.Timer.setInterval(goog.bind(this.renderingLoop_, this), 1);
 };
@@ -457,25 +449,5 @@ dotprod.Game.prototype.onMouseMoved_ = function(event) {
     this.scoreboardView_.show();
   } else {
     this.scoreboardView_.hide();
-  }
-};
-
-/**
- * @param {!goog.events.BrowserEvent} event
- * @private
- */
-dotprod.Game.prototype.onFullscreenToggleClicked_ = function(event) {
-  if (!document.mozFullScreen && !document.webkitIsFullScreen) {
-    if (document.body.mozRequestFullScreen) {
-      document.body.mozRequestFullScreen();
-    } else {
-      document.body.webkitRequestFullScreen(Element.ALLOW_KEYBOARD_INPUT);
-    }
-  } else {
-    if (document.mozCancelFullScreen) {
-      document.mozCancelFullScreen();
-    } else {
-      document.webkitCancelFullScreen();
-    }
   }
 };

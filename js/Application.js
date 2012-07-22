@@ -7,6 +7,8 @@ goog.provide('dotprod.Application');
 
 goog.require('goog.debug.Console');
 goog.require('goog.dom');
+goog.require('goog.events');
+goog.require('goog.events.EventType');
 goog.require('dotprod.Game');
 goog.require('dotprod.Protocol');
 goog.require('dotprod.QueryString');
@@ -70,6 +72,14 @@ dotprod.Application = function(settings) {
 
   this.loginView_.renderDom(/** @type {!HTMLDivElement} */ (goog.dom.$('login')));
   this.loginView_.show();
+
+  /**
+   * @type {!HTMLElement}
+   * @private
+   */
+  this.fullscreenToggle_ = /** @type {!HTMLElement} */ (goog.dom.$('fullscreenToggle'));
+  this.fullscreenToggle_.style.display = (window == window.top) ? '' : 'none';
+  goog.events.listen(this.fullscreenToggle_, goog.events.EventType.CLICK, goog.bind(this.onFullscreenToggleClicked_, this));
 };
 
 /**
@@ -91,6 +101,26 @@ dotprod.Application.prototype.onLoadComplete_ = function() {
 
   this.game_ = new dotprod.Game(this.protocol_, this.resourceManager_, this.settings_, this.mapData_);
   this.game_.renderDom(/** @type {!HTMLDivElement} */ (goog.dom.$('game')));
+};
+
+/**
+ * @param {!goog.events.BrowserEvent} event
+ * @private
+ */
+dotprod.Application.prototype.onFullscreenToggleClicked_ = function(event) {
+  if (!document.mozFullScreen && !document.webkitIsFullScreen) {
+    if (document.body.mozRequestFullScreen) {
+      document.body.mozRequestFullScreen();
+    } else {
+      document.body.webkitRequestFullScreen(Element.ALLOW_KEYBOARD_INPUT);
+    }
+  } else {
+    if (document.mozCancelFullScreen) {
+      document.mozCancelFullScreen();
+    } else {
+      document.webkitCancelFullScreen();
+    }
+  }
 };
 
 var _main = function(isOffline) {
