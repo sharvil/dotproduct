@@ -75,7 +75,7 @@
 			"xTiles": 10,
 			"yTiles": 9,
 			"frames": 10,
-			"period": 10
+			"period": 15
 		},
 
 		"ship2_junk": {
@@ -83,7 +83,7 @@
 			"xTiles": 10,
 			"yTiles": 9,
 			"frames": 10,
-			"period": 10
+			"period": 15
 		},
 
 		"ship3_junk": {
@@ -91,7 +91,7 @@
 			"xTiles": 10,
 			"yTiles": 9,
 			"frames": 10,
-			"period": 10
+			"period": 15
 		},
 
 		"ship4_junk": {
@@ -99,7 +99,7 @@
 			"xTiles": 10,
 			"yTiles": 9,
 			"frames": 10,
-			"period": 10
+			"period": 15
 		},
 
 		"ship5_junk": {
@@ -107,7 +107,7 @@
 			"xTiles": 10,
 			"yTiles": 9,
 			"frames": 10,
-			"period": 10
+			"period": 15
 		},
 
 		"ship6_junk": {
@@ -115,7 +115,7 @@
 			"xTiles": 10,
 			"yTiles": 9,
 			"frames": 10,
-			"period": 10
+			"period": 15
 		},
 
 		"ship7_junk": {
@@ -123,7 +123,7 @@
 			"xTiles": 10,
 			"yTiles": 9,
 			"frames": 10,
-			"period": 10
+			"period": 15
 		},
 
 		"explode0": {
