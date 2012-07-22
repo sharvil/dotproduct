@@ -21,6 +21,7 @@ dotprod.input.Keyboard = function() {
    */
   this.keys_ = {};
 
+  goog.events.listen(document, this.getVisibilityEvent_(), goog.bind(this.documentVisibilityChanged_, this));
   goog.events.listen(window, goog.events.EventType.KEYDOWN, goog.bind(this.keyPressed_, this));
   goog.events.listen(window, goog.events.EventType.KEYUP, goog.bind(this.keyReleased_, this));
 };
@@ -52,4 +53,56 @@ dotprod.input.Keyboard.prototype.keyPressed_ = function(e) {
  */
 dotprod.input.Keyboard.prototype.keyReleased_ = function(e) {
   this.keys_[e.keyCode] = false;
+};
+
+/**
+ * @type {!goog.events.BrowserEvent} event
+ * @private
+ */
+dotprod.input.Keyboard.prototype.documentVisibilityChanged_ = function(event) {
+  if (document[this.getVisibilityProperty_()]) {
+    for (var i in this.keys_) {
+      this.keys_[i] = false;
+    }
+  }
+};
+
+/**
+ * @return {string}
+ * @private
+ */
+dotprod.input.Keyboard.prototype.getVisibilityProperty_ = function() {
+  if (typeof document.hidden !== 'undefined') {
+    return 'hidden';
+  }
+  if (typeof document.mozHidden !== 'undefined') {
+    return 'mozHidden';
+  }
+  if (typeof document.msHidden !== 'undefined') {
+    return 'msHidden';
+  }
+  if (typeof document.webkitHidden !== 'undefined') {
+    return 'webkitHidden';
+  }
+  return '';
+};
+
+/**
+ * @return {string}
+ * @private
+ */
+dotprod.input.Keyboard.prototype.getVisibilityEvent_ = function() {
+  if (typeof document.hidden !== 'undefined') {
+    return 'visibilitychange';
+  }
+  if (typeof document.mozHidden !== 'undefined') {
+    return 'mozvisibilitychange';
+  }
+  if (typeof document.msHidden !== 'undefined') {
+    return 'msvisibilitychange';
+  }
+  if (typeof document.webkitHidden !== 'undefined') {
+    return 'webkitvisibilitychange';
+  }
+  return '';
 };
