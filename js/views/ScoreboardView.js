@@ -121,11 +121,11 @@ dotprod.views.ScoreboardView.prototype.update = function() {
 
     var nameNode = goog.dom.createElement('span');
     nameNode.classList.add(dotprod.views.ScoreboardView.NAME_CLASS_NAME_);
-    nameNode.innerText = player.getName();
+    nameNode.textContent = player.getName();
 
     var scoreNode = goog.dom.createElement('span');
     scoreNode.classList.add(dotprod.views.ScoreboardView.SCORE_CLASS_NAME_);
-    scoreNode.innerText = player.points_;
+    scoreNode.textContent = player.points_;
 
     var container = goog.dom.createElement('div');
     container.classList.add(player.isFriend(localPlayer) ? dotprod.views.ScoreboardView.FRIEND_CLASS_NAME_ : dotprod.views.ScoreboardView.FOE_CLASS_NAME_);

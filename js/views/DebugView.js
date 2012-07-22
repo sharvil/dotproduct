@@ -74,10 +74,10 @@ dotprod.views.DebugView.prototype.update = function() {
     return;
   }
 
-  this.view_.innerText = this.game_.getProtocol().getRoundTripTime() + 'ms, ' +
-                         this.frames_ + 'fps, ' +
-                         this.game_.getPlayerIndex().getPlayers().length + ' // ' +
-                         this.game_.getProjectileIndex().getProjectiles().length;
+  this.view_.textContent = this.game_.getProtocol().getRoundTripTime() + 'ms, ' +
+                           this.frames_ + 'fps, ' +
+                           this.game_.getPlayerIndex().getPlayers().length + ' // ' +
+                           this.game_.getProjectileIndex().getProjectiles().length;
 
   this.frames_ = 0;
   this.lastTime_ = now;
