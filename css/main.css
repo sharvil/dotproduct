@@ -149,13 +149,23 @@ body {
 
 .cv {
   width: 80%;
-  max-height: 80px;
+  max-height: 15%;
   overflow: scroll;
   position: absolute;
   left: 0px;
   bottom: 0px;
   padding: 0 0 0 5px;
   background: -webkit-linear-gradient(transparent, rgba(0, 0, 0, 0.8));
+  -webkit-transition: max-height 1s;
+  -ms-transition: max-height 1s;
+  -moz-transition: max-height 1s;
+}
+
+.cv-expanded {
+  max-height: 80%;
+  -webkit-transition: max-height 1s;
+  -ms-transition: max-height 1s;
+  -moz-transition: max-height 1s;
 }
 
 .cv-text-name {

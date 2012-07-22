@@ -152,6 +152,10 @@ dotprod.views.ChatView.prototype.addMessage = function(player, message) {
 };
 
 dotprod.views.ChatView.prototype.onGlobalKeyPress_ = function(event) {
+  if (event.keyCode == goog.events.KeyCodes.NUM_ZERO) {
+    this.view_.classList.toggle('cv-expanded');
+  }
+
   if (event.keyCode != goog.events.KeyCodes.ENTER) {
     return;
   }
