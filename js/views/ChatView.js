@@ -70,6 +70,14 @@ dotprod.views.ChatView = function(game) {
   goog.events.listen(this.chatBox_, goog.events.EventType.KEYPRESS, goog.bind(this.onChatKeyPress_, this));
   goog.events.listen(this.chatBox_, goog.events.EventType.KEYDOWN, goog.bind(this.keyFilter_, this));
   goog.events.listen(this.chatBox_, goog.events.EventType.KEYUP, goog.bind(this.keyFilter_, this));
+
+  var self = this;
+  goog.events.listen(this.chatBox_, goog.events.EventType.BLUR, function() {
+    self.playerIndex_.getLocalPlayer().isChatting = false;
+  });
+  goog.events.listen(this.chatBox_, goog.events.EventType.FOCUS, function() {
+    self.playerIndex_.getLocalPlayer().isChatting = true;
+  });
 };
 goog.inherits(dotprod.views.ChatView, dotprod.views.View);
 
@@ -213,6 +221,10 @@ dotprod.views.ChatView.prototype.keyFilter_ = function(event) {
 dotprod.views.ChatView.prototype.onNameClicked_ = function(player) {
   this.chatBox_.classList.add(dotprod.views.ChatView.CHAT_BOX_VISIBLE_CLASS_NAME_);
   this.chatBox_.focus();
+
+  if (this.chatBox_.value.length > 0 && this.chatBox_.value[this.chatBox_.value.length - 1] != ' ') {
+    this.chatBox_.value += ' ';
+  }
   this.chatBox_.value += '@' + player.getName();
 };
 
