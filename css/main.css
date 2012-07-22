@@ -149,7 +149,7 @@ body {
 
 .cv {
   width: 80%;
-  height: 80px;
+  max-height: 80px;
   overflow: scroll;
   position: absolute;
   left: 0px;
@@ -180,9 +180,6 @@ body {
   border: none;
   width: 80%;
   outline: none;
-}
-
-.cv-hidden {
   opacity: 0;
 }
 

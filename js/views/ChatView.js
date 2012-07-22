@@ -113,13 +113,6 @@ dotprod.views.ChatView.CHAT_BOX_CLASS_NAME_ = 'cv-input';
  * @private
  * @const
  */
-dotprod.views.ChatView.CHAT_BOX_HIDDEN_CLASS_NAME_ = 'cv-hidden';
-
-/**
- * @type {string}
- * @private
- * @const
- */
 dotprod.views.ChatView.CHAT_BOX_VISIBLE_CLASS_NAME_ = 'cv-visible';
 
 dotprod.views.ChatView.prototype.renderDom = function(rootNode) {
@@ -166,17 +159,16 @@ dotprod.views.ChatView.prototype.addMessage = function(player, message) {
 dotprod.views.ChatView.prototype.onKeyPress_ = function(event) {
   if (event.keyCode != goog.events.KeyCodes.ENTER) {
     // Don't accumulate characters in the input buffer if the chat box isn't currently visible.
-    if (!this.chatBox_.classList.contains(dotprod.views.ChatView.CHAT_BOX_VISIBLE_CLASS_NAME_)) {
+    if (!this.isChatBoxVisible_()) {
       event.preventDefault();
     }
     return;
   }
 
   this.chatBox_.classList.toggle(dotprod.views.ChatView.CHAT_BOX_VISIBLE_CLASS_NAME_);
-  this.chatBox_.classList.toggle(dotprod.views.ChatView.CHAT_BOX_HIDDEN_CLASS_NAME_);
 
   // The chat box was just shown -- clear any internal state and set focus on it.
-  if (this.chatBox_.classList.contains(dotprod.views.ChatView.CHAT_BOX_VISIBLE_CLASS_NAME_)) {
+  if (this.isChatBoxVisible_()) {
     this.chatBox_.focus();
     return;
   }
@@ -204,13 +196,12 @@ dotprod.views.ChatView.prototype.keyFilter_ = function(event) {
   // Chrome doesn't fire keypress events for the escape key so we have to handle it here instead.
   if (event.keyCode == goog.events.KeyCodes.ESC) {
     this.chatBox_.value = '';
-    this.chatBox_.classList.add(dotprod.views.ChatView.CHAT_BOX_HIDDEN_CLASS_NAME_);
     this.chatBox_.classList.remove(dotprod.views.ChatView.CHAT_BOX_VISIBLE_CLASS_NAME_);
     this.chatBox_.blur();
     return;
   }
 
-  if (this.chatBox_.classList.contains(dotprod.views.ChatView.CHAT_BOX_VISIBLE_CLASS_NAME_)) {
+  if (this.isChatBoxVisible_()) {
     event.stopPropagation();
   }
 };
@@ -220,8 +211,15 @@ dotprod.views.ChatView.prototype.keyFilter_ = function(event) {
  * @private
  */
 dotprod.views.ChatView.prototype.onNameClicked_ = function(player) {
-  this.chatBox_.classList.remove(dotprod.views.ChatView.CHAT_BOX_HIDDEN_CLASS_NAME_);
   this.chatBox_.classList.add(dotprod.views.ChatView.CHAT_BOX_VISIBLE_CLASS_NAME_);
   this.chatBox_.focus();
   this.chatBox_.value += '@' + player.getName();
+};
+
+/**
+ * @return {boolean}
+ * @private
+ */
+dotprod.views.ChatView.prototype.isChatBoxVisible_ = function() {
+  return this.chatBox_.classList.contains(dotprod.views.ChatView.CHAT_BOX_VISIBLE_CLASS_NAME_);
 };
