@@ -180,11 +180,11 @@ body {
   border: none;
   width: 80%;
   outline: none;
-  opacity: 0;
+  display: none;
 }
 
 .cv-visible {
-  opacity: 1;
+  display: block;
 }
 
 /**************************************

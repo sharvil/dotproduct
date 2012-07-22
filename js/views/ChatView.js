@@ -65,11 +65,11 @@ dotprod.views.ChatView = function(game) {
   this.chatBox_ = /** @type {!HTMLInputElement} */ (goog.dom.createElement('input'));
   this.chatBox_.type = 'text';
   this.chatBox_.classList.add(dotprod.views.ChatView.CHAT_BOX_CLASS_NAME_);
-  this.chatBox_.classList.add(dotprod.views.ChatView.CHAT_BOX_HIDDEN_CLASS_NAME_);
 
-  goog.events.listen(window, goog.events.EventType.KEYPRESS, goog.bind(this.onKeyPress_, this), true);
-  goog.events.listen(window, goog.events.EventType.KEYDOWN, goog.bind(this.keyFilter_, this), true);
-  goog.events.listen(window, goog.events.EventType.KEYUP, goog.bind(this.keyFilter_, this), true);
+  goog.events.listen(window, goog.events.EventType.KEYPRESS, goog.bind(this.onGlobalKeyPress_, this));
+  goog.events.listen(this.chatBox_, goog.events.EventType.KEYPRESS, goog.bind(this.onChatKeyPress_, this));
+  goog.events.listen(this.chatBox_, goog.events.EventType.KEYDOWN, goog.bind(this.keyFilter_, this));
+  goog.events.listen(this.chatBox_, goog.events.EventType.KEYUP, goog.bind(this.keyFilter_, this));
 };
 goog.inherits(dotprod.views.ChatView, dotprod.views.View);
 
@@ -99,7 +99,7 @@ dotprod.views.ChatView.TEXT_NAME_CLASS_NAME_ = 'cv-text-name';
  * @private
  * @const
  */
-dotprod.views.ChatView.TEX_MESSAGE_CLASS_NAME_ = 'cv-text-message';
+dotprod.views.ChatView.TEXT_MESSAGE_CLASS_NAME_ = 'cv-text-message';
 
 /**
  * @type {string}
@@ -138,7 +138,7 @@ dotprod.views.ChatView.prototype.addMessage = function(player, message) {
   goog.events.listen(nameNode, goog.events.EventType.CLICK, goog.bind(this.onNameClicked_, this, player));
 
   var textNode = goog.dom.createElement('span');
-  textNode.classList.add(dotprod.views.ChatView.TEX_MESSAGE_CLASS_NAME_);
+  textNode.classList.add(dotprod.views.ChatView.TEXT_MESSAGE_CLASS_NAME_);
   textNode.textContent = message;
   textNode.innerHTML = window.linkify(textNode.innerHTML);
 
@@ -146,30 +146,22 @@ dotprod.views.ChatView.prototype.addMessage = function(player, message) {
   messageNode.appendChild(textNode);
 
   this.text_.appendChild(messageNode);
-
   if (isAtBottom) {
     this.view_.scrollTop = this.view_.scrollHeight;
   }
 };
 
-/**
- * @param {!goog.events.BrowserEvent} event
- * @private
- */
-dotprod.views.ChatView.prototype.onKeyPress_ = function(event) {
+dotprod.views.ChatView.prototype.onGlobalKeyPress_ = function(event) {
   if (event.keyCode != goog.events.KeyCodes.ENTER) {
-    // Don't accumulate characters in the input buffer if the chat box isn't currently visible.
-    if (!this.isChatBoxVisible_()) {
-      event.preventDefault();
-    }
     return;
   }
 
-  this.chatBox_.classList.toggle(dotprod.views.ChatView.CHAT_BOX_VISIBLE_CLASS_NAME_);
+  this.chatBox_.classList.add(dotprod.views.ChatView.CHAT_BOX_VISIBLE_CLASS_NAME_);
+  this.chatBox_.focus();
+};
 
-  // The chat box was just shown -- clear any internal state and set focus on it.
-  if (this.isChatBoxVisible_()) {
-    this.chatBox_.focus();
+dotprod.views.ChatView.prototype.onChatKeyPress_ = function(event) {
+  if (event.keyCode != goog.events.KeyCodes.ENTER) {
     return;
   }
 
@@ -185,7 +177,11 @@ dotprod.views.ChatView.prototype.onKeyPress_ = function(event) {
       this.addMessage(this.playerIndex_.getLocalPlayer(), message);
     }
   }
+
   this.chatBox_.value = '';
+  this.chatBox_.blur();
+  this.chatBox_.classList.remove(dotprod.views.ChatView.CHAT_BOX_VISIBLE_CLASS_NAME_);
+  event.stopPropagation();
 };
 
 /**
@@ -196,8 +192,8 @@ dotprod.views.ChatView.prototype.keyFilter_ = function(event) {
   // Chrome doesn't fire keypress events for the escape key so we have to handle it here instead.
   if (event.keyCode == goog.events.KeyCodes.ESC) {
     this.chatBox_.value = '';
-    this.chatBox_.classList.remove(dotprod.views.ChatView.CHAT_BOX_VISIBLE_CLASS_NAME_);
     this.chatBox_.blur();
+    this.chatBox_.classList.remove(dotprod.views.ChatView.CHAT_BOX_VISIBLE_CLASS_NAME_);
     return;
   }
 
