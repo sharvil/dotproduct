@@ -83,6 +83,21 @@ body {
   color: #fff;
 }
 
+.helpButton + .helpContent {
+  position: absolute;
+  right: 0px;
+  z-index: 999;
+  opacity: 0;
+  visibility: hidden;
+  -webkit-transition: visibility 0s linear 1s, opacity 1s;
+}
+
+.helpButton:hover + .helpContent {
+  visibility: visible;
+  opacity: 1;
+  -webkit-transition: opacity 1s;
+}
+
 /**************************************
               SCROLLBARS
  **************************************/
