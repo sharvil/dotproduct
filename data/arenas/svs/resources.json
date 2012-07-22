@@ -58,6 +58,12 @@
       "url": "data/shared/graphics/exhaust.png",
       "xTiles": 19,
       "yTiles": 2
+    },
+
+    "speechBubble": {
+      "url": "data/shared/graphics/speech_bubble.png",
+      "xTiles": 1,
+      "yTiles": 1
     }
   },
 

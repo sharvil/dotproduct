@@ -90,7 +90,8 @@ dotprod.Protocol.C2SPacketType_ = {
   SHIP_CHANGE: 7,
   QUERY_NAME: 8,
   REGISTER_NAME: 9,
-  PRIZE_COLLECTED: 10
+  PRIZE_COLLECTED: 10,
+  SET_PRESENCE: 11
 };
 
 /**
@@ -109,7 +110,8 @@ dotprod.Protocol.S2CPacketType = {
   QUERY_NAME_REPLY: 10,
   REGISTER_NAME_REPLY: 11,
   PRIZE_SEED_UPDATE: 12,
-  PRIZE_COLLECTED: 13
+  PRIZE_COLLECTED: 13,
+  SET_PRESENCE: 14
 };
 
 /**
@@ -249,6 +251,13 @@ dotprod.Protocol.prototype.queryName = function(name) {
  */
 dotprod.Protocol.prototype.registerName = function(name) {
   this.send_([dotprod.Protocol.C2SPacketType_.REGISTER_NAME, name]);
+};
+
+/**
+ * @param {dotprod.entities.Player.Presence}
+ */
+dotprod.Protocol.prototype.sendSetPresence = function(presence) {
+  this.send_([dotprod.Protocol.C2SPacketType_.SET_PRESENCE, presence]);
 };
 
 dotprod.Protocol.prototype.onOpen_ = function() {

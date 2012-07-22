@@ -170,6 +170,7 @@ dotprod.Game = function(protocol, resourceManager, settings, mapData) {
   this.protocol_.registerHandler(dotprod.Protocol.S2CPacketType.SCORE_UPDATE, goog.bind(this.onScoreUpdated_, this));
   this.protocol_.registerHandler(dotprod.Protocol.S2CPacketType.PRIZE_SEED_UPDATE, goog.bind(this.onPrizeSeedUpdated_, this));
   this.protocol_.registerHandler(dotprod.Protocol.S2CPacketType.PRIZE_COLLECTED, goog.bind(this.onPrizeCollected_, this));
+  this.protocol_.registerHandler(dotprod.Protocol.S2CPacketType.SET_PRESENCE, goog.bind(this.onSetPresence_, this));
   this.protocol_.startGame(0 /* ship */);
 
   goog.events.listen(this.canvas_, goog.events.EventType.MOUSEMOVE, goog.bind(this.onMouseMoved_, this));
@@ -317,8 +318,12 @@ dotprod.Game.prototype.onPlayerEntered_ = function(packet) {
   var name = packet[0];
   var ship = packet[1];
   var bounty = packet[2];
+  var presence = /** @type {!dotprod.entities.Player.Presence} */ (packet[3]);
 
-  this.playerIndex_.addPlayer(new dotprod.entities.RemotePlayer(this, name, ship, bounty));
+  var player = new dotprod.entities.RemotePlayer(this, name, ship, bounty);
+  player.setPresence(presence);
+  this.playerIndex_.addPlayer(player);
+
   this.notifications_.addMessage('Player entered: ' + name);
 };
 
@@ -438,6 +443,16 @@ dotprod.Game.prototype.onPrizeCollected_ = function(packet) {
 
   player.onPrizeCollected();
   this.prizeIndex_.removePrize(xTile, yTile);
+};
+
+/**
+ * @param {!Object} packet
+ * @private
+ */
+dotprod.Game.prototype.onSetPresence_ = function(packet) {
+  var player = this.playerIndex_.findByName(packet[0]);
+  var presence = /** @type {dotprod.entities.Player.Presence} */ (packet[1]);
+  player.setPresence(presence);
 };
 
 /**

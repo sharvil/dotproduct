@@ -142,6 +142,14 @@ dotprod.entities.LocalPlayer.prototype.setShip = function(ship) {
   this.respawn();
 };
 
+/**
+ * @override
+ */
+dotprod.entities.LocalPlayer.prototype.setPresence = function(presence) {
+  goog.base(this, 'setPresence', presence);
+  this.game_.getProtocol().sendSetPresence(presence);
+};
+
 dotprod.entities.LocalPlayer.prototype.update = function() {
   var keyboard = this.game_.getKeyboard();
   var dimensions = this.camera_.getDimensions();

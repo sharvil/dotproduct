@@ -21,10 +21,10 @@ dotprod.views.ChatView = function(game) {
   dotprod.views.View.call(this);
 
   /**
-   * @type {dotprod.PlayerIndex}
+   * @type {!dotprod.entities.LocalPlayer}
    * @private
    */
-  this.playerIndex_ = game.getPlayerIndex();
+  this.localPlayer_ = game.getPlayerIndex().getLocalPlayer();
 
   /**
    * @type {!Object}
@@ -72,12 +72,8 @@ dotprod.views.ChatView = function(game) {
   goog.events.listen(this.chatBox_, goog.events.EventType.KEYUP, goog.bind(this.keyFilter_, this));
 
   var self = this;
-  goog.events.listen(this.chatBox_, goog.events.EventType.BLUR, function() {
-    self.playerIndex_.getLocalPlayer().isChatting = false;
-  });
-  goog.events.listen(this.chatBox_, goog.events.EventType.FOCUS, function() {
-    self.playerIndex_.getLocalPlayer().isChatting = true;
-  });
+  goog.events.listen(this.chatBox_, goog.events.EventType.BLUR, function() { self.localPlayer_.setPresence(dotprod.entities.Player.Presence.DEFAULT); });
+  goog.events.listen(this.chatBox_, goog.events.EventType.FOCUS, function() { self.localPlayer_.setPresence(dotprod.entities.Player.Presence.TYPING); });
 };
 goog.inherits(dotprod.views.ChatView, dotprod.views.View);
 
@@ -186,7 +182,7 @@ dotprod.views.ChatView.prototype.onChatKeyPress_ = function(event) {
       }
     } else {
       this.protocol_.sendChat(message);
-      this.addMessage(this.playerIndex_.getLocalPlayer(), message);
+      this.addMessage(this.localPlayer_, message);
     }
   }
 

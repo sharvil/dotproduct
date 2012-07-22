@@ -32,6 +32,12 @@ dotprod.entities.Player = function(game, name, ship, bounty) {
   this.game_ = game;
 
   /**
+   * @type {!dotprod.ResourceManager}
+   * @private
+   */
+  this.resourceManager_ = game.getResourceManager();
+
+  /**
    * @type {!Object}
    * @protected
    */
@@ -116,6 +122,12 @@ dotprod.entities.Player = function(game, name, ship, bounty) {
   this.image_;
 
   /**
+   * @type {!dotprod.Image}
+   * @private
+   */
+  this.speechBubbleImage_ = this.resourceManager_.getImage('speechBubble');
+
+  /**
    * @type {!dotprod.EffectIndex}
    * @private
    */
@@ -124,6 +136,14 @@ dotprod.entities.Player = function(game, name, ship, bounty) {
   this.setShip(this.ship_);
 };
 goog.inherits(dotprod.entities.Player, dotprod.entities.Entity);
+
+/**
+ * @enum {number}
+ */
+dotprod.entities.Player.Presence = {
+  DEFAULT: 0,
+  TYPING: 1
+};
 
 /**
  * @return {string}
@@ -161,7 +181,14 @@ dotprod.entities.Player.prototype.setShip = function(ship) {
   this.bounty_ = 0;
   this.xRadius_ = this.shipSettings_['xRadius'];
   this.yRadius_ = this.shipSettings_['yRadius'];
-  this.image_ = this.game_.getResourceManager().getImage('ship' + this.ship_);
+  this.image_ = this.resourceManager_.getImage('ship' + this.ship_);
+};
+
+/**
+ * @param {dotprod.entities.Player.Presence} presence
+ */
+dotprod.entities.Player.prototype.setPresence = function(presence) {
+  this.presence_ = presence;
 };
 
 /**
@@ -175,10 +202,10 @@ dotprod.entities.Player.prototype.takeDamage = function(player, projectile, dama
  * Called when this player is killed by another one.
  */
 dotprod.entities.Player.prototype.onDeath = function() {
-  var ensemble = this.game_.getResourceManager().getVideoEnsemble('explode1');
+  var ensemble = this.resourceManager_.getVideoEnsemble('explode1');
   this.effectIndex_.addEffect(new dotprod.entities.Effect(ensemble.getAnimation(0), this.position_, this.velocity_));
 
-  ensemble = this.game_.getResourceManager().getVideoEnsemble('ship' + this.ship_ + '_junk');
+  ensemble = this.resourceManager_.getVideoEnsemble('ship' + this.ship_ + '_junk');
   for (var i = 0; i < ensemble.getNumAnimations(); ++i) {
     var animation = ensemble.getAnimation(i);
     var deltaVelocity = dotprod.Vector.fromPolar(Math.random() * 2, Math.random() * 2 * Math.PI);
@@ -223,7 +250,7 @@ dotprod.entities.Player.prototype.isFriend = function(other) {
 };
 
 dotprod.entities.Player.prototype.warpFlash = function() {
-  var animation = this.game_.getResourceManager().getVideoEnsemble('warp').getAnimation(0);
+  var animation = this.resourceManager_.getVideoEnsemble('warp').getAnimation(0);
   this.effectIndex_.addEffect(new dotprod.entities.Effect(animation, this.position_, new dotprod.Vector(0, 0)));
 };
 
@@ -244,6 +271,12 @@ dotprod.entities.Player.prototype.render = function(camera) {
   var y = Math.floor(this.position_.getY() - dimensions.top - this.image_.getTileHeight() / 2);
 
   this.image_.render(context, x, y, tileNum);
+
+  if (this.presence_ == dotprod.entities.Player.Presence.TYPING) {
+    var speechX = x + this.image_.getTileWidth() - Math.floor(this.speechBubbleImage_.getTileWidth() / 2);
+    var speechY = y - Math.floor(this.speechBubbleImage_.getTileHeight() / 2);
+    this.speechBubbleImage_.render(context, speechX, speechY);
+  }
 
   context.save();
     context.font = dotprod.FontFoundry.playerFont();
