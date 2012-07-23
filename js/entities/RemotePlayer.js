@@ -15,11 +15,12 @@ goog.require('dotprod.Vector');
  * @constructor
  * @extends {dotprod.entities.Player}
  * @param {!dotprod.Game} game
+ * @param {string} id
  * @param {string} name
  * @param {number} ship
  */
-dotprod.entities.RemotePlayer = function(game, name, ship, bounty) {
-  dotprod.entities.Player.call(this, game, name, ship, bounty);
+dotprod.entities.RemotePlayer = function(game, id, name, ship, bounty) {
+  dotprod.entities.Player.call(this, game, id, name, ship, bounty);
 
   /**
    * @type {number}

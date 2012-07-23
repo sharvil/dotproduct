@@ -31,22 +31,22 @@ dotprod.PlayerIndex = function(localPlayer) {
  * @param {!dotprod.entities.Player} player
  */
 dotprod.PlayerIndex.prototype.addPlayer = function(player) {
-  goog.object.add(this.players_, player.getName(), player);
+  goog.object.add(this.players_, player.getId(), player);
 };
 
 /**
  * @param {!dotprod.entities.Player} player
  */
 dotprod.PlayerIndex.prototype.removePlayer = function(player) {
-  goog.object.remove(this.players_, player.getName());
+  goog.object.remove(this.players_, player.getId());
 };
 
 /**
  * @param {string} name
  * @return {!dotprod.entities.Player|undefined}
  */
-dotprod.PlayerIndex.prototype.findByName = function(name) {
-  return this.players_[name];
+dotprod.PlayerIndex.prototype.findById = function(id) {
+  return this.players_[id];
 };
 
 /**

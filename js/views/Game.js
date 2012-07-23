@@ -115,7 +115,7 @@ dotprod.Game = function(protocol, resourceManager, settings, mapData) {
    * @type {!dotprod.PlayerIndex}
    * @private
    */
-  this.playerIndex_ = new dotprod.PlayerIndex(new dotprod.entities.LocalPlayer(this, this.settings_['name'], 0 /* ship */, this.camera_));
+  this.playerIndex_ = new dotprod.PlayerIndex(new dotprod.entities.LocalPlayer(this, this.settings_['id'], this.settings_['name'], 0 /* ship */, this.camera_));
 
   /**
    * @type {!dotprod.views.ChatView}
@@ -315,12 +315,13 @@ dotprod.Game.prototype.renderingLoop_ = function() {
  * @private
  */
 dotprod.Game.prototype.onPlayerEntered_ = function(packet) {
-  var name = packet[0];
-  var ship = packet[1];
-  var bounty = packet[2];
-  var presence = /** @type {!dotprod.entities.Player.Presence} */ (packet[3]);
+  var id = packet[0];
+  var name = packet[1];
+  var ship = packet[2];
+  var bounty = packet[3];
+  var presence = /** @type {!dotprod.entities.Player.Presence} */ (packet[4]);
 
-  var player = new dotprod.entities.RemotePlayer(this, name, ship, bounty);
+  var player = new dotprod.entities.RemotePlayer(this, id, name, ship, bounty);
   player.setPresence(presence);
   this.playerIndex_.addPlayer(player);
 
@@ -332,12 +333,12 @@ dotprod.Game.prototype.onPlayerEntered_ = function(packet) {
  * @private
  */
 dotprod.Game.prototype.onPlayerLeft_ = function(packet) {
-  var name = packet[0];
-  var player = this.playerIndex_.findByName(name);
+  var id = packet[0];
+  var player = this.playerIndex_.findById(id);
   if (player) {
     this.projectileIndex_.removeProjectiles(player);
     this.playerIndex_.removePlayer(player);
-    this.notifications_.addMessage('Player left: ' + name);
+    this.notifications_.addMessage('Player left: ' + player.getName());
   }
 };
 
@@ -347,14 +348,14 @@ dotprod.Game.prototype.onPlayerLeft_ = function(packet) {
  */
 dotprod.Game.prototype.onPlayerPosition_ = function(packet) {
   var timeDiff = Math.floor(dotprod.Timer.millisToTicks(this.protocol_.getMillisSinceServerTime(packet[0])));
-  var name = packet[1];
+  var id = packet[1];
   var angle = packet[2];
   var position = new dotprod.Vector(packet[3], packet[4]);
   var velocity = new dotprod.Vector(packet[5], packet[6]);
 
   timeDiff = Math.min(timeDiff, 150);
 
-  var player = this.playerIndex_.findByName(name);
+  var player = this.playerIndex_.findById(id);
   if (player) {
     player.onPositionUpdate(timeDiff, angle, position, velocity);
     if (packet.length > 7) {
@@ -376,8 +377,8 @@ dotprod.Game.prototype.onPlayerDied_ = function(packet) {
   var timestamp = packet[0];
   var x = packet[1];
   var y = packet[2];
-  var killee = this.playerIndex_.findByName(packet[3]);
-  var killer = this.playerIndex_.findByName(packet[4]);
+  var killee = this.playerIndex_.findById(packet[3]);
+  var killer = this.playerIndex_.findById(packet[4]);
   var bountyGained = packet[5];
 
   if (!killer || !killee) {
@@ -394,7 +395,7 @@ dotprod.Game.prototype.onPlayerDied_ = function(packet) {
  * @param {!Object} packet
  */
 dotprod.Game.prototype.onShipChanged_ = function(packet) {
-  var player = this.playerIndex_.findByName(packet[0]);
+  var player = this.playerIndex_.findById(packet[0]);
   var ship = packet[1];
 
   if (player) {
@@ -407,7 +408,7 @@ dotprod.Game.prototype.onShipChanged_ = function(packet) {
  * @param {!Object} packet
  */
 dotprod.Game.prototype.onChatMessage_ = function(packet) {
-  var player = this.playerIndex_.findByName(packet[0]);
+  var player = this.playerIndex_.findById(packet[0]);
   var message = packet[1];
 
   this.chatView_.addMessage(player, message);
@@ -417,7 +418,7 @@ dotprod.Game.prototype.onChatMessage_ = function(packet) {
  * @param {!Object} packet
  */
 dotprod.Game.prototype.onScoreUpdated_ = function(packet) {
-  var player = this.playerIndex_.findByName(packet[0]);
+  var player = this.playerIndex_.findById(packet[0]);
   var points = packet[1];
   var wins = packet[2];
   var losses = packet[3];
@@ -436,7 +437,7 @@ dotprod.Game.prototype.onPrizeSeedUpdated_ = function(packet) {
 };
 
 dotprod.Game.prototype.onPrizeCollected_ = function(packet) {
-  var player = this.playerIndex_.findByName(packet[0]);
+  var player = this.playerIndex_.findById(packet[0]);
   var type = packet[1];
   var xTile = packet[2];
   var yTile = packet[3];
@@ -450,7 +451,7 @@ dotprod.Game.prototype.onPrizeCollected_ = function(packet) {
  * @private
  */
 dotprod.Game.prototype.onSetPresence_ = function(packet) {
-  var player = this.playerIndex_.findByName(packet[0]);
+  var player = this.playerIndex_.findById(packet[0]);
   var presence = /** @type {dotprod.entities.Player.Presence} */ (packet[1]);
   player.setPresence(presence);
 };

@@ -18,11 +18,12 @@ goog.require('dotprod.Vector');
  * @constructor
  * @extends {dotprod.entities.Player}
  * @param {!dotprod.Game} game
+ * @param {string} id
  * @param {string} name
  * @param {number} ship
  * @param {!dotprod.Camera} camera
  */
-dotprod.entities.LocalPlayer = function(game, name, ship, camera) {
+dotprod.entities.LocalPlayer = function(game, id, name, ship, camera) {
   /**
    * @type {!dotprod.ProjectileIndex}
    * @private
@@ -59,7 +60,7 @@ dotprod.entities.LocalPlayer = function(game, name, ship, camera) {
    */
   this.ticksSincePositionUpdate_ = 999999;
 
-  dotprod.entities.Player.call(this, game, name, ship, 0 /* bounty */);
+  dotprod.entities.Player.call(this, game, id, name, ship, 0 /* bounty */);
 };
 goog.inherits(dotprod.entities.LocalPlayer, dotprod.entities.Player);
 
@@ -108,7 +109,7 @@ dotprod.entities.LocalPlayer.prototype.takeDamage = function(shooter, projectile
     this.onDeath();
     shooter.onKill(this, bountyGained);
 
-    this.game_.getProtocol().sendDeath(this.position_, shooter.getName());
+    this.game_.getProtocol().sendDeath(this.position_, shooter);
 
     // TODO(sharvil): we shouldn't reach into game's private member...
     this.game_.notifications_.addMessage('You were killed by ' + shooter.getName() + '!');

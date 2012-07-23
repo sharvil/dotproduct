@@ -18,11 +18,12 @@ goog.require('dotprod.Palette');
  * @constructor
  * @extends {dotprod.entities.Entity}
  * @param {!dotprod.Game} game
+ * @param {string} id
  * @param {string} name
  * @param {number} ship
  * @param {number} bounty
  */
-dotprod.entities.Player = function(game, name, ship, bounty) {
+dotprod.entities.Player = function(game, id, name, ship, bounty) {
   dotprod.entities.Entity.call(this);
 
   /**
@@ -60,6 +61,12 @@ dotprod.entities.Player = function(game, name, ship, bounty) {
    * @protected
    */
   this.bombBay_ = new dotprod.model.BombBay(game, this.shipSettings_['bomb'], this);
+
+  /**
+   * @type {string}
+   * @protected
+   */
+  this.id_ = id;
 
   /**
    * @type {string}
@@ -143,6 +150,13 @@ goog.inherits(dotprod.entities.Player, dotprod.entities.Entity);
 dotprod.entities.Player.Presence = {
   DEFAULT: 0,
   TYPING: 1
+};
+
+/**
+ * @return {string}
+ */
+dotprod.entities.Player.prototype.getId = function() {
+  return this.id_;
 };
 
 /**
