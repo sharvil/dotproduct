@@ -23,15 +23,6 @@ dotprod.layers.ShipLayer = function(playerIndex) {
   this.playerIndex_ = playerIndex;
 };
 
-dotprod.layers.ShipLayer.prototype.updateShip = function(name, packet) {
-  for (var i = 0; i < this.ships_.length; ++i) {
-    if (this.ships_[i].name_ == name) {
-      this.ships_[i].positionUpdate(packet);
-      return;
-    }
-  }
-};
-
 /**
  * @override
  */
@@ -51,22 +42,4 @@ dotprod.layers.ShipLayer.prototype.render = function(camera) {
   for (var i = players.length - 1; i >= 0; --i) {
     players[i].render(camera);
   }
-
-  // TODO(sharvil): this should be moved into a debug console layer.
-/*
-  var context = camera.getContext();
-  var dimensions = camera.getDimensions();
-
-  context.save();
-    context.fillStyle = 'rgba(0, 0, 0, 0.25)';
-    context.fillRect(0, 0, dimensions.width, dimensions.height);
-
-    context.font = '12px Verdana';
-    context.fillStyle = 'rgb(200, 200, 200)';
-    for (var i = 0; i < players.length; ++i) {
-      var line = players[i].name_ + ' @ ' + Math.floor(players[i].position_.getX()) + ',' + Math.floor(players[i].position_.getY());
-      context.fillText(line, 10, 12 * i);
-    }
-  context.restore();
-*/
 };
