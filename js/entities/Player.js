@@ -153,6 +153,12 @@ dotprod.entities.Player.Presence = {
 };
 
 /**
+ * @type {string}
+ * @const
+ */
+dotprod.entities.Player.SYSTEM_PLAYER_ID = '0';
+
+/**
  * @return {string}
  */
 dotprod.entities.Player.prototype.getId = function() {

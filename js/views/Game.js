@@ -408,10 +408,14 @@ dotprod.Game.prototype.onShipChanged_ = function(packet) {
  * @param {!Object} packet
  */
 dotprod.Game.prototype.onChatMessage_ = function(packet) {
-  var player = this.playerIndex_.findById(packet[0]);
+  var playerId = packet[0];
   var message = packet[1];
 
-  this.chatView_.addMessage(player, message);
+  if (playerId == dotprod.entities.Player.SYSTEM_PLAYER_ID) {
+    this.chatView_.addSystemMessage(message);
+  } else {
+    this.chatView_.addMessage(this.playerIndex_.findById(packet[0]), message);
+  }
 };
 
 /**

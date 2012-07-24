@@ -195,6 +195,14 @@ body {
   color: rgba(190, 190, 190, 1);
 }
 
+.cv-system-message {
+  color: rgba(115, 255, 99, 1);
+}
+
+.cv-system-message > a:link {
+  color: rgba(115, 255, 99, 1);
+}
+
 .cv-input {
   font-family: 'SubSpace Regular';
   font-size: 12px;

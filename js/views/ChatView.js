@@ -110,6 +110,13 @@ dotprod.views.ChatView.TEXT_MESSAGE_CLASS_NAME_ = 'cv-text-message';
  * @private
  * @const
  */
+dotprod.views.ChatView.SYSTEM_MESSAGE_CLASS_NAME_ = 'cv-system-message';
+
+/**
+ * @type {string}
+ * @private
+ * @const
+ */
 dotprod.views.ChatView.CHAT_BOX_CLASS_NAME_ = 'cv-input';
 
 /**
@@ -148,6 +155,24 @@ dotprod.views.ChatView.prototype.addMessage = function(player, message) {
 
   messageNode.appendChild(nameNode);
   messageNode.appendChild(textNode);
+
+  this.text_.appendChild(messageNode);
+  if (isAtBottom) {
+    this.view_.scrollTop = this.view_.scrollHeight;
+  }
+};
+
+/**
+ * @param {!dotprod.entities.Player} player
+ * @param {string} message
+ */
+dotprod.views.ChatView.prototype.addSystemMessage = function(message) {
+  var isAtBottom = this.view_.scrollTop + this.view_.offsetHeight >= this.view_.scrollHeight;
+
+  var messageNode = goog.dom.createElement('div');
+  messageNode.classList.add(dotprod.views.ChatView.SYSTEM_MESSAGE_CLASS_NAME_);
+  messageNode.textContent = message;
+  messageNode.innerHTML = window.linkify(messageNode.innerHTML);
 
   this.text_.appendChild(messageNode);
   if (isAtBottom) {
