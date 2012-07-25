@@ -103,6 +103,10 @@ dotprod.entities.LocalPlayer.prototype.collectPrize_ = function(prize) {
  * @override
  */
 dotprod.entities.LocalPlayer.prototype.takeDamage = function(shooter, projectile, energy) {
+  if (!this.isAlive()) {
+    return;
+  }
+
   this.energy_ = Math.max(this.energy_ - energy, (shooter == this) ? 1 : 0);
   if (this.energy_ <= 0) {
     var bountyGained = this.bounty_;
