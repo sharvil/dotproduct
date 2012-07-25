@@ -64,6 +64,7 @@ dotprod.views.ChatView = function(game) {
    */
   this.chatBox_ = /** @type {!HTMLInputElement} */ (goog.dom.createElement('input'));
   this.chatBox_.type = 'text';
+  this.chatBox_.maxLength = 140;
   this.chatBox_.classList.add(dotprod.views.ChatView.CHAT_BOX_CLASS_NAME_);
 
   goog.events.listen(window, goog.events.EventType.KEYPRESS, goog.bind(this.onGlobalKeyPress_, this));
