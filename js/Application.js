@@ -20,8 +20,9 @@ goog.require('dotprod.Prng');
 /**
  * @constructor
  * @param {!Object} settings
+ * @param {string} url The WebSocket URL to connect to.
  */
-dotprod.Application = function(settings) {
+dotprod.Application = function(settings, url) {
   // Make sure all logging output goes to console.
   new goog.debug.Console().setCapturing(true);
 
@@ -29,7 +30,7 @@ dotprod.Application = function(settings) {
    * @type {!dotprod.Protocol}
    * @private
    */
-  this.protocol_ = new dotprod.Protocol(settings['url']);
+  this.protocol_ = new dotprod.Protocol(url);
 
   /**
    * @type {!dotprod.ResourceManager}
@@ -123,8 +124,7 @@ dotprod.Application.prototype.onFullscreenToggleClicked_ = function(event) {
 };
 
 var _main = function() {
-  var settings = dotprod.QueryString.toObject(window.location.hash.substr(1));
-  settings['url'] = 'ws://' + window.location.host + '/dotproduct/v1/';
+  var settings = window.toObject(window.location.hash.substr(1));
+  new dotprod.Application(settings, 'ws://' + window.location.host + '/dotproduct/v1/');
   window.location.hash = '';
-  new dotprod.Application(settings);
 };
