@@ -6,7 +6,7 @@
 
   "network":
   {
-    "sendPositionDelay": 250,
+    "sendPositionDelay": 10,
     "fastSendPositionDelay": 3
   },
 
