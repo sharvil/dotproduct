@@ -182,12 +182,6 @@ goog.inherits(dotprod.Game, dotprod.views.View);
 /**
  * @const
  * @type {number}
- */
-dotprod.Game.TICK_PERIOD = 10;
-
-/**
- * @const
- * @type {number}
  * @private
  */
 dotprod.Game.MAX_TICKS_PER_FRAME_ = 150;
@@ -280,7 +274,7 @@ dotprod.Game.prototype.getEffectIndex = function() {
  */
 dotprod.Game.prototype.renderingLoop_ = function() {
   var curTime = goog.now();
-  var timeDiff = Math.floor(dotprod.Timer.millisToTicks(curTime - this.lastTime_ + this.tickResidue_));
+  var timeDiff = dotprod.Timer.millisToTicks(curTime - this.lastTime_ + this.tickResidue_);
 
   timeDiff = Math.min(timeDiff, dotprod.Game.MAX_TICKS_PER_FRAME_);
 
@@ -347,7 +341,7 @@ dotprod.Game.prototype.onPlayerLeft_ = function(packet) {
  * @private
  */
 dotprod.Game.prototype.onPlayerPosition_ = function(packet) {
-  var timeDiff = Math.floor(dotprod.Timer.millisToTicks(this.protocol_.getMillisSinceServerTime(packet[0])));
+  var timeDiff = dotprod.Timer.millisToTicks(this.protocol_.getMillisSinceServerTime(packet[0]));
   var id = packet[1];
   var angle = packet[2];
   var position = new dotprod.Vector(packet[3], packet[4]);
@@ -436,7 +430,7 @@ dotprod.Game.prototype.onPrizeSeedUpdated_ = function(packet) {
   var seed = packet[1];
   var timeDeltaMillis = this.protocol_.getMillisSinceServerTime(packet[2]);
 
-  var ticks = Math.floor(dotprod.Timer.millisToTicks(timeDeltaMillis));
+  var ticks = dotprod.Timer.millisToTicks(timeDeltaMillis);
   this.prizeIndex_.onSeedUpdate(seed, ticks);
 };
 

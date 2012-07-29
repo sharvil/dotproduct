@@ -32,7 +32,7 @@ dotprod.Timer.clearInterval = function(intervalTimer) {
  * @return {number}
  */
 dotprod.Timer.millisToTicks = function(millis) {
-  return millis / dotprod.Timer.TICK_PERIOD_;
+  return Math.floor(millis / dotprod.Timer.TICK_PERIOD_);
 };
 
 /**
