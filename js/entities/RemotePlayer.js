@@ -28,12 +28,6 @@ dotprod.entities.RemotePlayer = function(game, id, name, ship, bounty) {
    */
   this.velocityAdjustTimer_ = 0;
 
-  /**
-   * @type {!dotprod.Vector}
-   * @private
-   */
-  this.originalVelocity_ = new dotprod.Vector(0, 0);
-
   // The remote player isn't alive until we receive a position packet telling
   // us otherwise.
   this.energy_ = 0;
@@ -96,7 +90,7 @@ dotprod.entities.RemotePlayer.prototype.onPositionUpdate = function(timeDiff, an
 dotprod.entities.RemotePlayer.prototype.update = function() {
   var bounceFactor = this.game_.getSettings()['ships'][this.ship_]['bounceFactor'];
   --this.velocityAdjustTimer_;
-  if (this.velocityAdjustTimer_ <= 0) {
+  if (this.velocityAdjustTimer_ == 0) {
     this.velocity_ = this.originalVelocity_;
   }
   this.updatePosition_(bounceFactor);
