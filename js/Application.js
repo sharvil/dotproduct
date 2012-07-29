@@ -11,7 +11,6 @@ goog.require('goog.events');
 goog.require('goog.events.EventType');
 goog.require('dotprod.Game');
 goog.require('dotprod.Protocol');
-goog.require('dotprod.QueryString');
 goog.require('dotprod.ResourceManager');
 goog.require('dotprod.views.LoadingView');
 goog.require('dotprod.views.LoginView');
@@ -123,7 +122,7 @@ dotprod.Application.prototype.onFullscreenToggleClicked_ = function(event) {
   }
 };
 
-var _main = function(isOffline) {
+var _main = function() {
   var settings = dotprod.QueryString.toObject(window.location.hash.substr(1));
   settings['url'] = 'ws://' + window.location.host + '/dotproduct/v1/';
   window.location.hash = '';
