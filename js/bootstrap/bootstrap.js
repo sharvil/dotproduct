@@ -40,5 +40,8 @@ window.fromObject = function(obj) {
   var hashObj = window.toObject(window.location.hash.substr(1));
   if (!hashObj['accessToken']) {
     window.location.href = './login.html';
+  } else {
+    document.write('<link rel="stylesheet" href="css/main.css" type="text/css" />');
+    document.write('<script type="text/javascript" src="js/Application.js"></script>');
   }
 })();
