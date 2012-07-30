@@ -36,6 +36,8 @@ window.fromObject = function(obj) {
   return ret.join('&');
 };
 
+var CLOSURE_NO_DEPS = true;
+
 (function() {
   var hashObj = window.toObject(window.location.hash.substr(1));
   if (!hashObj['accessToken']) {
