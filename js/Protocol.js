@@ -254,7 +254,7 @@ dotprod.Protocol.prototype.registerName = function(name) {
 };
 
 /**
- * @param {dotprod.entities.Player.Presence}
+ * @param {dotprod.entities.Player.Presence} presence
  */
 dotprod.Protocol.prototype.sendSetPresence = function(presence) {
   this.send_([dotprod.Protocol.C2SPacketType_.SET_PRESENCE, presence]);
