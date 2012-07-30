@@ -67,94 +67,94 @@
     }
   },
 
-	"videoensembles": {
-		"ship0_junk": {
-			"url": "data/shared/graphics/ship0_junk.png",
-			"xTiles": 10,
-			"yTiles": 9,
-			"frames": 10,
-			"period": 10
-		},
+  "videoensembles": {
+    "ship0_junk": {
+      "url": "data/shared/graphics/ship0_junk.png",
+      "xTiles": 10,
+      "yTiles": 9,
+      "frames": 10,
+      "period": 10
+    },
 
-		"ship1_junk": {
-			"url": "data/shared/graphics/ship1_junk.png",
-			"xTiles": 10,
-			"yTiles": 9,
-			"frames": 10,
-			"period": 15
-		},
+    "ship1_junk": {
+      "url": "data/shared/graphics/ship1_junk.png",
+      "xTiles": 10,
+      "yTiles": 9,
+      "frames": 10,
+      "period": 15
+    },
 
-		"ship2_junk": {
-			"url": "data/shared/graphics/ship2_junk.png",
-			"xTiles": 10,
-			"yTiles": 9,
-			"frames": 10,
-			"period": 15
-		},
+    "ship2_junk": {
+      "url": "data/shared/graphics/ship2_junk.png",
+      "xTiles": 10,
+      "yTiles": 9,
+      "frames": 10,
+      "period": 15
+    },
 
-		"ship3_junk": {
-			"url": "data/shared/graphics/ship3_junk.png",
-			"xTiles": 10,
-			"yTiles": 9,
-			"frames": 10,
-			"period": 15
-		},
+    "ship3_junk": {
+      "url": "data/shared/graphics/ship3_junk.png",
+      "xTiles": 10,
+      "yTiles": 9,
+      "frames": 10,
+      "period": 15
+    },
 
-		"ship4_junk": {
-			"url": "data/shared/graphics/ship4_junk.png",
-			"xTiles": 10,
-			"yTiles": 9,
-			"frames": 10,
-			"period": 15
-		},
+    "ship4_junk": {
+      "url": "data/shared/graphics/ship4_junk.png",
+      "xTiles": 10,
+      "yTiles": 9,
+      "frames": 10,
+      "period": 15
+    },
 
-		"ship5_junk": {
-			"url": "data/shared/graphics/ship5_junk.png",
-			"xTiles": 10,
-			"yTiles": 9,
-			"frames": 10,
-			"period": 15
-		},
+    "ship5_junk": {
+      "url": "data/shared/graphics/ship5_junk.png",
+      "xTiles": 10,
+      "yTiles": 9,
+      "frames": 10,
+      "period": 15
+    },
 
-		"ship6_junk": {
-			"url": "data/shared/graphics/ship6_junk.png",
-			"xTiles": 10,
-			"yTiles": 9,
-			"frames": 10,
-			"period": 15
-		},
+    "ship6_junk": {
+      "url": "data/shared/graphics/ship6_junk.png",
+      "xTiles": 10,
+      "yTiles": 9,
+      "frames": 10,
+      "period": 15
+    },
 
-		"ship7_junk": {
-			"url": "data/shared/graphics/ship7_junk.png",
-			"xTiles": 10,
-			"yTiles": 9,
-			"frames": 10,
-			"period": 15
-		},
+    "ship7_junk": {
+      "url": "data/shared/graphics/ship7_junk.png",
+      "xTiles": 10,
+      "yTiles": 9,
+      "frames": 10,
+      "period": 15
+    },
 
-		"explode0": {
-		  "url": "data/shared/graphics/explode0.png",
-		  "xTiles": 7,
-		  "yTiles": 1,
-		  "frames": 7,
-		  "period": 5
-		},
+    "explode0": {
+      "url": "data/shared/graphics/explode0.png",
+      "xTiles": 7,
+      "yTiles": 1,
+      "frames": 7,
+      "period": 5
+    },
 
-		"explode1": {
-		  "url": "data/shared/graphics/explode1.png",
-		  "xTiles": 6,
-		  "yTiles": 6,
-		  "frames": 36,
-		  "period": 2
-		},
+    "explode1": {
+      "url": "data/shared/graphics/explode1.png",
+      "xTiles": 6,
+      "yTiles": 6,
+      "frames": 36,
+      "period": 2
+    },
 
-		"explode2": {
-		  "url": "data/shared/graphics/explode2.png",
-		  "xTiles": 4,
-		  "yTiles": 11,
-		  "frames": 44,
-			"period": 2
-		},
+    "explode2": {
+      "url": "data/shared/graphics/explode2.png",
+      "xTiles": 4,
+      "yTiles": 11,
+      "frames": 44,
+      "period": 2
+    },
 
     "bullets": {
       "url": "data/shared/graphics/bullets.png",
@@ -187,7 +187,7 @@
       "frames": 10,
       "period": 5
     }
-	},
+  },
 
   "sounds": {
     "bounce": {
