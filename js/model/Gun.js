@@ -115,7 +115,7 @@ dotprod.model.Gun.prototype.getFireDelay_ = function() {
  * @private
  */
 dotprod.model.Gun.prototype.getFireEnergy_ = function() {
-  return this.gunSettings_['fireEnergy'];
+  return this.gunSettings_['fireEnergy'] * (this.level_ + 1);
 };
 
 /**
