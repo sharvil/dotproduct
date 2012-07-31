@@ -36,7 +36,7 @@ dotprod.model.BombBay = function(game, bombBaySettings, owner) {
    * @type {number}
    * @private
    */
-  this.level_ = 0;
+  this.level_ = Math.min(0, bombBaySettings['maxLevel']);
 };
 
 dotprod.model.BombBay.prototype.upgrade = function() {
@@ -51,6 +51,10 @@ dotprod.model.BombBay.prototype.upgrade = function() {
  * @return {dotprod.entities.Projectile}
  */
 dotprod.model.BombBay.prototype.fire = function(angle, position, velocity, commitFireFn) {
+  if(this.level_ < 0) {
+    return null;
+  }
+
   var fireEnergy = this.getFireEnergy_();
   var fireDelay = this.getFireDelay_();
 
