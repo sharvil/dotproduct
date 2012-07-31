@@ -37,6 +37,13 @@ dotprod.entities.Bomb = function(game, owner, level, position, velocity, lifetim
   this.animation_.setRepeatCount(-1);
 
   /**
+   * @type {!dotprod.Animation}
+   * @private
+   */
+  this.bouncingAnimation_ = game.getResourceManager().getVideoEnsemble('bombs').getAnimation(level + 8);
+  this.bouncingAnimation_.setRepeatCount(-1);
+
+  /**
    * @type {number}
    * @private
    */
@@ -87,6 +94,7 @@ dotprod.entities.Bomb.prototype.update = function(map, playerIndex) {
   }
 
   this.animation_.update();
+  this.bouncingAnimation_.update();
 };
 
 /**
@@ -101,7 +109,11 @@ dotprod.entities.Bomb.prototype.render = function(camera) {
   var x = Math.floor(this.position_.getX() - dimensions.left - this.animation_.getWidth() / 2);
   var y = Math.floor(this.position_.getY() - dimensions.top - this.animation_.getHeight() / 2);
 
-  this.animation_.render(camera.getContext(), x, y);
+  if(this.bounceCount_) {
+    this.bouncingAnimation_.render(camera.getContext(), x, y);
+  } else {
+    this.animation_.render(camera.getContext(), x, y);
+  }
 };
 
 /**
