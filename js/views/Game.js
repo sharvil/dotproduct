@@ -111,11 +111,13 @@ dotprod.Game = function(protocol, resourceManager, settings, mapData) {
    */
   this.notifications_ = new dotprod.Notifications();
 
+  var startingShip = Math.floor(Math.random() * this.settings_['ships'].length);
+
   /**
    * @type {!dotprod.PlayerIndex}
    * @private
    */
-  this.playerIndex_ = new dotprod.PlayerIndex(new dotprod.entities.LocalPlayer(this, this.settings_['id'], this.settings_['name'], 0 /* ship */, this.camera_));
+  this.playerIndex_ = new dotprod.PlayerIndex(new dotprod.entities.LocalPlayer(this, this.settings_['id'], this.settings_['name'], startingShip, this.camera_));
 
   /**
    * @type {!dotprod.views.ChatView}
@@ -171,7 +173,7 @@ dotprod.Game = function(protocol, resourceManager, settings, mapData) {
   this.protocol_.registerHandler(dotprod.Protocol.S2CPacketType.PRIZE_SEED_UPDATE, goog.bind(this.onPrizeSeedUpdated_, this));
   this.protocol_.registerHandler(dotprod.Protocol.S2CPacketType.PRIZE_COLLECTED, goog.bind(this.onPrizeCollected_, this));
   this.protocol_.registerHandler(dotprod.Protocol.S2CPacketType.SET_PRESENCE, goog.bind(this.onSetPresence_, this));
-  this.protocol_.startGame(0 /* ship */);
+  this.protocol_.startGame(startingShip);
 
   goog.events.listen(this.canvas_, goog.events.EventType.MOUSEMOVE, goog.bind(this.onMouseMoved_, this));
 
