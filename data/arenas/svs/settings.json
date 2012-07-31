@@ -19,21 +19,21 @@
 
   "prize": {
     "count": 1000,
-    "weights": [0, 6, 5, 8, 3]
+    "weights": [0, 6, 5, 8, 0]
   },
 
   "ships":
   [
     {
-      "name": "Warbird",
+      "name ": "Warbird",
       "xRadius": 14,
       "yRadius": 14,
       "bounceFactor": 0.727,
-      "rotationRadiansPerTick": 0.03141592,
-      "speedPixelsPerTick": 2.01,
-      "maxEnergy": 1000,
-      "accelerationPerTick": 0.015,
-      "rechargeRate": 0.4,
+      "rotationRadiansPerTick": 0.051836,
+      "speedPixelsPerTick": 3.250,
+      "maxEnergy": 1400,
+      "accelerationPerTick": 0.019,
+      "rechargeRate": 1.15,
       "respawnDelay": 500,
       "bullet": {
         "fireEnergy": 20,
@@ -43,18 +43,19 @@
         "damage": 200,
         "damageUpgrade": 100,
         "maxLevel": 2,
-        "bounces": true
+        "bounces": false
       },
       "bomb": {
-        "fireEnergy": 300,
-        "speed": 2,
+        "fireEnergy": 200,
+        "fireEnergyUpgrade": 0,
+        "speed": 4,
         "fireDelay": 150,
         "lifetime": 6000,
         "damage": 750,
         "damageUpgrade": 50,
-        "maxLevel": 1,
-        "blastRadius": 100,
-        "blastRadiusUpgrade": 50,
+        "maxLevel": 0,
+        "blastRadius": 80,
+        "blastRadiusUpgrade": 80,
         "bounceCount": 0
       }
     },
@@ -64,11 +65,11 @@
       "xRadius": 14,
       "yRadius": 14,
       "bounceFactor": 0.727,
-      "rotationRadiansPerTick": 0.03141592,
-      "speedPixelsPerTick": 2.01,
-      "maxEnergy": 1000,
-      "accelerationPerTick": 0.015,
-      "rechargeRate": 0.4,
+      "rotationRadiansPerTick": 0.036128,
+      "speedPixelsPerTick": 6,
+      "maxEnergy": 1700,
+      "accelerationPerTick": 0.017,
+      "rechargeRate": 1.5,
       "respawnDelay": 500,
       "bullet": {
         "fireEnergy": 20,
@@ -78,54 +79,20 @@
         "damage": 200,
         "damageUpgrade": 100,
         "maxLevel": 2,
-        "bounces": true
+        "bounces": false
       },
       "bomb": {
         "fireEnergy": 300,
+        "fireEnergyUpgrade": 0,
         "speed": 2,
         "fireDelay": 150,
         "lifetime": 6000,
         "damage": 750,
         "damageUpgrade": 50,
         "maxLevel": 1,
-        "blastRadius": 100,
-        "blastRadiusUpgrade": 50,
-        "bounceCount": 0
-      }
-    },
-
-    {
-      "name": "Spider",
-      "xRadius": 14,
-      "yRadius": 14,
-      "bounceFactor": 0.727,
-      "rotationRadiansPerTick": 0.03141592,
-      "speedPixelsPerTick": 2.01,
-      "maxEnergy": 1000,
-      "accelerationPerTick": 0.015,
-      "rechargeRate": 0.4,
-      "respawnDelay": 500,
-      "bullet": {
-        "fireEnergy": 20,
-        "speed": 2,
-        "fireDelay": 25,
-        "lifetime": 550,
-        "damage": 200,
-        "damageUpgrade": 100,
-        "maxLevel": 2,
-        "bounces": true
-      },
-      "bomb": {
-        "fireEnergy": 300,
-        "speed": 2,
-        "fireDelay": 150,
-        "lifetime": 6000,
-        "damage": 750,
-        "damageUpgrade": 50,
-        "maxLevel": 1,
-        "blastRadius": 100,
-        "blastRadiusUpgrade": 50,
-        "bounceCount": 0
+        "blastRadius": 80,
+        "blastRadiusUpgrade": 80,
+        "bounceCount": 1
       }
     },
 
@@ -134,11 +101,11 @@
       "xRadius": 14,
       "yRadius": 14,
       "bounceFactor": 0.727,
-      "rotationRadiansPerTick": 0.03141592,
-      "speedPixelsPerTick": 2.01,
-      "maxEnergy": 1000,
-      "accelerationPerTick": 0.015,
-      "rechargeRate": 0.4,
+      "rotationRadiansPerTick": 0.033772,
+      "speedPixelsPerTick": 3.250,
+      "maxEnergy": 2000,
+      "accelerationPerTick": 0.017,
+      "rechargeRate": 1.15,
       "respawnDelay": 500,
       "bullet": {
         "fireEnergy": 20,
@@ -148,123 +115,19 @@
         "damage": 200,
         "damageUpgrade": 100,
         "maxLevel": 2,
-        "bounces": true
+        "bounces": false
       },
       "bomb": {
         "fireEnergy": 300,
-        "speed": 2,
-        "fireDelay": 150,
+        "fireEnergyUpgrade": 0,
+        "speed": 1.75,
+        "fireDelay": 75,
         "lifetime": 6000,
         "damage": 750,
         "damageUpgrade": 50,
         "maxLevel": 2,
-        "blastRadius": 100,
-        "blastRadiusUpgrade": 50,
-        "bounceCount": 0
-      }
-    },
-
-    {
-      "name": "Terrier",
-      "xRadius": 14,
-      "yRadius": 14,
-      "bounceFactor": 0.727,
-      "rotationRadiansPerTick": 0.03141592,
-      "speedPixelsPerTick": 2.01,
-      "maxEnergy": 1000,
-      "accelerationPerTick": 0.015,
-      "rechargeRate": 0.4,
-      "respawnDelay": 500,
-      "bullet": {
-        "fireEnergy": 20,
-        "speed": 2,
-        "fireDelay": 30,
-        "lifetime": 550,
-        "damage": 200,
-        "damageUpgrade": 100,
-        "maxLevel": 2,
-        "bounces": true
-      },
-      "bomb": {
-        "fireEnergy": 300,
-        "speed": 2,
-        "fireDelay": 150,
-        "lifetime": 6000,
-        "damage": 750,
-        "damageUpgrade": 50,
-        "maxLevel": 1,
-        "blastRadius": 100,
-        "blastRadiusUpgrade": 50,
-        "bounceCount": 0
-      }
-    },
-
-    {
-      "name": "Weasel",
-      "xRadius": 14,
-      "yRadius": 14,
-      "bounceFactor": 0.727,
-      "rotationRadiansPerTick": 0.03141592,
-      "speedPixelsPerTick": 2.01,
-      "maxEnergy": 1000,
-      "accelerationPerTick": 0.015,
-      "rechargeRate": 0.4,
-      "respawnDelay": 500,
-      "bullet": {
-        "fireEnergy": 20,
-        "speed": 2,
-        "fireDelay": 25,
-        "lifetime": 550,
-        "damage": 200,
-        "damageUpgrade": 100,
-        "maxLevel": 2,
-        "bounces": true
-      },
-      "bomb": {
-        "fireEnergy": 300,
-        "speed": 2,
-        "fireDelay": 150,
-        "lifetime": 6000,
-        "damage": 750,
-        "damageUpgrade": 50,
-        "maxLevel": 1,
-        "blastRadius": 100,
-        "blastRadiusUpgrade": 50,
-        "bounceCount": 0
-      }
-    },
-
-    {
-      "name": "Lancaster",
-      "xRadius": 14,
-      "yRadius": 14,
-      "bounceFactor": 0.727,
-      "rotationRadiansPerTick": 0.03141592,
-      "speedPixelsPerTick": 2.01,
-      "maxEnergy": 1000,
-      "accelerationPerTick": 0.015,
-      "rechargeRate": 0.4,
-      "respawnDelay": 500,
-      "bullet": {
-        "fireEnergy": 20,
-        "speed": 2,
-        "fireDelay": 25,
-        "lifetime": 550,
-        "damage": 200,
-        "damageUpgrade": 100,
-        "maxLevel": 2,
-        "bounces": true
-      },
-      "bomb": {
-        "fireEnergy": 300,
-        "speed": 2,
-        "fireDelay": 150,
-        "lifetime": 6000,
-        "damage": 750,
-        "damageUpgrade": 50,
-        "maxLevel": 1,
-        "blastRadius": 200,
-        "blastRadiusUpgrade": 10,
+        "blastRadius": 80,
+        "blastRadiusUpgrade": 80,
         "bounceCount": 0
       }
     },
@@ -274,21 +137,22 @@
       "xRadius": 14,
       "yRadius": 14,
       "bounceFactor": 0.727,
-      "rotationRadiansPerTick": 0.03141592,
-      "speedPixelsPerTick": 2.01,
-      "maxEnergy": 1000,
-      "accelerationPerTick": 0.015,
-      "rechargeRate": 0.4,
+      "rotationRadiansPerTick": 0.036128,
+      "speedPixelsPerTick": 3.250,
+      "maxEnergy": 200,
+      "accelerationPerTick": 0.017,
+      "rechargeRate": 3,
       "respawnDelay": 500,
       "bullet": {
         "fireEnergy": 20,
+        "fireEnergyUpgrade": 0,
         "speed": 2,
         "fireDelay": 25,
         "lifetime": 550,
         "damage": 200,
         "damageUpgrade": 100,
         "maxLevel": 2,
-        "bounces": true
+        "bounces": false
       },
       "bomb": {
         "fireEnergy": 300,
@@ -297,9 +161,9 @@
         "lifetime": 6000,
         "damage": 750,
         "damageUpgrade": 50,
-        "maxLevel": 1,
-        "blastRadius": 100,
-        "blastRadiusUpgrade": 50,
+        "maxLevel": -1,
+        "blastRadius": 80,
+        "blastRadiusUpgrade": 80,
         "bounceCount": 0
       }
     }

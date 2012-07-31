@@ -19,36 +19,12 @@
     },
 
     "ship2": {
-      "url": "data/shared/graphics/ship2.png",
-      "xTiles": 10,
-      "yTiles": 4
-    },
-
-    "ship3": {
       "url": "data/shared/graphics/ship3.png",
       "xTiles": 10,
       "yTiles": 4
     },
 
-    "ship4": {
-      "url": "data/shared/graphics/ship4.png",
-      "xTiles": 10,
-      "yTiles": 4
-    },
-
-    "ship5": {
-      "url": "data/shared/graphics/ship5.png",
-      "xTiles": 10,
-      "yTiles": 4
-    },
-
-    "ship6": {
-      "url": "data/shared/graphics/ship6.png",
-      "xTiles": 10,
-      "yTiles": 4
-    },
-
-    "ship7": {
+    "ship3": {
       "url": "data/shared/graphics/ship7.png",
       "xTiles": 10,
       "yTiles": 4
@@ -85,14 +61,6 @@
     },
 
     "ship2_junk": {
-      "url": "data/shared/graphics/ship2_junk.png",
-      "xTiles": 10,
-      "yTiles": 9,
-      "frames": 10,
-      "period": 15
-    },
-
-    "ship3_junk": {
       "url": "data/shared/graphics/ship3_junk.png",
       "xTiles": 10,
       "yTiles": 9,
@@ -100,31 +68,7 @@
       "period": 15
     },
 
-    "ship4_junk": {
-      "url": "data/shared/graphics/ship4_junk.png",
-      "xTiles": 10,
-      "yTiles": 9,
-      "frames": 10,
-      "period": 15
-    },
-
-    "ship5_junk": {
-      "url": "data/shared/graphics/ship5_junk.png",
-      "xTiles": 10,
-      "yTiles": 9,
-      "frames": 10,
-      "period": 15
-    },
-
-    "ship6_junk": {
-      "url": "data/shared/graphics/ship6_junk.png",
-      "xTiles": 10,
-      "yTiles": 9,
-      "frames": 10,
-      "period": 15
-    },
-
-    "ship7_junk": {
+    "ship3_junk": {
       "url": "data/shared/graphics/ship7_junk.png",
       "xTiles": 10,
       "yTiles": 9,
