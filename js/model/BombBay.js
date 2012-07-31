@@ -60,9 +60,10 @@ dotprod.model.BombBay.prototype.fire = function(angle, position, velocity, commi
 
   var lifetime = this.getLifetime_();
   var damage = this.getDamage_();
+  var bounceCount = this.getBounceCount_();
   var blastRadius = this.getBlastRadius_();
   var newVelocity = velocity.add(dotprod.Vector.fromPolar(this.getBombSpeed_(), angle));
-  var projectile = new dotprod.entities.Bomb(this.game_, this.owner_, this.level_, position, newVelocity, lifetime, damage, 0, blastRadius);
+  var projectile = new dotprod.entities.Bomb(this.game_, this.owner_, this.level_, position, newVelocity, lifetime, damage, bounceCount, blastRadius);
 
   // TODO(sharvil): this should probably happen in the projectile base class' constructor.
   this.game_.getProjectileIndex().addProjectile(this.owner_, projectile);
@@ -112,6 +113,14 @@ dotprod.model.BombBay.prototype.getFireEnergy_ = function() {
  */
 dotprod.model.BombBay.prototype.getBombSpeed_ = function() {
   return this.bombBaySettings_['speed'];
+};
+
+/**
+ * @return {number}
+ * @private
+ */
+dotprod.model.BombBay.prototype.getBounceCount_ = function() {
+  return this.bombBaySettings_['bounceCount'];
 };
 
 /**

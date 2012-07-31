@@ -54,7 +54,8 @@
         "damageUpgrade": 50,
         "maxLevel": 1,
         "blastRadius": 100,
-        "blastRadiusUpgrade": 50
+        "blastRadiusUpgrade": 50,
+        "bounceCount": 0
       }
     },
 
@@ -88,7 +89,8 @@
         "damageUpgrade": 50,
         "maxLevel": 1,
         "blastRadius": 100,
-        "blastRadiusUpgrade": 50
+        "blastRadiusUpgrade": 50,
+        "bounceCount": 0
       }
     },
 
@@ -122,7 +124,8 @@
         "damageUpgrade": 50,
         "maxLevel": 1,
         "blastRadius": 100,
-        "blastRadiusUpgrade": 50
+        "blastRadiusUpgrade": 50,
+        "bounceCount": 0
       }
     },
 
@@ -156,7 +159,8 @@
         "damageUpgrade": 50,
         "maxLevel": 2,
         "blastRadius": 100,
-        "blastRadiusUpgrade": 50
+        "blastRadiusUpgrade": 50,
+        "bounceCount": 0
       }
     },
 
@@ -190,7 +194,8 @@
         "damageUpgrade": 50,
         "maxLevel": 1,
         "blastRadius": 100,
-        "blastRadiusUpgrade": 50
+        "blastRadiusUpgrade": 50,
+        "bounceCount": 0
       }
     },
 
@@ -224,7 +229,8 @@
         "damageUpgrade": 50,
         "maxLevel": 1,
         "blastRadius": 100,
-        "blastRadiusUpgrade": 50
+        "blastRadiusUpgrade": 50,
+        "bounceCount": 0
       }
     },
 
@@ -258,7 +264,8 @@
         "damageUpgrade": 50,
         "maxLevel": 1,
         "blastRadius": 200,
-        "blastRadiusUpgrade": 10
+        "blastRadiusUpgrade": 10,
+        "bounceCount": 0
       }
     },
 
@@ -292,7 +299,8 @@
         "damageUpgrade": 50,
         "maxLevel": 1,
         "blastRadius": 100,
-        "blastRadiusUpgrade": 50
+        "blastRadiusUpgrade": 50,
+        "bounceCount": 0
       }
     }
   ]
