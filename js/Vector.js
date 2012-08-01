@@ -27,6 +27,8 @@ dotprod.Vector = function(x, y) {
 };
 
 /**
+ * @param {number} r The magnitude of the vector. Must be a nonnegative number.
+ * @param {number} theta The angle, in radians, of the vector.
  * @return {!dotprod.Vector}
  */
 dotprod.Vector.fromPolar = function(r, theta) {
@@ -69,6 +71,7 @@ dotprod.Vector.prototype.getYComponent = function() {
 };
 
 /**
+ * @param {!dotprod.Vector} vector The second operand of the add operation.
  * @return {!dotprod.Vector}
  */
 dotprod.Vector.prototype.add = function(vector) {
@@ -76,6 +79,7 @@ dotprod.Vector.prototype.add = function(vector) {
 };
 
 /**
+ * @param {!dotprod.Vector} vector The vector to subtract from this vector.
  * @return {!dotprod.Vector}
  */
 dotprod.Vector.prototype.subtract = function(vector) {
@@ -83,6 +87,7 @@ dotprod.Vector.prototype.subtract = function(vector) {
 };
 
 /**
+ * @param {number} factor The coefficient by which to scale this vector.
  * @return {!dotprod.Vector}
  */
 dotprod.Vector.prototype.scale = function(factor) {
@@ -90,6 +95,7 @@ dotprod.Vector.prototype.scale = function(factor) {
 };
 
 /**
+ * @param {number} angle The angle, in radians, by which to rotate this vector.
  * @return {!dotprod.Vector}
  */
 dotprod.Vector.prototype.rotate = function(angle) {
