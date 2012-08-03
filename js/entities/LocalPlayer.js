@@ -60,6 +60,12 @@ dotprod.entities.LocalPlayer = function(game, id, name, ship, camera) {
    */
   this.ticksSincePositionUpdate_ = 999999;
 
+  /**
+   * @type {!Array.<!dotprod.entities.Exhaust>}
+   * @private
+   */
+  this.exhaust_ = [];
+
   dotprod.entities.Player.call(this, game, id, name, ship, 0 /* bounty */);
 };
 goog.inherits(dotprod.entities.LocalPlayer, dotprod.entities.Player);
@@ -247,7 +253,7 @@ dotprod.entities.LocalPlayer.prototype.update = function() {
 
   var angle = this.getAngle_();
 
-/*
+  // Update and invalidate any existing exhaust trails.
   var newExhaust = [];
   for (var i = 0; i < this.exhaust_.length; ++i) {
     this.exhaust_[i].update();
@@ -256,12 +262,11 @@ dotprod.entities.LocalPlayer.prototype.update = function() {
     }
   }
   this.exhaust_ = newExhaust;
-*/
 
   if (keyboard.isKeyPressed(goog.events.KeyCodes.UP)) {
-    this.velocity_ = this.velocity_.add(dotprod.Vector.fromPolar(acceleration, angle));
+    this.applyThrust_(dotprod.Vector.fromPolar(acceleration, angle));
   } else if (keyboard.isKeyPressed(goog.events.KeyCodes.DOWN)) {
-    this.velocity_ = this.velocity_.subtract(dotprod.Vector.fromPolar(acceleration, angle));
+    this.applyThrust_(dotprod.Vector.fromPolar(acceleration, angle).scale(-1));
   }
 
   if (keyboard.isKeyPressed(goog.events.KeyCodes.A)) {
@@ -301,11 +306,9 @@ dotprod.entities.LocalPlayer.prototype.render = function(camera) {
     return;
   }
 
-/*
   for (var i = 0; i < this.exhaust_.length; ++i) {
     this.exhaust_[i].render(camera);
   }
-*/
 
   goog.base(this, 'render', camera);
 
@@ -316,6 +319,22 @@ dotprod.entities.LocalPlayer.prototype.render = function(camera) {
     context.fillStyle = 'rgba(255, 255, 255, 0.3)';
     context.fillRect((dimensions.width - barWidth) / 2, 10, barWidth, barHeight);
   context.restore();
+};
+
+/**
+ * @param {!dotprod.Vector} thrustVector
+ * @private
+ */
+dotprod.entities.LocalPlayer.prototype.applyThrust_ = function(thrustVector) {
+  this.velocity_ = this.velocity_.add(thrustVector);
+
+  var angle = this.getAngle_();
+  var bottomOfShip = this.position_.subtract(dotprod.Vector.fromPolar(16, angle));
+  var perpendicular = dotprod.Vector.fromPolar(1, angle + Math.PI / 2).scale(3);
+  var e1 = new dotprod.entities.Exhaust(this.game_, bottomOfShip.add(perpendicular), dotprod.Vector.fromPolar(5, angle).scale(-1));
+  var e2 = new dotprod.entities.Exhaust(this.game_, bottomOfShip.subtract(perpendicular), dotprod.Vector.fromPolar(5, angle).scale(-1));
+  this.exhaust_.push(e1);
+  this.exhaust_.push(e2);
 };
 
 /**
