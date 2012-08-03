@@ -9,6 +9,7 @@ goog.require('dotprod.Camera');
 goog.require('dotprod.EffectIndex');
 goog.require('dotprod.entities.Player');
 goog.require('dotprod.Map');
+goog.require('dotprod.Timer');
 goog.require('dotprod.Vector');
 
 /**
@@ -21,6 +22,17 @@ goog.require('dotprod.Vector');
  */
 dotprod.entities.RemotePlayer = function(game, id, name, ship, bounty) {
   dotprod.entities.Player.call(this, game, id, name, ship, bounty);
+
+  /**
+   * The timestamp, in millseconds, when we last interpolated a bounce off a wall.
+   * We use this to ignore received position packets before the last bounce. It's
+   * important to do so otherwise we would set the velocity to the pre-bounce velocity
+   * resulting in another bounce into the wall.
+   *
+   * @type {number}
+   * @private
+   */
+  this.bounceTimestamp_ = 0;
 
   /**
    * @type {number}
@@ -66,6 +78,11 @@ dotprod.entities.RemotePlayer.prototype.onPositionUpdate = function(timeDiff, an
     return;
   }
 
+  // Ignore position updates from before the last wall bounce.
+  if(goog.now() - dotprod.Timer.ticksToMillis(timeDiff) < this.bounceTimestamp_) {
+    return;
+  }
+
   var finalPosition = position.add(velocity.scale(timeDiff));
   var distance = finalPosition.subtract(this.position_);
 
@@ -93,5 +110,14 @@ dotprod.entities.RemotePlayer.prototype.update = function() {
   if (this.velocityAdjustTimer_ == 0) {
     this.velocity_ = this.originalVelocity_;
   }
+
+  var xNeg = this.velocity_.getX() < 0;
+  var yNeg = this.velocity_.getY() < 0;
+
   this.updatePosition_(bounceFactor);
+
+  // If a bounce occurred, save the bounce timestamp.
+  if((this.velocity_.getX() < 0) != xNeg || (this.velocity_.getY() < 0) != yNeg) {
+    this.bounceTimestamp_ = goog.now();
+  }
 };
