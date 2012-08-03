@@ -196,12 +196,6 @@ dotprod.entities.LocalPlayer.prototype.update = function() {
   var acceleration = this.shipSettings_['accelerationPerTick'];
   var bounceFactor = this.shipSettings_['bounceFactor'];
   var rechargeRate = this.shipSettings_['rechargeRate'];
-  var bulletFireDelay = this.shipSettings_['bullet']['fireDelay'];
-  var bulletFireEnergy = this.shipSettings_['bullet']['fireEnergy'];
-  var bulletSpeed = this.shipSettings_['bullet']['speed'];
-  var bombFireDelay = this.shipSettings_['bomb']['fireDelay'];
-  var bombFireEnergy = this.shipSettings_['bomb']['fireEnergy'];
-  var bombSpeed = this.shipSettings_['bomb']['speed'];
 
   var oldAngle = this.angleInRadians_;
   var oldVelocity = this.velocity_;
