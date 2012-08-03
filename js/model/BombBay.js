@@ -47,7 +47,7 @@ dotprod.model.BombBay.prototype.upgrade = function() {
  * @param {number} angle
  * @param {!dotprod.Vector} position
  * @param {!dotprod.Vector} velocity
- * @param {function(number, number): boolean} commitFireFn
+ * @param {function(number, number, number): boolean} commitFireFn
  * @return {dotprod.entities.Projectile}
  */
 dotprod.model.BombBay.prototype.fire = function(angle, position, velocity, commitFireFn) {
@@ -57,8 +57,9 @@ dotprod.model.BombBay.prototype.fire = function(angle, position, velocity, commi
 
   var fireEnergy = this.getFireEnergy_();
   var fireDelay = this.getFireDelay_();
+  var recoilAcceleration = this.getRecoilAcceleration_();
 
-  if (!commitFireFn(fireEnergy, fireDelay)) {
+  if (!commitFireFn(fireEnergy, fireDelay, recoilAcceleration)) {
     return null;
   }
 
@@ -149,4 +150,12 @@ dotprod.model.BombBay.prototype.getDamage_ = function() {
  */
 dotprod.model.BombBay.prototype.getBlastRadius_ = function() {
   return this.bombBaySettings_['blastRadius'] + this.level_ * this.bombBaySettings_['blastRadiusUpgrade'];
+};
+
+/**
+ * @return {number}
+ * @private
+ */
+dotprod.model.BombBay.prototype.getRecoilAcceleration_ = function() {
+  return this.bombBaySettings_['recoilAcceleration'];
 };

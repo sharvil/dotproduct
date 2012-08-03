@@ -223,10 +223,11 @@ dotprod.entities.LocalPlayer.prototype.update = function() {
       var position = new dotprod.Vector(0, -this.yRadius_).rotate(angle).add(this.position_);
       var velocity = this.velocity_;
 
-      projectile = this.bombBay_.fire(angle, position, velocity, goog.bind(function(fireEnergy, fireDelay) {
+      projectile = this.bombBay_.fire(angle, position, velocity, goog.bind(function(fireEnergy, fireDelay, recoil) {
         if (this.energy_ > fireEnergy) {
           this.energy_ -= fireEnergy;
           this.projectileFireDelay_ = fireDelay;
+          this.velocity_ = this.velocity_.subtract(dotprod.Vector.fromPolar(recoil, angle));
           return true;
         }
         return false;
