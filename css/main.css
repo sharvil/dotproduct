@@ -184,6 +184,7 @@ body {
 }
 
 .cv-text-name {
+  cursor: pointer;
   color: rgba(155, 215, 254, 1);
 }
 
