@@ -5,6 +5,8 @@
  
 goog.provide('dotprod.Notifications');
 
+goog.require('goog.array');
+
 /**
  * @constructor
  */
@@ -14,9 +16,6 @@ dotprod.Notifications = function() {
    * @private
    */
   this.messages_ = [];
-  for (var i = 0; i < dotprod.Notifications.MAX_MESSAGES_; ++i) {
-    this.messages_.push(null);
-  }
 
   /**
    * @type {number}
@@ -37,12 +36,12 @@ dotprod.Notifications.MAX_MESSAGES_ = 5;
  */
 dotprod.Notifications.prototype.addMessage = function(message) {
   this.messages_[this.insertIndex_] = {text: message, ticks: 0};
-  this.insertIndex_ = (this.insertIndex_ + 1) % this.messages_.length;
+  this.insertIndex_ = (this.insertIndex_ + 1) % dotprod.Notifications.MAX_MESSAGES_;
 };
 
 /**
- * @return {!Array.<Object>}
+ * @param {function(!Object, number)} callback
  */
-dotprod.Notifications.prototype.getMessages = function() {
-  return this.messages_;
+dotprod.Notifications.prototype.forEach = function(callback) {
+  goog.array.forEach(this.messages_, callback);
 };
