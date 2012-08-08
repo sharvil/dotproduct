@@ -204,8 +204,6 @@ dotprod.entities.LocalPlayer.prototype.update = function() {
   }
 
   var shipRotation = this.shipSettings_['rotationRadiansPerTick'];
-  var shipSpeed = this.shipSettings_['speedPixelsPerTick'];
-  var acceleration = this.shipSettings_['accelerationPerTick'];
   var bounceFactor = this.shipSettings_['bounceFactor'];
   var rechargeRate = this.shipSettings_['rechargeRate'];
 
@@ -270,10 +268,21 @@ dotprod.entities.LocalPlayer.prototype.update = function() {
   }
   this.exhaust_ = newExhaust;
 
+  var maximumSpeed = this.shipSettings_['speedPixelsPerTick'];
+  var acceleration = this.shipSettings_['accelerationPerTick'];
+  var accelerationEnergy = 0;
+  if (keyboard.isKeyPressed(goog.events.KeyCodes.SHIFT) && this.energy_ > this.shipSettings_['afterburnerEnergy']) {
+    maximumSpeed = this.shipSettings_['afterburnerMaxSpeed'];
+    acceleration = this.shipSettings_['afterburnerAcceleration'];
+    accelerationEnergy = this.shipSettings_['afterburnerEnergy'];
+  }
+
   if (keyboard.isKeyPressed(goog.events.KeyCodes.UP)) {
     this.applyThrust_(dotprod.Vector.fromPolar(acceleration, angle));
+    this.energy_ -= accelerationEnergy;
   } else if (keyboard.isKeyPressed(goog.events.KeyCodes.DOWN)) {
     this.applyThrust_(dotprod.Vector.fromPolar(acceleration, angle).scale(-1));
+    this.energy_ -= accelerationEnergy;
   }
 
   if (keyboard.isKeyPressed(goog.events.KeyCodes.A)) {
@@ -284,8 +293,8 @@ dotprod.entities.LocalPlayer.prototype.update = function() {
 
   // Magnitude of speed is greater than maximum ship speed - clamp.
   var magnitude = this.velocity_.magnitude();
-  if (magnitude >= shipSpeed) {
-    this.velocity_ = this.velocity_.scale(shipSpeed / magnitude);
+  if (magnitude >= maximumSpeed) {
+    this.velocity_ = this.velocity_.scale(maximumSpeed / magnitude);
   }
 
   this.updatePosition_(bounceFactor);

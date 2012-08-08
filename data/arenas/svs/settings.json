@@ -33,6 +33,9 @@
       "speedPixelsPerTick": 3.250,
       "maxEnergy": 1400,
       "accelerationPerTick": 0.019,
+      "afterburnerMaxSpeed": 6,
+      "afterburnerAcceleration": 0.05,
+      "afterburnerEnergy": 3,
       "rechargeRate": 1.15,
       "respawnDelay": 500,
       "bullet": {
@@ -70,6 +73,9 @@
       "speedPixelsPerTick": 6,
       "maxEnergy": 1700,
       "accelerationPerTick": 0.017,
+      "afterburnerMaxSpeed": 6,
+      "afterburnerAcceleration": 0.05,
+      "afterburnerEnergy": 3,
       "rechargeRate": 1.5,
       "respawnDelay": 500,
       "bullet": {
@@ -107,6 +113,9 @@
       "speedPixelsPerTick": 3.250,
       "maxEnergy": 2000,
       "accelerationPerTick": 0.017,
+      "afterburnerMaxSpeed": 6,
+      "afterburnerAcceleration": 0.05,
+      "afterburnerEnergy": 3,
       "rechargeRate": 1.15,
       "respawnDelay": 500,
       "bullet": {
@@ -144,6 +153,9 @@
       "speedPixelsPerTick": 3.250,
       "maxEnergy": 200,
       "accelerationPerTick": 0.017,
+      "afterburnerMaxSpeed": 6,
+      "afterburnerAcceleration": 0.05,
+      "afterburnerEnergy": 3,
       "rechargeRate": 3,
       "respawnDelay": 500,
       "bullet": {
