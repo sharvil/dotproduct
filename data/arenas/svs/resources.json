@@ -30,12 +30,6 @@
       "yTiles": 4
     },
 
-    "exhaust": {
-      "url": "data/shared/graphics/exhaust.png",
-      "xTiles": 19,
-      "yTiles": 2
-    },
-
     "speechBubble": {
       "url": "data/shared/graphics/speech_bubble.png",
       "xTiles": 1,
@@ -44,6 +38,14 @@
   },
 
   "videoensembles": {
+    "exhaust": {
+      "url": "data/shared/graphics/exhaust.png",
+      "xTiles": 19,
+      "yTiles": 2,
+      "frames": 19,
+      "period": 1
+    },
+
     "ship0_junk": {
       "url": "data/shared/graphics/ship0_junk.png",
       "xTiles": 10,

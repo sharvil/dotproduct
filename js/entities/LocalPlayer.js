@@ -66,6 +66,12 @@ dotprod.entities.LocalPlayer = function(game, id, name, ship, camera) {
    */
   this.exhaust_ = [];
 
+  /**
+   * @type {number}
+   * @private
+   */
+  this.exhaustTimer_ = 0;
+
   dotprod.entities.Player.call(this, game, id, name, ship, 0 /* bounty */);
 };
 goog.inherits(dotprod.entities.LocalPlayer, dotprod.entities.Player);
@@ -254,6 +260,7 @@ dotprod.entities.LocalPlayer.prototype.update = function() {
   var angle = this.getAngle_();
 
   // Update and invalidate any existing exhaust trails.
+  --this.exhaustTimer_;
   var newExhaust = [];
   for (var i = 0; i < this.exhaust_.length; ++i) {
     this.exhaust_[i].update();
@@ -328,13 +335,20 @@ dotprod.entities.LocalPlayer.prototype.render = function(camera) {
 dotprod.entities.LocalPlayer.prototype.applyThrust_ = function(thrustVector) {
   this.velocity_ = this.velocity_.add(thrustVector);
 
+  if (this.exhaustTimer_ > 0) {
+    return;
+  }
+
   var angle = this.getAngle_();
-  var bottomOfShip = this.position_.subtract(dotprod.Vector.fromPolar(16, angle));
-  var perpendicular = dotprod.Vector.fromPolar(1, angle + Math.PI / 2).scale(3);
-  var e1 = new dotprod.entities.Exhaust(this.game_, bottomOfShip.add(perpendicular), dotprod.Vector.fromPolar(5, angle).scale(-1));
-  var e2 = new dotprod.entities.Exhaust(this.game_, bottomOfShip.subtract(perpendicular), dotprod.Vector.fromPolar(5, angle).scale(-1));
+  var bottomOfShip = this.position_.subtract(dotprod.Vector.fromPolar(this.yRadius_, angle));
+  var exhaustVelocity = this.velocity_.subtract(thrustVector.scale(5 / thrustVector.magnitude()));
+  var perpendicular = dotprod.Vector.fromPolar(1, angle + Math.PI / 2);
+
+  var e1 = new dotprod.entities.Exhaust(this.game_, bottomOfShip.add(perpendicular.scale(3)), exhaustVelocity.add(perpendicular));
+  var e2 = new dotprod.entities.Exhaust(this.game_, bottomOfShip.subtract(perpendicular.scale(3)), exhaustVelocity.subtract(perpendicular));
   this.exhaust_.push(e1);
   this.exhaust_.push(e2);
+  this.exhaustTimer_ = 6;
 };
 
 /**
