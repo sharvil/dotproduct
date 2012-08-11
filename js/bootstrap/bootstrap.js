@@ -40,7 +40,7 @@ var CLOSURE_NO_DEPS = true;
 
 (function() {
   var hashObj = window.toObject(window.location.hash.substr(1));
-  if (!hashObj['accessToken']) {
+  if (!hashObj['accessToken'] && !hashObj['offline']) {
     window.location.href = './login.html';
   } else {
     document.write('<link rel="stylesheet" href="css/main.css" type="text/css" />');

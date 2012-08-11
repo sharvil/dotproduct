@@ -429,8 +429,8 @@ dotprod.Game.prototype.onScoreUpdated_ = function(packet) {
 };
 
 dotprod.Game.prototype.onPrizeSeedUpdated_ = function(packet) {
-  var seed = packet[1];
-  var timeDeltaMillis = this.protocol_.getMillisSinceServerTime(packet[2]);
+  var seed = packet[0];
+  var timeDeltaMillis = this.protocol_.getMillisSinceServerTime(packet[1]);
 
   var ticks = dotprod.Timer.millisToTicks(timeDeltaMillis);
   this.prizeIndex_.onSeedUpdate(seed, ticks);
