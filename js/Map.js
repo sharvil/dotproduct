@@ -224,12 +224,13 @@ dotprod.Map.prototype.getCollision_ = function(dimensions) {
   var rightTile = Math.floor(right / this.tileWidth_);
   var topTile = Math.floor(top / this.tileHeight_);
   var bottomTile = Math.floor(bottom / this.tileHeight_);
+  var ret = null;
 
   for (var yTile = topTile; yTile <= bottomTile; ++yTile) {
     for (var xTile = leftTile; xTile <= rightTile; ++xTile) {
       var tileValue = this.getTile(xTile, yTile);
       if (tileValue != 0) {
-        return {
+        ret = {
           left: xTile * this.tileWidth_ - dotprod.Map.COLLISION_EPSILON_ - xRadius,
           right: (xTile + 1) * this.tileWidth_ + xRadius,
           top: yTile * this.tileHeight_ - dotprod.Map.COLLISION_EPSILON_ - yRadius,
@@ -238,9 +239,16 @@ dotprod.Map.prototype.getCollision_ = function(dimensions) {
           yTile: yTile,
           tileValue: tileValue
         };
+
+        // If the collision was due to a prize, we keep checking for a more concrete
+        // collision. Otherwise, we know we've collided with a solid object and should
+        // cause a bounce / explosion.
+        if (tileValue != 255) {
+          break;
+        }
       }
     }
   }
 
-  return null;
+  return ret;
 };
