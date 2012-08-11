@@ -95,10 +95,11 @@ dotprod.PrizeIndex.prototype.onSeedUpdate = function(seed, fastForwardTicks) {
     }
   }
 
+  // TODO(sharvil): re-enable this when prize decay is implemented.
   // Decay all prizes by the fast forward time.
-  for (var i = 0; i < fastForwardTicks; ++i) {
-    this.update();
-  }
+  // for (var i = 0; i < fastForwardTicks; ++i) {
+  //   this.update();
+  // }
 };
 
 /**
