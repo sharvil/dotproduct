@@ -294,7 +294,7 @@ dotprod.entities.LocalPlayer.prototype.update = function() {
   // Magnitude of speed is greater than maximum ship speed - clamp.
   var magnitude = this.velocity_.magnitude();
   if (magnitude >= maximumSpeed) {
-    this.velocity_ = this.velocity_.scale(maximumSpeed / magnitude);
+    this.velocity_ = this.velocity_.resize(maximumSpeed);
   }
 
   this.updatePosition_(bounceFactor);
@@ -350,7 +350,7 @@ dotprod.entities.LocalPlayer.prototype.applyThrust_ = function(thrustVector) {
 
   var angle = this.getAngle_();
   var bottomOfShip = this.position_.subtract(dotprod.Vector.fromPolar(this.yRadius_, angle));
-  var exhaustVelocity = this.velocity_.subtract(thrustVector.scale(5 / thrustVector.magnitude()));
+  var exhaustVelocity = this.velocity_.subtract(thrustVector.resize(5));
   var perpendicular = dotprod.Vector.fromPolar(1, angle + Math.PI / 2);
 
   var e1 = new dotprod.entities.Exhaust(this.game_, bottomOfShip.add(perpendicular.scale(3)), exhaustVelocity.add(perpendicular));

@@ -5,6 +5,8 @@
 
 goog.provide('dotprod.Vector');
 
+goog.require('goog.asserts');
+
 /**
  * @constructor
  * @param {number} x
@@ -103,6 +105,17 @@ dotprod.Vector.prototype.rotate = function(angle) {
   var y = -Math.cos(angle) * (this.x_ - this.y_);
 
   return new dotprod.Vector(x, y);
+};
+
+/**
+ * @param {number} newMagnitude The desired length of the vector.
+ * @return {!dotprod.Vector}
+ */
+dotprod.Vector.prototype.resize = function(newMagnitude) {
+  var currentMagnitude = this.magnitude();
+  goog.asserts.assert(currentMagnitude != 0, 'Cannot resize a zero-vector.');
+
+  return new dotprod.Vector(this.x_ * newMagnitude / currentMagnitude, this.y_ * newMagnitude / currentMagnitude);
 };
 
 dotprod.Vector.prototype.toString = function() {
