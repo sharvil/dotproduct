@@ -326,31 +326,47 @@ dotprod.entities.Player.prototype.updatePosition_ = function(bounceFactor) {
     return;
   }
 
-  this.position_ = this.position_.add(this.velocity_.getXComponent());
-  var collision = this.game_.getMap().getCollision(this);
-  if (collision) {
-    if (collision.tileValue == 255) {
-      var prize = this.game_.getPrizeIndex().removePrize(collision.xTile, collision.yTile);
-      this.collectPrize_(prize);
-    } else {
-      var xVel = this.velocity_.getX();
-      this.position_ = new dotprod.Vector(xVel >= 0 ? collision.left : collision.right, this.position_.getY());
-      this.velocity_ = new dotprod.Vector(-xVel * bounceFactor, this.velocity_.getY());
-      this.originalVelocity_ = new dotprod.Vector(-this.originalVelocity_.getX() * bounceFactor, this.originalVelocity_.getY());
+  var map = this.game_.getMap();
+
+  var tileWidth = map.getTileWidth();
+  var xSpeed = Math.abs(this.velocity_.getX());
+  for (var i = 0; i < xSpeed; i += tileWidth) {
+    var xVel = this.velocity_.getX();
+    var dx = Math.min(xSpeed - i, tileWidth);
+    this.position_ = this.position_.add(new dotprod.Vector(xVel < 0 ? -dx : dx, 0));
+
+    var collision = map.getCollision(this);
+    if (collision) {
+      if (collision.tileValue == 255) {
+        var prize = this.game_.getPrizeIndex().removePrize(collision.xTile, collision.yTile);
+        this.collectPrize_(prize);
+      } else {
+        this.position_ = new dotprod.Vector(xVel >= 0 ? collision.left : collision.right, this.position_.getY());
+        this.velocity_ = new dotprod.Vector(-xVel * bounceFactor, this.velocity_.getY());
+        this.originalVelocity_ = new dotprod.Vector(-this.originalVelocity_.getX() * bounceFactor, this.originalVelocity_.getY());
+        xSpeed *= bounceFactor;
+      }
     }
   }
 
-  this.position_ = this.position_.add(this.velocity_.getYComponent());
-  collision = this.game_.getMap().getCollision(this);
-  if (collision) {
-    if (collision.tileValue == 255) {
-      var prize = this.game_.getPrizeIndex().removePrize(collision.xTile, collision.yTile);
-      this.collectPrize_(prize);
-    } else {
-      var yVel = this.velocity_.getY();
-      this.position_ = new dotprod.Vector(this.position_.getX(), yVel >= 0 ? collision.top : collision.bottom);
-      this.velocity_ = new dotprod.Vector(this.velocity_.getX(), -yVel * bounceFactor);
-      this.originalVelocity_ = new dotprod.Vector(this.originalVelocity_.getX(), -this.originalVelocity_.getY() * bounceFactor);
+  var tileHeight = map.getTileHeight();
+  var ySpeed = Math.abs(this.velocity_.getY());
+  for (var i = 0; i < ySpeed; i += tileHeight) {
+    var yVel = this.velocity_.getY();
+    var dy = Math.min(ySpeed - i, tileHeight);
+    this.position_ = this.position_.add(new dotprod.Vector(0, yVel < 0 ? -dy : dy));
+
+    var collision = this.game_.getMap().getCollision(this);
+    if (collision) {
+      if (collision.tileValue == 255) {
+        var prize = this.game_.getPrizeIndex().removePrize(collision.xTile, collision.yTile);
+        this.collectPrize_(prize);
+      } else {
+        this.position_ = new dotprod.Vector(this.position_.getX(), yVel >= 0 ? collision.top : collision.bottom);
+        this.velocity_ = new dotprod.Vector(this.velocity_.getX(), -yVel * bounceFactor);
+        this.originalVelocity_ = new dotprod.Vector(this.originalVelocity_.getX(), -this.originalVelocity_.getY() * bounceFactor);
+        ySpeed *= bounceFactor;
+      }
     }
   }
 };

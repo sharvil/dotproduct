@@ -93,6 +93,20 @@ dotprod.Map.prototype.getHeight = function() {
 };
 
 /**
+ * @return {number}
+ */
+dotprod.Map.prototype.getTileWidth = function() {
+  return this.tileWidth_;
+};
+
+/**
+ * @return {number}
+ */
+dotprod.Map.prototype.getTileHeight = function() {
+  return this.tileHeight_;
+};
+
+/**
  * @param {!dotprod.Vector} vector A vector in pixel coordinates.
  * @return {!dotprod.Vector} A vector in map tile coordinates.
  */
