@@ -35,6 +35,16 @@ dotprod.entities.RemotePlayer = function(game, id, name, ship, bounty) {
   this.bounceTimestamp_ = 0;
 
   /**
+   * This is only used by RemotePlayer when we're adjusting the player's velocity
+   * to interpolate to the correct location. It's defined here because we need to
+   * bounce the velocity vector during collision detection.
+   *
+   * @type {!dotprod.Vector}
+   * @protected
+   */
+  this.originalVelocity_ = new dotprod.Vector(0, 0);
+
+  /**
    * @type {number}
    * @private
    */
@@ -83,7 +93,7 @@ dotprod.entities.RemotePlayer.prototype.onPositionUpdate = function(timeDiff, an
     return;
   }
 
-  var finalPosition = position.add(velocity.scale(timeDiff));
+  var finalPosition = this.extrapolatePosition_(timeDiff, position, velocity);
   var distance = finalPosition.subtract(this.position_);
 
   this.angleInRadians_ = angle;
@@ -111,15 +121,33 @@ dotprod.entities.RemotePlayer.prototype.update = function() {
     this.velocity_ = this.originalVelocity_;
   }
 
-  var xNeg = this.velocity_.getX() < 0;
-  var yNeg = this.velocity_.getY() < 0;
-
   this.updatePosition_(bounceFactor);
+};
 
-  // If a bounce occurred, save the bounce timestamp.
-  if((this.velocity_.getX() < 0) != xNeg || (this.velocity_.getY() < 0) != yNeg) {
-    this.bounceTimestamp_ = goog.now();
+/**
+ * @param {number} timeDiff
+ * @param {!dotprod.Vector} startPosition
+ * @param {!dotprod.Vector} startVelocity
+ * @return {!dotprod.Vector}
+ * @private
+ */
+dotprod.entities.RemotePlayer.prototype.extrapolatePosition_ = function(timeDiff, startPosition, startVelocity) {
+  var bounceFactor = this.game_.getSettings()['ships'][this.ship_]['bounceFactor'];
+  var savedPosition = this.position_;
+  var savedVelocity = this.velocity_;
+
+  this.position_ = startPosition;
+  this.velocity_ = startVelocity;
+  for (var i = 0; i < timeDiff; ++i) {
+    this.updatePosition_(bounceFactor);
   }
+
+  var extrapolatedPosition = this.position_;
+
+  this.position_ = savedPosition;
+  this.velocity_ = savedVelocity;
+
+  return extrapolatedPosition;
 };
 
 /**
@@ -128,4 +156,12 @@ dotprod.entities.RemotePlayer.prototype.update = function() {
 dotprod.entities.RemotePlayer.prototype.collectPrize_ = function(prize) {
   goog.base(this, 'collectPrize_', prize);
   return true;
+};
+
+/**
+ * @override
+ */
+dotprod.entities.RemotePlayer.prototype.bounce_ = function() {
+  this.velocityAdjustTimer_ = 0;
+  this.bounceTimestamp_ = goog.now();
 };
