@@ -106,6 +106,7 @@ dotprod.entities.LocalPlayer.prototype.collectPrize_ = function(prize) {
   }
   this.game_.getProtocol().sendPrizeCollected(prize.getType(), prize.getX(), prize.getY());
   ++this.bounty_;
+  return true;
 };
 
 /**

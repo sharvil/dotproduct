@@ -107,19 +107,26 @@ dotprod.PrizeIndex.prototype.onSeedUpdate = function(seed, fastForwardTicks) {
  * @param {number} y
  * @return {dotprod.Prize}
  */
-dotprod.PrizeIndex.prototype.removePrize = function(x, y) {
-  var prizeIndex = goog.array.findIndex(this.prizes_, function(prize) {
+dotprod.PrizeIndex.prototype.getPrize = function(x, y) {
+  return goog.array.find(this.prizes_, function(prize) {
     return prize != null && prize.getX() == x && prize.getY() == y;
+  });
+};
+
+/**
+ * @param {!dotprod.Prize} prize
+ */
+dotprod.PrizeIndex.prototype.removePrize = function(prize) {
+  var prizeIndex = goog.array.findIndex(this.prizes_, function(p) {
+    return p != null && prize.getX() == p.getX() && prize.getY() == p.getY();
   });
 
   if (prizeIndex == -1) {
     return null;
   }
 
-  var prize = this.prizes_[prizeIndex];
   this.prizes_[prizeIndex] = null;
   this.map_.setTile(prize.getX(), prize.getY(), 0);
-  return prize;
 };
 
 dotprod.PrizeIndex.prototype.update = function() {

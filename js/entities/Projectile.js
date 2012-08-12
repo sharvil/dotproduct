@@ -5,9 +5,7 @@
 
 goog.provide('dotprod.entities.Projectile');
 
-goog.require('goog.asserts');
 goog.require('dotprod.entities.Entity');
-goog.require('dotprod.model.Weapon.Type');
 
 /**
  * @constructor
@@ -20,13 +18,7 @@ goog.require('dotprod.model.Weapon.Type');
  * @param {number} bounceCount
  */
 dotprod.entities.Projectile = function(game, owner, level, lifetime, damage, bounceCount) {
-  dotprod.entities.Entity.call(this);
-
-  /**
-   * @type {!dotprod.Game}
-   * @protected
-   */
-  this.game_ = game;
+  dotprod.entities.Entity.call(this, game);
 
   /**
    * @type {!dotprod.entities.Player}
@@ -61,7 +53,7 @@ dotprod.entities.Projectile = function(game, owner, level, lifetime, damage, bou
 goog.inherits(dotprod.entities.Projectile, dotprod.entities.Entity);
 
 /**
- * @return {boolean}
+ * @override
  */
 dotprod.entities.Projectile.prototype.isAlive = function() {
   return this.lifetime_ >= 0;

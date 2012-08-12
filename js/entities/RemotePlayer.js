@@ -121,3 +121,11 @@ dotprod.entities.RemotePlayer.prototype.update = function() {
     this.bounceTimestamp_ = goog.now();
   }
 };
+
+/**
+ * @override
+ */
+dotprod.entities.RemotePlayer.prototype.collectPrize_ = function(prize) {
+  goog.base(this, 'collectPrize_', prize);
+  return true;
+};

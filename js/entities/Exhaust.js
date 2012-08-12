@@ -15,7 +15,7 @@ goog.require('dotprod.entities.Entity');
  * @param {!dotprod.Vector} velocity
  */
 dotprod.entities.Exhaust = function(game, position, velocity) {
-  dotprod.entities.Entity.call(this);
+  dotprod.entities.Entity.call(this, game);
 
   this.position_ = position;
   this.velocity_ = velocity;
@@ -40,7 +40,7 @@ dotprod.entities.Exhaust = function(game, position, velocity) {
 goog.inherits(dotprod.entities.Exhaust, dotprod.entities.Entity);
 
 /**
- * @return {boolean}
+ * @override
  */
 dotprod.entities.Exhaust.prototype.isAlive = function() {
   return this.image_.isRunning();
