@@ -442,8 +442,11 @@ dotprod.Game.prototype.onPrizeCollected_ = function(packet) {
   var xTile = packet[2];
   var yTile = packet[3];
 
-  player.onPrizeCollected();
-  this.prizeIndex_.removePrize(xTile, yTile);
+  var prize = this.prizeIndex_.getPrize(xTile, yTile);
+  if (prize) {
+    player.onPrizeCollected();
+    this.prizeIndex_.removePrize(prize);
+  }
 };
 
 /**
