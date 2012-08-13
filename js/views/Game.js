@@ -321,7 +321,7 @@ dotprod.Game.prototype.onPlayerEntered_ = function(packet) {
   player.setPresence(presence);
   this.playerIndex_.addPlayer(player);
 
-  this.notifications_.addMessage('Player entered: ' + name);
+  this.notifications_.addEnterMessage('Player entered: ' + name);
 };
 
 /**
@@ -334,7 +334,7 @@ dotprod.Game.prototype.onPlayerLeft_ = function(packet) {
   if (player) {
     this.projectileIndex_.removeProjectiles(player);
     this.playerIndex_.removePlayer(player);
-    this.notifications_.addMessage('Player left: ' + player.getName());
+    this.notifications_.addEnterMessage('Player left: ' + player.getName());
   }
 };
 
@@ -384,7 +384,13 @@ dotprod.Game.prototype.onPlayerDied_ = function(packet) {
   killee.onDeath();
   killer.onKill(killee, bountyGained);
   this.prizeIndex_.addKillPrize(x, y);
-  this.notifications_.addMessage(killee.getName() + '(' + bountyGained + ') killed by: ' + killer.getName());
+
+  var message = killee.getName() + '(' + bountyGained + ') killed by: ' + killer.getName()
+  if (killer == this.playerIndex_.getLocalPlayer()) {
+    this.notifications_.addPersonalMessage(message);
+  } else {
+    this.notifications_.addMessage(message);
+  }
 };
 
 /**

@@ -129,7 +129,7 @@ dotprod.entities.LocalPlayer.prototype.takeDamage = function(shooter, projectile
     this.game_.getProtocol().sendDeath(this.position_, shooter);
 
     // TODO(sharvil): we shouldn't reach into game's private member...
-    this.game_.notifications_.addMessage('You were killed by ' + shooter.getName() + '!');
+    this.game_.notifications_.addPersonalMessage('You were killed by ' + shooter.getName() + '!');
   }
 };
 

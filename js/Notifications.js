@@ -4,6 +4,7 @@
  */
  
 goog.provide('dotprod.Notifications');
+goog.provide('dotprod.Notifications.Type');
 
 goog.require('goog.array');
 
@@ -25,6 +26,15 @@ dotprod.Notifications = function() {
 };
 
 /**
+ * @enum {number}
+ */
+dotprod.Notifications.Type = {
+  DEFAULT: 1,
+  PERSONAL: 2,
+  ENTER: 3
+};
+
+/**
  * @type {number}
  * @private
  * @const
@@ -35,7 +45,35 @@ dotprod.Notifications.MAX_MESSAGES_ = 5;
  * @param {string} message
  */
 dotprod.Notifications.prototype.addMessage = function(message) {
-  this.messages_[this.insertIndex_] = {text: message, ticks: 0};
+  this.addMessage_(dotprod.Notifications.Type.DEFAULT, message);
+};
+
+/**
+ * @param {string} message
+ */
+dotprod.Notifications.prototype.addPersonalMessage = function(message) {
+  this.addMessage_(dotprod.Notifications.Type.PERSONAL, message);
+};
+
+/**
+ * @param {string} message
+ */
+dotprod.Notifications.prototype.addEnterMessage = function(message) {
+  this.addMessage_(dotprod.Notifications.Type.ENTER, message);
+};
+
+/**
+ * @param {dotprod.Notifications.Type} type
+ * @param {string} message
+ * @private
+ */
+dotprod.Notifications.prototype.addMessage_ = function(type, message) {
+  this.messages_[this.insertIndex_] = {
+    type: type,
+    text: message,
+    ticks: 0
+  };
+
   this.insertIndex_ = (this.insertIndex_ + 1) % dotprod.Notifications.MAX_MESSAGES_;
 };
 

@@ -29,7 +29,9 @@ dotprod.layers.NotificationLayer = function(notifications) {
  * @private
  * @const
  */
-dotprod.layers.NotificationLayer.MESSAGE_PERIOD_ = 200;
+dotprod.layers.NotificationLayer.MESSAGE_PERIOD_ = 150;
+
+dotprod.layers.NotificationLayer.FADE_PERIOD_ = 50;
 
 /**
  * @override
@@ -52,14 +54,27 @@ dotprod.layers.NotificationLayer.prototype.render = function(camera) {
     context.font = font;
 
     this.notifications_.forEach(function(message, index) {
-      if (message.ticks >= dotprod.layers.NotificationLayer.MESSAGE_PERIOD_) {
+      if (message.ticks >= dotprod.layers.NotificationLayer.MESSAGE_PERIOD_ + dotprod.layers.NotificationLayer.FADE_PERIOD_) {
         return;
       }
 
-      var opacity = 1.0 - message.ticks / dotprod.layers.NotificationLayer.MESSAGE_PERIOD_;
+      var opacity = 1;
+      if (message.ticks > dotprod.layers.NotificationLayer.MESSAGE_PERIOD_) {
+        opacity -= (message.ticks - dotprod.layers.NotificationLayer.MESSAGE_PERIOD_) / dotprod.layers.NotificationLayer.FADE_PERIOD_;
+      }
 
       // TODO(sharvil): don't hard-code text position.
-      context.fillStyle = dotprod.Palette.notificationsColor(opacity);
+      switch (message.type) {
+        case dotprod.Notifications.Type.PERSONAL:
+          context.fillStyle = dotprod.Palette.personalNotificationsColor(opacity);
+          break;
+        case dotprod.Notifications.Type.ENTER:
+          context.fillStyle = dotprod.Palette.enterNotificationsColor(opacity);
+          break;
+        default:
+          context.fillStyle = dotprod.Palette.notificationsColor(opacity);
+          break;
+      }
       context.textAlign = 'center';
       context.fillText(message.text, 400, index * font.getLineHeight() + 220);
     });

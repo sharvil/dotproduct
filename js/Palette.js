@@ -27,10 +27,14 @@ dotprod.Palette.radarTileColor = function() {
 };
 
 /**
+ * @param {number=} opt_alpha
  * @return {string}
  */
-dotprod.Palette.foeColor = function() {
-  return 'rgba(198, 198, 247, 1)';
+dotprod.Palette.foeColor = function(opt_alpha) {
+  if (opt_alpha === undefined) {
+    opt_alpha = 1;
+  }
+  return 'rgba(198, 198, 247, ' + opt_alpha + ')';
 };
 
 /**
@@ -67,4 +71,20 @@ dotprod.Palette.notificationsColor = function(opt_alpha) {
     opt_alpha = 1;
   }
   return 'rgba(115, 255, 99, ' + opt_alpha + ')';
+};
+
+/**
+ * @param {number=} opt_alpha
+ * @return {string}
+ */
+dotprod.Palette.personalNotificationsColor = function(opt_alpha) {
+  return dotprod.Palette.friendColor(opt_alpha);
+};
+
+/**
+ * @param {number=} opt_alpha
+ * @return {string}
+ */
+dotprod.Palette.enterNotificationsColor = function(opt_alpha) {
+  return dotprod.Palette.foeColor(opt_alpha);
 };
