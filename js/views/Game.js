@@ -163,6 +163,12 @@ dotprod.Game = function(protocol, resourceManager, settings, mapData) {
    */
   this.tickResidue_ = 0;
 
+  /**
+   * @type {number}
+   * @private
+   */
+  this.animationId_ = 0;
+
   this.protocol_.registerHandler(dotprod.Protocol.S2CPacketType.PLAYER_ENTERED, goog.bind(this.onPlayerEntered_, this));
   this.protocol_.registerHandler(dotprod.Protocol.S2CPacketType.PLAYER_LEFT, goog.bind(this.onPlayerLeft_, this));
   this.protocol_.registerHandler(dotprod.Protocol.S2CPacketType.PLAYER_POSITION, goog.bind(this.onPlayerPosition_, this));
@@ -175,9 +181,10 @@ dotprod.Game = function(protocol, resourceManager, settings, mapData) {
   this.protocol_.registerHandler(dotprod.Protocol.S2CPacketType.SET_PRESENCE, goog.bind(this.onSetPresence_, this));
   this.protocol_.startGame(startingShip);
 
+  goog.events.listen(window, goog.events.EventType.RESIZE, goog.bind(this.onResize_, this));
   goog.events.listen(this.canvas_, goog.events.EventType.MOUSEMOVE, goog.bind(this.onMouseMoved_, this));
 
-  dotprod.Timer.setInterval(goog.bind(this.renderingLoop_, this), 1);
+  dotprod.Timer.setInterval(goog.bind(this.heartbeat_, this), 100);
 };
 goog.inherits(dotprod.Game, dotprod.views.View);
 
@@ -206,6 +213,10 @@ dotprod.Game.prototype.renderDom = function(rootNode) {
   this.chatView_.renderDom(rootNode);
   this.debugView_.renderDom(rootNode);
   this.scoreboardView_.renderDom(rootNode);
+
+  // This starts the rendering loop once the canvas has been added to the DOM.
+  this.onResize_();
+  this.renderingLoop_();
 };
 
 /**
@@ -274,7 +285,21 @@ dotprod.Game.prototype.getEffectIndex = function() {
 /**
  * @private
  */
+dotprod.Game.prototype.heartbeat_ = function() {
+  // Keep the game running even if we're in the background.
+  var curTime = goog.now();
+  while (curTime - this.lastTime_ > 500) {
+    window.cancelAnimFrame(this.animationId_);
+    this.renderingLoop_();
+  }
+};
+
+/**
+ * @private
+ */
 dotprod.Game.prototype.renderingLoop_ = function() {
+  this.animationId_ = window.requestAnimFrame(goog.bind(this.renderingLoop_, this));
+
   var curTime = goog.now();
   var timeDiff = dotprod.Timer.millisToTicks(curTime - this.lastTime_ + this.tickResidue_);
 
@@ -285,9 +310,6 @@ dotprod.Game.prototype.renderingLoop_ = function() {
       this.layers_[j].update();
     }
   }
-
-  this.canvas_.width = window.innerWidth - this.canvas_.parentNode.offsetLeft;
-  this.canvas_.height = window.innerHeight - this.canvas_.parentNode.offsetTop;
 
   var context = this.camera_.getContext();
   context.save();
@@ -475,4 +497,13 @@ dotprod.Game.prototype.onMouseMoved_ = function(event) {
   } else {
     this.scoreboardView_.hide();
   }
+};
+
+/**
+ * @param {!goog.events.BrowserEvent} event
+ * @private
+ */
+dotprod.Game.prototype.onResize_ = function(event) {
+  this.canvas_.width = window.innerWidth - this.canvas_.parentNode.offsetLeft;
+  this.canvas_.height = window.innerHeight - this.canvas_.parentNode.offsetTop;
 };
