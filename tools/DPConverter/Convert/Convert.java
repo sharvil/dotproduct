@@ -19,19 +19,18 @@ public class Convert {
     static Map<String, Map<String, String>> sections = new LinkedHashMap<String, Map<String, String>>();
 
     /**
-    * DotProduct Settings Converter
+    * dotproduct Settings Converter
     * @author Derek Marr
     * @email dezmond.marr@Gmail.com
     */
     public static void main(String[] args) {
-        System.out.println("#### DotProduct Settings Converter");
-        System.out.println("#### Convert Subspace Map Configs to DotProduct Configs");
-        System.out.println("#### Only execute this program in the same directory that server.cfg is present!");
-        System.out.println("#### Author: Derek Marr (Dezmond) with guadiance from Sharvil!");
+        System.out.println("#### dotproduct settings converter");
+        System.out.println("#### Convert Subspace map configs to dotproduct configs");
+        System.out.println("#### Only execute this program in the same directory as server.cfg!");
+        System.out.println("#### Author: Derek Marr (Dezmond) with guidance from Sharvil!");
         System.out.println(" ");
 
         initiateConvert();
-
     }
 
     private static void initiateConvert() {
@@ -76,11 +75,9 @@ public class Convert {
             } else {
                 System.out.println("Error: Settings.cfg cannot be found in the same directory that this program is being run.");
             }
-
         } catch (IOException e) {
             e.printStackTrace();
         }
-
     }
 
     private static void printSettings() {
@@ -109,7 +106,7 @@ public class Convert {
 
                 System.out.println("Attempting to write settings to the new file...");
 
-                out.write("# These settings were created by the DotProduct Converter.");
+                out.write("# These settings were created by the dotproduct Converter.");
                 out.newLine();
                 out.write("# Map Name: " + mapname);
                 out.newLine();
@@ -165,7 +162,6 @@ public class Convert {
         } else {
             System.out.println("Error: The file already exists...");
         }
-
     }
 
     private static void getShipSettings(String shipName, BufferedWriter out) {
@@ -197,7 +193,6 @@ public class Convert {
         String recoilAcceleration = sections.get(name).get("Radius");
 
         try {
-
             out.newLine();
             out.write("[");
             out.newLine();
@@ -242,10 +237,8 @@ public class Convert {
             out.write("}");
             out.newLine();
             out.write("},");
-
         } catch (IOException e) {
             e.printStackTrace();
         }
-
     }
 }
