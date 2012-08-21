@@ -31,12 +31,11 @@ public class Convert {
         System.out.println(" ");
 
         initiateConvert();
+        printSettings();
     }
 
     private static void initiateConvert() {
         try {
-            settings.clear();
-            sections.clear();
             //Reads in the all the contents of the file
             String dir = System.getProperty("user.dir");
 
@@ -70,8 +69,6 @@ public class Convert {
                 }
 
                 input.close();
-                printSettings();
-
             } else {
                 System.out.println("Error: Settings.cfg cannot be found in the same directory that this program is being run.");
             }
@@ -90,28 +87,20 @@ public class Convert {
                 FileWriter fstream = new FileWriter("settings.json");
                 BufferedWriter out = new BufferedWriter(fstream);
 
-                String mapname = sections.get("Notes").get("MapName");
-                String owner = sections.get("Maker").get("Maker");
-                String kp = sections.get("Kill").get("KillPointsPerFlag");
+                String kp = "20";
                 String spd = sections.get("Misc").get("SendPositionDelay");
-                String fspd = sections.get("Misc").get("ExtraPositionData");
+                int fspd = Math.max(1, Integer.parseInt(spd) / 4);
                 String width = "1024";
                 String height = "1024";
                 String sradius = "500";
                 String pcount = sections.get("Prize").get("MultiPrizeCount");
                 String prize = "0";
                 String gupgrade = sections.get("PrizeWeight").get("Gun");
+                String bupgrade = sections.get("PrizeWeight").get("Bomb");
                 String fullcharge = sections.get("PrizeWeight").get("Recharge");
                 String bounceb = sections.get("PrizeWeight").get("BouncingBullets");
 
                 System.out.println("Attempting to write settings to the new file...");
-
-                out.write("# These settings were created by the dotproduct Converter.");
-                out.newLine();
-                out.write("# Map Name: " + mapname);
-                out.newLine();
-                out.write("# Creator: " + owner);
-                out.newLine();
 
                 out.write("{");
                 out.newLine();
@@ -135,24 +124,24 @@ public class Convert {
                 out.write("\"prize\":{");
                 out.newLine();
                 out.write("\"count\": " + pcount + "\n");
-                out.write("\"weights\": [" + prize + "," + gupgrade + "," + fullcharge + "," + bounceb + "]" + "\n}");
+                out.write("\"weights\": [" + prize + ", " + gupgrade + ", " + bupgrade + ", " + fullcharge + ", " + bounceb + "]" + "\n}");
                 out.newLine();
                 out.newLine();
 
+                out.write("\"ships\":\n");
+                out.write("[\n");
                 for (Entry<String, Map<String, String>> entry : sections.entrySet()) {
                     String keys = entry.getKey();
                     Map<String, String> values = entry.getValue();
                     String e = keys;
 
                     if (e.equals("Warbird") || e.equals("Javelin") || e.equals("Spider") || e.equals("Leviathan") || e.equals("Terrier")
-                            || e.equals("Weasal") || e.equals("Lancaster") || e.equals("Shark")) {
+                            || e.equals("Weasel") || e.equals("Lancaster") || e.equals("Shark")) {
                         String shipName = e;
-                        out.write("\"ships\":");
-                        getShipSettings(shipName, out);
-
+                        printShipSettings(shipName, out);
                     }
-
                 }
+                out.write("]\n");
                 System.out.println("The file has been successfully created with the settings in it.");
                 out.close();
 
@@ -164,11 +153,11 @@ public class Convert {
         }
     }
 
-    private static void getShipSettings(String shipName, BufferedWriter out) {
+    private static void printShipSettings(String shipName, BufferedWriter out) {
         String name = shipName;
-        String xrad = sections.get(name).get("Radius");
-        String yrad = sections.get(name).get("Radius");
-        String bouncef = sections.get(name).get("BounceFactor");
+        String xrad = "14";
+        String yrad = "14";
+        double bouncef = 16.0 / Integer.parseInt(sections.get("Misc").get("BounceFactor"));
         String rotrad = sections.get(name).get("InitialRotation");
         String speedPix = sections.get(name).get("InitialSpeed");
         String maxEn = sections.get(name).get("MaximumEnergy");
@@ -178,26 +167,26 @@ public class Convert {
         String afterEn = sections.get(name).get("AfterburnerEnergy");
         String rechargeRate = sections.get(name).get("InitialRecharge");
         String respawnDelay = "500";
-        String fireEnergy = sections.get(name).get("BulletFireEnergy");
-        String fireEnergyUp = sections.get(name).get("BombFireUpgrade");
+        String bulletFireEnergy = sections.get(name).get("BulletFireEnergy");
+        String bombFireEnergy = sections.get(name).get("BombFireEnergy");
+        String bombFireEnergyUpgrade = sections.get(name).get("BombFireEnergyUpgrade");
         String speed = sections.get(name).get("BulletSpeed");
-        String fireDelay = sections.get(name).get("BulletFireDelay");
-        String lifetime = sections.get(name).get("BulletAliveTime");
+        String bulletFireDelay = sections.get(name).get("BulletFireDelay");
+        String bombFireDelay = sections.get(name).get("BombFireDelay");
+        String bulletAliveTime = sections.get("Bullet").get("BulletAliveTime");
+        String bombAliveTime = sections.get("Bomb").get("BombAliveTime");
         String damage = sections.get("Bullet").get("ExactDamage");
         String damageUpgrade = sections.get("Bullet").get("BulletDamageUpgrade");
-        String maxLevel = sections.get(name).get("BulletDamageLevel");
+        int maxGuns = Integer.parseInt(sections.get(name).get("MaxGuns")) - 1;
+        int maxBombs = Integer.parseInt(sections.get(name).get("MaxBombs")) - 1;
         String bounce = "false";
-        String blastRadius = sections.get("Bomb").get("ProximityDistance");
-        String blastRadiusUp = sections.get(name).get("ProximityDistance");
+        String blastRadius = sections.get("Bomb").get("BombExplodePixels");
+        String blastRadiusUp = blastRadius;
         String bounceCount = sections.get(name).get("BombBounceCount");
-        String recoilAcceleration = sections.get(name).get("Radius");
+        String bombThrust = sections.get(name).get("BombThrust");
 
         try {
-            out.newLine();
-            out.write("[");
-            out.newLine();
-            out.write("{");
-            out.newLine();
+            out.write("{\n");
             out.write("\"name\": " + name + "\n");
             out.write("\"xRadius\": " + xrad + "\n");
             out.write("\"yRadius\": " + yrad + "\n");
@@ -211,29 +200,30 @@ public class Convert {
             out.write("\"afterburnerEnergy\": " + afterEn + "\n");
             out.write("\"rechargeRate\": " + rechargeRate + "\n");
             out.write("\"respawnDelay\": " + respawnDelay + "\n");
-            out.write("\"bullet\":{");
-            out.write("\"fireEnergy\": " + fireEnergy + "\n");
+            out.write("\"bullet\":{\n");
+            out.write("\"fireEnergy\": " + bulletFireEnergy + "\n");
             out.write("\"speed\": " + speed + "\n");
-            out.write("\"fireDelay\": " + fireDelay + "\n");
-            out.write("\"lifetime\": " + lifetime + "\n");
+            out.write("\"fireDelay\": " + bulletFireDelay + "\n");
+            out.write("\"lifetime\": " + bulletAliveTime + "\n");
             out.write("\"damage\": " + damage + "\n");
             out.write("\"damageUpgrade\": " + damageUpgrade + "\n");
-            out.write("\"maxlLevel\": " + maxLevel + "\n");
+            out.write("\"maxlLevel\": " + maxGuns + "\n");
             out.write("\"bounces\": " + bounce + "\n}");
             out.newLine();
             out.write("\"bomb\":{");
             out.newLine();
-            out.write("\"fireEnergy\": " + fireEnergy + "\n");
-            out.write("\"fireEnergyUpgrade\": " + fireEnergyUp + "\n");
+            out.write("\"fireEnergy\": " + bombFireEnergy + "\n");
+            out.write("\"fireEnergyUpgrade\": " + bombFireEnergyUpgrade + "\n");
             out.write("\"speed\": " + speed + "\n");
-            out.write("\"fireDelay\": " + fireDelay + "\n");
-            out.write("\"lifetime\": " + lifetime + "\n");
+            out.write("\"fireDelay\": " + bombFireDelay + "\n");
+            out.write("\"lifetime\": " + bombAliveTime + "\n");
             out.write("\"damage\": " + damage + "\n");
             out.write("\"damageUpgrade\": " + damageUpgrade + "\n");
+            out.write("\"maxLevel\": " + maxBombs + "\n");
             out.write("\"blastRadius\": " + blastRadius + "\n");
             out.write("\"blastRadiusUpgrade\": " + blastRadiusUp + "\n");
             out.write("\"bounceCount\": " + bounceCount + "\n");
-            out.write("\"recoilAcceleraion\": " + name + "\n");
+            out.write("\"recoilAcceleration\": " + bombThrust + "\n");
             out.write("}");
             out.newLine();
             out.write("},");
