@@ -6,11 +6,13 @@
 goog.provide('dotprod.entities.LocalPlayer');
 
 goog.require('goog.events');
+goog.require('goog.events.KeyCodes');
 goog.require('goog.object');
 goog.require('dotprod.entities.Bomb');
 goog.require('dotprod.entities.Bullet');
 goog.require('dotprod.entities.Exhaust');
 goog.require('dotprod.entities.Player');
+goog.require('dotprod.Keymap');
 goog.require('dotprod.Palette');
 goog.require('dotprod.Vector');
 
@@ -216,7 +218,7 @@ dotprod.entities.LocalPlayer.prototype.update = function() {
   this.energy_ = Math.min(this.energy_ + rechargeRate, this.maxEnergy_);
 
   if (this.projectileFireDelay_ <= 0) {
-    if (keyboard.isKeyPressed(goog.events.KeyCodes.CTRL) || keyboard.isKeyPressed(goog.events.KeyCodes.ALT)) {
+    if (keyboard.isKeyPressed(dotprod.Keymap.FIRE_GUN)) {
       var angle = this.getAngle_();
       var position = new dotprod.Vector(0, -this.yRadius_).rotate(angle).add(this.position_);
       var velocity = this.velocity_;
@@ -229,7 +231,7 @@ dotprod.entities.LocalPlayer.prototype.update = function() {
         }
         return false;
       }, this));
-    } else if (keyboard.isKeyPressed(goog.events.KeyCodes.TAB)) {
+    } else if (keyboard.isKeyPressed(dotprod.Keymap.FIRE_BOMB)) {
       var angle = this.getAngle_();
       var position = new dotprod.Vector(0, -this.yRadius_).rotate(angle).add(this.position_);
       var velocity = this.velocity_;
@@ -246,9 +248,9 @@ dotprod.entities.LocalPlayer.prototype.update = function() {
     }
   }
 
-  if (keyboard.isKeyPressed(goog.events.KeyCodes.LEFT)) {
+  if (keyboard.isKeyPressed(dotprod.Keymap.ROTATE_LEFT)) {
     this.angleInRadians_ -= shipRotation;
-  } else if (keyboard.isKeyPressed(goog.events.KeyCodes.RIGHT)) {
+  } else if (keyboard.isKeyPressed(dotprod.Keymap.ROTATE_RIGHT)) {
     this.angleInRadians_ += shipRotation;
   }
 
@@ -278,17 +280,17 @@ dotprod.entities.LocalPlayer.prototype.update = function() {
     accelerationEnergy = this.shipSettings_['afterburnerEnergy'];
   }
 
-  if (keyboard.isKeyPressed(goog.events.KeyCodes.UP)) {
+  if (keyboard.isKeyPressed(dotprod.Keymap.FORWARD_THRUST)) {
     this.applyThrust_(dotprod.Vector.fromPolar(acceleration, angle));
     this.energy_ -= accelerationEnergy;
-  } else if (keyboard.isKeyPressed(goog.events.KeyCodes.DOWN)) {
+  } else if (keyboard.isKeyPressed(dotprod.Keymap.REVERSE_THRUST)) {
     this.applyThrust_(dotprod.Vector.fromPolar(acceleration, angle).scale(-1));
     this.energy_ -= accelerationEnergy;
   }
 
-  if (keyboard.isKeyPressed(goog.events.KeyCodes.A)) {
+  if (keyboard.isKeyPressed(dotprod.Keymap.STRAFE_LEFT)) {
     this.velocity_ = this.velocity_.add(dotprod.Vector.fromPolar(-acceleration, angle + Math.PI / 2));
-  } else if (keyboard.isKeyPressed(goog.events.KeyCodes.D)) {
+  } else if (keyboard.isKeyPressed(dotprod.Keymap.STRAFE_RIGHT)) {
     this.velocity_ = this.velocity_.add(dotprod.Vector.fromPolar(acceleration, angle + Math.PI / 2));
   }
 

@@ -1,0 +1,26 @@
+/**
+ * @fileoverview Description of this file.
+ * @author sharvil.nanavati@gmail.com (Sharvil Nanavati)
+ */
+
+goog.provide('dotprod.Keymap');
+
+goog.require('goog.events.KeyCodes');
+
+/**
+ * @enum {goog.events.KeyCodes}
+ */
+dotprod.Keymap = {
+  FORWARD_THRUST: goog.events.KeyCodes.UP,
+  REVERSE_THRUST: goog.events.KeyCodes.DOWN,
+  ROTATE_LEFT: goog.events.KeyCodes.LEFT,
+  ROTATE_RIGHT: goog.events.KeyCodes.RIGHT,
+
+  FIRE_GUN: goog.events.KeyCodes.SPACE,
+  FIRE_BOMB: goog.events.KeyCodes.F,
+
+  STRAFE_LEFT: goog.events.KeyCodes.W,
+  STRAFE_RIGHT: goog.events.KeyCodes.E,
+
+  AFTERBURNER: goog.events.KeyCodes.SHIFT
+};
