@@ -167,7 +167,15 @@ dotprod.entities.LocalPlayer.prototype.setShip = function(ship) {
  */
 dotprod.entities.LocalPlayer.prototype.setPresence = function(presence) {
   goog.base(this, 'setPresence', presence);
-  this.game_.getProtocol().sendSetPresence(presence);
+  this.game_.getProtocol().sendSetPresence(this.presence_);
+};
+
+/**
+ * @override
+ */
+dotprod.entities.LocalPlayer.prototype.clearPresence = function(presence) {
+  goog.base(this, 'clearPresence', presence);
+  this.game_.getProtocol().sendSetPresence(this.presence_);
 };
 
 dotprod.entities.LocalPlayer.prototype.update = function() {

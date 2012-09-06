@@ -112,12 +112,13 @@ dotprod.Game = function(protocol, resourceManager, settings, mapData) {
   this.notifications_ = new dotprod.Notifications();
 
   var startingShip = Math.floor(Math.random() * this.settings_['ships'].length);
+  var localPlayer = new dotprod.entities.LocalPlayer(this, this.settings_['id'], this.settings_['name'], startingShip, this.camera_);
 
   /**
    * @type {!dotprod.PlayerIndex}
    * @private
    */
-  this.playerIndex_ = new dotprod.PlayerIndex(new dotprod.entities.LocalPlayer(this, this.settings_['id'], this.settings_['name'], startingShip, this.camera_));
+  this.playerIndex_ = new dotprod.PlayerIndex(localPlayer);
 
   /**
    * @type {!dotprod.views.ChatView}
@@ -183,6 +184,9 @@ dotprod.Game = function(protocol, resourceManager, settings, mapData) {
 
   goog.events.listen(window, goog.events.EventType.RESIZE, goog.bind(this.onResize_, this));
   goog.events.listen(this.canvas_, goog.events.EventType.MOUSEMOVE, goog.bind(this.onMouseMoved_, this));
+
+  goog.events.listen(window, goog.events.EventType.FOCUS, function() { localPlayer.clearPresence(dotprod.entities.Player.Presence.AWAY); });
+  goog.events.listen(window, goog.events.EventType.BLUR, function() { localPlayer.setPresence(dotprod.entities.Player.Presence.AWAY); });
 
   dotprod.Timer.setInterval(goog.bind(this.heartbeat_, this), 100);
 };
@@ -484,6 +488,7 @@ dotprod.Game.prototype.onPrizeCollected_ = function(packet) {
 dotprod.Game.prototype.onSetPresence_ = function(packet) {
   var player = this.playerIndex_.findById(packet[0]);
   var presence = /** @type {dotprod.entities.Player.Presence} */ (packet[1]);
+  player.clearPresence(~presence);
   player.setPresence(presence);
 };
 

@@ -73,7 +73,7 @@ dotprod.views.ChatView = function(game) {
   goog.events.listen(this.chatBox_, goog.events.EventType.KEYUP, goog.bind(this.keyFilter_, this));
 
   var self = this;
-  goog.events.listen(this.chatBox_, goog.events.EventType.BLUR, function() { self.localPlayer_.setPresence(dotprod.entities.Player.Presence.DEFAULT); });
+  goog.events.listen(this.chatBox_, goog.events.EventType.BLUR, function() { self.localPlayer_.clearPresence(dotprod.entities.Player.Presence.TYPING); });
   goog.events.listen(this.chatBox_, goog.events.EventType.FOCUS, function() { self.localPlayer_.setPresence(dotprod.entities.Player.Presence.TYPING); });
 };
 goog.inherits(dotprod.views.ChatView, dotprod.views.View);

@@ -126,7 +126,13 @@ dotprod.entities.Player = function(game, id, name, ship, bounty) {
    * @type {!dotprod.Image}
    * @private
    */
-  this.speechBubbleImage_ = this.resourceManager_.getImage('speechBubble');
+  this.typingImage_ = this.resourceManager_.getImage('presenceTyping');
+
+  /**
+   * @type {!dotprod.Image}
+   * @private
+   */
+  this.awayImage_ = this.resourceManager_.getImage('presenceAway');
 
   /**
    * @type {!dotprod.EffectIndex}
@@ -143,7 +149,8 @@ goog.inherits(dotprod.entities.Player, dotprod.entities.Entity);
  */
 dotprod.entities.Player.Presence = {
   DEFAULT: 0,
-  TYPING: 1
+  TYPING: 1,
+  AWAY: 2
 };
 
 /**
@@ -202,7 +209,22 @@ dotprod.entities.Player.prototype.setShip = function(ship) {
  * @param {dotprod.entities.Player.Presence} presence
  */
 dotprod.entities.Player.prototype.setPresence = function(presence) {
-  this.presence_ = presence;
+  this.presence_ |= presence;
+};
+
+/**
+ * @param {dotprod.entities.Player.Presence} presence
+ */
+dotprod.entities.Player.prototype.clearPresence = function(presence) {
+  this.presence_ &= ~presence;
+};
+
+/**
+ * @param {dotprod.entities.Player.Presence} presence
+ * @return {boolean}
+ */
+dotprod.entities.Player.prototype.hasPresence = function(presence) {
+  return (this.presence_ & presence) != 0;
 };
 
 /**
@@ -286,10 +308,17 @@ dotprod.entities.Player.prototype.render = function(camera) {
 
   this.image_.render(context, x, y, tileNum);
 
-  if (this.presence_ == dotprod.entities.Player.Presence.TYPING) {
-    var speechX = x + this.image_.getTileWidth() - Math.floor(this.speechBubbleImage_.getTileWidth() / 2);
-    var speechY = y - Math.floor(this.speechBubbleImage_.getTileHeight() / 2);
-    this.speechBubbleImage_.render(context, speechX, speechY);
+  var presenceImage = null;
+  if (this.hasPresence(dotprod.entities.Player.Presence.AWAY)) {
+    presenceImage = this.awayImage_;
+  } else if (this.hasPresence(dotprod.entities.Player.Presence.TYPING)) {
+    presenceImage = this.typingImage_;
+  }
+
+  if (presenceImage) {
+    var speechX = x + this.image_.getTileWidth() - Math.floor(presenceImage.getTileWidth() / 2);
+    var speechY = y - Math.floor(presenceImage.getTileHeight() / 2);
+    presenceImage.render(context, speechX, speechY);
   }
 
   context.save();

@@ -30,8 +30,14 @@
       "yTiles": 4
     },
 
-    "speechBubble": {
-      "url": "data/shared/graphics/speech_bubble.png",
+    "presenceTyping": {
+      "url": "data/shared/graphics/presence_typing.png",
+      "xTiles": 1,
+      "yTiles": 1
+    },
+
+    "presenceAway": {
+      "url": "data/shared/graphics/presence_away.png",
       "xTiles": 1,
       "yTiles": 1
     }
