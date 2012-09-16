@@ -8,10 +8,21 @@ goog.provide('dotprod.Notifications.Type');
 
 goog.require('goog.array');
 
+goog.require('html5.Notifications');
+
+goog.require('dotprod.entities.Player.Presence');
+
 /**
  * @constructor
+ * @param {!dotprod.entities.LocalPlayer} localPlayer
  */
-dotprod.Notifications = function() {
+dotprod.Notifications = function(localPlayer) {
+  /**
+   * @type {!dotprod.entities.LocalPlayer}
+   * @private
+   */
+  this.localPlayer_ = localPlayer;
+
   /**
    * @type {!Array.<Object>}
    * @private
@@ -75,6 +86,13 @@ dotprod.Notifications.prototype.addMessage_ = function(type, message) {
   };
 
   this.insertIndex_ = (this.insertIndex_ + 1) % dotprod.Notifications.MAX_MESSAGES_;
+
+  // Only show desktop notifications if the user isn't focused on the game.
+  if (this.localPlayer_.hasPresence(dotprod.entities.Player.Presence.AWAY)) {
+    var notification = html5.Notifications.createNotification('img/dotproduct_logo_128.png', 'dotproduct', message);
+    setTimeout(function() { notification.close(); }, 5000);
+    notification.show();
+  }
 };
 
 /**

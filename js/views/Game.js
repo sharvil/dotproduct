@@ -109,12 +109,6 @@ dotprod.Game = function(protocol, resourceManager, settings, mapData) {
    */
   this.effectIndex_ = new dotprod.EffectIndex();
 
-  /**
-   * @type {!dotprod.Notifications}
-   * @private
-   */
-  this.notifications_ = new dotprod.Notifications();
-
   var startingShip = Math.floor(Math.random() * this.settings_['ships'].length);
   var localPlayer = new dotprod.entities.LocalPlayer(this, this.settings_['id'], this.settings_['name'], startingShip, this.camera_);
 
@@ -123,6 +117,12 @@ dotprod.Game = function(protocol, resourceManager, settings, mapData) {
    * @private
    */
   this.playerIndex_ = new dotprod.PlayerIndex(localPlayer);
+
+  /**
+   * @type {!dotprod.Notifications}
+   * @private
+   */
+  this.notifications_ = new dotprod.Notifications(localPlayer);
 
   /**
    * @type {!dotprod.views.ChatView}

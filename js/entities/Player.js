@@ -4,6 +4,7 @@
  */
 
 goog.provide('dotprod.entities.Player');
+goog.provide('dotprod.entities.Player.Presence');
 
 goog.require('dotprod.FontFoundry');
 goog.require('dotprod.entities.Entity');
