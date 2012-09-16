@@ -9,13 +9,14 @@ goog.require('goog.debug.Console');
 goog.require('goog.dom');
 goog.require('goog.events');
 goog.require('goog.events.EventType');
+
+goog.require('html5.Fullscreen');
+
 goog.require('dotprod.Game');
 goog.require('dotprod.Protocol');
 goog.require('dotprod.ResourceManager');
 goog.require('dotprod.views.LoadingView');
 goog.require('dotprod.views.LoginView');
-
-goog.require('dotprod.Prng');
 
 /**
  * @constructor
@@ -108,18 +109,10 @@ dotprod.Application.prototype.onLoadComplete_ = function() {
  * @private
  */
 dotprod.Application.prototype.onFullscreenToggleClicked_ = function(event) {
-  if (!document.mozFullScreen && !document.webkitIsFullScreen) {
-    if (document.body.mozRequestFullScreen) {
-      document.body.mozRequestFullScreen();
-    } else {
-      document.body.webkitRequestFullScreen(Element.ALLOW_KEYBOARD_INPUT);
-    }
+  if (!html5.Fullscreen.isFullscreen()) {
+    html5.Fullscreen.request(Element.ALLOW_KEYBOARD_INPUT);
   } else {
-    if (document.mozCancelFullScreen) {
-      document.mozCancelFullScreen();
-    } else {
-      document.webkitCancelFullScreen();
-    }
+    html5.Fullscreen.cancel();
   }
 };
 

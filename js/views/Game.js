@@ -10,6 +10,10 @@ goog.require('goog.dom');
 goog.require('goog.events');
 goog.require('goog.events.BrowserEvent');
 goog.require('goog.events.EventType');
+
+goog.require('html5.AnimationFrame');
+goog.require('html5.Notifications');
+
 goog.require('dotprod.Camera');
 goog.require('dotprod.EffectIndex');
 goog.require('dotprod.entities.LocalPlayer');
@@ -188,6 +192,9 @@ dotprod.Game = function(protocol, resourceManager, settings, mapData) {
   goog.events.listen(window, goog.events.EventType.FOCUS, function() { localPlayer.clearPresence(dotprod.entities.Player.Presence.AWAY); });
   goog.events.listen(window, goog.events.EventType.BLUR, function() { localPlayer.setPresence(dotprod.entities.Player.Presence.AWAY); });
 
+  // TODO(sharvil): hack, come up with a better interface.
+  goog.events.listen(window, goog.events.EventType.MOUSEDOWN, function() { html5.Notifications.requestPermission(); });
+
   dotprod.Timer.setInterval(goog.bind(this.heartbeat_, this), 100);
 };
 goog.inherits(dotprod.Game, dotprod.views.View);
@@ -293,7 +300,7 @@ dotprod.Game.prototype.heartbeat_ = function() {
   // Keep the game running even if we're in the background.
   var curTime = goog.now();
   while (curTime - this.lastTime_ > 500) {
-    window.cancelAnimFrame(this.animationId_);
+    html5.AnimationFrame.cancel(this.animationId_);
     this.renderingLoop_();
   }
 };
@@ -302,7 +309,7 @@ dotprod.Game.prototype.heartbeat_ = function() {
  * @private
  */
 dotprod.Game.prototype.renderingLoop_ = function() {
-  this.animationId_ = window.requestAnimFrame(goog.bind(this.renderingLoop_, this));
+  this.animationId_ = html5.AnimationFrame.request(goog.bind(this.renderingLoop_, this));
 
   var curTime = goog.now();
   var timeDiff = dotprod.Timer.millisToTicks(curTime - this.lastTime_ + this.tickResidue_);
