@@ -10,6 +10,7 @@ goog.require('goog.events.BrowserEvent');
 goog.require('goog.events.Event');
 goog.require('goog.events.EventType');
 goog.require('dotprod.Protocol');
+goog.require('dotprod.Timestamp');
 goog.require('dotprod.views.View');
 
 /**
@@ -140,6 +141,8 @@ dotprod.views.ChatView.prototype.renderDom = function(rootNode) {
  * @param {string} message
  */
 dotprod.views.ChatView.prototype.addMessage = function(player, message) {
+  console.log('(' + dotprod.Timestamp.print() + ') ' + player.getName() + ': ' + message);
+
   var isAtBottom = this.view_.scrollTop + this.view_.offsetHeight >= this.view_.scrollHeight;
 
   var messageNode = goog.dom.createElement('div');
@@ -168,6 +171,8 @@ dotprod.views.ChatView.prototype.addMessage = function(player, message) {
  * @param {string} message
  */
 dotprod.views.ChatView.prototype.addSystemMessage = function(message) {
+  console.log('(' + dotprod.Timestamp.print() + ') ' + message);
+
   var isAtBottom = this.view_.scrollTop + this.view_.offsetHeight >= this.view_.scrollHeight;
 
   var messageNode = goog.dom.createElement('div');

@@ -15,6 +15,7 @@ goog.require('html5.Fullscreen');
 goog.require('dotprod.Game');
 goog.require('dotprod.Protocol');
 goog.require('dotprod.ResourceManager');
+goog.require('dotprod.Timestamp');
 goog.require('dotprod.views.LoadingView');
 goog.require('dotprod.views.LoginView');
 
@@ -102,6 +103,8 @@ dotprod.Application.prototype.onLoadComplete_ = function() {
 
   this.game_ = new dotprod.Game(this.protocol_, this.resourceManager_, this.settings_, this.mapData_);
   this.game_.renderDom(/** @type {!HTMLDivElement} */ (goog.dom.$('game')));
+
+  console.log('(' + dotprod.Timestamp.print() + ') You joined the game as: ' + this.game_.getPlayerIndex().getLocalPlayer().name_);
 };
 
 /**
