@@ -19,8 +19,8 @@ dotprod.Keymap = {
   FIRE_GUN: goog.events.KeyCodes.SPACE,
   FIRE_BOMB: goog.events.KeyCodes.F,
 
-  STRAFE_LEFT: goog.events.KeyCodes.W,
-  STRAFE_RIGHT: goog.events.KeyCodes.E,
+  STRAFE_LEFT: goog.events.KeyCodes.S,
+  STRAFE_RIGHT: goog.events.KeyCodes.D,
 
-  AFTERBURNER: goog.events.KeyCodes.SHIFT
+  AFTERBURNER: goog.events.KeyCodes.A
 };
