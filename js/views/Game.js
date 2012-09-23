@@ -20,6 +20,7 @@ goog.require('dotprod.entities.LocalPlayer');
 goog.require('dotprod.entities.RemotePlayer');
 goog.require('dotprod.input.Keyboard');
 goog.require('dotprod.layers.EffectLayer');
+goog.require('dotprod.layers.HudLayer');
 goog.require('dotprod.layers.NotificationLayer');
 goog.require('dotprod.layers.MapLayer');
 goog.require('dotprod.layers.ProjectileLayer');
@@ -154,7 +155,8 @@ dotprod.Game = function(protocol, resourceManager, settings, mapData) {
       new dotprod.layers.ShipLayer(this.playerIndex_),
       new dotprod.layers.EffectLayer(this.effectIndex_),
       new dotprod.layers.NotificationLayer(this.notifications_),
-      new dotprod.layers.RadarLayer(this)
+      new dotprod.layers.RadarLayer(this),
+      new dotprod.layers.HudLayer(this)
     ];
 
   /**
@@ -371,8 +373,8 @@ dotprod.Game.prototype.onPlayerLeft_ = function(packet) {
     this.projectileIndex_.removeProjectiles(player);
     this.playerIndex_.removePlayer(player);
     this.notifications_.addEnterMessage('Player left: ' + player.getName());
-	
-	console.log('(' + dotprod.Timestamp.print() + ') ' + 'Player left: ' + player.getName());
+
+    console.log('(' + dotprod.Timestamp.print() + ') ' + 'Player left: ' + player.getName());
   }
 };
 

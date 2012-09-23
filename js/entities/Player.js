@@ -177,6 +177,20 @@ dotprod.entities.Player.prototype.getName = function() {
 /**
  * @return {number}
  */
+dotprod.entities.Player.prototype.getEnergy = function () {
+  return this.energy_;
+};
+
+/**
+ * @return {number}
+ */
+dotprod.entities.Player.prototype.getMaxEnergy = function () {
+  return this.maxEnergy_;
+};
+
+/**
+ * @return {number}
+ */
 dotprod.entities.Player.prototype.getShip = function() {
   return this.ship_;
 };

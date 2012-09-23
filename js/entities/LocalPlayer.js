@@ -282,7 +282,7 @@ dotprod.entities.LocalPlayer.prototype.update = function() {
   var maximumSpeed = this.shipSettings_['speedPixelsPerTick'];
   var acceleration = this.shipSettings_['accelerationPerTick'];
   var accelerationEnergy = 0;
-  if (keyboard.isKeyPressed(goog.events.KeyCodes.SHIFT) && this.energy_ > this.shipSettings_['afterburnerEnergy']) {
+  if (keyboard.isKeyPressed(dotprod.Keymap.AFTERBURNER) && this.energy_ > this.shipSettings_['afterburnerEnergy']) {
     maximumSpeed = this.shipSettings_['afterburnerMaxSpeed'];
     acceleration = this.shipSettings_['afterburnerAcceleration'];
     accelerationEnergy = this.shipSettings_['afterburnerEnergy'];
@@ -338,14 +338,6 @@ dotprod.entities.LocalPlayer.prototype.render = function(camera) {
   }
 
   goog.base(this, 'render', camera);
-
-  var barWidth = 300 * this.energy_ / this.maxEnergy_;
-  var barHeight = 10;
-
-  context.save();
-    context.fillStyle = 'rgba(255, 255, 255, 0.3)';
-    context.fillRect((dimensions.width - barWidth) / 2, 10, barWidth, barHeight);
-  context.restore();
 };
 
 /**
