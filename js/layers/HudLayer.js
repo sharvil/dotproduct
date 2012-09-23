@@ -31,6 +31,24 @@ dotprod.layers.HudLayer = function (game) {
    * @private
    */
   this.player_ = game.getPlayerIndex().getLocalPlayer();
+
+  /**
+   * @type {!dotprod.Image}
+   * @private
+   */
+  this.shipInfoDisplayImage_ = this.resourceManager_.getImage('shipInfoDisplay');
+
+  /**
+   * @type {!dotprod.Image}
+   * @private
+   */
+  this.energyFontImage_ = this.resourceManager_.getImage('energyFont');
+
+  /**
+   * @type {!dotprod.Image}
+   * @private
+   */
+  this.ledFontImage_ = this.resourceManager_.getImage('ledFont');
 };
 
 /**
@@ -48,6 +66,7 @@ dotprod.layers.HudLayer.prototype.render = function (camera) {
 
   this.renderEnergyBar_(context, dimensions);
   this.renderNearShipEnergyDisplay_(context, dimensions);
+  this.renderShipInfoDisplay_(context, dimensions);
 };
 
 /**
@@ -122,5 +141,39 @@ dotprod.layers.HudLayer.prototype.renderNearShipEnergyDisplay_ = function (conte
         context.fillText(Math.floor(this.player_.energy_), x, y);
       context.restore();
     }
+  }
+};
+
+/**
+ * @param {!CanvasRenderingContext2D} context
+ * @param {!Object} dimensions
+ */
+dotprod.layers.HudLayer.prototype.renderShipInfoDisplay_ = function (context, dimensions) {
+  var shipInfoDisplayLeft = dimensions.width - this.shipInfoDisplayImage_.getTileWidth();
+  var shipInfoDisplayRight = shipInfoDisplayLeft + this.shipInfoDisplayImage_.getTileWidth();
+  var shipInfoDisplayTop = 50;
+
+  this.shipInfoDisplayImage_.render(context, shipInfoDisplayLeft, shipInfoDisplayTop);
+
+  if (this.player_) {
+    var energyDigits = Math.floor(this.player_.getEnergy());
+    var digitOffset = 0;
+    var offsetWidth = this.energyFontImage_.getTileWidth();
+    do {
+      this.energyFontImage_.render(context, shipInfoDisplayRight - 30 - digitOffset * offsetWidth, shipInfoDisplayTop - 5, energyDigits % 10);
+      energyDigits = Math.floor(energyDigits / 10);
+      digitOffset++;
+    }
+    while (energyDigits);
+
+    var bountyDigits = this.player_.getBounty();
+    var digitOffset = 0;
+    var offsetWidth = this.ledFontImage_.getTileWidth();
+    do {
+      this.ledFontImage_.render(context, shipInfoDisplayLeft + 65 - digitOffset * offsetWidth, shipInfoDisplayTop + 52, bountyDigits % 10);
+      bountyDigits = Math.floor(bountyDigits / 10);
+      digitOffset++;
+    }
+    while (bountyDigits);
   }
 };

@@ -40,6 +40,24 @@
       "url": "data/shared/graphics/presence_away.png",
       "xTiles": 1,
       "yTiles": 1
+    },
+    
+    "shipDisplayInfo": {
+      "url": "data/shared/graphics/disp.png",
+      "xTiles": 1,
+      "yTiles": 1
+    },
+
+    "energyFont": {
+      "url": "data/shared/graphics/engyfont.png",
+      "xTiles": 10,
+      "yTiles": 1
+    },
+
+    "ledFont": {
+      "url": "data/shared/graphics/led.png",
+      "xTiles": 10,
+      "yTiles": 1
     }
   },
 

@@ -196,6 +196,13 @@ dotprod.entities.Player.prototype.getShip = function() {
 };
 
 /**
+ * @return {number}
+ */
+dotprod.entities.Player.prototype.getBounty = function () {
+  return this.bounty_;
+};
+
+/**
  * @override
  */
 dotprod.entities.Player.prototype.isAlive = function() {
