@@ -47,6 +47,7 @@ dotprod.layers.HudLayer.prototype.render = function (camera) {
   var dimensions = camera.getDimensions();
 
   this.renderEnergyBar_(context, dimensions);
+  this.renderNearShipEnergyDisplay_(context, dimensions);
 };
 
 /**
@@ -95,5 +96,31 @@ dotprod.layers.HudLayer.prototype.renderEnergyBar_ = function (context, dimensio
       context.lineTo((dimensions.width + energyBarMaxWidth) / 2, 10);
       context.stroke();
     context.restore();
+  }
+};
+
+/**
+ * @param {!CanvasRenderingContext2D} canvas
+ * @param {!Object} dimensions
+ */
+dotprod.layers.HudLayer.prototype.renderNearShipEnergyDisplay_ = function (context, dimensions) {
+  if (this.player_) {
+    var percentEnergy = this.player_.getEnergy() / this.player_.getMaxEnergy();
+
+    if (percentEnergy < 0.5) {
+      var x = Math.floor(this.player_.position_.getX() - dimensions.left - this.player_.image_.getTileWidth() / 2 - 10);
+      var y = Math.floor(this.player_.position_.getY() - dimensions.top - this.player_.image_.getTileHeight() / 2);
+
+      context.save();
+        context.fillStyle = percentEnergy < 0.25 ? 'rgba(200, 0, 0, 0.5)' :
+                            percentEnergy < 0.5 ? 'rgba(200, 200, 0, 0.5)' :
+                            percentEnergy < 0.75 ? 'rgba(0, 200, 0, 0.5)' :
+                            'rgba(0, 200, 200, 0.5)';
+        context.font = dotprod.FontFoundry.playerFont();
+        context.textAlign = 'right';
+        context.textBaseline = 'bottom';
+        context.fillText(Math.floor(this.player_.energy_), x, y);
+      context.restore();
+    }
   }
 };
