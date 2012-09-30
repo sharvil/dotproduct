@@ -338,6 +338,16 @@ dotprod.entities.LocalPlayer.prototype.render = function(camera) {
   }
 
   goog.base(this, 'render', camera);
+
+  var x = Math.floor(dimensions.width / 2 - this.image_.getTileWidth() / 2);
+  var y = Math.floor(dimensions.height / 2 - this.image_.getTileHeight() / 2);
+  var tileNum = Math.floor(this.angleInRadians_ / (2 * Math.PI) * this.image_.getNumTiles());
+
+  context.save();
+    context.globalAlpha = 0.7 * (1 - (this.energy_ / this.maxEnergy_));
+    context.globalCompositeOperation = 'lighter';
+    this.damageOverlay_.render(context, x, y, tileNum);
+  context.restore();
 };
 
 /**

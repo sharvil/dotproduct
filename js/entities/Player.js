@@ -124,6 +124,12 @@ dotprod.entities.Player = function(game, id, name, ship, bounty) {
   this.image_;
 
   /**
+   * @type {dotprod.Image}
+   * @protected
+   */
+  this.damageOverlay_;
+
+  /**
    * @type {!dotprod.Image}
    * @private
    */
@@ -225,6 +231,7 @@ dotprod.entities.Player.prototype.setShip = function(ship) {
   this.xRadius_ = this.shipSettings_['xRadius'];
   this.yRadius_ = this.shipSettings_['yRadius'];
   this.image_ = this.resourceManager_.getImage('ship' + this.ship_);
+  this.damageOverlay_ = this.resourceManager_.getImage('ship' + this.ship_ + 'DamageOverlay');
 };
 
 /**
