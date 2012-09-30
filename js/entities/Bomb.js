@@ -22,8 +22,10 @@ goog.require('dotprod.Vector');
  * @param {number} lifetime
  * @param {number} damage
  * @param {number} bounceCount
+ * @param {number} blastRadius
+ * @param {number} proxRadius
  */
-dotprod.entities.Bomb = function(game, owner, level, position, velocity, lifetime, damage, bounceCount, blastRadius) {
+dotprod.entities.Bomb = function(game, owner, level, position, velocity, lifetime, damage, bounceCount, blastRadius, proxRadius) {
   dotprod.entities.Projectile.call(this, game, owner, level, lifetime, damage, bounceCount);
 
   this.position_ = position;
@@ -48,6 +50,24 @@ dotprod.entities.Bomb = function(game, owner, level, position, velocity, lifetim
    * @private
    */
   this.blastRadius_ = blastRadius;
+
+  /**
+   * @type {number}
+   * @private
+   */
+  this.proxRadius_ = proxRadius;
+
+  /**
+   * @type {dotprod.entities.Player}
+   * @private
+   */
+   this.proxActivator_;
+
+  /**
+   * @type {number}
+   * @private
+   */
+  this.lastDistanceToProxActivator_;
 };
 goog.inherits(dotprod.entities.Bomb, dotprod.entities.Projectile);
 
@@ -111,9 +131,27 @@ dotprod.entities.Bomb.prototype.checkPlayerCollision_ = function(player) {
   var dimensions = player.getDimensions();
   var x = this.position_.getX();
   var y = this.position_.getY();
+  var delta = this.position_.subtract(player.getPosition());
+  var distance = Math.sqrt(delta.getX() * delta.getX() + delta.getY() * delta.getY());
+
   if (x >= dimensions.left && x <= dimensions.right && y >= dimensions.top && y <= dimensions.bottom) {
     this.explode_(player == this.game_.getPlayerIndex().getLocalPlayer());
     return true;
+  }
+  else if (!this.proxActivator_) {
+    if (distance <= this.proxRadius_) {
+      this.proxActivator_ = player;
+      this.lastDistanceToProxActivator_ = distance;
+      return false;
+    }
+  }
+  else if (player == this.proxActivator_) {
+    if (distance > this.lastDistanceToProxActivator_) {
+      this.explode_(false);
+      return true;
+    }
+    this.lastDistanceToProxActivator_ = distance;
+    return false;
   }
   return false;
 };
