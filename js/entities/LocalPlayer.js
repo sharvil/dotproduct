@@ -75,6 +75,12 @@ dotprod.entities.LocalPlayer = function(game, id, name, ship, camera) {
    */
   this.exhaustTimer_ = new dotprod.Range(0, 6, 1);
 
+  /**
+   * @type {dotprod.Image}
+   * @private
+   */
+  this.damageOverlay_ = game.getResourceManager().getImage('ship' + ship + 'Red');
+
   dotprod.entities.Player.call(this, game, id, name, ship, 0 /* bounty */);
 };
 goog.inherits(dotprod.entities.LocalPlayer, dotprod.entities.Player);

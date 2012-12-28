@@ -1,5 +1,5 @@
 /**
- * @fileoverview Head-up display layer
+ * @fileoverview Heads-up display layer
  */
 
 goog.provide('dotprod.layers.HudLayer');
@@ -36,7 +36,7 @@ dotprod.layers.HudLayer = function (game) {
    * @type {!dotprod.Image}
    * @private
    */
-  this.shipInfoDisplayImage_ = this.resourceManager_.getImage('shipInfoDisplay');
+  this.shipInfoDisplayImage_ = this.resourceManager_.getImage('shipDisplayInfo');
 
   /**
    * @type {!dotprod.Image}
