@@ -14,6 +14,7 @@ goog.require('dotprod.entities.Exhaust');
 goog.require('dotprod.entities.Player');
 goog.require('dotprod.Keymap');
 goog.require('dotprod.Palette');
+goog.require('dotprod.Range');
 goog.require('dotprod.Vector');
 
 /**
@@ -39,16 +40,16 @@ dotprod.entities.LocalPlayer = function(game, id, name, ship, camera) {
   this.camera_ = camera;
 
   /**
-   * @type {number}
+   * @type {!dotprod.Range}
    * @private
    */
-  this.projectileFireDelay_ = 0;
+  this.projectileFireDelay_ = new dotprod.Range(0, Number.MAX_VALUE, 1);
 
   /**
-   * @type {number}
+   * @type {!dotprod.Range}
    * @private
    */
-  this.shipChangeDelay_ = 0;
+  this.shipChangeDelay_ = new dotprod.Range(0, 300, 1);  // 3 seconds
 
   /**
    * @type {number}
@@ -72,7 +73,7 @@ dotprod.entities.LocalPlayer = function(game, id, name, ship, camera) {
    * @type {number}
    * @private
    */
-  this.exhaustTimer_ = 0;
+  this.exhaustTimer_ = new dotprod.Range(0, 6, 1);
 
   dotprod.entities.Player.call(this, game, id, name, ship, 0 /* bounty */);
 };
@@ -194,8 +195,8 @@ dotprod.entities.LocalPlayer.prototype.update = function() {
   }
 
   // Check for ship change before we read any ship settings.
-  this.shipChangeDelay_ = Math.max(this.shipChangeDelay_ - 1, 0);
-  if (this.shipChangeDelay_ <= 0) {
+  this.shipChangeDelay_.decrement();
+  if (this.shipChangeDelay_.isLow()) {
     for (var i = 0; i < this.settings_['ships'].length; ++i) {
       if (keyboard.isKeyPressed(goog.events.KeyCodes.ONE + i)) {
         if (i != this.ship_) {
@@ -207,7 +208,7 @@ dotprod.entities.LocalPlayer.prototype.update = function() {
             // TODO(sharvil): we shouldn't reach into game's private member...
             this.game_.notifications_.addMessage('You must have full energy to change ships.');
           }
-          this.shipChangeDelay_ = 300;  // 3 seconds.
+          this.shipChangeDelay_.setHigh();
         }
         break;
       }
@@ -222,10 +223,10 @@ dotprod.entities.LocalPlayer.prototype.update = function() {
   var oldVelocity = this.velocity_;
   var projectile;
 
-  this.projectileFireDelay_ = Math.max(this.projectileFireDelay_ - 1, 0);
+  this.projectileFireDelay_.decrement();
   this.energy_ = Math.min(this.energy_ + rechargeRate, this.maxEnergy_);
 
-  if (this.projectileFireDelay_ <= 0) {
+  if (this.projectileFireDelay_.isLow()) {
     if (keyboard.isKeyPressed(dotprod.Keymap.FIRE_GUN)) {
       var angle = this.getAngle_();
       var position = new dotprod.Vector(0, -this.yRadius_).rotate(angle).add(this.position_);
@@ -234,7 +235,7 @@ dotprod.entities.LocalPlayer.prototype.update = function() {
       projectile = this.gun_.fire(angle, position, velocity, goog.bind(function(fireEnergy, fireDelay) {
         if (this.energy_ > fireEnergy) {
           this.energy_ -= fireEnergy;
-          this.projectileFireDelay_ = fireDelay;
+          this.projectileFireDelay_.setValue(fireDelay);
           return true;
         }
         return false;
@@ -247,7 +248,7 @@ dotprod.entities.LocalPlayer.prototype.update = function() {
       projectile = this.bombBay_.fire(angle, position, velocity, goog.bind(function(fireEnergy, fireDelay, recoil) {
         if (this.energy_ > fireEnergy) {
           this.energy_ -= fireEnergy;
-          this.projectileFireDelay_ = fireDelay;
+          this.projectileFireDelay_.setValue(fireDelay);
           this.velocity_ = this.velocity_.subtract(dotprod.Vector.fromPolar(recoil, angle));
           return true;
         }
@@ -269,7 +270,7 @@ dotprod.entities.LocalPlayer.prototype.update = function() {
   var angle = this.getAngle_();
 
   // Update and invalidate any existing exhaust trails.
-  --this.exhaustTimer_;
+  this.exhaustTimer_.decrement();
   var newExhaust = [];
   for (var i = 0; i < this.exhaust_.length; ++i) {
     this.exhaust_[i].update();
@@ -355,7 +356,7 @@ dotprod.entities.LocalPlayer.prototype.render = function(camera) {
 dotprod.entities.LocalPlayer.prototype.applyThrust_ = function(thrustVector) {
   this.velocity_ = this.velocity_.add(thrustVector);
 
-  if (this.exhaustTimer_ > 0) {
+  if (!this.exhaustTimer_.isLow()) {
     return;
   }
 
@@ -368,7 +369,7 @@ dotprod.entities.LocalPlayer.prototype.applyThrust_ = function(thrustVector) {
   var e2 = new dotprod.entities.Exhaust(this.game_, bottomOfShip.subtract(perpendicular.scale(3)), exhaustVelocity.subtract(perpendicular));
   this.exhaust_.push(e1);
   this.exhaust_.push(e2);
-  this.exhaustTimer_ = 6;
+  this.exhaustTimer_.setHigh();
 };
 
 /**

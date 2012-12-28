@@ -6,6 +6,7 @@
 goog.provide('dotprod.model.Gun');
 
 goog.require('dotprod.entities.Bullet');
+goog.require('dotprod.Range');
 
 /**
  * @constructor
@@ -33,10 +34,10 @@ dotprod.model.Gun = function(game, gunSettings, owner) {
   this.owner_ = owner;
 
   /**
-   * @type {number}
+   * @type {!dotprod.Range}
    * @private
    */
-  this.level_ = 0;
+  this.level_ = new dotprod.Range(Math.min(0, this.gunSettings_['maxLevel']), this.gunSettings_['maxLevel'], 1);
 
   /**
    * @type {boolean}
@@ -46,7 +47,7 @@ dotprod.model.Gun = function(game, gunSettings, owner) {
 };
 
 dotprod.model.Gun.prototype.upgrade = function() {
-  this.level_ = Math.min(this.level_ + 1, this.gunSettings_['maxLevel']);
+  this.level_.increment();
 };
 
 /**
@@ -66,8 +67,9 @@ dotprod.model.Gun.prototype.setBounces = function(bounces) {
 dotprod.model.Gun.prototype.fire = function(angle, position, velocity, commitFireFn) {
   var fireEnergy = this.getFireEnergy_();
   var fireDelay = this.getFireDelay_();
+  var level = this.level_.getValue();
 
-  if (!commitFireFn(fireEnergy, fireDelay)) {
+  if (level < 0 || !commitFireFn(fireEnergy, fireDelay)) {
     return null;
   }
 
@@ -75,7 +77,7 @@ dotprod.model.Gun.prototype.fire = function(angle, position, velocity, commitFir
   var damage = this.getDamage_();
   var bounceCount = this.getBounceCount_();
   var newVelocity = velocity.add(dotprod.Vector.fromPolar(this.getBulletSpeed_(), angle));
-  var projectile = new dotprod.entities.Bullet(this.game_, this.owner_, this.level_, position, newVelocity, lifetime, damage, bounceCount);
+  var projectile = new dotprod.entities.Bullet(this.game_, this.owner_, level, position, newVelocity, lifetime, damage, bounceCount);
 
   // TODO(sharvil): this should probably happen in the projectile base class' constructor.
   this.game_.getProjectileIndex().addProjectile(this.owner_, projectile);
@@ -92,12 +94,12 @@ dotprod.model.Gun.prototype.fire = function(angle, position, velocity, commitFir
  * @return {dotprod.entities.Projectile}
  */
 dotprod.model.Gun.prototype.fireSynthetic = function(level, bounceCount, position, velocity) {
-  this.level_ = level;
+  this.level_.setValue(level);
 
   var lifetime = this.getLifetime_();
   var damage = this.getDamage_();
 
-  var projectile = new dotprod.entities.Bullet(this.game_, this.owner_, this.level_, position, velocity, lifetime, damage, bounceCount);
+  var projectile = new dotprod.entities.Bullet(this.game_, this.owner_, this.level_.getValue(), position, velocity, lifetime, damage, bounceCount);
   this.game_.getProjectileIndex().addProjectile(this.owner_, projectile);
   return projectile;
 };
@@ -115,7 +117,7 @@ dotprod.model.Gun.prototype.getFireDelay_ = function() {
  * @private
  */
 dotprod.model.Gun.prototype.getFireEnergy_ = function() {
-  return this.gunSettings_['fireEnergy'] * (this.level_ + 1);
+  return this.gunSettings_['fireEnergy'] * (this.level_.getValue() + 1);
 };
 
 /**
@@ -139,7 +141,7 @@ dotprod.model.Gun.prototype.getLifetime_ = function() {
  * @private
  */
 dotprod.model.Gun.prototype.getDamage_ = function() {
-  return this.gunSettings_['damage'] + this.level_ * this.gunSettings_['damageUpgrade'];
+  return this.gunSettings_['damage'] + this.level_.getValue() * this.gunSettings_['damageUpgrade'];
 };
 
 /**
