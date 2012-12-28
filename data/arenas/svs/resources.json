@@ -30,6 +30,30 @@
       "yTiles": 4
     },
 
+    "ship0DamageOverlay": {
+      "url": "data/shared/graphics/ship0_red.png",
+      "xTiles": 10,
+      "yTiles": 4
+    },
+
+    "ship1DamageOverlay": {
+      "url": "data/shared/graphics/ship1_red.png",
+      "xTiles": 10,
+      "yTiles": 4
+    },
+
+    "ship2DamageOverlay": {
+      "url": "data/shared/graphics/ship3_red.png",
+      "xTiles": 10,
+      "yTiles": 4
+    },
+
+    "ship3DamageOverlay": {
+      "url": "data/shared/graphics/ship7_red.png",
+      "xTiles": 10,
+      "yTiles": 4
+    },
+
     "presenceTyping": {
       "url": "data/shared/graphics/presence_typing.png",
       "xTiles": 1,
@@ -39,6 +63,24 @@
     "presenceAway": {
       "url": "data/shared/graphics/presence_away.png",
       "xTiles": 1,
+      "yTiles": 1
+    },
+    
+    "shipDisplayInfo": {
+      "url": "data/shared/graphics/disp.png",
+      "xTiles": 1,
+      "yTiles": 1
+    },
+
+    "energyFont": {
+      "url": "data/shared/graphics/engyfont.png",
+      "xTiles": 10,
+      "yTiles": 1
+    },
+
+    "ledFont": {
+      "url": "data/shared/graphics/led.png",
+      "xTiles": 10,
       "yTiles": 1
     }
   },

@@ -20,6 +20,7 @@ goog.require('dotprod.entities.LocalPlayer');
 goog.require('dotprod.entities.RemotePlayer');
 goog.require('dotprod.input.Keyboard');
 goog.require('dotprod.layers.EffectLayer');
+goog.require('dotprod.layers.HudLayer');
 goog.require('dotprod.layers.NotificationLayer');
 goog.require('dotprod.layers.MapLayer');
 goog.require('dotprod.layers.ProjectileLayer');
@@ -34,6 +35,7 @@ goog.require('dotprod.PrizeIndex');
 goog.require('dotprod.ProjectileIndex');
 goog.require('dotprod.Protocol');
 goog.require('dotprod.Timer');
+goog.require('dotprod.Timestamp');
 goog.require('dotprod.views.ChatView');
 goog.require('dotprod.views.DebugView');
 goog.require('dotprod.views.ScoreboardView');
@@ -153,7 +155,8 @@ dotprod.Game = function(protocol, resourceManager, settings, mapData) {
       new dotprod.layers.ShipLayer(this.playerIndex_),
       new dotprod.layers.EffectLayer(this.effectIndex_),
       new dotprod.layers.NotificationLayer(this.notifications_),
-      new dotprod.layers.RadarLayer(this)
+      new dotprod.layers.RadarLayer(this),
+      new dotprod.layers.HudLayer(this)
     ];
 
   /**
@@ -355,6 +358,8 @@ dotprod.Game.prototype.onPlayerEntered_ = function(packet) {
   this.playerIndex_.addPlayer(player);
 
   this.notifications_.addEnterMessage('Player entered: ' + name);
+
+  console.log('(' + dotprod.Timestamp.print() + ') ' + 'Player entered: ' + name);
 };
 
 /**
@@ -368,6 +373,8 @@ dotprod.Game.prototype.onPlayerLeft_ = function(packet) {
     this.projectileIndex_.removeProjectiles(player);
     this.playerIndex_.removePlayer(player);
     this.notifications_.addEnterMessage('Player left: ' + player.getName());
+
+    console.log('(' + dotprod.Timestamp.print() + ') ' + 'Player left: ' + player.getName());
   }
 };
 
@@ -419,6 +426,7 @@ dotprod.Game.prototype.onPlayerDied_ = function(packet) {
   this.prizeIndex_.addKillPrize(x, y);
 
   var message = killee.getName() + '(' + bountyGained + ') killed by: ' + killer.getName()
+  console.log('(' + dotprod.Timestamp.print() + ') ' + message);
   if (killer == this.playerIndex_.getLocalPlayer()) {
     this.notifications_.addPersonalMessage(message);
   } else {

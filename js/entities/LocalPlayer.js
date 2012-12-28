@@ -283,7 +283,7 @@ dotprod.entities.LocalPlayer.prototype.update = function() {
   var maximumSpeed = this.shipSettings_['speedPixelsPerTick'];
   var acceleration = this.shipSettings_['accelerationPerTick'];
   var accelerationEnergy = 0;
-  if (keyboard.isKeyPressed(goog.events.KeyCodes.SHIFT) && this.energy_ > this.shipSettings_['afterburnerEnergy']) {
+  if (keyboard.isKeyPressed(dotprod.Keymap.AFTERBURNER) && this.energy_ > this.shipSettings_['afterburnerEnergy']) {
     maximumSpeed = this.shipSettings_['afterburnerMaxSpeed'];
     acceleration = this.shipSettings_['afterburnerAcceleration'];
     accelerationEnergy = this.shipSettings_['afterburnerEnergy'];
@@ -340,12 +340,14 @@ dotprod.entities.LocalPlayer.prototype.render = function(camera) {
 
   goog.base(this, 'render', camera);
 
-  var barWidth = 300 * this.energy_ / this.maxEnergy_;
-  var barHeight = 10;
+  var x = Math.floor(dimensions.width / 2 - this.image_.getTileWidth() / 2);
+  var y = Math.floor(dimensions.height / 2 - this.image_.getTileHeight() / 2);
+  var tileNum = Math.floor(this.angleInRadians_ / (2 * Math.PI) * this.image_.getNumTiles());
 
   context.save();
-    context.fillStyle = 'rgba(255, 255, 255, 0.3)';
-    context.fillRect((dimensions.width - barWidth) / 2, 10, barWidth, barHeight);
+    context.globalAlpha = 0.7 * (1 - (this.energy_ / this.maxEnergy_));
+    context.globalCompositeOperation = 'lighter';
+    this.damageOverlay_.render(context, x, y, tileNum);
   context.restore();
 };
 

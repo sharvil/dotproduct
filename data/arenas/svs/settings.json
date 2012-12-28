@@ -59,6 +59,8 @@
         "maxLevel": 0,
         "blastRadius": 80,
         "blastRadiusUpgrade": 80,
+        "proxRadius": 56,
+        "proxRadiusUpgrade": 19,
         "bounceCount": 0,
         "recoilAcceleration": 0.5
       }
@@ -99,6 +101,8 @@
         "maxLevel": 1,
         "blastRadius": 80,
         "blastRadiusUpgrade": 80,
+        "proxRadius": 56,
+        "proxRadiusUpgrade": 19,
         "bounceCount": 1,
         "recoilAcceleration": 0.5
       }
@@ -139,6 +143,8 @@
         "maxLevel": 2,
         "blastRadius": 80,
         "blastRadiusUpgrade": 80,
+        "proxRadius": 56,
+        "proxRadiusUpgrade": 19,
         "bounceCount": 0,
         "recoilAcceleration": 0.5
       }
@@ -179,6 +185,8 @@
         "maxLevel": -1,
         "blastRadius": 80,
         "blastRadiusUpgrade": 80,
+        "proxRadius": 56,
+        "proxRadiusUpgrade": 19,
         "bounceCount": 0,
         "recoilAcceleration": 0.5
       }
