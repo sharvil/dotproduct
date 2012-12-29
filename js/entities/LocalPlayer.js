@@ -23,10 +23,11 @@ goog.require('dotprod.math.Vector');
  * @param {!dotprod.Game} game
  * @param {string} id
  * @param {string} name
+ * @param {number} team
  * @param {number} ship
  * @param {!dotprod.Camera} camera
  */
-dotprod.entities.LocalPlayer = function(game, id, name, ship, camera) {
+dotprod.entities.LocalPlayer = function(game, id, name, team, ship, camera) {
   /**
    * @type {!dotprod.ProjectileIndex}
    * @private
@@ -81,7 +82,7 @@ dotprod.entities.LocalPlayer = function(game, id, name, ship, camera) {
    */
   this.damageOverlay_;
 
-  dotprod.entities.Player.call(this, game, id, name, ship, 0 /* bounty */);
+  dotprod.entities.Player.call(this, game, id, name, team, ship, 0 /* bounty */);
 };
 goog.inherits(dotprod.entities.LocalPlayer, dotprod.entities.Player);
 

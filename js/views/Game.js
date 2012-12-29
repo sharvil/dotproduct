@@ -112,7 +112,7 @@ dotprod.Game = function(protocol, resourceManager, settings, mapData) {
   this.effectIndex_ = new dotprod.EffectIndex();
 
   var startingShip = Math.floor(Math.random() * this.settings_['ships'].length);
-  var localPlayer = new dotprod.entities.LocalPlayer(this, this.settings_['id'], this.settings_['name'], startingShip, this.camera_);
+  var localPlayer = new dotprod.entities.LocalPlayer(this, this.settings_['id'], this.settings_['name'], this.settings_['team'], startingShip, this.camera_);
 
   /**
    * @type {!dotprod.PlayerIndex}
@@ -349,11 +349,12 @@ dotprod.Game.prototype.renderingLoop_ = function() {
 dotprod.Game.prototype.onPlayerEntered_ = function(packet) {
   var id = packet[0];
   var name = packet[1];
-  var ship = packet[2];
-  var bounty = packet[3];
-  var presence = /** @type {!dotprod.entities.Player.Presence} */ (packet[4]);
+  var team = packet[2];
+  var ship = packet[3];
+  var bounty = packet[4];
+  var presence = /** @type {!dotprod.entities.Player.Presence} */ (packet[5]);
 
-  var player = new dotprod.entities.RemotePlayer(this, id, name, ship, bounty);
+  var player = new dotprod.entities.RemotePlayer(this, id, name, team, ship, bounty);
   player.setPresence(presence);
   this.playerIndex_.addPlayer(player);
 

@@ -21,10 +21,11 @@ goog.require('dotprod.Palette');
  * @param {!dotprod.Game} game
  * @param {string} id
  * @param {string} name
+ * @param {number} team
  * @param {number} ship
  * @param {number} bounty
  */
-dotprod.entities.Player = function(game, id, name, ship, bounty) {
+dotprod.entities.Player = function(game, id, name, team, ship, bounty) {
   dotprod.entities.Entity.call(this, game);
 
   /**
@@ -68,6 +69,12 @@ dotprod.entities.Player = function(game, id, name, ship, bounty) {
    * @protected
    */
   this.name_ = name;
+
+  /**
+   * @type {number}
+   * @protected
+   */
+  this.team_ = team;
 
   /**
    * @type {number}
@@ -198,6 +205,13 @@ dotprod.entities.Player.prototype.getShip = function() {
 /**
  * @return {number}
  */
+dotprod.entities.Player.prototype.getTeam = function() {
+  return this.team_;
+};
+
+/**
+ * @return {number}
+ */
 dotprod.entities.Player.prototype.getBounty = function () {
   return this.bounty_;
 };
@@ -304,7 +318,7 @@ dotprod.entities.Player.prototype.onScoreUpdate = function(points, wins, losses)
  * @return {boolean}
  */
 dotprod.entities.Player.prototype.isFriend = function(other) {
-  return this == other;
+  return this.team_ == other.team_;
 };
 
 dotprod.entities.Player.prototype.warpFlash = function() {

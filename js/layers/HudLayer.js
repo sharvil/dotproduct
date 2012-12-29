@@ -155,21 +155,40 @@ dotprod.layers.HudLayer.prototype.renderShipInfoDisplay_ = function(context, dim
 
   this.statusHudImage_.render(context, statusHudLeft, statusHudTop);
 
-  var energyDigits = Math.floor(this.player_.getEnergy());
-  var digitOffset = 0;
-  var offsetWidth = this.energyFontImage_.getTileWidth();
-  do {
-    this.energyFontImage_.render(context, statusHudRight - 30 - digitOffset * offsetWidth, statusHudTop - 5, energyDigits % 10);
-    energyDigits = Math.floor(energyDigits / 10);
-    ++digitOffset;
-  } while (energyDigits);
+  // Energy
+  var self = this;
+  var x = statusHudRight - 30;
+  var y = statusHudTop - 5;
+  this.forEachDigitInReverse_(this.player_.getEnergy(), function(digit) {
+    self.energyFontImage_.render(context, x, y, digit);
+    x -= self.energyFontImage_.getTileWidth();
+  });
 
-  var bountyDigits = this.player_.getBounty();
-  var digitOffset = 0;
-  var offsetWidth = this.ledFontImage_.getTileWidth();
+  // Team
+  x = statusHudLeft + 65;
+  y = statusHudTop + 28;
+  this.forEachDigitInReverse_(this.player_.getTeam(), function(digit) {
+    self.ledFontImage_.render(context, x, y, digit);
+    x -= self.ledFontImage_.getTileWidth();
+  });
+
+  // Bounty
+  x = statusHudLeft + 65;
+  y = statusHudTop + 52;
+  this.forEachDigitInReverse_(this.player_.getBounty(), function(digit) {
+    self.ledFontImage_.render(context, x, y, digit);
+    x -= self.ledFontImage_.getTileWidth();
+  });
+};
+
+/**
+ * @param {number} num
+ * @param {function(number)} callback
+ */
+dotprod.layers.HudLayer.prototype.forEachDigitInReverse_ = function(num, callback) {
+  num = Math.floor(num);
   do {
-    this.ledFontImage_.render(context, statusHudLeft + 65 - digitOffset * offsetWidth, statusHudTop + 52, bountyDigits % 10);
-    bountyDigits = Math.floor(bountyDigits / 10);
-    ++digitOffset;
-  } while (bountyDigits);
+    callback(num % 10);
+    num = Math.floor(num / 10);
+  } while (num != 0);
 };

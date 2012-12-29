@@ -18,10 +18,12 @@ goog.require('dotprod.math.Vector');
  * @param {!dotprod.Game} game
  * @param {string} id
  * @param {string} name
+ * @param {number} team
  * @param {number} ship
+ * @param {number} bounty
  */
-dotprod.entities.RemotePlayer = function(game, id, name, ship, bounty) {
-  dotprod.entities.Player.call(this, game, id, name, ship, bounty);
+dotprod.entities.RemotePlayer = function(game, id, name, team, ship, bounty) {
+  dotprod.entities.Player.call(this, game, id, name, team, ship, bounty);
 
   /**
    * The timestamp, in millseconds, when we last interpolated a bounce off a wall.
