@@ -3,7 +3,7 @@
  * @author sharvil.nanavati@gmail.com (Sharvil Nanavati)
  */
 
-goog.provide('dotprod.Rect');
+goog.provide('dotprod.math.Rect');
 
 /**
  * @constructor
@@ -12,7 +12,7 @@ goog.provide('dotprod.Rect');
  * @param {number} width
  * @param {number} height
  */
-dotprod.Rect = function(x, y, width, height) {
+dotprod.math.Rect = function(x, y, width, height) {
   this.x_ = x;
   this.y_ = y;
   this.width_ = width;
@@ -25,62 +25,62 @@ dotprod.Rect = function(x, y, width, height) {
  * @param {number} right
  * @param {number} bottom
  */
-dotprod.Rect.fromBox = function(left, top, right, bottom) {
-  return new dotprod.Rect(left, top, right - left, bottom - top);
+dotprod.math.Rect.fromBox = function(left, top, right, bottom) {
+  return new dotprod.math.Rect(left, top, right - left, bottom - top);
 };
 
 /**
  * @return {number}
  */
-dotprod.Rect.prototype.x = function() {
+dotprod.math.Rect.prototype.x = function() {
   return this.x_;
 };
 
 /**
  * @return {number}
  */
-dotprod.Rect.prototype.y = function() {
+dotprod.math.Rect.prototype.y = function() {
   return this.y_;
 };
 
 /**
  * @return {number}
  */
-dotprod.Rect.prototype.width = function() {
+dotprod.math.Rect.prototype.width = function() {
   return this.width_;
 };
 
 /**
  * @return {number}
  */
-dotprod.Rect.prototype.height = function() {
+dotprod.math.Rect.prototype.height = function() {
   return this.height_;
 };
 
 /**
  * @return {number}
  */
-dotprod.Rect.prototype.left = function() {
+dotprod.math.Rect.prototype.left = function() {
   return this.x_;
 };
 
 /**
  * @return {number}
  */
-dotprod.Rect.prototype.right = function() {
+dotprod.math.Rect.prototype.right = function() {
   return this.x_ + this.width_;
 };
 
 /**
  * @return {number}
  */
-dotprod.Rect.prototype.top = function() {
+dotprod.math.Rect.prototype.top = function() {
   return this.y_;
 };
 
 /**
  * @return {number}
  */
-dotprod.Rect.prototype.bottom = function() {
+dotprod.math.Rect.prototype.bottom = function() {
   return this.y_ + this.height_;
 };

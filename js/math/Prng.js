@@ -54,39 +54,39 @@
    email: m-mat @ math.sci.hiroshima-u.ac.jp (remove space)
 */
 
-goog.provide('dotprod.Prng');
+goog.provide('dotprod.math.Prng');
 
 /**
  * @constructor
  */
-dotprod.Prng = function() {
-  this.mt_ = new Array(dotprod.Prng.N_);  /* the array for the state vector  */
-  this.mti_ = dotprod.Prng.N_ + 1;        /* mti==N+1 means mt[N] is not initialized */
+dotprod.math.Prng = function() {
+  this.mt_ = new Array(dotprod.math.Prng.N_);  /* the array for the state vector  */
+  this.mti_ = dotprod.math.Prng.N_ + 1;        /* mti==N+1 means mt[N] is not initialized */
 };
 
-dotprod.Prng.N_ = 624;
-dotprod.Prng.M_ = 397;
-dotprod.Prng.MATRIX_A_ = 0x9908b0df;   /* constant vector a */
-dotprod.Prng.UPPER_MASK_ = 0x80000000; /* most significant w-r bits */
-dotprod.Prng.LOWER_MASK_ = 0x7fffffff; /* least significant r bits */
+dotprod.math.Prng.N_ = 624;
+dotprod.math.Prng.M_ = 397;
+dotprod.math.Prng.MATRIX_A_ = 0x9908b0df;   /* constant vector a */
+dotprod.math.Prng.UPPER_MASK_ = 0x80000000; /* most significant w-r bits */
+dotprod.math.Prng.LOWER_MASK_ = 0x7fffffff; /* least significant r bits */
 
 // returns a 32-bits unsigned integer from an operand to which applied a bit operator.
-dotprod.Prng.prototype.unsigned32_ = function(n1) {
-  return n1 < 0 ? (n1 ^ dotprod.Prng.UPPER_MASK_) + dotprod.Prng.UPPER_MASK_ : n1;
+dotprod.math.Prng.prototype.unsigned32_ = function(n1) {
+  return n1 < 0 ? (n1 ^ dotprod.math.Prng.UPPER_MASK_) + dotprod.math.Prng.UPPER_MASK_ : n1;
 };
 
 // emulates lowerflow of a c 32-bits unsiged integer variable, instead of the operator -. these both arguments must be non-negative integers expressible using unsigned 32 bits.
-dotprod.Prng.prototype.subtraction32_ = function(n1, n2) {
+dotprod.math.Prng.prototype.subtraction32_ = function(n1, n2) {
   return n1 < n2 ? this.unsigned32_((0x100000000 - (n2 - n1)) & 0xffffffff) : n1 - n2;
 };
 
 // emulates overflow of a c 32-bits unsiged integer variable, instead of the operator +. these both arguments must be non-negative integers expressible using unsigned 32 bits.
-dotprod.Prng.prototype.addition32_ = function(n1, n2) {
+dotprod.math.Prng.prototype.addition32_ = function(n1, n2) {
   return this.unsigned32_((n1 + n2) & 0xffffffff);
 };
 
 // emulates overflow of a c 32-bits unsiged integer variable, instead of the operator *. these both arguments must be non-negative integers expressible using unsigned 32 bits.
-dotprod.Prng.prototype.multiplication32_ = function(n1, n2) {
+dotprod.math.Prng.prototype.multiplication32_ = function(n1, n2) {
   var sum = 0;
   for (var i = 0; i < 32; ++i) {
     if ((n1 >>> i) & 0x1) {
@@ -97,9 +97,9 @@ dotprod.Prng.prototype.multiplication32_ = function(n1, n2) {
 };
 
 /* initializes mt[N] with a seed */
-dotprod.Prng.prototype.seed = function(s) {
+dotprod.math.Prng.prototype.seed = function(s) {
   this.mt_[0] = this.unsigned32_(s & 0xffffffff);
-  for (this.mti_ = 1; this.mti_ < dotprod.Prng.N_; this.mti_++) {
+  for (this.mti_ = 1; this.mti_ < dotprod.math.Prng.N_; this.mti_++) {
     this.mt_[this.mti_] = this.addition32_(this.multiplication32_(1812433253,
                                this.unsigned32_(this.mt_[this.mti_ - 1] ^ (this.mt_[this.mti_ - 1] >>> 30))),
                                this.mti_);
@@ -112,28 +112,28 @@ dotprod.Prng.prototype.seed = function(s) {
 };
 
 /* generates a random number on [0,0xffffffff]-interval */
-dotprod.Prng.prototype.random = function() {
+dotprod.math.Prng.prototype.random = function() {
 	var y;
-	var mag01 = new Array(0x0, dotprod.Prng.MATRIX_A_);
+	var mag01 = new Array(0x0, dotprod.math.Prng.MATRIX_A_);
 
-	if (this.mti_ >= dotprod.Prng.N_) { /* generate N words at one time */
+	if (this.mti_ >= dotprod.math.Prng.N_) { /* generate N words at one time */
 		var kk;
 
-		if (this.mti_ == dotprod.Prng.N_ + 1) {   /* if init_genrand() has not been called, */
+		if (this.mti_ == dotprod.math.Prng.N_ + 1) {   /* if init_genrand() has not been called, */
 			this.seed(5489); /* a default initial seed is used */
 		}
 
-		for (kk = 0; kk < dotprod.Prng.N_ - dotprod.Prng.M_; kk++) {
-			y = this.unsigned32_((this.mt_[kk] & dotprod.Prng.UPPER_MASK_) | (this.mt_[kk + 1] & dotprod.Prng.LOWER_MASK_));
-			this.mt_[kk] = this.unsigned32_(this.mt_[kk + dotprod.Prng.M_] ^ (y >>> 1) ^ mag01[y & 0x1]);
+		for (kk = 0; kk < dotprod.math.Prng.N_ - dotprod.math.Prng.M_; kk++) {
+			y = this.unsigned32_((this.mt_[kk] & dotprod.math.Prng.UPPER_MASK_) | (this.mt_[kk + 1] & dotprod.math.Prng.LOWER_MASK_));
+			this.mt_[kk] = this.unsigned32_(this.mt_[kk + dotprod.math.Prng.M_] ^ (y >>> 1) ^ mag01[y & 0x1]);
 		}
-		for (; kk < dotprod.Prng.N_ - 1; kk++) {
-			y = this.unsigned32_((this.mt_[kk] & dotprod.Prng.UPPER_MASK_) | (this.mt_[kk + 1] & dotprod.Prng.LOWER_MASK_));
-			this.mt_[kk] = this.unsigned32_(this.mt_[kk + (dotprod.Prng.M_ - dotprod.Prng.N_)] ^ (y >>> 1) ^ mag01[y & 0x1]);
+		for (; kk < dotprod.math.Prng.N_ - 1; kk++) {
+			y = this.unsigned32_((this.mt_[kk] & dotprod.math.Prng.UPPER_MASK_) | (this.mt_[kk + 1] & dotprod.math.Prng.LOWER_MASK_));
+			this.mt_[kk] = this.unsigned32_(this.mt_[kk + (dotprod.math.Prng.M_ - dotprod.math.Prng.N_)] ^ (y >>> 1) ^ mag01[y & 0x1]);
 		}
 
-		y = this.unsigned32_((this.mt_[dotprod.Prng.N_ - 1] & dotprod.Prng.UPPER_MASK_) | (this.mt_[0] & dotprod.Prng.LOWER_MASK_));
-		this.mt_[dotprod.Prng.N_ - 1] = this.unsigned32_(this.mt_[dotprod.Prng.M_ - 1] ^ (y >>> 1) ^ mag01[y & 0x1]);
+		y = this.unsigned32_((this.mt_[dotprod.math.Prng.N_ - 1] & dotprod.math.Prng.UPPER_MASK_) | (this.mt_[0] & dotprod.math.Prng.LOWER_MASK_));
+		this.mt_[dotprod.math.Prng.N_ - 1] = this.unsigned32_(this.mt_[dotprod.math.Prng.M_ - 1] ^ (y >>> 1) ^ mag01[y & 0x1]);
 		this.mti_ = 0;
 	}
 

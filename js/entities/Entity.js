@@ -5,7 +5,7 @@
 
 goog.provide('dotprod.entities.Entity');
 
-goog.require('dotprod.Vector');
+goog.require('dotprod.math.Vector');
 
 /**
  * @constructor
@@ -19,16 +19,16 @@ dotprod.entities.Entity = function(game) {
   this.game_ = game;
 
   /**
-   * @type {!dotprod.Vector}
+   * @type {!dotprod.math.Vector}
    * @protected
    */
-  this.position_ = new dotprod.Vector(0, 0);
+  this.position_ = new dotprod.math.Vector(0, 0);
 
   /**
-   * @type {!dotprod.Vector}
+   * @type {!dotprod.math.Vector}
    * @protected
    */
-  this.velocity_ = new dotprod.Vector(0, 0);
+  this.velocity_ = new dotprod.math.Vector(0, 0);
 
   /**
    * @type {number}
@@ -44,14 +44,14 @@ dotprod.entities.Entity = function(game) {
 };
 
 /**
- * @return {!dotprod.Vector}
+ * @return {!dotprod.math.Vector}
  */
 dotprod.entities.Entity.prototype.getPosition = function() {
   return this.position_;
 };
 
 /**
- * @return {!dotprod.Vector}
+ * @return {!dotprod.math.Vector}
  */
 dotprod.entities.Entity.prototype.getVelocity = function() {
   return this.velocity_;
@@ -102,7 +102,7 @@ dotprod.entities.Entity.prototype.updatePosition_ = function(opt_bounceFactor) {
   for (var i = 0; i < xSpeed; i += tileWidth) {
     var xVel = this.velocity_.getX();
     var dx = Math.min(xSpeed - i, tileWidth);
-    this.position_ = this.position_.add(new dotprod.Vector(xVel < 0 ? -dx : dx, 0));
+    this.position_ = this.position_.add(new dotprod.math.Vector(xVel < 0 ? -dx : dx, 0));
 
     var collision = map.getCollision(this);
     if (collision) {
@@ -112,8 +112,8 @@ dotprod.entities.Entity.prototype.updatePosition_ = function(opt_bounceFactor) {
           prizeIndex.removePrize(prize);
         }
       } else {
-        this.position_ = new dotprod.Vector(xVel >= 0 ? collision.left : collision.right, this.position_.getY());
-        this.velocity_ = new dotprod.Vector(-xVel * bounceFactor, this.velocity_.getY());
+        this.position_ = new dotprod.math.Vector(xVel >= 0 ? collision.left : collision.right, this.position_.getY());
+        this.velocity_ = new dotprod.math.Vector(-xVel * bounceFactor, this.velocity_.getY());
         xSpeed *= bounceFactor;
         this.bounce_();
       }
@@ -125,7 +125,7 @@ dotprod.entities.Entity.prototype.updatePosition_ = function(opt_bounceFactor) {
   for (var i = 0; i < ySpeed; i += tileHeight) {
     var yVel = this.velocity_.getY();
     var dy = Math.min(ySpeed - i, tileHeight);
-    this.position_ = this.position_.add(new dotprod.Vector(0, yVel < 0 ? -dy : dy));
+    this.position_ = this.position_.add(new dotprod.math.Vector(0, yVel < 0 ? -dy : dy));
 
     var collision = this.game_.getMap().getCollision(this);
     if (collision) {
@@ -135,8 +135,8 @@ dotprod.entities.Entity.prototype.updatePosition_ = function(opt_bounceFactor) {
           prizeIndex.removePrize(prize);
         }
       } else {
-        this.position_ = new dotprod.Vector(this.position_.getX(), yVel >= 0 ? collision.top : collision.bottom);
-        this.velocity_ = new dotprod.Vector(this.velocity_.getX(), -yVel * bounceFactor);
+        this.position_ = new dotprod.math.Vector(this.position_.getX(), yVel >= 0 ? collision.top : collision.bottom);
+        this.velocity_ = new dotprod.math.Vector(this.velocity_.getX(), -yVel * bounceFactor);
         ySpeed *= bounceFactor;
         this.bounce_();
       }

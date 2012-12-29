@@ -9,7 +9,7 @@ goog.require('dotprod.Camera');
 goog.require('dotprod.entities.Effect');
 goog.require('dotprod.entities.Projectile');
 goog.require('dotprod.model.Weapon.Type');
-goog.require('dotprod.Vector');
+goog.require('dotprod.math.Vector');
 
 /**
  * @constructor
@@ -17,8 +17,8 @@ goog.require('dotprod.Vector');
  * @param {!dotprod.Game} game
  * @param {!dotprod.entities.Player} owner
  * @param {number} level
- * @param {!dotprod.Vector} position
- * @param {!dotprod.Vector} velocity
+ * @param {!dotprod.math.Vector} position
+ * @param {!dotprod.math.Vector} velocity
  * @param {number} lifetime
  * @param {number} damage
  * @param {number} bounceCount
@@ -164,12 +164,12 @@ dotprod.entities.Bomb.prototype.bounce_ = function() {
  */
 dotprod.entities.Bomb.prototype.explode_ = function(directHit) {
   // Reset bomb state.
-  this.velocity_ = new dotprod.Vector(0, 0);
+  this.velocity_ = new dotprod.math.Vector(0, 0);
   this.lifetime_ = 0;
 
   // Add an explosion animation.
   var animation = this.game_.getResourceManager().getVideoEnsemble('explode2').getAnimation(0);
-  var explosion = new dotprod.entities.Effect(animation, this.position_, new dotprod.Vector(0, 0));
+  var explosion = new dotprod.entities.Effect(animation, this.position_, new dotprod.math.Vector(0, 0));
   this.game_.getEffectIndex().addEffect(explosion);
 
   // Figure out how much damage the local player is going to take from this bomb explosion.

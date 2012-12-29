@@ -9,7 +9,7 @@ goog.require('dotprod.entities.LocalPlayer');
 goog.require('dotprod.entities.Player');
 goog.require('dotprod.layers.Layer');
 goog.require('dotprod.Palette');
-goog.require('dotprod.Rect');
+goog.require('dotprod.math.Rect');
 
 /**
  * @constructor
@@ -145,7 +145,7 @@ dotprod.layers.RadarLayer.prototype.renderMap_ = function(context, dimensions, r
   rightTile = Math.min(rightTile, map.getWidth());
   bottomTile = Math.min(bottomTile, map.getHeight());
 
-  var tiles = map.getTiles(dotprod.Rect.fromBox(leftTile, topTile, rightTile, bottomTile));
+  var tiles = map.getTiles(dotprod.math.Rect.fromBox(leftTile, topTile, rightTile, bottomTile));
   for (var i = 0; i < tiles.length; ++i) {
     var tile = tiles[i];
     var xPixels = (tile.x - dimensions.x / tileWidth) * scaledTileWidth;

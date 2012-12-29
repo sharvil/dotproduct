@@ -218,8 +218,8 @@ dotprod.entities.Player.prototype.setShip = function(ship) {
   this.gun_ = new dotprod.model.Gun(this.game_, this.shipSettings_['bullet'], this);
   this.bombBay_ = new dotprod.model.BombBay(this.game_, this.shipSettings_['bomb'], this);
 
-  this.position_ = new dotprod.Vector(0, 0);
-  this.velocity_ = new dotprod.Vector(0, 0);
+  this.position_ = new dotprod.math.Vector(0, 0);
+  this.velocity_ = new dotprod.math.Vector(0, 0);
   this.energy_ = 0;
   this.bounty_ = 0;
   this.xRadius_ = this.shipSettings_['xRadius'];
@@ -266,7 +266,7 @@ dotprod.entities.Player.prototype.onDeath = function() {
   ensemble = this.resourceManager_.getVideoEnsemble('ship' + this.ship_ + '_junk');
   for (var i = 0; i < ensemble.getNumAnimations(); ++i) {
     var animation = ensemble.getAnimation(i);
-    var deltaVelocity = dotprod.Vector.fromPolar(Math.random() * 2, Math.random() * 2 * Math.PI);
+    var deltaVelocity = dotprod.math.Vector.fromPolar(Math.random() * 2, Math.random() * 2 * Math.PI);
     var piece = new dotprod.entities.Effect(animation, this.position_, this.velocity_.add(deltaVelocity));
     this.effectIndex_.addEffect(piece);
   }
@@ -309,7 +309,7 @@ dotprod.entities.Player.prototype.isFriend = function(other) {
 
 dotprod.entities.Player.prototype.warpFlash = function() {
   var animation = this.resourceManager_.getVideoEnsemble('warp').getAnimation(0);
-  this.effectIndex_.addEffect(new dotprod.entities.Effect(animation, this.position_, new dotprod.Vector(0, 0)));
+  this.effectIndex_.addEffect(new dotprod.entities.Effect(animation, this.position_, new dotprod.math.Vector(0, 0)));
 };
 
 /**
@@ -362,8 +362,8 @@ dotprod.entities.Player.prototype.onPrizeCollected = function() {
  * @param {number} type
  * @param {number} level
  * @param {number} bounceCount
- * @param {!dotprod.Vector} position
- * @param {!dotprod.Vector} velocity
+ * @param {!dotprod.math.Vector} position
+ * @param {!dotprod.math.Vector} velocity
  */
 dotprod.entities.Player.prototype.fireWeapon = function(timeDiff, type, level, bounceCount, position, velocity) {
   var projectile;

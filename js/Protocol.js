@@ -9,7 +9,7 @@ goog.provide('dotprod.Protocol.S2CPacketType');
 goog.require('goog.debug.Logger');
 goog.require('dotprod.entities.Projectile');
 goog.require('dotprod.Timer');
-goog.require('dotprod.Vector');
+goog.require('dotprod.math.Vector');
 
 /**
  * @constructor
@@ -170,8 +170,8 @@ dotprod.Protocol.prototype.startGame = function(ship) {
 
 /**
  * @param {number} direction
- * @param {!dotprod.Vector} position
- * @param {!dotprod.Vector} velocity
+ * @param {!dotprod.math.Vector} position
+ * @param {!dotprod.math.Vector} velocity
  * @param {!dotprod.entities.Projectile=} opt_projectile
  */
 dotprod.Protocol.prototype.sendPosition = function(direction, position, velocity, opt_projectile) {
@@ -218,7 +218,7 @@ dotprod.Protocol.prototype.onClockSyncReply_ = function(packet) {
 };
 
 /**
- * @param {!dotprod.Vector} position The position of the local player at the time of death.
+ * @param {!dotprod.math.Vector} position The position of the local player at the time of death.
  * @param {!dotprod.entities.Player} killer
  */
 dotprod.Protocol.prototype.sendDeath = function(position, killer) {

@@ -5,8 +5,8 @@
 
 goog.provide('dotprod.PrizeIndex');
 
+goog.require('dotprod.math.Prng');
 goog.require('dotprod.Prize');
-goog.require('dotprod.Prng');
 goog.require('goog.array');
 
 /**
@@ -26,10 +26,10 @@ dotprod.PrizeIndex = function(game) {
   this.map_ = game.getMap();
 
   /**
-   * @type {!dotprod.Prng}
+   * @type {!dotprod.math.Prng}
    * @private
    */
-  this.prng_ = new dotprod.Prng();
+  this.prng_ = new dotprod.math.Prng();
 
   /**
    * This PRNG doesn't need to be synchronized across clients. We use
@@ -39,7 +39,7 @@ dotprod.PrizeIndex = function(game) {
    * @type {!dotprod.Prng}
    * @private
    */
-  this.killPrng_ = new dotprod.Prng();
+  this.killPrng_ = new dotprod.math.Prng();
 
   /**
    * @type {!Array.<dotprod.Prize>}
@@ -53,7 +53,7 @@ dotprod.PrizeIndex = function(game) {
  * @param {number} y
  */
 dotprod.PrizeIndex.prototype.addKillPrize = function(x, y) {
-  var coordinates = this.map_.toTileCoordinates(new dotprod.Vector(x, y));
+  var coordinates = this.map_.toTileCoordinates(new dotprod.math.Vector(x, y));
   var xTile = coordinates.getX();
   var yTile = coordinates.getY();
 

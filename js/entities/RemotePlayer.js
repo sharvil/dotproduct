@@ -10,7 +10,7 @@ goog.require('dotprod.EffectIndex');
 goog.require('dotprod.entities.Player');
 goog.require('dotprod.Map');
 goog.require('dotprod.Timer');
-goog.require('dotprod.Vector');
+goog.require('dotprod.math.Vector');
 
 /**
  * @constructor
@@ -39,10 +39,10 @@ dotprod.entities.RemotePlayer = function(game, id, name, ship, bounty) {
    * to interpolate to the correct location. It's defined here because we need to
    * bounce the velocity vector during collision detection.
    *
-   * @type {!dotprod.Vector}
+   * @type {!dotprod.math.Vector}
    * @protected
    */
-  this.originalVelocity_ = new dotprod.Vector(0, 0);
+  this.originalVelocity_ = new dotprod.math.Vector(0, 0);
 
   /**
    * @type {number}
@@ -73,8 +73,8 @@ dotprod.entities.RemotePlayer.VELOCITY_ADJUST_PERIOD_ = 20;
 /**
  * @param {number} timeDiff
  * @param {number} angle
- * @param {!dotprod.Vector} position
- * @param {!dotprod.Vector} velocity
+ * @param {!dotprod.math.Vector} position
+ * @param {!dotprod.math.Vector} velocity
  */
 dotprod.entities.RemotePlayer.prototype.onPositionUpdate = function(timeDiff, angle, position, velocity) {
   if (!this.isAlive()) {
@@ -102,15 +102,15 @@ dotprod.entities.RemotePlayer.prototype.onPositionUpdate = function(timeDiff, an
   this.velocityAdjustTimer_ = dotprod.entities.RemotePlayer.VELOCITY_ADJUST_PERIOD_;
 
   if (Math.abs(distance.getX()) >= dotprod.entities.RemotePlayer.MAX_DRIFT_PIXELS_) {
-    this.position_ = new dotprod.Vector(finalPosition.getX(), this.position_.getY());
+    this.position_ = new dotprod.math.Vector(finalPosition.getX(), this.position_.getY());
   } else {
-    this.velocity_ = this.velocity_.add(new dotprod.Vector(distance.getX(), 0).scale(1 / dotprod.entities.RemotePlayer.VELOCITY_ADJUST_PERIOD_));
+    this.velocity_ = this.velocity_.add(new dotprod.math.Vector(distance.getX(), 0).scale(1 / dotprod.entities.RemotePlayer.VELOCITY_ADJUST_PERIOD_));
   }
 
   if (Math.abs(distance.getY()) >= dotprod.entities.RemotePlayer.MAX_DRIFT_PIXELS_) {
-    this.position_ = new dotprod.Vector(this.position_.getX(), finalPosition.getY());
+    this.position_ = new dotprod.math.Vector(this.position_.getX(), finalPosition.getY());
   } else {
-    this.velocity_ = this.velocity_.add(new dotprod.Vector(0, distance.getY()).scale(1 / dotprod.entities.RemotePlayer.VELOCITY_ADJUST_PERIOD_));
+    this.velocity_ = this.velocity_.add(new dotprod.math.Vector(0, distance.getY()).scale(1 / dotprod.entities.RemotePlayer.VELOCITY_ADJUST_PERIOD_));
   }
 };
 
@@ -126,9 +126,9 @@ dotprod.entities.RemotePlayer.prototype.update = function() {
 
 /**
  * @param {number} timeDiff
- * @param {!dotprod.Vector} startPosition
- * @param {!dotprod.Vector} startVelocity
- * @return {!dotprod.Vector}
+ * @param {!dotprod.math.Vector} startPosition
+ * @param {!dotprod.math.Vector} startVelocity
+ * @return {!dotprod.math.Vector}
  * @private
  */
 dotprod.entities.RemotePlayer.prototype.extrapolatePosition_ = function(timeDiff, startPosition, startVelocity) {

@@ -6,7 +6,7 @@
 goog.provide('dotprod.entities.Effect');
 
 goog.require('dotprod.Animation');
-goog.require('dotprod.Vector');
+goog.require('dotprod.math.Vector');
 
 /**
  * @constructor
@@ -19,13 +19,13 @@ dotprod.entities.Effect = function(animation, position, velocity) {
   this.animation_ = animation;
 
   /**
-   * @type {!dotprod.Vector}
+   * @type {!dotprod.math.Vector}
    * @private
    */
   this.position_ = position;
 
   /**
-   * @type {!dotprod.Vector}
+   * @type {!dotprod.math.Vector}
    * @private
    */
   this.velocity_ = velocity;

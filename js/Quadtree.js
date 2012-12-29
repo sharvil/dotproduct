@@ -6,7 +6,7 @@
 goog.provide('dotprod.Quadtree');
 goog.provide('dotprod.Quadtree.Node');
 
-goog.require('dotprod.Rect');
+goog.require('dotprod.math.Rect');
 
 /**
  * @constructor
@@ -19,7 +19,7 @@ dotprod.Quadtree = function(mapData, width, height) {
    * @type {!dotprod.Quadtree.Node}
    * @private
    */
-  this.rootNode_ = new dotprod.Quadtree.Node(mapData, width, new dotprod.Rect(0, 0, width, height));
+  this.rootNode_ = new dotprod.Quadtree.Node(mapData, width, new dotprod.math.Rect(0, 0, width, height));
 };
 
 /**
@@ -37,7 +37,7 @@ dotprod.Quadtree.MIN_SIZE_ = 4;
 dotprod.Quadtree.MIN_TILES_ = 16;
 
 /**
- * @param {!dotprod.Rect} viewport
+ * @param {!dotprod.math.Rect} viewport
  * @return {!Array.<!Object>}
  */
 dotprod.Quadtree.prototype.tilesForViewport = function(viewport) {
@@ -48,11 +48,11 @@ dotprod.Quadtree.prototype.tilesForViewport = function(viewport) {
  * @constructor
  * @param {!Object.<number, number>} mapData
  * @param {number} stride
- * @param {!dotprod.Rect} rect
+ * @param {!dotprod.math.Rect} rect
  */
 dotprod.Quadtree.Node = function(mapData, stride, rect) {
   /**
-   * @type {!dotprod.Rect}
+   * @type {!dotprod.math.Rect}
    * @private
    */
   this.rect_ = rect;
@@ -80,10 +80,10 @@ dotprod.Quadtree.Node = function(mapData, stride, rect) {
   if (width > dotprod.Quadtree.MIN_SIZE_ && height > dotprod.Quadtree.MIN_SIZE_) {
     var midX = rect.left() + Math.floor(width / 2);
     var midY = rect.top() + Math.floor(height / 2);
-    this.children_.push(new dotprod.Quadtree.Node(mapData, stride, dotprod.Rect.fromBox(rect.left(), rect.top(), midX,         midY)));
-    this.children_.push(new dotprod.Quadtree.Node(mapData, stride, dotprod.Rect.fromBox(midX + 1,    rect.top(), rect.right(), midY)));
-    this.children_.push(new dotprod.Quadtree.Node(mapData, stride, dotprod.Rect.fromBox(rect.left(), midY + 1,   midX,         rect.bottom())));
-    this.children_.push(new dotprod.Quadtree.Node(mapData, stride, dotprod.Rect.fromBox(midX + 1,    midY + 1,   rect.right(), rect.bottom())));
+    this.children_.push(new dotprod.Quadtree.Node(mapData, stride, dotprod.math.Rect.fromBox(rect.left(), rect.top(), midX,         midY)));
+    this.children_.push(new dotprod.Quadtree.Node(mapData, stride, dotprod.math.Rect.fromBox(midX + 1,    rect.top(), rect.right(), midY)));
+    this.children_.push(new dotprod.Quadtree.Node(mapData, stride, dotprod.math.Rect.fromBox(rect.left(), midY + 1,   midX,         rect.bottom())));
+    this.children_.push(new dotprod.Quadtree.Node(mapData, stride, dotprod.math.Rect.fromBox(midX + 1,    midY + 1,   rect.right(), rect.bottom())));
     this.merge_();
     this.prune_();
   } else {
@@ -100,7 +100,7 @@ dotprod.Quadtree.Node = function(mapData, stride, rect) {
 };
 
 /**
- * @param {!dotprod.Rect} viewport
+ * @param {!dotprod.math.Rect} viewport
  * @return {!Array.<!Object>}
  */
 dotprod.Quadtree.Node.prototype.tilesForViewport = function(viewport) {
@@ -148,7 +148,7 @@ dotprod.Quadtree.Node.prototype.prune_ = function() {
 };
 
 /**
- * @param {!dotprod.Rect} viewport
+ * @param {!dotprod.math.Rect} viewport
  * @return {boolean}
  * @private
  */

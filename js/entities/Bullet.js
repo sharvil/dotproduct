@@ -9,7 +9,7 @@ goog.require('dotprod.Camera');
 goog.require('dotprod.entities.Effect');
 goog.require('dotprod.entities.Projectile');
 goog.require('dotprod.model.Weapon.Type');
-goog.require('dotprod.Vector');
+goog.require('dotprod.math.Vector');
 
 /**
  * @constructor
@@ -17,8 +17,8 @@ goog.require('dotprod.Vector');
  * @param {!dotprod.Game} game
  * @param {!dotprod.entities.Player} owner
  * @param {number} level
- * @param {!dotprod.Vector} position
- * @param {!dotprod.Vector} velocity
+ * @param {!dotprod.math.Vector} position
+ * @param {!dotprod.math.Vector} velocity
  * @param {number} lifetime
  * @param {number} damage
  * @param {number} bounceCount
@@ -112,7 +112,7 @@ dotprod.entities.Bullet.prototype.checkPlayerCollision_ = function(player) {
 
 dotprod.entities.Bullet.prototype.bounce_ = function() {
   if (this.bounceCount_ == 0) {
-    this.velocity_ = new dotprod.Vector(0, 0);
+    this.velocity_ = new dotprod.math.Vector(0, 0);
     this.lifetime_ = 0;
     this.explode_();
   } else if (this.bounceCount_ > 0) {
@@ -122,6 +122,6 @@ dotprod.entities.Bullet.prototype.bounce_ = function() {
 
 dotprod.entities.Bullet.prototype.explode_ = function() {
   var animation = this.game_.getResourceManager().getVideoEnsemble('explode0').getAnimation(0);
-  var explosion = new dotprod.entities.Effect(animation, this.position_, new dotprod.Vector(0, 0));
+  var explosion = new dotprod.entities.Effect(animation, this.position_, new dotprod.math.Vector(0, 0));
   this.game_.getEffectIndex().addEffect(explosion);
 };

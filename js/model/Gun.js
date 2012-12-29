@@ -6,7 +6,7 @@
 goog.provide('dotprod.model.Gun');
 
 goog.require('dotprod.entities.Bullet');
-goog.require('dotprod.Range');
+goog.require('dotprod.math.Range');
 
 /**
  * @constructor
@@ -34,10 +34,10 @@ dotprod.model.Gun = function(game, gunSettings, owner) {
   this.owner_ = owner;
 
   /**
-   * @type {!dotprod.Range}
+   * @type {!dotprod.math.Range}
    * @private
    */
-  this.level_ = new dotprod.Range(Math.min(0, this.gunSettings_['maxLevel']), this.gunSettings_['maxLevel'], 1);
+  this.level_ = new dotprod.math.Range(Math.min(0, this.gunSettings_['maxLevel']), this.gunSettings_['maxLevel'], 1);
 
   /**
    * @type {boolean}
@@ -59,8 +59,8 @@ dotprod.model.Gun.prototype.setBounces = function(bounces) {
 
 /**
  * @param {number} angle
- * @param {!dotprod.Vector} position
- * @param {!dotprod.Vector} velocity
+ * @param {!dotprod.math.Vector} position
+ * @param {!dotprod.math.Vector} velocity
  * @param {function(number, number): boolean} commitFireFn
  * @return {dotprod.entities.Projectile}
  */
@@ -76,7 +76,7 @@ dotprod.model.Gun.prototype.fire = function(angle, position, velocity, commitFir
   var lifetime = this.getLifetime_();
   var damage = this.getDamage_();
   var bounceCount = this.getBounceCount_();
-  var newVelocity = velocity.add(dotprod.Vector.fromPolar(this.getBulletSpeed_(), angle));
+  var newVelocity = velocity.add(dotprod.math.Vector.fromPolar(this.getBulletSpeed_(), angle));
   var projectile = new dotprod.entities.Bullet(this.game_, this.owner_, level, position, newVelocity, lifetime, damage, bounceCount);
 
   // TODO(sharvil): this should probably happen in the projectile base class' constructor.
@@ -89,8 +89,8 @@ dotprod.model.Gun.prototype.fire = function(angle, position, velocity, commitFir
 /**
  * @param {number} level
  * @param {number} bounceCount
- * @param {!dotprod.Vector} position
- * @param {!dotprod.Vector} velocity
+ * @param {!dotprod.math.Vector} position
+ * @param {!dotprod.math.Vector} velocity
  * @return {dotprod.entities.Projectile}
  */
 dotprod.model.Gun.prototype.fireSynthetic = function(level, bounceCount, position, velocity) {

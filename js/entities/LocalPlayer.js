@@ -14,8 +14,8 @@ goog.require('dotprod.entities.Exhaust');
 goog.require('dotprod.entities.Player');
 goog.require('dotprod.Keymap');
 goog.require('dotprod.Palette');
-goog.require('dotprod.Range');
-goog.require('dotprod.Vector');
+goog.require('dotprod.math.Range');
+goog.require('dotprod.math.Vector');
 
 /**
  * @constructor
@@ -40,16 +40,16 @@ dotprod.entities.LocalPlayer = function(game, id, name, ship, camera) {
   this.camera_ = camera;
 
   /**
-   * @type {!dotprod.Range}
+   * @type {!dotprod.math.Range}
    * @private
    */
-  this.projectileFireDelay_ = new dotprod.Range(0, Number.MAX_VALUE, 1);
+  this.projectileFireDelay_ = new dotprod.math.Range(0, Number.MAX_VALUE, 1);
 
   /**
-   * @type {!dotprod.Range}
+   * @type {!dotprod.math.Range}
    * @private
    */
-  this.shipChangeDelay_ = new dotprod.Range(0, 300, 1);  // 3 seconds
+  this.shipChangeDelay_ = new dotprod.math.Range(0, 300, 1);  // 3 seconds
 
   /**
    * @type {number}
@@ -73,7 +73,7 @@ dotprod.entities.LocalPlayer = function(game, id, name, ship, camera) {
    * @type {number}
    * @private
    */
-  this.exhaustTimer_ = new dotprod.Range(0, 6, 1);
+  this.exhaustTimer_ = new dotprod.math.Range(0, 6, 1);
 
   /**
    * @type {dotprod.Image}
@@ -153,7 +153,7 @@ dotprod.entities.LocalPlayer.prototype.onDeath = function() {
 dotprod.entities.LocalPlayer.prototype.respawn = function() {
   this.angleInRadians_ = Math.random() * 2 * Math.PI;
   this.position_ = this.game_.getMap().getSpawnLocation(this);
-  this.velocity_ = new dotprod.Vector(0, 0);
+  this.velocity_ = new dotprod.math.Vector(0, 0);
   this.energy_ = this.shipSettings_['maxEnergy'];
   this.maxEnergy_ = this.shipSettings_['maxEnergy'];
   this.projectileIndex_.removeProjectiles(this);
@@ -235,7 +235,7 @@ dotprod.entities.LocalPlayer.prototype.update = function() {
   if (this.projectileFireDelay_.isLow()) {
     if (keyboard.isKeyPressed(dotprod.Keymap.FIRE_GUN)) {
       var angle = this.getAngle_();
-      var position = new dotprod.Vector(0, -this.yRadius_).rotate(angle).add(this.position_);
+      var position = new dotprod.math.Vector(0, -this.yRadius_).rotate(angle).add(this.position_);
       var velocity = this.velocity_;
 
       projectile = this.gun_.fire(angle, position, velocity, goog.bind(function(fireEnergy, fireDelay) {
@@ -248,14 +248,14 @@ dotprod.entities.LocalPlayer.prototype.update = function() {
       }, this));
     } else if (keyboard.isKeyPressed(dotprod.Keymap.FIRE_BOMB)) {
       var angle = this.getAngle_();
-      var position = new dotprod.Vector(0, -this.yRadius_).rotate(angle).add(this.position_);
+      var position = new dotprod.math.Vector(0, -this.yRadius_).rotate(angle).add(this.position_);
       var velocity = this.velocity_;
 
       projectile = this.bombBay_.fire(angle, position, velocity, goog.bind(function(fireEnergy, fireDelay, recoil) {
         if (this.energy_ > fireEnergy) {
           this.energy_ -= fireEnergy;
           this.projectileFireDelay_.setValue(fireDelay);
-          this.velocity_ = this.velocity_.subtract(dotprod.Vector.fromPolar(recoil, angle));
+          this.velocity_ = this.velocity_.subtract(dotprod.math.Vector.fromPolar(recoil, angle));
           return true;
         }
         return false;
@@ -296,17 +296,17 @@ dotprod.entities.LocalPlayer.prototype.update = function() {
   }
 
   if (keyboard.isKeyPressed(dotprod.Keymap.FORWARD_THRUST)) {
-    this.applyThrust_(dotprod.Vector.fromPolar(acceleration, angle));
+    this.applyThrust_(dotprod.math.Vector.fromPolar(acceleration, angle));
     this.energy_ -= accelerationEnergy;
   } else if (keyboard.isKeyPressed(dotprod.Keymap.REVERSE_THRUST)) {
-    this.applyThrust_(dotprod.Vector.fromPolar(acceleration, angle).scale(-1));
+    this.applyThrust_(dotprod.math.Vector.fromPolar(acceleration, angle).scale(-1));
     this.energy_ -= accelerationEnergy;
   }
 
   if (keyboard.isKeyPressed(dotprod.Keymap.STRAFE_LEFT)) {
-    this.velocity_ = this.velocity_.add(dotprod.Vector.fromPolar(-acceleration, angle + Math.PI / 2));
+    this.velocity_ = this.velocity_.add(dotprod.math.Vector.fromPolar(-acceleration, angle + Math.PI / 2));
   } else if (keyboard.isKeyPressed(dotprod.Keymap.STRAFE_RIGHT)) {
-    this.velocity_ = this.velocity_.add(dotprod.Vector.fromPolar(acceleration, angle + Math.PI / 2));
+    this.velocity_ = this.velocity_.add(dotprod.math.Vector.fromPolar(acceleration, angle + Math.PI / 2));
   }
 
   // Magnitude of speed is greater than maximum ship speed - clamp.
@@ -358,7 +358,7 @@ dotprod.entities.LocalPlayer.prototype.render = function(camera) {
 };
 
 /**
- * @param {!dotprod.Vector} thrustVector
+ * @param {!dotprod.math.Vector} thrustVector
  * @private
  */
 dotprod.entities.LocalPlayer.prototype.applyThrust_ = function(thrustVector) {
@@ -369,9 +369,9 @@ dotprod.entities.LocalPlayer.prototype.applyThrust_ = function(thrustVector) {
   }
 
   var angle = this.getAngle_();
-  var bottomOfShip = this.position_.subtract(dotprod.Vector.fromPolar(this.yRadius_, angle));
+  var bottomOfShip = this.position_.subtract(dotprod.math.Vector.fromPolar(this.yRadius_, angle));
   var exhaustVelocity = this.velocity_.subtract(thrustVector.resize(5));
-  var perpendicular = dotprod.Vector.fromPolar(1, angle + Math.PI / 2);
+  var perpendicular = dotprod.math.Vector.fromPolar(1, angle + Math.PI / 2);
 
   var e1 = new dotprod.entities.Exhaust(this.game_, bottomOfShip.add(perpendicular.scale(3)), exhaustVelocity.add(perpendicular));
   var e2 = new dotprod.entities.Exhaust(this.game_, bottomOfShip.subtract(perpendicular.scale(3)), exhaustVelocity.subtract(perpendicular));

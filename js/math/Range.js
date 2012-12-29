@@ -3,7 +3,7 @@
  * @author sharvil.nanavati@gmail.com (Sharvil Nanavati)
  */
 
-goog.provide('dotprod.Range');
+goog.provide('dotprod.math.Range');
 
 goog.require('goog.asserts');
 
@@ -13,7 +13,7 @@ goog.require('goog.asserts');
  * @param {number} high
  * @param {number} increment
  */
-dotprod.Range = function(low, high, increment) {
+dotprod.math.Range = function(low, high, increment) {
   goog.asserts.assert(low <= high, 'Cannot construct a range where low > high.');
 
   /**
@@ -42,18 +42,18 @@ dotprod.Range = function(low, high, increment) {
 };
 
 /**
- * @return {!dotprod.Range}
+ * @return {!dotprod.math.Range}
  */
-dotprod.Range.fromArray = function(array) {
+dotprod.math.Range.fromArray = function(array) {
   goog.asserts.assert(array.length == 3, 'Range can only be constructed from ararys of length 3.');
 
-  return new dotprod.Range(array[0], array[1], array[2]);
+  return new dotprod.math.Range(array[0], array[1], array[2]);
 };
 
 /**
  * @return {boolean}
  */
-dotprod.Range.prototype.increment = function() {
+dotprod.math.Range.prototype.increment = function() {
   this.value_ = Math.min(this.value_ + this.increment_, this.high_);
   return this.isHigh();
 };
@@ -61,7 +61,7 @@ dotprod.Range.prototype.increment = function() {
 /**
  * @return {boolean}
  */
-dotprod.Range.prototype.decrement = function() {
+dotprod.math.Range.prototype.decrement = function() {
   this.value_ = Math.max(this.value_ - this.increment_, this.low_);
   return this.isLow();
 };
@@ -69,35 +69,35 @@ dotprod.Range.prototype.decrement = function() {
 /**
  * @return {boolean}
  */
-dotprod.Range.prototype.isLow = function() {
+dotprod.math.Range.prototype.isLow = function() {
   return this.value_ == this.low_;
 };
 
 /**
  * @return {boolean}
  */
-dotprod.Range.prototype.isHigh = function() {
+dotprod.math.Range.prototype.isHigh = function() {
   return this.value_ == this.high_;
 };
 
-dotprod.Range.prototype.setLow = function() {
+dotprod.math.Range.prototype.setLow = function() {
   this.value_ = this.low_;
 };
 
-dotprod.Range.prototype.setHigh = function() {
+dotprod.math.Range.prototype.setHigh = function() {
   this.value_ = this.high_;
 };
 
 /**
  * @return {number}
  */
-dotprod.Range.prototype.getValue = function() {
+dotprod.math.Range.prototype.getValue = function() {
   return this.value_;
 };
 
 /**
  * @param {number} value
  */
-dotprod.Range.prototype.setValue = function(value) {
+dotprod.math.Range.prototype.setValue = function(value) {
   this.value_ = Math.min(Math.max(this.low_, value), this.high_);
 };

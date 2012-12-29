@@ -8,8 +8,8 @@ goog.provide('dotprod.Map');
 goog.require('dotprod.entities.Entity');
 goog.require('dotprod.Image');
 goog.require('dotprod.Quadtree');
-goog.require('dotprod.Rect');
-goog.require('dotprod.Vector');
+goog.require('dotprod.math.Rect');
+goog.require('dotprod.math.Vector');
 goog.require('goog.asserts');
 
 /**
@@ -107,8 +107,8 @@ dotprod.Map.prototype.getTileHeight = function() {
 };
 
 /**
- * @param {!dotprod.Vector} vector A vector in pixel coordinates.
- * @return {!dotprod.Vector} A vector in map tile coordinates.
+ * @param {!dotprod.math.Vector} vector A vector in pixel coordinates.
+ * @return {!dotprod.math.Vector} A vector in map tile coordinates.
  */
 dotprod.Map.prototype.toTileCoordinates = function(vector) {
   var xTile = Math.floor(vector.getX() / this.tileWidth_);
@@ -117,7 +117,7 @@ dotprod.Map.prototype.toTileCoordinates = function(vector) {
   goog.asserts.assert(xTile >= 0 && xTile < this.width_, 'Invalid x coordinate.');
   goog.asserts.assert(yTile >= 0 && yTile < this.height_, 'Invalid y coordinate.');
 
-  return new dotprod.Vector(xTile, yTile);
+  return new dotprod.math.Vector(xTile, yTile);
 };
 
 /**
@@ -148,7 +148,7 @@ dotprod.Map.prototype.setTile = function(x, y, value) {
 };
 
 /**
- * @param {!dotprod.Rect} rect
+ * @param {!dotprod.math.Rect} rect
  * @return {!Array.<!Object>}
  */
 dotprod.Map.prototype.getTiles = function(rect) {
@@ -157,7 +157,7 @@ dotprod.Map.prototype.getTiles = function(rect) {
 
 /**
  * @param {!dotprod.entities.Entity} entity
- * @return {!dotprod.Vector}
+ * @return {!dotprod.math.Vector}
  */
 dotprod.Map.prototype.getSpawnLocation = function(entity) {
   var cX = this.width_ * this.tileWidth_ / 2;
@@ -182,7 +182,7 @@ dotprod.Map.prototype.getSpawnLocation = function(entity) {
 
   } while (this.getCollision_(dimensions) && attempts++ < dotprod.Map.MAX_SPAWN_LOCATION_ATTEMPTS_);
 
-  return new dotprod.Vector(x, y);
+  return new dotprod.math.Vector(x, y);
 };
 
 /**

@@ -6,7 +6,7 @@
 goog.provide('dotprod.model.BombBay');
 
 goog.require('dotprod.entities.Bomb');
-goog.require('dotprod.Range');
+goog.require('dotprod.math.Range');
 
 /**
  * @constructor
@@ -34,10 +34,10 @@ dotprod.model.BombBay = function(game, bombBaySettings, owner) {
   this.owner_ = owner;
 
   /**
-   * @type {!dotprod.Range}
+   * @type {!dotprod.math.Range}
    * @private
    */
-  this.level_ = new dotprod.Range(Math.min(0, bombBaySettings['maxLevel']), bombBaySettings['maxLevel'], 1);
+  this.level_ = new dotprod.math.Range(Math.min(0, bombBaySettings['maxLevel']), bombBaySettings['maxLevel'], 1);
 };
 
 dotprod.model.BombBay.prototype.upgrade = function() {
@@ -46,8 +46,8 @@ dotprod.model.BombBay.prototype.upgrade = function() {
 
 /**
  * @param {number} angle
- * @param {!dotprod.Vector} position
- * @param {!dotprod.Vector} velocity
+ * @param {!dotprod.math.Vector} position
+ * @param {!dotprod.math.Vector} velocity
  * @param {function(number, number, number): boolean} commitFireFn
  * @return {dotprod.entities.Projectile}
  */
@@ -70,7 +70,7 @@ dotprod.model.BombBay.prototype.fire = function(angle, position, velocity, commi
   var bounceCount = this.getBounceCount_();
   var blastRadius = this.getBlastRadius_();
   var proxRadius = this.getProxRadius_();
-  var newVelocity = velocity.add(dotprod.Vector.fromPolar(this.getBombSpeed_(), angle));
+  var newVelocity = velocity.add(dotprod.math.Vector.fromPolar(this.getBombSpeed_(), angle));
   var projectile = new dotprod.entities.Bomb(this.game_, this.owner_, level, position, newVelocity, lifetime, damage, bounceCount, blastRadius, proxRadius);
 
   // TODO(sharvil): this should probably happen in the projectile base class' constructor.
@@ -83,8 +83,8 @@ dotprod.model.BombBay.prototype.fire = function(angle, position, velocity, commi
 /**
  * @param {number} level
  * @param {number} bounceCount
- * @param {!dotprod.Vector} position
- * @param {!dotprod.Vector} velocity
+ * @param {!dotprod.math.Vector} position
+ * @param {!dotprod.math.Vector} velocity
  * @return {dotprod.entities.Projectile}
  */
 dotprod.model.BombBay.prototype.fireSynthetic = function(level, bounceCount, position, velocity) {
