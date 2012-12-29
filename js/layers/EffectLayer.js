@@ -27,7 +27,7 @@ dotprod.layers.EffectLayer = function(effectIndex) {
  * @override
  */
 dotprod.layers.EffectLayer.prototype.update = function() {
-  goog.array.forEach(this.effectIndex_.getEffects(), function(effect) {
+  this.effectIndex_.forEach(function(effect) {
     effect.update();
   });
 };
@@ -37,7 +37,7 @@ dotprod.layers.EffectLayer.prototype.update = function() {
  * @override
  */
 dotprod.layers.EffectLayer.prototype.render = function(camera) {
-  goog.array.forEach(this.effectIndex_.getEffects(), function(effect) {
+  this.effectIndex_.forEach(function(effect) {
     effect.render(camera);
   });
 };

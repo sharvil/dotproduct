@@ -27,12 +27,12 @@ dotprod.EffectIndex.prototype.addEffect = function(effect) {
 };
 
 /**
- * @return {!Array.<!dotprod.entities.Effect>}
+ * @param {function(!dotprod.entities.Effect)} cb
  */
-dotprod.EffectIndex.prototype.getEffects = function() {
-  goog.array.removeIf(this.effects_, function(effect) {
-    return !effect.isAlive();
+dotprod.EffectIndex.prototype.forEach = function(cb) {
+  goog.array.forEach(this.effects_, function(effect) {
+    if (effect.isAlive()) {
+      cb(effect);
+    }
   });
-
-  return this.effects_;
 };
