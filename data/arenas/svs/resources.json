@@ -30,25 +30,25 @@
       "yTiles": 4
     },
 
-    "ship0DamageOverlay": {
+    "ship0Red": {
       "url": "data/shared/graphics/ship0_red.png",
       "xTiles": 10,
       "yTiles": 4
     },
 
-    "ship1DamageOverlay": {
+    "ship1Red": {
       "url": "data/shared/graphics/ship1_red.png",
       "xTiles": 10,
       "yTiles": 4
     },
 
-    "ship2DamageOverlay": {
+    "ship2Red": {
       "url": "data/shared/graphics/ship3_red.png",
       "xTiles": 10,
       "yTiles": 4
     },
 
-    "ship3DamageOverlay": {
+    "ship3Red": {
       "url": "data/shared/graphics/ship7_red.png",
       "xTiles": 10,
       "yTiles": 4
@@ -66,20 +66,20 @@
       "yTiles": 1
     },
     
-    "shipDisplayInfo": {
-      "url": "data/shared/graphics/disp.png",
+    "statusHud": {
+      "url": "data/shared/graphics/status_hud.png",
       "xTiles": 1,
       "yTiles": 1
     },
 
     "energyFont": {
-      "url": "data/shared/graphics/engyfont.png",
+      "url": "data/shared/graphics/energy_font.png",
       "xTiles": 10,
       "yTiles": 1
     },
 
     "ledFont": {
-      "url": "data/shared/graphics/led.png",
+      "url": "data/shared/graphics/led_font.png",
       "xTiles": 10,
       "yTiles": 1
     }

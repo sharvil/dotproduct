@@ -36,7 +36,7 @@ dotprod.layers.HudLayer = function (game) {
    * @type {!dotprod.Image}
    * @private
    */
-  this.shipInfoDisplayImage_ = this.resourceManager_.getImage('shipDisplayInfo');
+  this.statusHudImage_ = this.resourceManager_.getImage('statusHud');
 
   /**
    * @type {!dotprod.Image}
@@ -81,14 +81,14 @@ dotprod.layers.HudLayer.prototype.renderEnergyBar_ = function (context, dimensio
     var energyBarHeight = 10;
 
     context.save();
-      //Energy bar
+      // Energy bar
       context.fillStyle = percentEnergy < 0.25 ? 'rgba(200, 0, 0, 0.3)' :
                           percentEnergy < 0.5 ? 'rgba(200, 200, 0, 0.3)' :
                           percentEnergy < 0.75 ? 'rgba(0, 200, 0, 0.3)' :
                           'rgba(0, 200, 200, 0.3)';
       context.fillRect((dimensions.width - energyBarWidth) / 2, 10, energyBarWidth, energyBarHeight);
 
-      //Energy bar markings
+      // Energy bar markings
       context.beginPath();
       context.lineWidth = 1.3;
       context.strokeStyle = 'rgba(127, 127, 127, 0.5)';
@@ -108,7 +108,7 @@ dotprod.layers.HudLayer.prototype.renderEnergyBar_ = function (context, dimensio
       context.lineTo((dimensions.width + 0.75 * energyBarMaxWidth) / 2, 10 + 0.5 * energyBarHeight);
       context.stroke();
 
-      //Energy bar top
+      // Energy bar top
       context.beginPath();
       context.strokeStyle = 'rgba(127, 127, 127, 1)';
       context.moveTo((dimensions.width - energyBarMaxWidth) / 2, 10);
@@ -149,31 +149,29 @@ dotprod.layers.HudLayer.prototype.renderNearShipEnergyDisplay_ = function (conte
  * @param {!Object} dimensions
  */
 dotprod.layers.HudLayer.prototype.renderShipInfoDisplay_ = function (context, dimensions) {
-  var shipInfoDisplayLeft = dimensions.width - this.shipInfoDisplayImage_.getTileWidth();
-  var shipInfoDisplayRight = shipInfoDisplayLeft + this.shipInfoDisplayImage_.getTileWidth();
-  var shipInfoDisplayTop = 50;
+  var statusHudLeft = dimensions.width - this.statusHudImage_.getTileWidth();
+  var statusHudRight = statusHudLeft + this.statusHudImage_.getTileWidth();
+  var statusHudTop = 50;
 
-  this.shipInfoDisplayImage_.render(context, shipInfoDisplayLeft, shipInfoDisplayTop);
+  this.statusHudImage_.render(context, statusHudLeft, statusHudTop);
 
   if (this.player_) {
     var energyDigits = Math.floor(this.player_.getEnergy());
     var digitOffset = 0;
     var offsetWidth = this.energyFontImage_.getTileWidth();
     do {
-      this.energyFontImage_.render(context, shipInfoDisplayRight - 30 - digitOffset * offsetWidth, shipInfoDisplayTop - 5, energyDigits % 10);
+      this.energyFontImage_.render(context, statusHudRight - 30 - digitOffset * offsetWidth, statusHudTop - 5, energyDigits % 10);
       energyDigits = Math.floor(energyDigits / 10);
-      digitOffset++;
-    }
-    while (energyDigits);
+      ++digitOffset;
+    } while (energyDigits);
 
     var bountyDigits = this.player_.getBounty();
     var digitOffset = 0;
     var offsetWidth = this.ledFontImage_.getTileWidth();
     do {
-      this.ledFontImage_.render(context, shipInfoDisplayLeft + 65 - digitOffset * offsetWidth, shipInfoDisplayTop + 52, bountyDigits % 10);
+      this.ledFontImage_.render(context, statusHudLeft + 65 - digitOffset * offsetWidth, statusHudTop + 52, bountyDigits % 10);
       bountyDigits = Math.floor(bountyDigits / 10);
-      digitOffset++;
-    }
-    while (bountyDigits);
+      ++digitOffset;
+    } while (bountyDigits);
   }
 };
