@@ -6,6 +6,7 @@
 goog.provide('dotprod.math.Range');
 
 goog.require('goog.asserts');
+goog.require('goog.math');
 
 /**
  * @constructor
@@ -99,5 +100,5 @@ dotprod.math.Range.prototype.getValue = function() {
  * @param {number} value
  */
 dotprod.math.Range.prototype.setValue = function(value) {
-  this.value_ = Math.min(Math.max(this.low_, value), this.high_);
+  this.value_ = goog.math.clamp(value, this.low_, this.high_);
 };
