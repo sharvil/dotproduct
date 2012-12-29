@@ -12,7 +12,7 @@ goog.require('dotprod.entities.Bomb');
 goog.require('dotprod.entities.Bullet');
 goog.require('dotprod.entities.Exhaust');
 goog.require('dotprod.entities.Player');
-goog.require('dotprod.Keymap');
+goog.require('dotprod.input.Keymap');
 goog.require('dotprod.Palette');
 goog.require('dotprod.math.Range');
 goog.require('dotprod.math.Vector');
@@ -234,7 +234,7 @@ dotprod.entities.LocalPlayer.prototype.update = function() {
   this.energy_ = Math.min(this.energy_ + rechargeRate, this.maxEnergy_);
 
   if (this.projectileFireDelay_.isLow()) {
-    if (keyboard.isKeyPressed(dotprod.Keymap.FIRE_GUN)) {
+    if (keyboard.isKeyPressed(dotprod.input.Keymap.FIRE_GUN)) {
       var angle = this.getAngle_();
       var position = new dotprod.math.Vector(0, -this.yRadius_).rotate(angle).add(this.position_);
       var velocity = this.velocity_;
@@ -247,7 +247,7 @@ dotprod.entities.LocalPlayer.prototype.update = function() {
         }
         return false;
       }, this));
-    } else if (keyboard.isKeyPressed(dotprod.Keymap.FIRE_BOMB)) {
+    } else if (keyboard.isKeyPressed(dotprod.input.Keymap.FIRE_BOMB)) {
       var angle = this.getAngle_();
       var position = new dotprod.math.Vector(0, -this.yRadius_).rotate(angle).add(this.position_);
       var velocity = this.velocity_;
@@ -264,9 +264,9 @@ dotprod.entities.LocalPlayer.prototype.update = function() {
     }
   }
 
-  if (keyboard.isKeyPressed(dotprod.Keymap.ROTATE_LEFT)) {
+  if (keyboard.isKeyPressed(dotprod.input.Keymap.ROTATE_LEFT)) {
     this.angleInRadians_ -= shipRotation;
-  } else if (keyboard.isKeyPressed(dotprod.Keymap.ROTATE_RIGHT)) {
+  } else if (keyboard.isKeyPressed(dotprod.input.Keymap.ROTATE_RIGHT)) {
     this.angleInRadians_ += shipRotation;
   }
 
@@ -290,23 +290,23 @@ dotprod.entities.LocalPlayer.prototype.update = function() {
   var maximumSpeed = this.shipSettings_['speedPixelsPerTick'];
   var acceleration = this.shipSettings_['accelerationPerTick'];
   var accelerationEnergy = 0;
-  if (keyboard.isKeyPressed(dotprod.Keymap.AFTERBURNER) && this.energy_ > this.shipSettings_['afterburnerEnergy']) {
+  if (keyboard.isKeyPressed(dotprod.input.Keymap.AFTERBURNER) && this.energy_ > this.shipSettings_['afterburnerEnergy']) {
     maximumSpeed = this.shipSettings_['afterburnerMaxSpeed'];
     acceleration = this.shipSettings_['afterburnerAcceleration'];
     accelerationEnergy = this.shipSettings_['afterburnerEnergy'];
   }
 
-  if (keyboard.isKeyPressed(dotprod.Keymap.FORWARD_THRUST)) {
+  if (keyboard.isKeyPressed(dotprod.input.Keymap.FORWARD_THRUST)) {
     this.applyThrust_(dotprod.math.Vector.fromPolar(acceleration, angle));
     this.energy_ -= accelerationEnergy;
-  } else if (keyboard.isKeyPressed(dotprod.Keymap.REVERSE_THRUST)) {
+  } else if (keyboard.isKeyPressed(dotprod.input.Keymap.REVERSE_THRUST)) {
     this.applyThrust_(dotprod.math.Vector.fromPolar(acceleration, angle).scale(-1));
     this.energy_ -= accelerationEnergy;
   }
 
-  if (keyboard.isKeyPressed(dotprod.Keymap.STRAFE_LEFT)) {
+  if (keyboard.isKeyPressed(dotprod.input.Keymap.STRAFE_LEFT)) {
     this.velocity_ = this.velocity_.add(dotprod.math.Vector.fromPolar(-acceleration, angle + Math.PI / 2));
-  } else if (keyboard.isKeyPressed(dotprod.Keymap.STRAFE_RIGHT)) {
+  } else if (keyboard.isKeyPressed(dotprod.input.Keymap.STRAFE_RIGHT)) {
     this.velocity_ = this.velocity_.add(dotprod.math.Vector.fromPolar(acceleration, angle + Math.PI / 2));
   }
 
