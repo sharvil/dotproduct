@@ -5,6 +5,7 @@
 
 goog.provide('dotprod.entities.Entity');
 
+goog.require('dotprod.math.Rect');
 goog.require('dotprod.math.Vector');
 
 /**
@@ -74,7 +75,8 @@ dotprod.entities.Entity.prototype.getDimensions = function() {
     width: this.xRadius_ * 2,
     height: this.yRadius_ * 2,
     xRadius: this.xRadius_,
-    yRadius: this.yRadius_
+    yRadius: this.yRadius_,
+    boundingRect: new dotprod.math.Rect(x - this.xRadius_, y - this.yRadius_, this.xRadius_ * 2, this.yRadius_ * 2)
   };
 };
 

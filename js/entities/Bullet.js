@@ -98,10 +98,7 @@ dotprod.entities.Bullet.prototype.checkPlayerCollision_ = function(player) {
     return false;
   }
 
-  var dimensions = player.getDimensions();
-  var x = this.position_.getX();
-  var y = this.position_.getY();
-  if (x >= dimensions.left && x <= dimensions.right && y >= dimensions.top && y <= dimensions.bottom) {
+  if (player.getDimensions().boundingRect.contains(this.position_)) {
     player.takeDamage(this.owner_, this, this.damage_);
     this.lifetime_ = 0;
     this.explode_();

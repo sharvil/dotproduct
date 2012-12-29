@@ -84,3 +84,13 @@ dotprod.math.Rect.prototype.top = function() {
 dotprod.math.Rect.prototype.bottom = function() {
   return this.y_ + this.height_;
 };
+
+/**
+ * @param {!dotprod.math.Vector} vec
+ * @return {boolean}
+ */
+dotprod.math.Rect.prototype.contains = function(vec) {
+  var x = vec.getX();
+  var y = vec.getY();
+  return x >= this.x_ && x <= this.x_ + this.width_ && y >= this.y_ && y <= this.y_ + this.height_;
+};

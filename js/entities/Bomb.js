@@ -128,12 +128,8 @@ dotprod.entities.Bomb.prototype.checkPlayerCollision_ = function(player) {
     return false;
   }
 
-  var dimensions = player.getDimensions();
-  var x = this.position_.getX();
-  var y = this.position_.getY();
   var distance = this.position_.subtract(player.getPosition()).magnitude();
-
-  if (x >= dimensions.left && x <= dimensions.right && y >= dimensions.top && y <= dimensions.bottom) {
+  if (player.getDimensions().boundingRect.contains(this.position_)) {
     this.explode_(player == this.game_.getPlayerIndex().getLocalPlayer());
     return true;
   } else if (!this.proxActivator_) {
@@ -178,9 +174,8 @@ dotprod.entities.Bomb.prototype.explode_ = function(directHit) {
   if (directHit) {
     damageRatio = 1;
   } else {
-    var delta = this.position_.subtract(player.getPosition());
-    var distance = Math.sqrt(delta.getX() * delta.getX() + delta.getY() * delta.getY()) / this.blastRadius_;
-    damageRatio = Math.max(1 - distance, 0);
+    var normDistance = this.position_.subtract(player.getPosition()).magnitude() / this.blastRadius_;
+    damageRatio = Math.max(1 - normDistance, 0);
   }
 
   player.takeDamage(this.owner_, this, this.damage_ * damageRatio);
