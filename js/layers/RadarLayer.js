@@ -191,7 +191,7 @@ dotprod.layers.RadarLayer.prototype.renderPrizes_ = function(context, dimensions
  * @param {number} radarHeight
  */
 dotprod.layers.RadarLayer.prototype.renderPlayers_ = function(context, dimensions, radarWidth, radarHeight) {
-  var players = this.game_.getPlayerIndex().getPlayers();
+  var self = this;
   var localPlayer = this.game_.getPlayerIndex().getLocalPlayer();
 
   var SCALE_FACTOR = dotprod.layers.RadarLayer.SCALE_FACTOR_;
@@ -199,10 +199,9 @@ dotprod.layers.RadarLayer.prototype.renderPlayers_ = function(context, dimension
   var actualXScale = (Math.floor(this.tileWidth_ * SCALE_FACTOR / ZOOM_FACTOR) || 1) / this.tileWidth_;
   var actualYScale = (Math.floor(this.tileHeight_ * SCALE_FACTOR / ZOOM_FACTOR) || 1) / this.tileHeight_;
 
-  for (var i = 0; i < players.length; ++i) {
-    var player = players[i];
+  this.game_.getPlayerIndex().forEach(function(player) {
     if (!player.isAlive()) {
-      continue;
+      return;
     }
 
     var position = player.getPosition();
@@ -210,9 +209,9 @@ dotprod.layers.RadarLayer.prototype.renderPlayers_ = function(context, dimension
     var yPixels = Math.floor(position.getY() * actualYScale) - (dimensions.y * actualYScale);
     var x = Math.floor(xPixels + radarWidth / 2);
     var y = Math.floor(yPixels + radarHeight / 2);
-    var alpha = (player == localPlayer) ? this.blinkAlpha_ : 1;
+    var alpha = (player == localPlayer) ? self.blinkAlpha_ : 1;
 
     context.fillStyle = player.isFriend(localPlayer) ? dotprod.Palette.friendColor(alpha) : dotprod.Palette.foeColor();
     context.fillRect(x - 1, y - 1, 3, 3);
-  }
+  });
 };

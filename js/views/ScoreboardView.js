@@ -108,17 +108,13 @@ dotprod.views.ScoreboardView.prototype.hide = function() {
 dotprod.views.ScoreboardView.prototype.update = function() {
   this.view_.innerHTML = '';
 
+  var self = this;
   var localPlayer = this.playerIndex_.getLocalPlayer();
-  var players = this.playerIndex_.getPlayers();
+  var compareFn = function(p1, p2) {
+    return p2.getPoints() - p1.getPoints();
+  };
 
-  // TODO(sharvil): don't access points_ directly.
-  goog.array.stableSort(players, function(p1, p2) {
-    return p2.points_ - p1.points_;
-  });
-
-  for (var i = 0; i < players.length; ++i) {
-    var player = players[i];
-
+  this.playerIndex_.forEach(function(player) {
     var nameNode = goog.dom.createElement('span');
     nameNode.classList.add(dotprod.views.ScoreboardView.NAME_CLASS_NAME_);
     nameNode.textContent = player.getName();
@@ -132,6 +128,6 @@ dotprod.views.ScoreboardView.prototype.update = function() {
     container.appendChild(nameNode);
     container.appendChild(scoreNode);
 
-    this.view_.appendChild(container);
-  }
+    self.view_.appendChild(container);
+  }, compareFn);
 };

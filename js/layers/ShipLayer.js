@@ -27,10 +27,9 @@ dotprod.layers.ShipLayer = function(playerIndex) {
  * @override
  */
 dotprod.layers.ShipLayer.prototype.update = function() {
-  var players = this.playerIndex_.getPlayers();
-  for (var i = 0; i < players.length; ++i) {
-    players[i].update();
-  }
+  this.playerIndex_.forEach(function(player) {
+    player.update();
+  });
 };
 
 /**
@@ -38,8 +37,12 @@ dotprod.layers.ShipLayer.prototype.update = function() {
  * @override
  */
 dotprod.layers.ShipLayer.prototype.render = function(camera) {
-  var players = this.playerIndex_.getPlayers();
-  for (var i = players.length - 1; i >= 0; --i) {
-    players[i].render(camera);
-  }
+  // Always draw local player last so we never fly under any other ships.
+  var localPlayer = this.playerIndex_.getLocalPlayer();
+  this.playerIndex_.forEach(function(player) {
+    if (player != localPlayer) {
+      player.render(camera);
+    }
+  });
+  localPlayer.render(camera);
 };

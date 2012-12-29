@@ -50,10 +50,29 @@ dotprod.PlayerIndex.prototype.findById = function(id) {
 };
 
 /**
- * @return {!Array.<!dotprod.entities.Player>}
+ * @return {number}
  */
-dotprod.PlayerIndex.prototype.getPlayers = function() {
-  return goog.object.getValues(this.players_);
+dotprod.PlayerIndex.prototype.getCount = function() {
+  return goog.object.getCount(this.players_);
+};
+
+/**
+ * @param {function(!dotprod.entities.Player)} cb
+ * @param {function(*, *): number=} opt_compareFn
+ */
+dotprod.PlayerIndex.prototype.forEach = function(cb, opt_compareFn) {
+  var players = goog.object.getValues(this.players_);
+  if (opt_compareFn) {
+    goog.array.stableSort(players, opt_compareFn);
+  }
+  goog.array.forEach(players, cb);
+};
+
+/**
+ * @param {function(!dotprod.entities.Player): boolean} cb
+ */
+dotprod.PlayerIndex.prototype.some = function(cb) {
+  goog.object.some(this.players_, cb);
 };
 
 /**

@@ -212,6 +212,13 @@ dotprod.entities.Player.prototype.getTeam = function() {
 /**
  * @return {number}
  */
+dotprod.entities.Player.prototype.getPoints = function() {
+  return this.points_;
+};
+
+/**
+ * @return {number}
+ */
 dotprod.entities.Player.prototype.getBounty = function () {
   return this.bounty_;
 };

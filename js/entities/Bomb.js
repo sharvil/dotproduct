@@ -90,12 +90,7 @@ dotprod.entities.Bomb.prototype.update = function(map, playerIndex) {
 
   this.updatePosition_();
 
-  var players = playerIndex.getPlayers();
-  for (var i = 0; i < players.length; ++i) {
-    if (this.checkPlayerCollision_(players[i])) {
-      break;
-    }
-  }
+  playerIndex.some(goog.bind(this.checkPlayerCollision_, this));
 
   this.animation_.update();
   this.bouncingAnimation_.update();
