@@ -135,7 +135,6 @@ dotprod.PrizeIndex.prototype.update_ = function(opt_fastForwardTicks) {
     if (prize) {
       prize.update(opt_fastForwardTicks);
       if (!prize.isAlive()) {
-        console.log('Prize removed');
         this.prizes_[i] = null;
         this.map_.setTile(prize.getX(), prize.getY(), 0);
       }
