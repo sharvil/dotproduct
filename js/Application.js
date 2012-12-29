@@ -79,9 +79,9 @@ dotprod.Application = function(settings, url) {
    * @type {!HTMLElement}
    * @private
    */
-  this.fullscreenToggle_ = /** @type {!HTMLElement} */ (goog.dom.$('fullscreenToggle'));
-  this.fullscreenToggle_.style.display = (window == window.top) ? '' : 'none';
-  goog.events.listen(this.fullscreenToggle_, goog.events.EventType.CLICK, goog.bind(this.onFullscreenToggleClicked_, this));
+  // this.fullscreenToggle_ = /** @type {!HTMLElement} */ (goog.dom.$('fullscreenToggle'));
+  // this.fullscreenToggle_.style.display = (window == window.top) ? '' : 'none';
+  // goog.events.listen(this.fullscreenToggle_, goog.events.EventType.CLICK, goog.bind(this.onFullscreenToggleClicked_, this));
 };
 
 /**
