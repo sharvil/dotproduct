@@ -79,7 +79,7 @@ dotprod.entities.LocalPlayer = function(game, id, name, ship, camera) {
    * @type {dotprod.Image}
    * @private
    */
-  this.damageOverlay_ = game.getResourceManager().getImage('ship' + ship + 'Red');
+  this.damageOverlay_;
 
   dotprod.entities.Player.call(this, game, id, name, ship, 0 /* bounty */);
 };
@@ -157,6 +157,7 @@ dotprod.entities.LocalPlayer.prototype.respawn = function() {
   this.energy_ = this.shipSettings_['maxEnergy'];
   this.maxEnergy_ = this.shipSettings_['maxEnergy'];
   this.projectileIndex_.removeProjectiles(this);
+  this.damageOverlay_ = this.resourceManager_.getImage('ship' + this.ship_ + 'Red');
 
   this.warpFlash();
 };
