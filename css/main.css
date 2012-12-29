@@ -64,13 +64,8 @@ body {
 /*  color: #36ade1;*/
 }
 
-.social {
-  float: right;
-  margin-left: 4px;
-  margin-right: 8px;
-}
-
 .content {
+/*  margin: 24px 8px 0 8px;*/
 }
 
 .signin {
@@ -156,6 +151,16 @@ body {
 }
 
 .gv-map-canvas {
+}
+
+/**************************************
+              SOCIAL VIEW
+ **************************************/
+
+.socv {
+  position: absolute;
+  right: 0px;
+  top: 50%;
 }
 
 /**************************************
