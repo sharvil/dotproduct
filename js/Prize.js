@@ -11,11 +11,13 @@ goog.provide('dotprod.Prize.Type');
  * @param {!dotprod.Prize.Type} type
  * @param {number} xTile
  * @param {number} yTile
+ * @param {number} ttl
  */
-dotprod.Prize = function(type, xTile, yTile) {
+dotprod.Prize = function(type, xTile, yTile, ttl) {
   this.type_ = type;
   this.xTile_ = xTile;
   this.yTile_ = yTile;
+  this.ttl_ = ttl;
 };
 
 /**
@@ -52,12 +54,17 @@ dotprod.Prize.prototype.getY = function() {
   return this.yTile_;
 };
 
-dotprod.Prize.prototype.update = function() {
+/**
+ * @param {number=} opt_fastForwardTicks
+ */
+dotprod.Prize.prototype.update = function(opt_fastForwardTicks) {
+  var ticks = (opt_fastForwardTicks === undefined) ? 1 : opt_fastForwardTicks;
+  this.ttl_ = Math.max(0, this.ttl_ - ticks);
 };
 
 /**
  * @return {boolean}
  */
 dotprod.Prize.prototype.isAlive = function() {
-  return true;
+  return this.ttl_ > 0;
 };

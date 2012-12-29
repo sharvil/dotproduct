@@ -59,7 +59,8 @@ dotprod.PrizeIndex.prototype.addKillPrize = function(x, y) {
 
   if (this.map_.getTile(xTile, yTile) == 0) {
     var type = this.generatePrizeType_(this.killPrng_);
-    var prize = new dotprod.Prize(type, xTile, yTile);
+    var ttl = this.generateTimeToLive_(this.killPrng_);
+    var prize = new dotprod.Prize(type, xTile, yTile, ttl);
     this.map_.setTile(xTile, yTile, 255);
     this.prizes_.push(prize);
   }
@@ -70,14 +71,6 @@ dotprod.PrizeIndex.prototype.addKillPrize = function(x, y) {
  * @param {number} fastForwardTicks
  */
 dotprod.PrizeIndex.prototype.onSeedUpdate = function(seed, fastForwardTicks) {
-  // Remove all existing prizes from the map.
-  goog.array.forEach(this.prizes_, goog.bind(function(prize) {
-    if (prize) {
-      this.map_.setTile(prize.getX(), prize.getY(), 0);
-    }
-  }, this));
-  this.prizes_ = [];
-
   // Set the seed.
   this.prng_.seed(seed);
   this.killPrng_.seed(this.killPrng_.random() ^ seed);
@@ -86,23 +79,20 @@ dotprod.PrizeIndex.prototype.onSeedUpdate = function(seed, fastForwardTicks) {
   var prizeRadius = this.prizeSettings_['radius'];
   for (var i = 0; i < this.prizeSettings_['count']; ++i) {
     var type = this.generatePrizeType_(this.prng_);
+    var ttl = this.generateTimeToLive_(this.prng_);
 
     // Generate random coordinates in the range [-prizeRadius, prizeRadius) and offset by the center of the map.
     var xTile = Math.floor(this.map_.getWidth() / 2 + this.prng_.random() % prizeRadius * 2 - prizeRadius);
     var yTile = Math.floor(this.map_.getHeight() / 2 + this.prng_.random() % prizeRadius * 2 - prizeRadius);
 
     if (this.map_.getTile(xTile, yTile) == 0) {
-      var prize = new dotprod.Prize(type, xTile, yTile);
+      var prize = new dotprod.Prize(type, xTile, yTile, ttl);
       this.map_.setTile(xTile, yTile, 255);
       this.prizes_.push(prize);
     }
   }
 
-  // TODO(sharvil): re-enable this when prize decay is implemented.
-  // Decay all prizes by the fast forward time.
-  // for (var i = 0; i < fastForwardTicks; ++i) {
-  //   this.update();
-  // }
+  this.update_(fastForwardTicks);
 };
 
 /**
@@ -112,7 +102,7 @@ dotprod.PrizeIndex.prototype.onSeedUpdate = function(seed, fastForwardTicks) {
  */
 dotprod.PrizeIndex.prototype.getPrize = function(x, y) {
   return goog.array.find(this.prizes_, function(prize) {
-    return prize != null && prize.getX() == x && prize.getY() == y;
+    return prize != null && prize.isAlive() && prize.getX() == x && prize.getY() == y;
   });
 };
 
@@ -121,7 +111,7 @@ dotprod.PrizeIndex.prototype.getPrize = function(x, y) {
  */
 dotprod.PrizeIndex.prototype.removePrize = function(prize) {
   var prizeIndex = goog.array.findIndex(this.prizes_, function(p) {
-    return p != null && prize.getX() == p.getX() && prize.getY() == p.getY();
+    return p != null && p.isAlive() == prize.isAlive() && prize.getX() == p.getX() && prize.getY() == p.getY();
   });
 
   if (prizeIndex == -1) {
@@ -133,12 +123,21 @@ dotprod.PrizeIndex.prototype.removePrize = function(prize) {
 };
 
 dotprod.PrizeIndex.prototype.update = function() {
+  this.update_(1);
+};
+
+/**
+ * @param {number=} opt_fastForwardTicks
+ */
+dotprod.PrizeIndex.prototype.update_ = function(opt_fastForwardTicks) {
   for (var i = 0; i < this.prizes_.length; ++i) {
     var prize = this.prizes_[i];
     if (prize) {
-      prize.update();
+      prize.update(opt_fastForwardTicks);
       if (!prize.isAlive()) {
+        console.log('Prize removed');
         this.prizes_[i] = null;
+        this.map_.setTile(prize.getX(), prize.getY(), 0);
       }
     }
   }
@@ -156,7 +155,7 @@ dotprod.PrizeIndex.prototype.forEach = function(cb) {
 };
 
 /**
- * @param {!dotprod.Prng} prng
+ * @param {!dotprod.math.Prng} prng
  * @return {!dotprod.Prize.Type}
  */
 dotprod.PrizeIndex.prototype.generatePrizeType_ = function(prng) {
@@ -180,4 +179,12 @@ dotprod.PrizeIndex.prototype.generatePrizeType_ = function(prng) {
   }
 
   return /** @type {!dotprod.Prize.Type} */ (type);
+};
+
+/**
+ * @param {!dotprod.math.Prng} prng
+ * @return {number}
+ */
+dotprod.PrizeIndex.prototype.generateTimeToLive_ = function(prng) {
+  return prng.random() % this.prizeSettings_['decayTime'] + 1;
 };
