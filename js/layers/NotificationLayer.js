@@ -31,6 +31,11 @@ dotprod.layers.NotificationLayer = function(notifications) {
  */
 dotprod.layers.NotificationLayer.MESSAGE_PERIOD_ = 150;
 
+/**
+ * @type {number}
+ * @private
+ * @const
+ */
 dotprod.layers.NotificationLayer.FADE_PERIOD_ = 50;
 
 /**
