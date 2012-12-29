@@ -210,8 +210,9 @@ dotprod.layers.RadarLayer.prototype.renderPlayers_ = function(context, dimension
     var yPixels = Math.floor(position.getY() * actualYScale) - (dimensions.y * actualYScale);
     var x = Math.floor(xPixels + radarWidth / 2);
     var y = Math.floor(yPixels + radarHeight / 2);
+    var alpha = (player == localPlayer) ? this.blinkAlpha_ : 1;
 
-    context.fillStyle = player.isFriend(localPlayer) ? dotprod.Palette.friendColor(this.blinkAlpha_) : dotprod.Palette.foeColor();
+    context.fillStyle = player.isFriend(localPlayer) ? dotprod.Palette.friendColor(alpha) : dotprod.Palette.foeColor();
     context.fillRect(x - 1, y - 1, 3, 3);
   }
 };
