@@ -21,6 +21,13 @@ dotprod.ProjectileIndex = function() {
 };
 
 /**
+ * @return {number}
+ */
+dotprod.ProjectileIndex.prototype.getCount = function() {
+  return this.projectiles_.length;
+};
+
+/**
  * @param {!dotprod.entities.Player} player
  * @param {!dotprod.entities.Projectile} projectile
  */
@@ -38,14 +45,12 @@ dotprod.ProjectileIndex.prototype.removeProjectiles = function(player) {
 };
 
 /**
- * @return {!Array.<!dotprod.entities.Projectile>}
+ * @param {function(!dotprod.entities.Projectile)} cb
  */
-dotprod.ProjectileIndex.prototype.getProjectiles = function() {
-  goog.array.removeIf(this.projectiles_, function(element) {
-    return !element.projectile.isAlive();
-  });
-
-  return goog.array.map(this.projectiles_, function(element) {
-    return element.projectile;
+dotprod.ProjectileIndex.prototype.forEach = function(cb) {
+  goog.array.forEach(this.projectiles_, function(element) {
+    if (element.projectile.isAlive()) {
+      cb(element.projectile);
+    }
   });
 };

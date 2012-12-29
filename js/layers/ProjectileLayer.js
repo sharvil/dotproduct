@@ -43,10 +43,10 @@ dotprod.layers.ProjectileLayer = function(map, playerIndex, projectileIndex) {
  * @override
  */
 dotprod.layers.ProjectileLayer.prototype.update = function() {
-  var projectiles = this.projectileIndex_.getProjectiles();
-  for (var i = 0; i < projectiles.length; ++i) {
-    projectiles[i].update(this.map_, this.playerIndex_);
-  }
+  var self = this;
+  this.projectileIndex_.forEach(function(projectile) {
+    projectile.update(self.map_, self.playerIndex_);
+  });
 };
 
 /**
@@ -54,8 +54,7 @@ dotprod.layers.ProjectileLayer.prototype.update = function() {
  * @override
  */
 dotprod.layers.ProjectileLayer.prototype.render = function(camera) {
-  var projectiles = this.projectileIndex_.getProjectiles();
-  for (var i = 0; i < projectiles.length; ++i) {
-    projectiles[i].render(camera);
-  }
+  this.projectileIndex_.forEach(function(projectile) {
+    projectile.render(camera);
+  });
 };

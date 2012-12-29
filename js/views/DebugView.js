@@ -117,7 +117,7 @@ dotprod.views.DebugView.prototype.update = function() {
   html += this.game_.getProtocol().getRoundTripTime() + 'ms, ' +
           this.frames_ + 'fps, ' +
           this.game_.getPlayerIndex().getCount() + ' // ' +
-          this.game_.getProjectileIndex().getProjectiles().length;
+          this.game_.getProjectileIndex().getCount();
 
   this.view_.innerHTML = html;
 
