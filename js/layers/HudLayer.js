@@ -13,7 +13,7 @@ goog.require('dotprod.layers.Layer');
  * @implements {dotprod.layers.Layer}
  * @param {!dotprod.Game} game
  */
-dotprod.layers.HudLayer = function (game) {
+dotprod.layers.HudLayer = function(game) {
   /**
    * @type {!dotprod.Game}
    * @private
@@ -54,13 +54,13 @@ dotprod.layers.HudLayer = function (game) {
 /**
  * @override
  */
-dotprod.layers.HudLayer.prototype.update = function () {};
+dotprod.layers.HudLayer.prototype.update = goog.nullFunction;
 
 /**
  * @param {!dotprod.Camera} camera
  * @override
  */
-dotprod.layers.HudLayer.prototype.render = function (camera) {
+dotprod.layers.HudLayer.prototype.render = function(camera) {
   var context = camera.getContext();
   var dimensions = camera.getDimensions();
 
@@ -73,7 +73,7 @@ dotprod.layers.HudLayer.prototype.render = function (camera) {
  * @param {!CanvasRenderingContext2D} context
  * @param {!Object} dimensions
  */
-dotprod.layers.HudLayer.prototype.renderEnergyBar_ = function (context, dimensions) {
+dotprod.layers.HudLayer.prototype.renderEnergyBar_ = function(context, dimensions) {
   var percentEnergy = this.player_.getEnergy() / this.player_.getMaxEnergy();
   var energyBarMaxWidth = 300;
   var energyBarWidth = percentEnergy * energyBarMaxWidth;
@@ -120,7 +120,7 @@ dotprod.layers.HudLayer.prototype.renderEnergyBar_ = function (context, dimensio
  * @param {!CanvasRenderingContext2D} canvas
  * @param {!Object} dimensions
  */
-dotprod.layers.HudLayer.prototype.renderNearShipEnergyDisplay_ = function (context, dimensions) {
+dotprod.layers.HudLayer.prototype.renderNearShipEnergyDisplay_ = function(context, dimensions) {
   if (!this.player_.isAlive()) {
     return;
   }
@@ -148,7 +148,7 @@ dotprod.layers.HudLayer.prototype.renderNearShipEnergyDisplay_ = function (conte
  * @param {!CanvasRenderingContext2D} context
  * @param {!Object} dimensions
  */
-dotprod.layers.HudLayer.prototype.renderShipInfoDisplay_ = function (context, dimensions) {
+dotprod.layers.HudLayer.prototype.renderShipInfoDisplay_ = function(context, dimensions) {
   var statusHudLeft = dimensions.width - this.statusHudImage_.getTileWidth();
   var statusHudRight = statusHudLeft + this.statusHudImage_.getTileWidth();
   var statusHudTop = 50;
