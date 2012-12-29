@@ -161,7 +161,7 @@ dotprod.model.BombBay.prototype.getBlastRadius_ = function() {
  * @private
  */
 dotprod.model.BombBay.prototype.getProxRadius_ = function() {
-  return this.bombBaySettings_['proxRadius'] + this.level_ * this.bombBaySettings_['proxRadiusUpgrade'];
+  return this.bombBaySettings_['proxRadius'] + this.level_.getValue() * this.bombBaySettings_['proxRadiusUpgrade'];
 };
 
 /**

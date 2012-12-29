@@ -94,7 +94,7 @@ dotprod.entities.Bullet.prototype.render = function(camera) {
  * @param {!dotprod.entities.Player} player
  */
 dotprod.entities.Bullet.prototype.checkPlayerCollision_ = function(player) {
-  if (!player.isAlive() || this.owner_ == player) {
+  if (!player.isAlive() || this.owner_.isFriend(player)) {
     return false;
   }
 

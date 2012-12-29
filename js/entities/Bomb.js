@@ -124,34 +124,29 @@ dotprod.entities.Bomb.prototype.render = function(camera) {
  * @param {!dotprod.entities.Player} player
  */
 dotprod.entities.Bomb.prototype.checkPlayerCollision_ = function(player) {
-  if (!player.isAlive() || this.owner_ == player) {
+  if (!player.isAlive() || this.owner_.isFriend(player)) {
     return false;
   }
 
   var dimensions = player.getDimensions();
   var x = this.position_.getX();
   var y = this.position_.getY();
-  var delta = this.position_.subtract(player.getPosition());
-  var distance = Math.sqrt(delta.getX() * delta.getX() + delta.getY() * delta.getY());
+  var distance = this.position_.subtract(player.getPosition()).magnitude();
 
   if (x >= dimensions.left && x <= dimensions.right && y >= dimensions.top && y <= dimensions.bottom) {
     this.explode_(player == this.game_.getPlayerIndex().getLocalPlayer());
     return true;
-  }
-  else if (!this.proxActivator_) {
+  } else if (!this.proxActivator_) {
     if (distance <= this.proxRadius_) {
       this.proxActivator_ = player;
       this.lastDistanceToProxActivator_ = distance;
-      return false;
     }
-  }
-  else if (player == this.proxActivator_) {
+  } else if (player == this.proxActivator_) {
     if (distance > this.lastDistanceToProxActivator_) {
       this.explode_(false);
       return true;
     }
     this.lastDistanceToProxActivator_ = distance;
-    return false;
   }
   return false;
 };
