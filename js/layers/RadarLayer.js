@@ -114,6 +114,7 @@ dotprod.layers.RadarLayer.prototype.render = function(camera) {
     context.fillRect(0, 0, radarWidth, radarHeight);
 
     this.renderMap_(context, dimensions, radarWidth, radarHeight);
+    this.renderPrizes_(context, dimensions, radarWidth, radarHeight);
     this.renderPlayers_(context, dimensions, radarWidth, radarHeight);
   context.restore();
 };
@@ -155,6 +156,32 @@ dotprod.layers.RadarLayer.prototype.renderMap_ = function(context, dimensions, r
 
     context.fillRect(x, y, scaledTileWidth, scaledTileHeight);
   }
+};
+
+/**
+ * @param {!CanvasRenderingContext2D} context
+ * @param {!Object} dimensions
+ * @param {number} radarWidth
+ * @param {number} radarHeight
+ */
+dotprod.layers.RadarLayer.prototype.renderPrizes_ = function(context, dimensions, radarWidth, radarHeight) {
+  var SCALE_FACTOR = dotprod.layers.RadarLayer.SCALE_FACTOR_;
+  var ZOOM_FACTOR = dotprod.layers.RadarLayer.ZOOM_FACTOR_;
+
+  var tileWidth = this.tileWidth_;
+  var tileHeight = this.tileHeight_;
+  var scaledTileWidth = Math.floor(tileWidth * SCALE_FACTOR / ZOOM_FACTOR) || 1;
+  var scaledTileHeight = Math.floor(tileHeight * SCALE_FACTOR / ZOOM_FACTOR) || 1;
+
+  context.fillStyle = dotprod.Palette.radarPrizeColor();
+  this.game_.getPrizeIndex().forEach(function(prize) {
+    var xPixels = (prize.getX() - dimensions.x / tileWidth) * scaledTileWidth;
+    var yPixels = (prize.getY() - dimensions.y / tileHeight) * scaledTileHeight;
+    var x = Math.floor(xPixels + radarWidth / 2);
+    var y = Math.floor(yPixels + radarHeight / 2);
+
+    context.fillRect(x, y, scaledTileWidth, scaledTileHeight);
+  });
 };
 
 /**

@@ -83,10 +83,13 @@ dotprod.PrizeIndex.prototype.onSeedUpdate = function(seed, fastForwardTicks) {
   this.killPrng_.seed(this.killPrng_.random() ^ seed);
 
   // Create prizes using new seed.
+  var prizeRadius = this.prizeSettings_['radius'];
   for (var i = 0; i < this.prizeSettings_['count']; ++i) {
     var type = this.generatePrizeType_(this.prng_);
-    var xTile = this.prng_.random() % this.map_.getWidth();
-    var yTile = this.prng_.random() % this.map_.getHeight();
+
+    // Generate random coordinates in the range [-prizeRadius, prizeRadius) and offset by the center of the map.
+    var xTile = Math.floor(this.map_.getWidth() / 2 + this.prng_.random() % prizeRadius * 2 - prizeRadius);
+    var yTile = Math.floor(this.map_.getHeight() / 2 + this.prng_.random() % prizeRadius * 2 - prizeRadius);
 
     if (this.map_.getTile(xTile, yTile) == 0) {
       var prize = new dotprod.Prize(type, xTile, yTile);
@@ -139,6 +142,17 @@ dotprod.PrizeIndex.prototype.update = function() {
       }
     }
   }
+};
+
+/**
+ * @param {function(!dotprod.Prize)} cb
+ */
+dotprod.PrizeIndex.prototype.forEach = function(cb) {
+  goog.array.forEach(this.prizes_, function(prize) {
+    if (prize != null && prize.isAlive()) {
+      cb(prize);
+    }
+  });
 };
 
 /**

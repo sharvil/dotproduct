@@ -18,7 +18,8 @@
   },
 
   "prize": {
-    "count": 1000,
+    "count": 50,
+    "radius": 128,
     "weights": [0, 6, 5, 8, 0]
   },
 

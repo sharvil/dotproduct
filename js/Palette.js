@@ -27,6 +27,13 @@ dotprod.Palette.radarTileColor = function() {
 };
 
 /**
+ * @return {string}
+ */
+dotprod.Palette.radarPrizeColor = function() {
+  return 'rgba(0, 255, 0, 0.8)';
+};
+
+/**
  * @param {number=} opt_alpha
  * @return {string}
  */
