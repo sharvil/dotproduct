@@ -359,8 +359,6 @@ dotprod.Game.prototype.onPlayerEntered_ = function(packet) {
   this.playerIndex_.addPlayer(player);
 
   this.notifications_.addEnterMessage('Player entered: ' + name);
-
-  console.log('(' + dotprod.Timestamp.print() + ') ' + 'Player entered: ' + name);
 };
 
 /**
@@ -374,8 +372,6 @@ dotprod.Game.prototype.onPlayerLeft_ = function(packet) {
     this.projectileIndex_.removeProjectiles(player);
     this.playerIndex_.removePlayer(player);
     this.notifications_.addEnterMessage('Player left: ' + player.getName());
-
-    console.log('(' + dotprod.Timestamp.print() + ') ' + 'Player left: ' + player.getName());
   }
 };
 
@@ -427,7 +423,6 @@ dotprod.Game.prototype.onPlayerDied_ = function(packet) {
   this.prizeIndex_.addKillPrize(x, y);
 
   var message = killee.getName() + '(' + bountyGained + ') killed by: ' + killer.getName()
-  console.log('(' + dotprod.Timestamp.print() + ') ' + message);
   if (killer == this.playerIndex_.getLocalPlayer()) {
     this.notifications_.addPersonalMessage(message);
   } else {
@@ -458,7 +453,10 @@ dotprod.Game.prototype.onChatMessage_ = function(packet) {
   if (playerId == dotprod.entities.Player.SYSTEM_PLAYER_ID) {
     this.chatView_.addSystemMessage(message);
   } else {
-    this.chatView_.addMessage(this.playerIndex_.findById(packet[0]), message);
+    var player = this.playerIndex_.findById(packet[0]);
+    if (player) {
+      this.chatView_.addMessage(player, message);
+    }
   }
 };
 
@@ -504,7 +502,7 @@ dotprod.Game.prototype.onPrizeCollected_ = function(packet) {
 dotprod.Game.prototype.onSetPresence_ = function(packet) {
   var player = this.playerIndex_.findById(packet[0]);
   var presence = /** @type {dotprod.entities.Player.Presence} */ (packet[1]);
-  player.clearPresence(~presence);
+  player.clearPresence(dotprod.entities.Player.Presence.ALL);
   player.setPresence(presence);
 };
 
@@ -521,10 +519,9 @@ dotprod.Game.prototype.onMouseMoved_ = function(event) {
 };
 
 /**
- * @param {!goog.events.BrowserEvent} event
  * @private
  */
-dotprod.Game.prototype.onResize_ = function(event) {
+dotprod.Game.prototype.onResize_ = function() {
   this.canvas_.width = window.innerWidth - this.canvas_.parentNode.offsetLeft;
   this.canvas_.height = window.innerHeight - this.canvas_.parentNode.offsetTop;
 };

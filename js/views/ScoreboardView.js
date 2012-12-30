@@ -18,6 +18,8 @@ goog.require('dotprod.views.View');
  * @param {!dotprod.Game} game
  */
 dotprod.views.ScoreboardView = function(game) {
+  goog.base(this);
+
   /**
    * @type {!HTMLDivElement}
    * @private
@@ -30,8 +32,6 @@ dotprod.views.ScoreboardView = function(game) {
    * @private
    */
   this.playerIndex_ = game.getPlayerIndex();
-
-  dotprod.views.View.call(this);
 };
 goog.inherits(dotprod.views.ScoreboardView, dotprod.views.View);
 
@@ -81,7 +81,7 @@ dotprod.views.ScoreboardView.FOE_CLASS_NAME_ = 'sv-row-foe';
  * @override
  */
 dotprod.views.ScoreboardView.prototype.renderDom = function(rootNode) {
-  dotprod.views.View.call(this, 'renderDom', rootNode);
+  goog.base(this, 'renderDom', rootNode);
 
   rootNode.appendChild(this.view_);
 

@@ -103,8 +103,6 @@ dotprod.Application.prototype.onLoadComplete_ = function() {
 
   this.game_ = new dotprod.Game(this.protocol_, this.resourceManager_, this.settings_, this.mapData_);
   this.game_.renderDom(/** @type {!HTMLDivElement} */ (goog.dom.$('game')));
-
-  console.log('(' + dotprod.Timestamp.print() + ') You joined the game as: ' + this.game_.getPlayerIndex().getLocalPlayer().name_);
 };
 
 /**

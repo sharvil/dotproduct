@@ -117,7 +117,7 @@ dotprod.layers.HudLayer.prototype.renderEnergyBar_ = function(context, dimension
 };
 
 /**
- * @param {!CanvasRenderingContext2D} canvas
+ * @param {!CanvasRenderingContext2D} context
  * @param {!Object} dimensions
  */
 dotprod.layers.HudLayer.prototype.renderNearShipEnergyDisplay_ = function(context, dimensions) {
@@ -139,7 +139,7 @@ dotprod.layers.HudLayer.prototype.renderNearShipEnergyDisplay_ = function(contex
       context.font = dotprod.FontFoundry.playerFont();
       context.textAlign = 'right';
       context.textBaseline = 'bottom';
-      context.fillText(Math.floor(this.player_.energy_), x, y);
+      context.fillText(Math.floor(this.player_.energy_).toString(), x, y);
     context.restore();
   }
 };

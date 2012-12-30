@@ -172,7 +172,7 @@ dotprod.Protocol.prototype.startGame = function(ship) {
  * @param {number} direction
  * @param {!dotprod.math.Vector} position
  * @param {!dotprod.math.Vector} velocity
- * @param {!dotprod.entities.Projectile=} opt_projectile
+ * @param {dotprod.entities.Projectile=} opt_projectile
  */
 dotprod.Protocol.prototype.sendPosition = function(direction, position, velocity, opt_projectile) {
   var packet = [dotprod.Protocol.C2SPacketType_.POSITION, this.asRemoteTime_(goog.now()), direction, position.getX(), position.getY(), velocity.getX(), velocity.getY()];

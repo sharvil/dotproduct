@@ -36,7 +36,7 @@ dotprod.PrizeIndex = function(game) {
    * it to generate kill prize types and to avoid getting this.prng_
    * out of sync.
    *
-   * @type {!dotprod.Prng}
+   * @type {!dotprod.math.Prng}
    * @private
    */
   this.killPrng_ = new dotprod.math.Prng();
@@ -101,9 +101,9 @@ dotprod.PrizeIndex.prototype.onSeedUpdate = function(seed, fastForwardTicks) {
  * @return {dotprod.Prize}
  */
 dotprod.PrizeIndex.prototype.getPrize = function(x, y) {
-  return goog.array.find(this.prizes_, function(prize) {
+  return /** @type {dotprod.Prize} */ (goog.array.find(this.prizes_, function(prize) {
     return prize != null && prize.isAlive() && prize.getX() == x && prize.getY() == y;
-  });
+  }));
 };
 
 /**

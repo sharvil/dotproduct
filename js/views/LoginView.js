@@ -20,7 +20,7 @@ goog.require('dotprod.views.View');
  * @param {function(!Object.<string, !Object>, !Object, !Object.<number, number>)} successCb
  */
 dotprod.views.LoginView = function(loginData, protocol, successCb) {
-  dotprod.views.View.call(this, goog.dom.$(dotprod.views.LoginView.LOGIN_VIEW_ID_));
+  goog.base(this, /** @type {!HTMLDivElement} */ (goog.dom.$(dotprod.views.LoginView.LOGIN_VIEW_ID_)));
 
   /**
    * @type {!HTMLInputElement}

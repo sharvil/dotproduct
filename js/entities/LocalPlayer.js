@@ -71,7 +71,7 @@ dotprod.entities.LocalPlayer = function(game, id, name, team, ship, camera) {
   this.exhaust_ = [];
 
   /**
-   * @type {number}
+   * @type {!dotprod.math.Range}
    * @private
    */
   this.exhaustTimer_ = new dotprod.math.Range(0, 6, 1);
@@ -206,7 +206,8 @@ dotprod.entities.LocalPlayer.prototype.update = function() {
   this.shipChangeDelay_.decrement();
   if (this.shipChangeDelay_.isLow()) {
     for (var i = 0; i < this.settings_['ships'].length; ++i) {
-      if (keyboard.isKeyPressed(goog.events.KeyCodes.ONE + i)) {
+      var keycode = /** @type {goog.events.KeyCodes} */ (goog.events.KeyCodes.ONE + i);
+      if (keyboard.isKeyPressed(keycode)) {
         if (i != this.ship_) {
           if (this.energy_ >= this.maxEnergy_) {
             this.setShip(i);
@@ -385,7 +386,7 @@ dotprod.entities.LocalPlayer.prototype.applyThrust_ = function(thrustVector) {
 /**
  * @param {boolean} forceSendUpdate
  * @param {boolean} isAccelerating
- * @param {!dotprod.entities.Projectile=} opt_projectile
+ * @param {dotprod.entities.Projectile=} opt_projectile
  */
 dotprod.entities.LocalPlayer.prototype.sendPositionUpdate_ = function(forceSendUpdate, isAccelerating, opt_projectile) {
   if (!forceSendUpdate) {

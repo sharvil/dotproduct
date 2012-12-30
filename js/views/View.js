@@ -7,13 +7,13 @@ goog.provide('dotprod.views.View');
 
 /**
  * @constructor
- * @param {HTMLDivElement=} opt_rootNode
+ * @param {HTMLElement=} opt_rootNode
  */
 dotprod.views.View = function(opt_rootNode) {
   /**
    * @type {HTMLElement}
    */
-  this.rootNode_ = opt_rootNode;
+  this.rootNode_ = opt_rootNode || null;
 };
 
 dotprod.views.View.prototype.renderDom = function(rootNode) {

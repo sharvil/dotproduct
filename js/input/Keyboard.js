@@ -56,7 +56,7 @@ dotprod.input.Keyboard.prototype.keyReleased_ = function(e) {
 };
 
 /**
- * @type {!goog.events.BrowserEvent} event
+ * @param {!goog.events.BrowserEvent} event
  * @private
  */
 dotprod.input.Keyboard.prototype.documentVisibilityChanged_ = function(event) {

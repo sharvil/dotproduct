@@ -33,7 +33,7 @@ dotprod.ResourceManager = function() {
   this.videoEnsembles_ = {};
 
   /**
-   * @type {!Object.<string, Audio>}
+   * @type {!Object.<string, HTMLAudioElement>}
    * @private
    */
   this.sounds_ = {};
@@ -83,7 +83,7 @@ dotprod.ResourceManager.prototype.loadSound = function(name, url, loadCb) {
   // TODO(sharvil): remove this once Chrome and Safari behave correctly when loading Audio.
   loadCb();
   return;
-
+/*
   var self = this;
   var callback = function() {
     self.logger_.info('Loaded sound: "' + name + '"');
@@ -91,11 +91,12 @@ dotprod.ResourceManager.prototype.loadSound = function(name, url, loadCb) {
   };
 
   this.logger_.info('Loading sound: "' + name + '" using URL: ' + url);
-//  this.sounds_[name] = new Audio();
+  this.sounds_[name] = new Audio();
   this.sounds_[name].src = url;
   this.sounds_[name].addEventListener('error', callback);
   this.sounds_[name].addEventListener('progress', callback);
   this.sounds_[name].load();
+*/
 };
 
 dotprod.ResourceManager.prototype.playSound = function(name) {

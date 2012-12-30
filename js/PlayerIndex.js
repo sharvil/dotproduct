@@ -42,7 +42,7 @@ dotprod.PlayerIndex.prototype.removePlayer = function(player) {
 };
 
 /**
- * @param {string} name
+ * @param {string} id
  * @return {!dotprod.entities.Player|undefined}
  */
 dotprod.PlayerIndex.prototype.findById = function(id) {

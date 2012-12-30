@@ -158,7 +158,8 @@ goog.inherits(dotprod.entities.Player, dotprod.entities.Entity);
 dotprod.entities.Player.Presence = {
   DEFAULT: 0,
   TYPING: 1,
-  AWAY: 2
+  AWAY: 2,
+  ALL: 0x7FFFFFFF
 };
 
 /**

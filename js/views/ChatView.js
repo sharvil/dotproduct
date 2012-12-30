@@ -141,8 +141,6 @@ dotprod.views.ChatView.prototype.renderDom = function(rootNode) {
  * @param {string} message
  */
 dotprod.views.ChatView.prototype.addMessage = function(player, message) {
-  console.log('(' + dotprod.Timestamp.print() + ') ' + player.getName() + ': ' + message);
-
   var isAtBottom = this.view_.scrollTop + this.view_.offsetHeight >= this.view_.scrollHeight;
 
   var messageNode = goog.dom.createElement('div');
@@ -167,12 +165,9 @@ dotprod.views.ChatView.prototype.addMessage = function(player, message) {
 };
 
 /**
- * @param {!dotprod.entities.Player} player
  * @param {string} message
  */
 dotprod.views.ChatView.prototype.addSystemMessage = function(message) {
-  console.log('(' + dotprod.Timestamp.print() + ') ' + message);
-
   var isAtBottom = this.view_.scrollTop + this.view_.offsetHeight >= this.view_.scrollHeight;
 
   var messageNode = goog.dom.createElement('div');

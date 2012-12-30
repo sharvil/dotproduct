@@ -150,6 +150,7 @@ dotprod.entities.Entity.prototype.updatePosition_ = function(opt_bounceFactor) {
  * This function takes a prize and returns true if it should be taken or
  * false if it should not be taken.
  * @protected
+ * @param {!dotprod.Prize} prize
  * @return {boolean}
  */
 dotprod.entities.Entity.prototype.collectPrize_ = goog.nullFunction;
