@@ -28,16 +28,29 @@ dotprod.Camera = function(game, context) {
    * @private
    */
   this.context_ = context;
+
+  /**
+   * @type {dotprod.entities.Player}
+   * @private
+   */
+  this.followingPlayer_;
 };
 
 /**
- * @param {number} x
- * @param {number} y
+ * @param {!dotprod.entities.Player} player
  */
-dotprod.Camera.prototype.setPosition = function(x, y) {
-  // TODO(sharvil): set a max bound for camera position.
-  this.x_ = Math.max(x, 0);
-  this.y_ = Math.max(y, 0);
+dotprod.Camera.prototype.followPlayer = function(player) {
+  this.followingPlayer_ = player;
+};
+
+dotprod.Camera.prototype.update = function() {
+  if (!this.followingPlayer_) {
+    return;
+  }
+
+  var position = this.followingPlayer_.getPosition();
+  this.x_ = Math.floor(position.getX());
+  this.y_ = Math.floor(position.getY());
 };
 
 /**

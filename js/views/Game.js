@@ -189,6 +189,8 @@ dotprod.Game = function(protocol, resourceManager, settings, mapData) {
   this.protocol_.registerHandler(dotprod.Protocol.S2CPacketType.SET_PRESENCE, goog.bind(this.onSetPresence_, this));
   this.protocol_.startGame(startingShip);
 
+  this.camera_.followPlayer(localPlayer);
+
   goog.events.listen(window, goog.events.EventType.RESIZE, goog.bind(this.onResize_, this));
   goog.events.listen(this.canvas_, goog.events.EventType.MOUSEMOVE, goog.bind(this.onMouseMoved_, this));
 
@@ -325,8 +327,7 @@ dotprod.Game.prototype.renderingLoop_ = function() {
     }
   }
 
-  var position = this.playerIndex_.getLocalPlayer().getPosition();
-  this.camera_.setPosition(Math.floor(position.getX()), Math.floor(position.getY()));
+  this.camera_.update();
 
   var context = this.camera_.getContext();
   context.save();
