@@ -5,8 +5,6 @@
 
 goog.provide('dotprod.entities.Bullet');
 
-goog.require('dotprod.Camera');
-goog.require('dotprod.entities.Effect');
 goog.require('dotprod.entities.Projectile');
 goog.require('dotprod.model.Weapon.Type');
 goog.require('dotprod.math.Vector');
@@ -24,24 +22,10 @@ goog.require('dotprod.math.Vector');
  * @param {number} bounceCount
  */
 dotprod.entities.Bullet = function(game, owner, level, position, velocity, lifetime, damage, bounceCount) {
-  dotprod.entities.Projectile.call(this, game, owner, level, lifetime, damage, bounceCount);
+  goog.base(this, game, owner, level, lifetime, damage, bounceCount);
 
   this.position_ = position;
   this.velocity_ = velocity;
-
-  /**
-   * @type {!dotprod.Animation}
-   * @private
-   */
-  this.animation_ = game.getResourceManager().getVideoEnsemble('bullets').getAnimation(level);
-  this.animation_.setRepeatCount(-1);
-
-  /**
-   * @type {!dotprod.Animation}
-   * @private
-   */
-   this.bouncingAnimation_ = game.getResourceManager().getVideoEnsemble('bullets').getAnimation(5 + level);
-   this.bouncingAnimation_.setRepeatCount(-1);
 };
 goog.inherits(dotprod.entities.Bullet, dotprod.entities.Projectile);
 
@@ -53,36 +37,16 @@ dotprod.entities.Bullet.prototype.getType = function() {
 };
 
 /**
- * @param {!dotprod.Map} map
- * @param {!dotprod.PlayerIndex} playerIndex
+ * @param {!dotprod.Game} game
  */
-dotprod.entities.Bullet.prototype.update = function(map, playerIndex) {
+dotprod.entities.Bullet.prototype.update = function(game) {
   --this.lifetime_;
   if (!this.isAlive()) {
     return;
   }
 
   this.updatePosition_();
-
-  playerIndex.some(goog.bind(this.checkPlayerCollision_, this));
-
-  this.animation_.update();
-};
-
-/**
- * @param {!dotprod.Camera} camera
- */
-dotprod.entities.Bullet.prototype.render = function(camera) {
-  if (!this.isAlive()) {
-    return;
-  }
-
-  var dimensions = camera.getDimensions();
-  var x = Math.floor(this.position_.getX() - dimensions.left - this.animation_.getWidth() / 2);
-  var y = Math.floor(this.position_.getY() - dimensions.top - this.animation_.getHeight() / 2);
-  var animation = this.bounceCount_ ? this.bouncingAnimation_ : this.animation_;
-
-  animation.render(camera.getContext(), x, y);
+  game.getPlayerIndex().some(goog.bind(this.checkPlayerCollision_, this));
 };
 
 /**
@@ -112,8 +76,7 @@ dotprod.entities.Bullet.prototype.bounce_ = function() {
   }
 };
 
-dotprod.entities.Bullet.prototype.explode_ = function() {
-  var animation = this.game_.getResourceManager().getVideoEnsemble('explode0').getAnimation(0);
-  var explosion = new dotprod.entities.Effect(animation, this.position_, new dotprod.math.Vector(0, 0));
-  this.game_.getEffectIndex().addEffect(explosion);
-};
+/**
+ * @protected
+ */
+dotprod.entities.Bullet.prototype.explode_ = goog.nullFunction;

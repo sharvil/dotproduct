@@ -151,7 +151,7 @@ dotprod.Game = function(protocol, resourceManager, settings, mapData) {
   this.layers_ = [
       new dotprod.layers.StarLayer(),
       new dotprod.layers.MapLayer(this),
-      new dotprod.layers.ProjectileLayer(this.map_, this.playerIndex_, this.projectileIndex_),
+      new dotprod.layers.ProjectileLayer(this),
       new dotprod.layers.ShipLayer(this.playerIndex_),
       new dotprod.layers.EffectLayer(this.effectIndex_),
       new dotprod.layers.NotificationLayer(this.notifications_),

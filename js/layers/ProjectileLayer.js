@@ -15,28 +15,20 @@ goog.require('dotprod.ProjectileIndex');
 /**
  * @constructor
  * @implements {dotprod.layers.Layer}
- * @param {!dotprod.Map} map
- * @param {!dotprod.PlayerIndex} playerIndex
- * @param {!dotprod.ProjectileIndex} projectileIndex
+ * @param {!dotprod.Game} game
  */
-dotprod.layers.ProjectileLayer = function(map, playerIndex, projectileIndex) {
+dotprod.layers.ProjectileLayer = function(game) {
   /**
-   * @type {!dotprod.Map}
+   * @type {!dotprod.Game}
    * @private
    */
-  this.map_ = map;
-
-  /**
-   * @type {!dotprod.PlayerIndex}
-   * @private
-   */
-  this.playerIndex_ = playerIndex;
+  this.game_ = game;
 
   /**
    * @type {!dotprod.ProjectileIndex}
    * @private
    */
-  this.projectileIndex_ = projectileIndex;
+  this.projectileIndex_ = game.getProjectileIndex();
 };
 
 /**
@@ -45,7 +37,7 @@ dotprod.layers.ProjectileLayer = function(map, playerIndex, projectileIndex) {
 dotprod.layers.ProjectileLayer.prototype.update = function() {
   var self = this;
   this.projectileIndex_.forEach(function(projectile) {
-    projectile.update(self.map_, self.playerIndex_);
+    projectile.update(self.game_);
   });
 };
 
