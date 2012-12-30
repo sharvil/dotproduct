@@ -112,7 +112,7 @@ dotprod.Game = function(protocol, resourceManager, settings, mapData) {
   this.effectIndex_ = new dotprod.EffectIndex();
 
   var startingShip = Math.floor(Math.random() * this.settings_['ships'].length);
-  var localPlayer = new dotprod.sprites.LocalPlayerSprite(this, this.settings_['id'], this.settings_['name'], this.settings_['team'], startingShip, this.camera_);
+  var localPlayer = new dotprod.sprites.LocalPlayerSprite(this, this.settings_['id'], this.settings_['name'], this.settings_['team'], startingShip);
 
   /**
    * @type {!dotprod.PlayerIndex}
@@ -324,6 +324,9 @@ dotprod.Game.prototype.renderingLoop_ = function() {
       this.layers_[j].update();
     }
   }
+
+  var position = this.playerIndex_.getLocalPlayer().getPosition();
+  this.camera_.setPosition(Math.floor(position.getX()), Math.floor(position.getY()));
 
   var context = this.camera_.getContext();
   context.save();

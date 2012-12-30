@@ -19,10 +19,9 @@ goog.require('dotprod.sprites.Sprite');
  * @param {string} name
  * @param {number} team
  * @param {number} ship
- * @param {!dotprod.Camera} camera
  */
-dotprod.sprites.LocalPlayerSprite = function(game, id, name, team, ship, camera) {
-  goog.base(this, game, id, name, team, ship, camera);
+dotprod.sprites.LocalPlayerSprite = function(game, id, name, team, ship) {
+  goog.base(this, game, id, name, team, ship);
 };
 goog.inherits(dotprod.sprites.LocalPlayerSprite, dotprod.entities.LocalPlayer);
 
@@ -62,7 +61,7 @@ dotprod.sprites.LocalPlayerSprite.prototype.render = function(camera) {
 
   dotprod.sprites.PlayerSprite.prototype.render.call(this, camera);
 
-  var damageOverlay = this.resourceManager_.getImage('ship' + this.ship_ + 'Red');
+  var damageOverlay = this.game_.getResourceManager().getImage('ship' + this.ship_ + 'Red');
   var x = Math.floor((dimensions.width - damageOverlay.getTileWidth()) / 2);
   var y = Math.floor((dimensions.height - damageOverlay.getTileHeight()) / 2);
   var tileNum = Math.floor(this.angleInRadians_ / (2 * Math.PI) * damageOverlay.getNumTiles());

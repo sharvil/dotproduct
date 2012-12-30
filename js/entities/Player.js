@@ -29,12 +29,6 @@ dotprod.entities.Player = function(game, id, name, team, ship, bounty) {
   goog.base(this, game);
 
   /**
-   * @type {!dotprod.ResourceManager}
-   * @private
-   */
-  this.resourceManager_ = game.getResourceManager();
-
-  /**
    * @type {!Object}
    * @protected
    */
@@ -123,12 +117,6 @@ dotprod.entities.Player = function(game, id, name, team, ship, bounty) {
    * @protected
    */
   this.losses_ = 0;
-
-  /**
-   * @type {!dotprod.EffectIndex}
-   * @private
-   */
-  this.effectIndex_ = this.game_.getEffectIndex();
 
   this.setShip(this.ship_);
 };

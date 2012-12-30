@@ -25,20 +25,13 @@ goog.require('dotprod.math.Vector');
  * @param {string} name
  * @param {number} team
  * @param {number} ship
- * @param {!dotprod.Camera} camera
  */
-dotprod.entities.LocalPlayer = function(game, id, name, team, ship, camera) {
+dotprod.entities.LocalPlayer = function(game, id, name, team, ship) {
   /**
    * @type {!dotprod.ProjectileIndex}
    * @private
    */
   this.projectileIndex_ = game.getProjectileIndex();
-
-  /**
-   * @type {!dotprod.Camera} camera
-   * @private
-   */
-  this.camera_ = camera;
 
   /**
    * @type {!dotprod.math.Range}
@@ -194,7 +187,6 @@ dotprod.entities.LocalPlayer.prototype.clearPresence = function(presence) {
 
 dotprod.entities.LocalPlayer.prototype.update = function() {
   var keyboard = this.game_.getKeyboard();
-  var dimensions = this.camera_.getDimensions();
   var forceSendUpdate = false;
 
   ++this.ticksSincePositionUpdate_;
@@ -324,7 +316,6 @@ dotprod.entities.LocalPlayer.prototype.update = function() {
   }
 
   this.updatePosition_(bounceFactor);
-  this.camera_.setPosition(Math.floor(this.position_.getX()), Math.floor(this.position_.getY()));
   this.sendPositionUpdate_(forceSendUpdate, this.velocity_ != oldVelocity || this.angleInRadians_ != oldAngle, projectile);
 };
 

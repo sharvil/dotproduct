@@ -21,22 +21,26 @@ dotprod.sprites.PlayerSprite = goog.abstractMethod;
 dotprod.sprites.PlayerSprite.prototype.respawn = function(angle, position, velocity) {
   goog.base(this, 'respawn', angle, position, velocity);
 
-  var animation = this.resourceManager_.getVideoEnsemble('warp').getAnimation(0);
-  this.effectIndex_.addEffect(new dotprod.entities.Effect(animation, this.position_, new dotprod.math.Vector(0, 0)));
+  var resourceManager = this.game_.getResourceManager();
+  var effectIndex = this.game_.getEffectIndex();
+  var animation = resourceManager.getVideoEnsemble('warp').getAnimation(0);
+  effectIndex.addEffect(new dotprod.entities.Effect(animation, this.position_, new dotprod.math.Vector(0, 0)));
 };
 
 dotprod.sprites.PlayerSprite.prototype.onDeath = function() {
   goog.base(this, 'onDeath');
 
-  var ensemble = this.resourceManager_.getVideoEnsemble('explode1');
-  this.effectIndex_.addEffect(new dotprod.entities.Effect(ensemble.getAnimation(0), this.position_, this.velocity_));
+  var resourceManager = this.game_.getResourceManager();
+  var effectIndex = this.game_.getEffectIndex();
+  var ensemble = resourceManager.getVideoEnsemble('explode1');
+  effectIndex.addEffect(new dotprod.entities.Effect(ensemble.getAnimation(0), this.position_, this.velocity_));
 
-  ensemble = this.resourceManager_.getVideoEnsemble('ship' + this.ship_ + '_junk');
+  ensemble = resourceManager.getVideoEnsemble('ship' + this.ship_ + '_junk');
   for (var i = 0; i < ensemble.getNumAnimations(); ++i) {
     var animation = ensemble.getAnimation(i);
     var deltaVelocity = dotprod.math.Vector.fromPolar(Math.random() * 2, Math.random() * 2 * Math.PI);
     var piece = new dotprod.entities.Effect(animation, this.position_, this.velocity_.add(deltaVelocity));
-    this.effectIndex_.addEffect(piece);
+    effectIndex.addEffect(piece);
   }
 };
 
@@ -48,9 +52,10 @@ dotprod.sprites.PlayerSprite.prototype.render = function(camera) {
     return;
   }
 
-  var shipImage = this.resourceManager_.getImage('ship' + this.ship_);
-  var awayImage = this.resourceManager_.getImage('presenceAway');
-  var typingImage = this.resourceManager_.getImage('presenceTyping');
+  var resourceManager = this.game_.getResourceManager();
+  var shipImage = resourceManager.getImage('ship' + this.ship_);
+  var awayImage = resourceManager.getImage('presenceAway');
+  var typingImage = resourceManager.getImage('presenceTyping');
 
   var localPlayer = this.game_.getPlayerIndex().getLocalPlayer();
   var tileNum = Math.floor(this.angleInRadians_ / (2 * Math.PI) * shipImage.getNumTiles());
