@@ -17,11 +17,12 @@ goog.require('dotprod.sprites.Sprite');
  * @param {string} id
  * @param {string} name
  * @param {number} team
+ * @param {boolean} isAlive
  * @param {number} ship
  * @param {number} bounty
  */
-dotprod.sprites.RemotePlayerSprite = function(game, id, name, team, ship, bounty) {
-  goog.base(this, game, id, name, team, ship, bounty);
+dotprod.sprites.RemotePlayerSprite = function(game, id, name, team, isAlive, ship, bounty) {
+  goog.base(this, game, id, name, team, isAlive, ship, bounty);
 };
 goog.inherits(dotprod.sprites.RemotePlayerSprite, dotprod.entities.RemotePlayer);
 

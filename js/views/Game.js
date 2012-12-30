@@ -354,11 +354,12 @@ dotprod.Game.prototype.onPlayerEntered_ = function(packet) {
   var id = packet[0];
   var name = packet[1];
   var team = packet[2];
-  var ship = packet[3];
-  var bounty = packet[4];
-  var presence = /** @type {!dotprod.entities.Player.Presence} */ (packet[5]);
+  var isAlive = packet[3];
+  var ship = packet[4];
+  var bounty = packet[5];
+  var presence = /** @type {!dotprod.entities.Player.Presence} */ (packet[6]);
 
-  var player = new dotprod.sprites.RemotePlayerSprite(this, id, name, team, ship, bounty);
+  var player = new dotprod.sprites.RemotePlayerSprite(this, id, name, team, isAlive, ship, bounty);
   player.setPresence(presence);
   this.playerIndex_.addPlayer(player);
 

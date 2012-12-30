@@ -92,13 +92,19 @@ dotprod.entities.Player = function(game, id, name, team, ship, bounty) {
    * @type {number}
    * @protected
    */
-  this.ship_ = ship;
+  this.ship_;
 
   /**
    * @type {number}
    * @protected
    */
-  this.bounty_ = bounty;
+  this.bounty_;
+
+  /**
+   * @type {!dotprod.entities.Player.Presence}
+   * @protected
+   */
+  this.presence_ = dotprod.entities.Player.Presence.DEFAULT;
 
   /**
    * @type {number}
@@ -118,7 +124,8 @@ dotprod.entities.Player = function(game, id, name, team, ship, bounty) {
    */
   this.losses_ = 0;
 
-  this.setShip(this.ship_);
+  this.setShip(ship);
+  this.bounty_ = bounty;
 };
 goog.inherits(dotprod.entities.Player, dotprod.entities.Entity);
 
