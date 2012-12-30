@@ -15,7 +15,7 @@ goog.require('dotprod.views.View');
  * @param {!dotprod.Camera} camera
  */
 dotprod.views.DebugView = function(game, camera) {
-  dotprod.views.View.call(this);
+  goog.base(this);
 
   /**
    * @type {!dotprod.Game}

@@ -82,7 +82,7 @@ dotprod.entities.LocalPlayer = function(game, id, name, team, ship, camera) {
    */
   this.damageOverlay_;
 
-  dotprod.entities.Player.call(this, game, id, name, team, ship, 0 /* bounty */);
+  goog.base(this, game, id, name, team, ship, 0 /* bounty */);
 };
 goog.inherits(dotprod.entities.LocalPlayer, dotprod.entities.Player);
 

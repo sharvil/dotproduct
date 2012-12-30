@@ -26,7 +26,7 @@ goog.require('dotprod.Palette');
  * @param {number} bounty
  */
 dotprod.entities.Player = function(game, id, name, team, ship, bounty) {
-  dotprod.entities.Entity.call(this, game);
+  goog.base(this, game);
 
   /**
    * @type {!dotprod.ResourceManager}

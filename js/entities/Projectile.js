@@ -18,7 +18,7 @@ goog.require('dotprod.entities.Entity');
  * @param {number} bounceCount
  */
 dotprod.entities.Projectile = function(game, owner, level, lifetime, damage, bounceCount) {
-  dotprod.entities.Entity.call(this, game);
+  goog.base(this, game);
 
   /**
    * @type {!dotprod.entities.Player}

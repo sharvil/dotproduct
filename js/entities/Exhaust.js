@@ -15,7 +15,7 @@ goog.require('dotprod.entities.Entity');
  * @param {!dotprod.math.Vector} velocity
  */
 dotprod.entities.Exhaust = function(game, position, velocity) {
-  dotprod.entities.Entity.call(this, game);
+  goog.base(this, game);
 
   this.position_ = position;
   this.velocity_ = velocity;

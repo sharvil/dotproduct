@@ -19,7 +19,7 @@ goog.require('dotprod.views.View');
  * @param {!dotprod.Game} game
  */
 dotprod.views.ChatView = function(game) {
-  dotprod.views.View.call(this);
+  goog.base(this);
 
   /**
    * @type {!dotprod.entities.LocalPlayer}
