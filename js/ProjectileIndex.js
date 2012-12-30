@@ -48,6 +48,7 @@ dotprod.ProjectileIndex.prototype.removeProjectiles = function(player) {
  * @param {function(!dotprod.entities.Projectile)} cb
  */
 dotprod.ProjectileIndex.prototype.forEach = function(cb) {
+  this.projectiles_ = goog.array.filter(this.projectiles_, function(element) { return element.projectile.isAlive(); });
   goog.array.forEach(this.projectiles_, function(element) {
     if (element.projectile.isAlive()) {
       cb(element.projectile);
