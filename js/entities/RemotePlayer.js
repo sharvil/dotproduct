@@ -157,7 +157,7 @@ dotprod.entities.RemotePlayer.prototype.extrapolatePosition_ = function(timeDiff
  */
 dotprod.entities.RemotePlayer.prototype.collectPrize_ = function(prize) {
   goog.base(this, 'collectPrize_', prize);
-  return true;
+  return false;
 };
 
 /**
