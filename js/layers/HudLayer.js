@@ -125,11 +125,13 @@ dotprod.layers.HudLayer.prototype.renderNearShipEnergyDisplay_ = function(contex
     return;
   }
 
-  var percentEnergy = this.player_.getEnergy() / this.player_.getMaxEnergy();
+  var energy = this.player_.getEnergy();
+  var playerDimensions = this.player_.getDimensions();
+  var percentEnergy = energy / this.player_.getMaxEnergy();
 
   if (percentEnergy < 0.5) {
-    var x = Math.floor(this.player_.position_.getX() - dimensions.left - this.player_.image_.getTileWidth() / 2 - 10);
-    var y = Math.floor(this.player_.position_.getY() - dimensions.top - this.player_.image_.getTileHeight() / 2);
+    var x = Math.floor(playerDimensions.left - dimensions.left - 10);
+    var y = Math.floor(playerDimensions.top - dimensions.top);
 
     context.save();
       context.fillStyle = percentEnergy < 0.25 ? 'rgba(200, 0, 0, 0.5)' :
@@ -139,7 +141,7 @@ dotprod.layers.HudLayer.prototype.renderNearShipEnergyDisplay_ = function(contex
       context.font = dotprod.FontFoundry.playerFont();
       context.textAlign = 'right';
       context.textBaseline = 'bottom';
-      context.fillText(Math.floor(this.player_.energy_).toString(), x, y);
+      context.fillText(energy.toString(), x, y);
     context.restore();
   }
 };

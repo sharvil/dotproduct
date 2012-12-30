@@ -156,7 +156,7 @@ dotprod.entities.Player.prototype.getName = function() {
  * @return {number}
  */
 dotprod.entities.Player.prototype.getEnergy = function () {
-  return this.energy_;
+  return Math.floor(this.energy_);
 };
 
 /**
