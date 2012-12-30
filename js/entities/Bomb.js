@@ -5,8 +5,6 @@
 
 goog.provide('dotprod.entities.Bomb');
 
-goog.require('dotprod.Camera');
-goog.require('dotprod.entities.Effect');
 goog.require('dotprod.entities.Projectile');
 goog.require('dotprod.model.Weapon.Type');
 goog.require('dotprod.math.Vector');
@@ -65,21 +63,7 @@ dotprod.entities.Bomb.prototype.getType = function() {
 };
 
 /**
- * @param {!dotprod.Game} game
- */
-dotprod.entities.Bomb.prototype.update = function(game) {
-  --this.lifetime_;
-  if (!this.isAlive()) {
-    return;
-  }
-
-  this.updatePosition_();
-  game.getPlayerIndex().some(goog.bind(this.checkPlayerCollision_, this));
-};
-
-/**
- * @private
- * @param {!dotprod.entities.Player} player
+ * @override
  */
 dotprod.entities.Bomb.prototype.checkPlayerCollision_ = function(player) {
   if (!player.isAlive() || this.owner_.isFriend(player)) {
@@ -88,7 +72,7 @@ dotprod.entities.Bomb.prototype.checkPlayerCollision_ = function(player) {
 
   var distance = this.position_.subtract(player.getPosition()).magnitude();
   if (player.getDimensions().boundingRect.contains(this.position_)) {
-    this.explode_(player == this.game_.getPlayerIndex().getLocalPlayer());
+    this.explode_(player);
     return true;
   } else if (!this.proxActivator_) {
     if (distance <= this.proxRadius_) {
@@ -97,7 +81,7 @@ dotprod.entities.Bomb.prototype.checkPlayerCollision_ = function(player) {
     }
   } else if (player == this.proxActivator_) {
     if (distance > this.lastDistanceToProxActivator_) {
-      this.explode_(false);
+      this.explode_(null);
       return true;
     }
     this.lastDistanceToProxActivator_ = distance;
@@ -105,32 +89,23 @@ dotprod.entities.Bomb.prototype.checkPlayerCollision_ = function(player) {
   return false;
 };
 
-dotprod.entities.Bomb.prototype.bounce_ = function() {
-  if (this.bounceCount_ == 0) {
-    this.explode_(false);
-  } else if (this.bounceCount_ > 0) {
-    --this.bounceCount_;
-  }
-};
-
 /**
- * @protected
- * @param {boolean} directHit True if the local player was hit directly by the bomb, false otherwise.
+ * @override
  */
-dotprod.entities.Bomb.prototype.explode_ = function(directHit) {
+dotprod.entities.Bomb.prototype.explode_ = function(hitPlayer) {
   // Reset bomb state.
   this.velocity_ = new dotprod.math.Vector(0, 0);
   this.lifetime_ = 0;
 
   // Figure out how much damage the local player is going to take from this bomb explosion.
   var damageRatio;
-  var player = this.game_.getPlayerIndex().getLocalPlayer();
-  if (directHit) {
+  var localPlayer = this.game_.getPlayerIndex().getLocalPlayer();
+  if (hitPlayer == localPlayer) {
     damageRatio = 1;
   } else {
-    var normDistance = this.position_.subtract(player.getPosition()).magnitude() / this.blastRadius_;
+    var normDistance = this.position_.subtract(localPlayer.getPosition()).magnitude() / this.blastRadius_;
     damageRatio = Math.max(1 - normDistance, 0);
   }
 
-  player.takeDamage(this.owner_, this, this.damage_ * damageRatio);
+  localPlayer.takeDamage(this.owner_, this, this.damage_ * damageRatio);
 };

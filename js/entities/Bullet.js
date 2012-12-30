@@ -37,20 +37,7 @@ dotprod.entities.Bullet.prototype.getType = function() {
 };
 
 /**
- * @param {!dotprod.Game} game
- */
-dotprod.entities.Bullet.prototype.update = function(game) {
-  --this.lifetime_;
-  if (!this.isAlive()) {
-    return;
-  }
-
-  this.updatePosition_();
-  game.getPlayerIndex().some(goog.bind(this.checkPlayerCollision_, this));
-};
-
-/**
- * @param {!dotprod.entities.Player} player
+ * @override
  */
 dotprod.entities.Bullet.prototype.checkPlayerCollision_ = function(player) {
   if (!player.isAlive() || this.owner_.isFriend(player)) {
@@ -58,25 +45,17 @@ dotprod.entities.Bullet.prototype.checkPlayerCollision_ = function(player) {
   }
 
   if (player.getDimensions().boundingRect.contains(this.position_)) {
-    player.takeDamage(this.owner_, this, this.damage_);
-    this.lifetime_ = 0;
-    this.explode_();
+    this.explode_(player);
     return true;
   }
   return false;
 };
 
-dotprod.entities.Bullet.prototype.bounce_ = function() {
-  if (this.bounceCount_ == 0) {
-    this.velocity_ = new dotprod.math.Vector(0, 0);
-    this.lifetime_ = 0;
-    this.explode_();
-  } else if (this.bounceCount_ > 0) {
-    --this.bounceCount_;
-  }
-};
-
 /**
- * @protected
+ * @override
  */
-dotprod.entities.Bullet.prototype.explode_ = goog.nullFunction;
+dotprod.entities.Bullet.prototype.explode_ = function(hitPlayer) {
+  this.velocity_ = new dotprod.math.Vector(0, 0);
+  this.lifetime_ = 0;
+  hitPlayer.takeDamage(this.owner_, this, this.damage_);
+};

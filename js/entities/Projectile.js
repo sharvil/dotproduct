@@ -52,6 +52,20 @@ dotprod.entities.Projectile = function(game, owner, level, lifetime, damage, bou
 };
 goog.inherits(dotprod.entities.Projectile, dotprod.entities.Entity);
 
+dotprod.entities.Projectile.prototype.getType = goog.abstractMethod;
+
+/**
+ * @param {!dotprod.entities.Player} player
+ * @protected
+ */
+dotprod.entities.Projectile.prototype.checkPlayerCollision_ = goog.abstractMethod;
+
+/**
+ * @param {dotprod.entities.Player} player The player who was directly hit or null if there was no direct hit.
+ * @protected
+ */
+dotprod.entities.Projectile.prototype.explode_ = goog.abstractMethod;
+
 /**
  * @override
  */
@@ -73,4 +87,26 @@ dotprod.entities.Projectile.prototype.getBounceCount = function() {
   return this.bounceCount_;
 };
 
-dotprod.entities.Projectile.prototype.getType = goog.abstractMethod;
+/**
+ * @param {!dotprod.Game} game
+ */
+dotprod.entities.Projectile.prototype.update = function(game) {
+  --this.lifetime_;
+  if (!this.isAlive()) {
+    return;
+  }
+
+  this.updatePosition_();
+  game.getPlayerIndex().some(goog.bind(this.checkPlayerCollision_, this));
+};
+
+/**
+ * @override
+ */
+dotprod.entities.Projectile.prototype.bounce_ = function() {
+  if (this.bounceCount_ == 0) {
+    this.explode_(null);
+  } else if (this.bounceCount_ > 0) {
+    --this.bounceCount_;
+  }
+};

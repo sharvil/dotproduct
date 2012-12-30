@@ -45,8 +45,8 @@ goog.inherits(dotprod.sprites.BulletSprite, dotprod.entities.Bullet);
 /**
  * @override
  */
-dotprod.sprites.BulletSprite.prototype.update = function(map, playerIndex) {
-  goog.base(this, 'update', map, playerIndex);
+dotprod.sprites.BulletSprite.prototype.update = function(game) {
+  goog.base(this, 'update', game);
   this.animation_.update();
   this.bouncingAnimation_.update();
 };
@@ -70,8 +70,8 @@ dotprod.sprites.BulletSprite.prototype.render = function(camera) {
 /**
  * @override
  */
-dotprod.sprites.BulletSprite.prototype.explode_ = function() {
-  goog.base(this, 'explode_');
+dotprod.sprites.BulletSprite.prototype.explode_ = function(hitPlayer) {
+  goog.base(this, 'explode_', hitPlayer);
 
   var animation = this.game_.getResourceManager().getVideoEnsemble('explode0').getAnimation(0);
   var explosion = new dotprod.entities.Effect(animation, this.position_, new dotprod.math.Vector(0, 0));
