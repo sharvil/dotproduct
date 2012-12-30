@@ -125,24 +125,6 @@ dotprod.entities.Player = function(game, id, name, team, ship, bounty) {
   this.losses_ = 0;
 
   /**
-   * @type {dotprod.Image}
-   * @protected
-   */
-  this.image_;
-
-  /**
-   * @type {!dotprod.Image}
-   * @private
-   */
-  this.typingImage_ = this.resourceManager_.getImage('presenceTyping');
-
-  /**
-   * @type {!dotprod.Image}
-   * @private
-   */
-  this.awayImage_ = this.resourceManager_.getImage('presenceAway');
-
-  /**
    * @type {!dotprod.EffectIndex}
    * @private
    */
@@ -246,7 +228,6 @@ dotprod.entities.Player.prototype.setShip = function(ship) {
   this.bounty_ = 0;
   this.xRadius_ = this.shipSettings_['xRadius'];
   this.yRadius_ = this.shipSettings_['yRadius'];
-  this.image_ = this.resourceManager_.getImage('ship' + this.ship_);
 };
 
 /**
@@ -276,23 +257,19 @@ dotprod.entities.Player.prototype.hasPresence = function(presence) {
  * @param {!dotprod.entities.Projectile} projectile
  * @param {number} damage
  */
-dotprod.entities.Player.prototype.takeDamage = function(player, projectile, damage) {};
+dotprod.entities.Player.prototype.takeDamage = goog.nullFunction;
+
+/**
+ * @param {number} angle
+ * @param {!dotprod.math.Vector} position
+ * @param {!dotprod.math.Vector} velocity
+ */
+dotprod.entities.Player.prototype.respawn = goog.abstractMethod;
 
 /**
  * Called when this player is killed by another one.
  */
 dotprod.entities.Player.prototype.onDeath = function() {
-  var ensemble = this.resourceManager_.getVideoEnsemble('explode1');
-  this.effectIndex_.addEffect(new dotprod.entities.Effect(ensemble.getAnimation(0), this.position_, this.velocity_));
-
-  ensemble = this.resourceManager_.getVideoEnsemble('ship' + this.ship_ + '_junk');
-  for (var i = 0; i < ensemble.getNumAnimations(); ++i) {
-    var animation = ensemble.getAnimation(i);
-    var deltaVelocity = dotprod.math.Vector.fromPolar(Math.random() * 2, Math.random() * 2 * Math.PI);
-    var piece = new dotprod.entities.Effect(animation, this.position_, this.velocity_.add(deltaVelocity));
-    this.effectIndex_.addEffect(piece);
-  }
-
   ++this.losses_;
   this.bounty_ = 0;
   this.energy_ = 0;
@@ -327,51 +304,6 @@ dotprod.entities.Player.prototype.onScoreUpdate = function(points, wins, losses)
  */
 dotprod.entities.Player.prototype.isFriend = function(other) {
   return this.team_ == other.team_;
-};
-
-dotprod.entities.Player.prototype.warpFlash = function() {
-  var animation = this.resourceManager_.getVideoEnsemble('warp').getAnimation(0);
-  this.effectIndex_.addEffect(new dotprod.entities.Effect(animation, this.position_, new dotprod.math.Vector(0, 0)));
-};
-
-/**
- * @param {!dotprod.Camera} camera
- */
-dotprod.entities.Player.prototype.render = function(camera) {
-  if (!this.isAlive()) {
-    return;
-  }
-
-  var localPlayer = this.game_.getPlayerIndex().getLocalPlayer();
-  var tileNum = Math.floor(this.angleInRadians_ / (2 * Math.PI) * this.image_.getNumTiles());
-  var dimensions = camera.getDimensions();
-  var context = camera.getContext();
-
-  var x = Math.floor(this.position_.getX() - dimensions.left - this.image_.getTileWidth() / 2);
-  var y = Math.floor(this.position_.getY() - dimensions.top - this.image_.getTileHeight() / 2);
-
-  this.image_.render(context, x, y, tileNum);
-
-  var presenceImage = null;
-  if (this.hasPresence(dotprod.entities.Player.Presence.AWAY)) {
-    presenceImage = this.awayImage_;
-  } else if (this.hasPresence(dotprod.entities.Player.Presence.TYPING)) {
-    presenceImage = this.typingImage_;
-  }
-
-  if (presenceImage) {
-    var speechX = x + this.image_.getTileWidth() - Math.floor(presenceImage.getTileWidth() / 2);
-    var speechY = y - Math.floor(presenceImage.getTileHeight() / 2);
-    presenceImage.render(context, speechX, speechY);
-  }
-
-  context.save();
-    context.font = dotprod.FontFoundry.playerFont();
-    context.fillStyle = this.isFriend(localPlayer) ? dotprod.Palette.friendColor() : dotprod.Palette.foeColor();
-    context.textAlign = 'center';
-    context.textBaseline = 'top';
-    context.fillText(this.name_ + '(' + this.bounty_ + ')', x + this.image_.getTileWidth() / 2, y + this.image_.getTileHeight());
-  context.restore();
 };
 
 // Called when the server tells us that this player collected a prize.

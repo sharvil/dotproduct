@@ -73,6 +73,18 @@ dotprod.entities.RemotePlayer.MAX_DRIFT_PIXELS_ = 64;
 dotprod.entities.RemotePlayer.VELOCITY_ADJUST_PERIOD_ = 20;
 
 /**
+ * @override
+ */
+dotprod.entities.RemotePlayer.prototype.respawn = function(angle, position, velocity) {
+  this.energy_ = 1;
+  this.bounty_ = 0;
+  this.angleInRadians_ = angle;
+  this.position_ = position;
+  this.velocity_ = velocity;
+  this.originalVelocity_ = velocity;
+};
+
+/**
  * @param {number} timeDiff
  * @param {number} angle
  * @param {!dotprod.math.Vector} position
@@ -80,13 +92,7 @@ dotprod.entities.RemotePlayer.VELOCITY_ADJUST_PERIOD_ = 20;
  */
 dotprod.entities.RemotePlayer.prototype.onPositionUpdate = function(timeDiff, angle, position, velocity) {
   if (!this.isAlive()) {
-    this.energy_ = 1;
-    this.bounty_ = 0;
-    this.angleInRadians_ = angle;
-    this.position_ = position;
-    this.velocity_ = velocity;
-    this.originalVelocity_ = velocity;
-    this.warpFlash();
+    this.respawn(angle, position, velocity);
     return;
   }
 

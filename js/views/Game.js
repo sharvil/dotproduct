@@ -16,8 +16,6 @@ goog.require('html5.Notifications');
 
 goog.require('dotprod.Camera');
 goog.require('dotprod.EffectIndex');
-goog.require('dotprod.entities.LocalPlayer');
-goog.require('dotprod.entities.RemotePlayer');
 goog.require('dotprod.input.Keyboard');
 goog.require('dotprod.layers.EffectLayer');
 goog.require('dotprod.layers.HudLayer');
@@ -34,6 +32,8 @@ goog.require('dotprod.Prize');
 goog.require('dotprod.PrizeIndex');
 goog.require('dotprod.ProjectileIndex');
 goog.require('dotprod.Protocol');
+goog.require('dotprod.sprites.LocalPlayerSprite');
+goog.require('dotprod.sprites.RemotePlayerSprite');
 goog.require('dotprod.Timer');
 goog.require('dotprod.Timestamp');
 goog.require('dotprod.views.ChatView');
@@ -112,7 +112,7 @@ dotprod.Game = function(protocol, resourceManager, settings, mapData) {
   this.effectIndex_ = new dotprod.EffectIndex();
 
   var startingShip = Math.floor(Math.random() * this.settings_['ships'].length);
-  var localPlayer = new dotprod.entities.LocalPlayer(this, this.settings_['id'], this.settings_['name'], this.settings_['team'], startingShip, this.camera_);
+  var localPlayer = new dotprod.sprites.LocalPlayerSprite(this, this.settings_['id'], this.settings_['name'], this.settings_['team'], startingShip, this.camera_);
 
   /**
    * @type {!dotprod.PlayerIndex}
@@ -354,7 +354,7 @@ dotprod.Game.prototype.onPlayerEntered_ = function(packet) {
   var bounty = packet[4];
   var presence = /** @type {!dotprod.entities.Player.Presence} */ (packet[5]);
 
-  var player = new dotprod.entities.RemotePlayer(this, id, name, team, ship, bounty);
+  var player = new dotprod.sprites.RemotePlayerSprite(this, id, name, team, ship, bounty);
   player.setPresence(presence);
   this.playerIndex_.addPlayer(player);
 

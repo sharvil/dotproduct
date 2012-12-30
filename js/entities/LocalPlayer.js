@@ -76,15 +76,16 @@ dotprod.entities.LocalPlayer = function(game, id, name, team, ship, camera) {
    */
   this.exhaustTimer_ = new dotprod.math.Range(0, 6, 1);
 
-  /**
-   * @type {dotprod.Image}
-   * @private
-   */
-  this.damageOverlay_;
-
   goog.base(this, game, id, name, team, ship, 0 /* bounty */);
 };
 goog.inherits(dotprod.entities.LocalPlayer, dotprod.entities.Player);
+
+/**
+ * @type {number}
+ * @const
+ * @private
+ */
+dotprod.entities.LocalPlayer.ANGLE_STEPS_ = 40;
 
 /**
  * @override
@@ -151,16 +152,16 @@ dotprod.entities.LocalPlayer.prototype.onDeath = function() {
   this.respawnTimer_ = this.shipSettings_['respawnDelay'];
 };
 
-dotprod.entities.LocalPlayer.prototype.respawn = function() {
-  this.angleInRadians_ = Math.random() * 2 * Math.PI;
-  this.position_ = this.game_.getMap().getSpawnLocation(this);
-  this.velocity_ = new dotprod.math.Vector(0, 0);
+/**
+ * @override
+ */
+dotprod.entities.LocalPlayer.prototype.respawn = function(angle, position, velocity) {
+  this.angleInRadians_ = angle;
+  this.position_ = position;
+  this.velocity_ = velocity;
   this.energy_ = this.shipSettings_['maxEnergy'];
   this.maxEnergy_ = this.shipSettings_['maxEnergy'];
   this.projectileIndex_.removeProjectiles(this);
-  this.damageOverlay_ = this.resourceManager_.getImage('ship' + this.ship_ + 'Red');
-
-  this.warpFlash();
 };
 
 /**
@@ -168,7 +169,11 @@ dotprod.entities.LocalPlayer.prototype.respawn = function() {
  */
 dotprod.entities.LocalPlayer.prototype.setShip = function(ship) {
   goog.base(this, 'setShip', ship);
-  this.respawn();
+
+  var angle = Math.random() * 2 * Math.PI;
+  var position = this.game_.getMap().getSpawnLocation(this);
+  var velocity = new dotprod.math.Vector(0, 0);
+  this.respawn(angle, position, velocity);
 };
 
 /**
@@ -324,43 +329,6 @@ dotprod.entities.LocalPlayer.prototype.update = function() {
 };
 
 /**
- * @param {!dotprod.Camera} camera
- */
-dotprod.entities.LocalPlayer.prototype.render = function(camera) {
-  var context = camera.getContext();
-  var dimensions = camera.getDimensions();
-
-  if (!this.isAlive()) {
-    var millis = dotprod.Timer.ticksToMillis(this.respawnTimer_);
-    var seconds = Math.floor(millis / 1000);
-    var tenths = Math.floor((millis % 1000) / 100);
-    var time = seconds + '.' + tenths;
-    context.save();
-      context.font = dotprod.FontFoundry.playerFont();
-      context.fillStyle = dotprod.Palette.friendColor();
-      context.fillText(time, dimensions.width / 2, dimensions.height / 2);
-    context.restore();
-    return;
-  }
-
-  for (var i = 0; i < this.exhaust_.length; ++i) {
-    this.exhaust_[i].render(camera);
-  }
-
-  goog.base(this, 'render', camera);
-
-  var x = Math.floor(dimensions.width / 2 - this.image_.getTileWidth() / 2);
-  var y = Math.floor(dimensions.height / 2 - this.image_.getTileHeight() / 2);
-  var tileNum = Math.floor(this.angleInRadians_ / (2 * Math.PI) * this.image_.getNumTiles());
-
-  context.save();
-    context.globalAlpha = 0.7 * (1 - (this.energy_ / this.maxEnergy_));
-    context.globalCompositeOperation = 'lighter';
-    this.damageOverlay_.render(context, x, y, tileNum);
-  context.restore();
-};
-
-/**
  * @param {!dotprod.math.Vector} thrustVector
  * @private
  */
@@ -408,5 +376,5 @@ dotprod.entities.LocalPlayer.prototype.sendPositionUpdate_ = function(forceSendU
  * @return {number}
  */
 dotprod.entities.LocalPlayer.prototype.getAngle_ = function() {
-  return 2 * Math.PI * Math.floor(this.angleInRadians_ / (2 * Math.PI) * this.image_.getNumTiles()) / this.image_.getNumTiles();
+  return 2 * Math.PI * Math.floor(this.angleInRadians_ / (2 * Math.PI) * dotprod.entities.LocalPlayer.ANGLE_STEPS_) / dotprod.entities.LocalPlayer.ANGLE_STEPS_;
 };

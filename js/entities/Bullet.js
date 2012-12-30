@@ -57,5 +57,7 @@ dotprod.entities.Bullet.prototype.checkPlayerCollision_ = function(player) {
 dotprod.entities.Bullet.prototype.explode_ = function(hitPlayer) {
   this.velocity_ = new dotprod.math.Vector(0, 0);
   this.lifetime_ = 0;
-  hitPlayer.takeDamage(this.owner_, this, this.damage_);
+  if (hitPlayer) {
+    hitPlayer.takeDamage(this.owner_, this, this.damage_);
+  }
 };
