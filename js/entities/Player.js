@@ -107,6 +107,12 @@ dotprod.entities.Player = function(game, id, name, team, ship, bounty) {
   this.bounty_ = bounty;
 
   /**
+   * @type {!dotprod.entities.Player.Presence}
+   * @protected
+   */
+  this.presence_ = dotprod.entities.Player.Presence.DEFAULT;
+
+  /**
    * @type {number}
    * @protected
    */
