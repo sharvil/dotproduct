@@ -98,13 +98,13 @@ dotprod.entities.Player = function(game, id, name, team, ship, bounty) {
    * @type {number}
    * @protected
    */
-  this.ship_ = ship;
+  this.ship_;
 
   /**
    * @type {number}
    * @protected
    */
-  this.bounty_ = bounty;
+  this.bounty_;
 
   /**
    * @type {!dotprod.entities.Player.Presence}
@@ -154,7 +154,8 @@ dotprod.entities.Player = function(game, id, name, team, ship, bounty) {
    */
   this.effectIndex_ = this.game_.getEffectIndex();
 
-  this.setShip(this.ship_);
+  this.setShip(ship);
+  this.bounty_ = bounty;
 };
 goog.inherits(dotprod.entities.Player, dotprod.entities.Entity);
 

@@ -19,10 +19,11 @@ goog.require('dotprod.math.Vector');
  * @param {string} id
  * @param {string} name
  * @param {number} team
+ * @param {boolean} isAlive
  * @param {number} ship
  * @param {number} bounty
  */
-dotprod.entities.RemotePlayer = function(game, id, name, team, ship, bounty) {
+dotprod.entities.RemotePlayer = function(game, id, name, team, isAlive, ship, bounty) {
   dotprod.entities.Player.call(this, game, id, name, team, ship, bounty);
 
   /**
@@ -52,9 +53,7 @@ dotprod.entities.RemotePlayer = function(game, id, name, team, ship, bounty) {
    */
   this.velocityAdjustTimer_ = 0;
 
-  // The remote player isn't alive until we receive a position packet telling
-  // us otherwise.
-  this.energy_ = 0;
+  this.energy_ = isAlive ? 1 : 0;
 };
 goog.inherits(dotprod.entities.RemotePlayer, dotprod.entities.Player);
 
