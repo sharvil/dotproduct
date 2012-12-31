@@ -37,7 +37,7 @@ dotprod.layers.ProjectileLayer = function(game) {
 dotprod.layers.ProjectileLayer.prototype.update = function() {
   var self = this;
   this.projectileIndex_.forEach(function(projectile) {
-    projectile.update(self.game_);
+    projectile.update();
   });
 };
 

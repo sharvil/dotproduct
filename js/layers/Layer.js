@@ -11,4 +11,8 @@ goog.provide('dotprod.layers.Layer');
 dotprod.layers.Layer = goog.nullFunction;
 
 dotprod.layers.Layer.prototype.update = goog.abstractMethod;
+
+/**
+ * @param {!dotprod.Camera} camera
+ */
 dotprod.layers.Layer.prototype.render = goog.abstractMethod;

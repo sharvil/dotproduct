@@ -87,17 +87,14 @@ dotprod.entities.Projectile.prototype.getBounceCount = function() {
   return this.bounceCount_;
 };
 
-/**
- * @param {!dotprod.Game} game
- */
-dotprod.entities.Projectile.prototype.update = function(game) {
+dotprod.entities.Projectile.prototype.update = function() {
   --this.lifetime_;
   if (!this.isAlive()) {
     return;
   }
 
   this.updatePosition_();
-  game.getPlayerIndex().some(goog.bind(this.checkPlayerCollision_, this));
+  this.game_.getPlayerIndex().some(goog.bind(this.checkPlayerCollision_, this));
 };
 
 /**

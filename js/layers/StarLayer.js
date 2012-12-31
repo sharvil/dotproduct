@@ -71,11 +71,9 @@ dotprod.layers.StarLayer.STAR_L2_COLOR_ = 'rgb(96, 96, 96)';
 /**
  * @override
  */
-dotprod.layers.StarLayer.prototype.update = function() {
-};
+dotprod.layers.StarLayer.prototype.update = goog.nullFunction;
 
 /**
- * @param {!dotprod.Camera} camera
  * @override
  */
 dotprod.layers.StarLayer.prototype.render = function(camera) {
