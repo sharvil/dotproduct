@@ -6,14 +6,10 @@
 goog.provide('dotprod.entities.Player');
 goog.provide('dotprod.entities.Player.Presence');
 
-goog.require('dotprod.FontFoundry');
 goog.require('dotprod.entities.Entity');
-goog.require('dotprod.Image');
-goog.require('dotprod.Map');
 goog.require('dotprod.model.BombBay');
 goog.require('dotprod.model.Gun');
 goog.require('dotprod.model.Weapon.Type');
-goog.require('dotprod.Palette');
 
 /**
  * @constructor
@@ -209,20 +205,13 @@ dotprod.entities.Player.prototype.isAlive = function() {
 };
 
 /**
- * @param {number} ship
+ * Returns true if this player is a friend of (on the same team as) the other player.
+ *
+ * @param {!dotprod.entities.Player} other
+ * @return {boolean}
  */
-dotprod.entities.Player.prototype.setShip = function(ship) {
-  this.ship_ = ship;
-  this.shipSettings_ = this.settings_['ships'][this.ship_];
-  this.gun_ = new dotprod.model.Gun(this.game_, this.shipSettings_['bullet'], this);
-  this.bombBay_ = new dotprod.model.BombBay(this.game_, this.shipSettings_['bomb'], this);
-
-  this.position_ = new dotprod.math.Vector(0, 0);
-  this.velocity_ = new dotprod.math.Vector(0, 0);
-  this.energy_ = 0;
-  this.bounty_ = 0;
-  this.xRadius_ = this.shipSettings_['xRadius'];
-  this.yRadius_ = this.shipSettings_['yRadius'];
+dotprod.entities.Player.prototype.isFriend = function(other) {
+  return this.team_ == other.team_;
 };
 
 /**
@@ -248,62 +237,20 @@ dotprod.entities.Player.prototype.hasPresence = function(presence) {
 };
 
 /**
- * @param {!dotprod.entities.Player} player
- * @param {!dotprod.entities.Projectile} projectile
- * @param {number} damage
+ * @param {number} ship
  */
-dotprod.entities.Player.prototype.takeDamage = goog.nullFunction;
+dotprod.entities.Player.prototype.setShip = function(ship) {
+  this.ship_ = ship;
+  this.shipSettings_ = this.settings_['ships'][this.ship_];
+  this.gun_ = new dotprod.model.Gun(this.game_, this.shipSettings_['bullet'], this);
+  this.bombBay_ = new dotprod.model.BombBay(this.game_, this.shipSettings_['bomb'], this);
 
-/**
- * @param {number} angle
- * @param {!dotprod.math.Vector} position
- * @param {!dotprod.math.Vector} velocity
- */
-dotprod.entities.Player.prototype.respawn = goog.abstractMethod;
-
-/**
- * Called when this player is killed by another one.
- */
-dotprod.entities.Player.prototype.onDeath = function() {
-  ++this.losses_;
-  this.bounty_ = 0;
+  this.position_ = new dotprod.math.Vector(0, 0);
+  this.velocity_ = new dotprod.math.Vector(0, 0);
   this.energy_ = 0;
-};
-
-/**
- * Called when this player kills another one.
- * @param {!dotprod.entities.Player} killee The player who we just killed.
- * @param {number} extraPoints How many points were gained by killing this player.
- */
-dotprod.entities.Player.prototype.onKill = function(killee, extraPoints) {
-  this.points_ += this.settings_['game']['killPoints'] + extraPoints;
-  ++this.wins_;
-};
-
-/**
- * Called when this player's score gets updated from the server.
- * @param {number} points
- * @param {number} wins
- * @param {number} losses
- */
-dotprod.entities.Player.prototype.onScoreUpdate = function(points, wins, losses) {
-  this.points_ = points;
-  this.wins_ = wins;
-  this.losses_ = losses;
-};
-
-/**
- * Returns true if this player is a friend (on the same team) of the other player.
- * @param {!dotprod.entities.Player} other
- * @return {boolean}
- */
-dotprod.entities.Player.prototype.isFriend = function(other) {
-  return this.team_ == other.team_;
-};
-
-// Called when the server tells us that this player collected a prize.
-dotprod.entities.Player.prototype.onPrizeCollected = function() {
-  ++this.bounty_;
+  this.bounty_ = 0;
+  this.xRadius_ = this.shipSettings_['xRadius'];
+  this.yRadius_ = this.shipSettings_['yRadius'];
 };
 
 /**
@@ -332,4 +279,60 @@ dotprod.entities.Player.prototype.fireWeapon = function(timeDiff, type, level, b
   for (var i = 0; i < timeDiff; ++i) {
     projectile.update(this.game_);
   }
+};
+
+/**
+ * @param {number} angle
+ * @param {!dotprod.math.Vector} position
+ * @param {!dotprod.math.Vector} velocity
+ */
+dotprod.entities.Player.prototype.respawn = goog.abstractMethod;
+
+/**
+ * Called when the player takes damage from a projectile fired by some other player.
+ *
+ * @param {!dotprod.entities.Player} player The player whose projectile is causing the damage.
+ * @param {!dotprod.entities.Projectile} projectile The projectile that caused the damage.
+ * @param {number} damage The damage, in energy units, caused by the projectile.
+ */
+dotprod.entities.Player.prototype.onDamage = goog.nullFunction;
+
+/**
+ * Called when this player is killed by someone.
+ */
+dotprod.entities.Player.prototype.onDeath = function() {
+  ++this.losses_;
+  this.bounty_ = 0;
+  this.energy_ = 0;
+};
+
+/**
+ * Called when this player kills someone.
+ *
+ * @param {!dotprod.entities.Player} killee The player who we just killed.
+ * @param {number} extraPoints How many points were gained by killing this player.
+ */
+dotprod.entities.Player.prototype.onKill = function(killee, extraPoints) {
+  this.points_ += this.settings_['game']['killPoints'] + extraPoints;
+  ++this.wins_;
+};
+
+/**
+ * Called when this player's score gets updated from the server.
+ *
+ * @param {number} points
+ * @param {number} wins
+ * @param {number} losses
+ */
+dotprod.entities.Player.prototype.onScoreUpdate = function(points, wins, losses) {
+  this.points_ = points;
+  this.wins_ = wins;
+  this.losses_ = losses;
+};
+
+/**
+ * Called when the server tells us that this player collected a prize.
+ */
+dotprod.entities.Player.prototype.onPrizeCollected = function() {
+  ++this.bounty_;
 };

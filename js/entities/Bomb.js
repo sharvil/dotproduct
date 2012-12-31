@@ -107,5 +107,5 @@ dotprod.entities.Bomb.prototype.explode_ = function(hitPlayer) {
     damageRatio = Math.max(1 - normDistance, 0);
   }
 
-  localPlayer.takeDamage(this.owner_, this, this.damage_ * damageRatio);
+  localPlayer.onDamage(this.owner_, this, this.damage_ * damageRatio);
 };

@@ -58,6 +58,6 @@ dotprod.entities.Bullet.prototype.explode_ = function(hitPlayer) {
   this.velocity_ = new dotprod.math.Vector(0, 0);
   this.lifetime_ = 0;
   if (hitPlayer) {
-    hitPlayer.takeDamage(this.owner_, this, this.damage_);
+    hitPlayer.onDamage(this.owner_, this, this.damage_);
   }
 };

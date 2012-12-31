@@ -13,7 +13,6 @@ goog.require('dotprod.entities.Bullet');
 goog.require('dotprod.entities.Exhaust');
 goog.require('dotprod.entities.Player');
 goog.require('dotprod.input.Keymap');
-goog.require('dotprod.Palette');
 goog.require('dotprod.math.Range');
 goog.require('dotprod.math.Vector');
 
@@ -114,12 +113,9 @@ dotprod.entities.LocalPlayer.prototype.collectPrize_ = function(prize) {
 };
 
 /**
- * @param {!dotprod.entities.Player} shooter
- * @param {!dotprod.entities.Projectile} projectile
- * @param {number} energy
  * @override
  */
-dotprod.entities.LocalPlayer.prototype.takeDamage = function(shooter, projectile, energy) {
+dotprod.entities.LocalPlayer.prototype.onDamage = function(shooter, projectile, energy) {
   if (!this.isAlive()) {
     return;
   }

@@ -5,10 +5,7 @@
 
 goog.provide('dotprod.entities.RemotePlayer');
 
-goog.require('dotprod.Camera');
-goog.require('dotprod.EffectIndex');
 goog.require('dotprod.entities.Player');
-goog.require('dotprod.Map');
 goog.require('dotprod.Timer');
 goog.require('dotprod.math.Vector');
 
