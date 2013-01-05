@@ -22,6 +22,12 @@ dotprod.entities.Projectile = function(game, owner, level, lifetime, damage, bou
   goog.base(this, game);
 
   /**
+   * @type {boolean}
+   * @private
+   */
+  this.isValid_ = true;
+
+  /**
    * @type {!dotprod.entities.Player}
    * @protected
    */
@@ -81,7 +87,7 @@ dotprod.entities.Projectile.prototype.isAlive = function() {
  * @override
  */
 dotprod.entities.Projectile.prototype.isValid = function() {
-  return this.lifetime_ >= 0;
+  return this.isValid_;
 };
 
 /**
@@ -98,9 +104,13 @@ dotprod.entities.Projectile.prototype.getBounceCount = function() {
   return this.bounceCount_;
 };
 
+dotprod.entities.Projectile.prototype.invalidate = function() {
+  this.isValid_ = false;
+};
+
 dotprod.entities.Projectile.prototype.advanceTime = function() {
-  --this.lifetime_;
-  if (!this.isValid()) {
+  if (--this.lifetime_ <= 0) {
+    this.invalidate();
     return;
   }
 

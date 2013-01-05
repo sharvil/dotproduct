@@ -39,8 +39,10 @@ dotprod.ProjectileIndex.prototype.addProjectile = function(player, projectile) {
  * @param {!dotprod.entities.Player} player
  */
 dotprod.ProjectileIndex.prototype.removeProjectiles = function(player) {
-  this.projectiles_ = goog.array.filter(this.projectiles_, function(element) {
-    return element.player != player;
+  goog.array.forEach(this.projectiles_, function(element) {
+    if (element.player == player) {
+      element.projectile.invalidate();
+    }
   });
 };
 
@@ -50,8 +52,6 @@ dotprod.ProjectileIndex.prototype.removeProjectiles = function(player) {
 dotprod.ProjectileIndex.prototype.forEach = function(cb) {
   this.projectiles_ = goog.array.filter(this.projectiles_, function(element) { return element.projectile.isValid(); });
   goog.array.forEach(this.projectiles_, function(element) {
-    if (element.projectile.isValid()) {
-      cb(element.projectile);
-    }
+    cb(element.projectile);
   });
 };

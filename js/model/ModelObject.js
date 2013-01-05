@@ -16,3 +16,5 @@ dotprod.model.ModelObject.prototype.advanceTime = goog.abstractMethod;
  * @return {boolean} Returns true if the object is still valid, false otherwise.
  */
 dotprod.model.ModelObject.prototype.isValid = goog.abstractMethod;
+
+dotprod.model.ModelObject.prototype.invalidate = goog.abstractMethod;
