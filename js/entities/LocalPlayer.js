@@ -185,8 +185,6 @@ dotprod.entities.LocalPlayer.prototype.clearPresence = function(presence) {
  * @override
  */
 dotprod.entities.LocalPlayer.prototype.advanceTime = function() {
-  goog.base(this, 'advanceTime');
-
   var forceSendUpdate = false;
   var keyboard = this.game_.getKeyboard();
 
@@ -203,6 +201,7 @@ dotprod.entities.LocalPlayer.prototype.advanceTime = function() {
   this.projectileFireDelay_.decrement();
   this.exhaustTimer_.decrement();
   this.energy_ = Math.min(this.energy_ + this.shipSettings_['rechargeRate'], this.maxEnergy_);
+  this.exhaust_ = goog.array.filter(this.exhaust_, function(e) { return e.isValid(); });
 
   // Check for ship change before we read any ship settings.
   if (this.shipChangeDelay_.isLow()) {
@@ -272,17 +271,6 @@ dotprod.entities.LocalPlayer.prototype.advanceTime = function() {
   }
 
   var angle = this.getAngle_();
-
-  // Update and invalidate any existing exhaust trails.
-  var newExhaust = [];
-  for (var i = 0; i < this.exhaust_.length; ++i) {
-    this.exhaust_[i].update();
-    if (this.exhaust_[i].isAlive()) {
-      newExhaust.push(this.exhaust_[i]);
-    }
-  }
-  this.exhaust_ = newExhaust;
-
   var maximumSpeed = this.shipSettings_['speedPixelsPerTick'];
   var acceleration = this.shipSettings_['accelerationPerTick'];
   var accelerationEnergy = 0;

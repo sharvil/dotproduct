@@ -7,9 +7,11 @@ goog.provide('dotprod.entities.Entity');
 
 goog.require('dotprod.math.Rect');
 goog.require('dotprod.math.Vector');
+goog.require('dotprod.model.ModelObject');
 
 /**
  * @constructor
+ * @implements {dotprod.model.ModelObject}
  * @param {!dotprod.Game} game
  */
 dotprod.entities.Entity = function(game) {
@@ -18,6 +20,12 @@ dotprod.entities.Entity = function(game) {
    * @protected
    */
   this.game_ = game;
+
+  /**
+   * @type {boolean}
+   * @private
+   */
+  this.isValid_ = true;
 
   /**
    * @type {!dotprod.math.Vector}
@@ -42,6 +50,22 @@ dotprod.entities.Entity = function(game) {
    * @protected
    */
   this.yRadius_ = 0;
+
+  game.getSimulation().registerObject(this);
+};
+
+/**
+ * @override
+ */
+dotprod.entities.Entity.prototype.isValid = function() {
+  return this.isValid_;
+};
+
+/**
+ * @override
+ */
+dotprod.entities.Entity.prototype.invalidate = function() {
+  this.isValid_ = false;
 };
 
 /**
@@ -81,10 +105,14 @@ dotprod.entities.Entity.prototype.getDimensions = function() {
 };
 
 /**
+ * @override
+ */
+dotprod.entities.Entity.prototype.advanceTime = goog.abstractMethod;
+
+/**
  * @return {boolean}
  */
 dotprod.entities.Entity.prototype.isAlive = goog.abstractMethod;
-
 
 /**
  * @param {number=} opt_bounceFactor

@@ -10,7 +10,6 @@ goog.require('dotprod.entities.Entity');
 /**
  * @constructor
  * @extends {dotprod.entities.Entity}
- * @implements {dotprod.model.ModelObject}
  * @param {!dotprod.Game} game
  * @param {!dotprod.entities.Player} owner
  * @param {number} level
@@ -20,12 +19,6 @@ goog.require('dotprod.entities.Entity');
  */
 dotprod.entities.Projectile = function(game, owner, level, lifetime, damage, bounceCount) {
   goog.base(this, game);
-
-  /**
-   * @type {boolean}
-   * @private
-   */
-  this.isValid_ = true;
 
   /**
    * @type {!dotprod.entities.Player}
@@ -57,7 +50,6 @@ dotprod.entities.Projectile = function(game, owner, level, lifetime, damage, bou
    */
   this.bounceCount_ = bounceCount;
 
-  game.getSimulation().registerObject(this);
   game.getProjectileIndex().addProjectile(owner, this);
 };
 goog.inherits(dotprod.entities.Projectile, dotprod.entities.Entity);
@@ -84,13 +76,6 @@ dotprod.entities.Projectile.prototype.isAlive = function() {
 };
 
 /**
- * @override
- */
-dotprod.entities.Projectile.prototype.isValid = function() {
-  return this.isValid_;
-};
-
-/**
  * @return {number}
  */
 dotprod.entities.Projectile.prototype.getLevel = function() {
@@ -102,10 +87,6 @@ dotprod.entities.Projectile.prototype.getLevel = function() {
  */
 dotprod.entities.Projectile.prototype.getBounceCount = function() {
   return this.bounceCount_;
-};
-
-dotprod.entities.Projectile.prototype.invalidate = function() {
-  this.isValid_ = false;
 };
 
 dotprod.entities.Projectile.prototype.advanceTime = function() {

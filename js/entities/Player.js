@@ -9,13 +9,11 @@ goog.provide('dotprod.entities.Player.Presence');
 goog.require('dotprod.entities.Entity');
 goog.require('dotprod.model.BombBay');
 goog.require('dotprod.model.Gun');
-goog.require('dotprod.model.ModelObject');
 goog.require('dotprod.model.Weapon.Type');
 
 /**
  * @constructor
  * @extends {dotprod.entities.Entity}
- * @implements {dotprod.model.ModelObject}
  * @param {!dotprod.Game} game
  * @param {string} id
  * @param {string} name
@@ -49,12 +47,6 @@ dotprod.entities.Player = function(game, id, name, team, ship, bounty) {
    * @protected
    */
   this.bombBay_ = new dotprod.model.BombBay(game, this.shipSettings_['bomb'], this);
-
-  /**
-   * @type {boolean}
-   * @private
-   */
-  this.isValid_ = true;
 
   /**
    * @type {string}
@@ -130,8 +122,6 @@ dotprod.entities.Player = function(game, id, name, team, ship, bounty) {
 
   this.setShip(ship);
   this.bounty_ = bounty;
-
-  game.getSimulation().registerObject(this);
 };
 goog.inherits(dotprod.entities.Player, dotprod.entities.Entity);
 
@@ -215,13 +205,6 @@ dotprod.entities.Player.prototype.isAlive = function() {
 };
 
 /**
- * @override
- */
-dotprod.entities.Player.prototype.isValid = function() {
-  return this.isValid_;
-};
-
-/**
  * Returns true if this player is a friend of (on the same team as) the other player.
  *
  * @param {!dotprod.entities.Player} other
@@ -251,13 +234,6 @@ dotprod.entities.Player.prototype.clearPresence = function(presence) {
  */
 dotprod.entities.Player.prototype.hasPresence = function(presence) {
   return (this.presence_ & presence) != 0;
-};
-
-/**
- * @override
- */
-dotprod.entities.Player.prototype.invalidate = function() {
-  this.isValid_ = false;
 };
 
 /**
@@ -304,11 +280,6 @@ dotprod.entities.Player.prototype.fireWeapon = function(timeDiff, type, level, b
     projectile.advanceTime();
   }
 };
-
-/**
- * @override
- */
-dotprod.entities.Player.prototype.advanceTime = goog.nullFunction;
 
 /**
  * @param {number} angle
