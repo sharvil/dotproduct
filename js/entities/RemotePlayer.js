@@ -118,7 +118,12 @@ dotprod.entities.RemotePlayer.prototype.onPositionUpdate = function(timeDiff, an
   }
 };
 
-dotprod.entities.RemotePlayer.prototype.update = function() {
+/**
+ * @override
+ */
+dotprod.entities.RemotePlayer.prototype.advanceTime = function() {
+  goog.base(this, 'advanceTime');
+
   var bounceFactor = this.game_.getSettings()['ships'][this.ship_]['bounceFactor'];
   --this.velocityAdjustTimer_;
   if (this.velocityAdjustTimer_ == 0) {

@@ -32,6 +32,7 @@ dotprod.layers.ProjectileLayer = function(game) {
 };
 
 /**
+ * @deprecated
  * @override
  */
 dotprod.layers.ProjectileLayer.prototype.update = goog.nullFunction;

@@ -38,6 +38,7 @@ dotprod.PlayerIndex.prototype.addPlayer = function(player) {
  * @param {!dotprod.entities.Player} player
  */
 dotprod.PlayerIndex.prototype.removePlayer = function(player) {
+  player.invalidate();
   goog.object.remove(this.players_, player.getId());
 };
 

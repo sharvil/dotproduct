@@ -181,7 +181,12 @@ dotprod.entities.LocalPlayer.prototype.clearPresence = function(presence) {
   this.game_.getProtocol().sendSetPresence(this.presence_);
 };
 
-dotprod.entities.LocalPlayer.prototype.update = function() {
+/**
+ * @override
+ */
+dotprod.entities.LocalPlayer.prototype.advanceTime = function() {
+  goog.base(this, 'advanceTime');
+
   var forceSendUpdate = false;
   var keyboard = this.game_.getKeyboard();
 

@@ -10,8 +10,6 @@ goog.provide('dotprod.sprites.Sprite');
  */
 dotprod.sprites.Sprite = goog.nullFunction;
 
-dotprod.sprites.Sprite.prototype.update = goog.abstractMethod;
-
 /**
  * @param {!dotprod.Camera} camera
  */

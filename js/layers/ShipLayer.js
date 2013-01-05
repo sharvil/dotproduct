@@ -24,13 +24,10 @@ dotprod.layers.ShipLayer = function(playerIndex) {
 };
 
 /**
+ * @deprecated
  * @override
  */
-dotprod.layers.ShipLayer.prototype.update = function() {
-  this.playerIndex_.forEach(function(player) {
-    player.update();
-  });
-};
+dotprod.layers.ShipLayer.prototype.update = goog.nullFunction;
 
 /**
  * @param {!dotprod.Camera} camera
