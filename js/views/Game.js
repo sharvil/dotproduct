@@ -26,14 +26,14 @@ goog.require('dotprod.layers.RadarLayer');
 goog.require('dotprod.layers.ShipLayer');
 goog.require('dotprod.layers.StarLayer');
 goog.require('dotprod.Map');
+goog.require('dotprod.model.impl.GraphicalModelObjectFactory');
+goog.require('dotprod.model.impl.HeadlessModelObjectFactory');
 goog.require('dotprod.Notifications');
 goog.require('dotprod.PlayerIndex');
 goog.require('dotprod.Prize');
 goog.require('dotprod.PrizeIndex');
 goog.require('dotprod.ProjectileIndex');
 goog.require('dotprod.Protocol');
-goog.require('dotprod.sprites.LocalPlayerSprite');
-goog.require('dotprod.sprites.RemotePlayerSprite');
 goog.require('dotprod.Timer');
 goog.require('dotprod.Timestamp');
 goog.require('dotprod.views.ChatView');
@@ -61,6 +61,12 @@ dotprod.Game = function(protocol, resourceManager, settings, mapData) {
    * @private
    */
   this.resourceManager_ = resourceManager;
+
+  /**
+   * @type {!dotprod.model.ModelObjectFactory}
+   * @private
+   */
+  this.modelObjectFactory_ = new dotprod.model.impl.GraphicalModelObjectFactory();
 
   /**
    * @type {!Object}
@@ -112,7 +118,7 @@ dotprod.Game = function(protocol, resourceManager, settings, mapData) {
   this.effectIndex_ = new dotprod.EffectIndex();
 
   var startingShip = Math.floor(Math.random() * this.settings_['ships'].length);
-  var localPlayer = new dotprod.sprites.LocalPlayerSprite(this, this.settings_['id'], this.settings_['name'], this.settings_['team'], startingShip);
+  var localPlayer = this.modelObjectFactory_.newLocalPlayer(this, this.settings_['id'], this.settings_['name'], this.settings_['team'], startingShip);
 
   /**
    * @type {!dotprod.PlayerIndex}
@@ -299,6 +305,13 @@ dotprod.Game.prototype.getEffectIndex = function() {
 };
 
 /**
+ * @return {!dotprod.model.ModelObjectFactory}
+ */
+dotprod.Game.prototype.getModelObjectFactory = function() {
+  return this.modelObjectFactory_;
+};
+
+/**
  * @private
  */
 dotprod.Game.prototype.heartbeat_ = function() {
@@ -359,7 +372,7 @@ dotprod.Game.prototype.onPlayerEntered_ = function(packet) {
   var bounty = packet[5];
   var presence = /** @type {!dotprod.entities.Player.Presence} */ (packet[6]);
 
-  var player = new dotprod.sprites.RemotePlayerSprite(this, id, name, team, isAlive, ship, bounty);
+  var player = this.modelObjectFactory_.newRemotePlayer(this, id, name, team, isAlive, ship, bounty);
   player.setPresence(presence);
   this.playerIndex_.addPlayer(player);
 

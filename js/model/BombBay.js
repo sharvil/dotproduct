@@ -5,7 +5,6 @@
 
 goog.provide('dotprod.model.BombBay');
 
-goog.require('dotprod.sprites.BombSprite');
 goog.require('dotprod.math.Range');
 
 /**
@@ -71,7 +70,7 @@ dotprod.model.BombBay.prototype.fire = function(angle, position, velocity, commi
   var blastRadius = this.getBlastRadius_();
   var proxRadius = this.getProxRadius_();
   var newVelocity = velocity.add(dotprod.math.Vector.fromPolar(this.getBombSpeed_(), angle));
-  var projectile = new dotprod.sprites.BombSprite(this.game_, this.owner_, level, position, newVelocity, lifetime, damage, bounceCount, blastRadius, proxRadius);
+  var projectile = this.game_.getModelObjectFactory().newBomb(this.game_, this.owner_, level, position, newVelocity, lifetime, damage, bounceCount, blastRadius, proxRadius);
 
   // TODO(sharvil): this should probably happen in the projectile base class' constructor.
   this.game_.getProjectileIndex().addProjectile(this.owner_, projectile);
@@ -95,7 +94,7 @@ dotprod.model.BombBay.prototype.fireSynthetic = function(level, bounceCount, pos
   var blastRadius = this.getBlastRadius_();
   var proxRadius = this.getProxRadius_();
 
-  var projectile = new dotprod.sprites.BombSprite(this.game_, this.owner_, this.level_.getValue(), position, velocity, lifetime, damage, bounceCount, blastRadius, proxRadius);
+  var projectile = this.game_.getModelObjectFactory().newBomb(this.game_, this.owner_, this.level_.getValue(), position, velocity, lifetime, damage, bounceCount, blastRadius, proxRadius);
   this.game_.getProjectileIndex().addProjectile(this.owner_, projectile);
   return projectile;
 };

@@ -6,7 +6,6 @@
 goog.provide('dotprod.model.Gun');
 
 goog.require('dotprod.math.Range');
-goog.require('dotprod.sprites.BulletSprite');
 
 /**
  * @constructor
@@ -77,7 +76,7 @@ dotprod.model.Gun.prototype.fire = function(angle, position, velocity, commitFir
   var damage = this.getDamage_();
   var bounceCount = this.getBounceCount_();
   var newVelocity = velocity.add(dotprod.math.Vector.fromPolar(this.getBulletSpeed_(), angle));
-  var projectile = new dotprod.sprites.BulletSprite(this.game_, this.owner_, level, position, newVelocity, lifetime, damage, bounceCount);
+  var projectile = this.game_.getModelObjectFactory().newBullet(this.game_, this.owner_, level, position, newVelocity, lifetime, damage, bounceCount);
 
   // TODO(sharvil): this should probably happen in the projectile base class' constructor.
   this.game_.getProjectileIndex().addProjectile(this.owner_, projectile);
@@ -99,7 +98,7 @@ dotprod.model.Gun.prototype.fireSynthetic = function(level, bounceCount, positio
   var lifetime = this.getLifetime_();
   var damage = this.getDamage_();
 
-  var projectile = new dotprod.sprites.BulletSprite(this.game_, this.owner_, this.level_.getValue(), position, velocity, lifetime, damage, bounceCount);
+  var projectile = this.game_.getModelObjectFactory().newBullet(this.game_, this.owner_, this.level_.getValue(), position, velocity, lifetime, damage, bounceCount);
   this.game_.getProjectileIndex().addProjectile(this.owner_, projectile);
   return projectile;
 };

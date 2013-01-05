@@ -45,8 +45,8 @@ goog.inherits(dotprod.sprites.BulletSprite, dotprod.entities.Bullet);
 /**
  * @override
  */
-dotprod.sprites.BulletSprite.prototype.update = function(game) {
-  goog.base(this, 'update', game);
+dotprod.sprites.BulletSprite.prototype.update = function() {
+  goog.base(this, 'update');
   this.animation_.update();
   this.bouncingAnimation_.update();
 };

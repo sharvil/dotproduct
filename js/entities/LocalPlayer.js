@@ -182,21 +182,24 @@ dotprod.entities.LocalPlayer.prototype.clearPresence = function(presence) {
 };
 
 dotprod.entities.LocalPlayer.prototype.update = function() {
-  var keyboard = this.game_.getKeyboard();
   var forceSendUpdate = false;
+  var keyboard = this.game_.getKeyboard();
 
-  ++this.ticksSincePositionUpdate_;
-
+  --this.respawnTimer_;
   if (this.respawnTimer_ > 0) {
-    if (--this.respawnTimer_ != 0) {
-      return;
-    }
+    return;
+  } else if (this.respawnTimer_ == 0) {
     this.setShip(this.ship_);
     forceSendUpdate = true;
   }
 
-  // Check for ship change before we read any ship settings.
+  ++this.ticksSincePositionUpdate_;
   this.shipChangeDelay_.decrement();
+  this.projectileFireDelay_.decrement();
+  this.exhaustTimer_.decrement();
+  this.energy_ = Math.min(this.energy_ + this.shipSettings_['rechargeRate'], this.maxEnergy_);
+
+  // Check for ship change before we read any ship settings.
   if (this.shipChangeDelay_.isLow()) {
     for (var i = 0; i < this.settings_['ships'].length; ++i) {
       var keycode = /** @type {goog.events.KeyCodes} */ (goog.events.KeyCodes.ONE + i);
@@ -217,16 +220,9 @@ dotprod.entities.LocalPlayer.prototype.update = function() {
     }
   }
 
-  var shipRotation = this.shipSettings_['rotationRadiansPerTick'];
-  var bounceFactor = this.shipSettings_['bounceFactor'];
-  var rechargeRate = this.shipSettings_['rechargeRate'];
-
   var oldAngle = this.angleInRadians_;
   var oldVelocity = this.velocity_;
   var projectile;
-
-  this.projectileFireDelay_.decrement();
-  this.energy_ = Math.min(this.energy_ + rechargeRate, this.maxEnergy_);
 
   if (this.projectileFireDelay_.isLow()) {
     if (keyboard.isKeyPressed(dotprod.input.Keymap.FIRE_GUN)) {
@@ -259,6 +255,7 @@ dotprod.entities.LocalPlayer.prototype.update = function() {
     }
   }
 
+  var shipRotation = this.shipSettings_['rotationRadiansPerTick'];
   if (keyboard.isKeyPressed(dotprod.input.Keymap.ROTATE_LEFT)) {
     this.angleInRadians_ -= shipRotation;
   } else if (keyboard.isKeyPressed(dotprod.input.Keymap.ROTATE_RIGHT)) {
@@ -272,7 +269,6 @@ dotprod.entities.LocalPlayer.prototype.update = function() {
   var angle = this.getAngle_();
 
   // Update and invalidate any existing exhaust trails.
-  this.exhaustTimer_.decrement();
   var newExhaust = [];
   for (var i = 0; i < this.exhaust_.length; ++i) {
     this.exhaust_[i].update();
@@ -311,7 +307,7 @@ dotprod.entities.LocalPlayer.prototype.update = function() {
     this.velocity_ = this.velocity_.resize(maximumSpeed);
   }
 
-  this.updatePosition_(bounceFactor);
+  this.updatePosition_(this.shipSettings_['bounceFactor']);
   this.sendPositionUpdate_(forceSendUpdate, this.velocity_ != oldVelocity || this.angleInRadians_ != oldAngle, projectile);
 };
 
