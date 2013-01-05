@@ -34,12 +34,7 @@ dotprod.layers.ProjectileLayer = function(game) {
 /**
  * @override
  */
-dotprod.layers.ProjectileLayer.prototype.update = function() {
-  var self = this;
-  this.projectileIndex_.forEach(function(projectile) {
-    projectile.update();
-  });
-};
+dotprod.layers.ProjectileLayer.prototype.update = goog.nullFunction;
 
 /**
  * @param {!dotprod.Camera} camera

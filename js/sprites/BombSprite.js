@@ -45,10 +45,16 @@ dotprod.sprites.BombSprite = function(game, owner, level, position, velocity, li
 goog.inherits(dotprod.sprites.BombSprite, dotprod.entities.Bomb);
 
 /**
+ * @deprecated
  * @override
  */
-dotprod.sprites.BombSprite.prototype.update = function() {
-  goog.base(this, 'update');
+dotprod.sprites.BombSprite.prototype.update = goog.nullFunction;
+
+/**
+ * @override
+ */
+dotprod.sprites.BombSprite.prototype.advanceTime = function() {
+  goog.base(this, 'advanceTime');
   this.animation_.update();
   this.bouncingAnimation_.update();
 };

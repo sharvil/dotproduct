@@ -78,8 +78,6 @@ dotprod.model.Gun.prototype.fire = function(angle, position, velocity, commitFir
   var newVelocity = velocity.add(dotprod.math.Vector.fromPolar(this.getBulletSpeed_(), angle));
   var projectile = this.game_.getModelObjectFactory().newBullet(this.game_, this.owner_, level, position, newVelocity, lifetime, damage, bounceCount);
 
-  // TODO(sharvil): this should probably happen in the projectile base class' constructor.
-  this.game_.getProjectileIndex().addProjectile(this.owner_, projectile);
   this.game_.getResourceManager().playSound('bullet');
 
   return projectile;

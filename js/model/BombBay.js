@@ -72,8 +72,6 @@ dotprod.model.BombBay.prototype.fire = function(angle, position, velocity, commi
   var newVelocity = velocity.add(dotprod.math.Vector.fromPolar(this.getBombSpeed_(), angle));
   var projectile = this.game_.getModelObjectFactory().newBomb(this.game_, this.owner_, level, position, newVelocity, lifetime, damage, bounceCount, blastRadius, proxRadius);
 
-  // TODO(sharvil): this should probably happen in the projectile base class' constructor.
-  this.game_.getProjectileIndex().addProjectile(this.owner_, projectile);
   this.game_.getResourceManager().playSound('bomb');
 
   return projectile;

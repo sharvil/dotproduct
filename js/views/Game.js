@@ -28,6 +28,7 @@ goog.require('dotprod.layers.StarLayer');
 goog.require('dotprod.Map');
 goog.require('dotprod.model.impl.GraphicalModelObjectFactory');
 goog.require('dotprod.model.impl.HeadlessModelObjectFactory');
+goog.require('dotprod.model.Simulation');
 goog.require('dotprod.Notifications');
 goog.require('dotprod.PlayerIndex');
 goog.require('dotprod.Prize');
@@ -67,6 +68,12 @@ dotprod.Game = function(protocol, resourceManager, settings, mapData) {
    * @private
    */
   this.modelObjectFactory_ = new dotprod.model.impl.GraphicalModelObjectFactory();
+
+  /**
+   * @type {!dotprod.model.Simulation}
+   * @private
+   */
+  this.simulation_ = new dotprod.model.Simulation(this.modelObjectFactory_);
 
   /**
    * @type {!Object}
@@ -242,6 +249,13 @@ dotprod.Game.prototype.renderDom = function(rootNode) {
 };
 
 /**
+ * @return {!dotprod.model.Simulation}
+ */
+dotprod.Game.prototype.getSimulation = function() {
+  return this.simulation_;
+};
+
+/**
  * @return {!dotprod.Protocol}
  */
 dotprod.Game.prototype.getProtocol = function() {
@@ -335,6 +349,7 @@ dotprod.Game.prototype.renderingLoop_ = function() {
   timeDiff = Math.min(timeDiff, dotprod.Game.MAX_TICKS_PER_FRAME_);
 
   for (var i = 0; i < timeDiff; ++i) {
+    this.simulation_.advanceTime();
     for (var j = 0; j < this.layers_.length; ++j) {
       this.layers_[j].update();
     }

@@ -43,10 +43,16 @@ dotprod.sprites.BulletSprite = function(game, owner, level, position, velocity, 
 goog.inherits(dotprod.sprites.BulletSprite, dotprod.entities.Bullet);
 
 /**
+ * @deprecated
  * @override
  */
-dotprod.sprites.BulletSprite.prototype.update = function() {
-  goog.base(this, 'update');
+dotprod.sprites.BulletSprite.prototype.update = goog.nullFunction;
+
+/**
+ * @override
+ */
+dotprod.sprites.BulletSprite.prototype.advanceTime = function() {
+  goog.base(this, 'advanceTime');
   this.animation_.update();
   this.bouncingAnimation_.update();
 };
