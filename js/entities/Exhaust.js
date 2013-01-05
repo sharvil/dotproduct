@@ -39,14 +39,6 @@ dotprod.entities.Exhaust = function(game, position, velocity) {
 };
 goog.inherits(dotprod.entities.Exhaust, dotprod.entities.Entity);
 
-/**
- * @deprecated
- * @override
- */
-dotprod.entities.Exhaust.prototype.isAlive = function() {
-  return this.image_.isRunning();
-};
-
 dotprod.entities.Exhaust.prototype.advanceTime = function() {
   if (++this.hack_ % 2) {
     return;
@@ -65,10 +57,6 @@ dotprod.entities.Exhaust.prototype.advanceTime = function() {
  * @param {!dotprod.Camera} camera
  */
 dotprod.entities.Exhaust.prototype.render = function(camera) {
-  if (!this.isAlive()) {
-    return;
-  }
-
   var context = camera.getContext();
   var dimensions = camera.getDimensions();
   var x = Math.floor(this.position_.getX() - dimensions.left - this.image_.getWidth() / 2);

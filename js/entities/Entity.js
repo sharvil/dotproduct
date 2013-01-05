@@ -110,19 +110,10 @@ dotprod.entities.Entity.prototype.getDimensions = function() {
 dotprod.entities.Entity.prototype.advanceTime = goog.abstractMethod;
 
 /**
- * @return {boolean}
- */
-dotprod.entities.Entity.prototype.isAlive = goog.abstractMethod;
-
-/**
  * @param {number=} opt_bounceFactor
  * @protected
  */
 dotprod.entities.Entity.prototype.updatePosition_ = function(opt_bounceFactor) {
-  if (!this.isAlive()) {
-    return;
-  }
-
   var bounceFactor = opt_bounceFactor || 1;
   var map = this.game_.getMap();
   var prizeIndex = this.game_.getPrizeIndex();

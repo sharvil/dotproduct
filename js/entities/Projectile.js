@@ -69,13 +69,6 @@ dotprod.entities.Projectile.prototype.checkPlayerCollision_ = goog.abstractMetho
 dotprod.entities.Projectile.prototype.explode_ = goog.abstractMethod;
 
 /**
- * @override
- */
-dotprod.entities.Projectile.prototype.isAlive = function() {
-  return true;
-};
-
-/**
  * @return {number}
  */
 dotprod.entities.Projectile.prototype.getLevel = function() {

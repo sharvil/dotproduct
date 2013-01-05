@@ -198,7 +198,7 @@ dotprod.entities.Player.prototype.getBounty = function () {
 };
 
 /**
- * @override
+ * @return {boolean} True if the player is alive in-game, false otherwise.
  */
 dotprod.entities.Player.prototype.isAlive = function() {
   return this.energy_ > 0;

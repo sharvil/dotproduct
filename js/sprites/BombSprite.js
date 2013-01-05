@@ -57,10 +57,6 @@ dotprod.sprites.BombSprite.prototype.advanceTime = function() {
  * @override
  */
 dotprod.sprites.BombSprite.prototype.render = function(camera) {
-  if (!this.isAlive()) {
-    return;
-  }
-
   var dimensions = camera.getDimensions();
   var x = Math.floor(this.position_.getX() - dimensions.left - this.animation_.getWidth() / 2);
   var y = Math.floor(this.position_.getY() - dimensions.top - this.animation_.getHeight() / 2);
