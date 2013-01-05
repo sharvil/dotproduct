@@ -277,7 +277,7 @@ dotprod.entities.Player.prototype.fireWeapon = function(timeDiff, type, level, b
   // TODO(sharvil): we need a better way to account for latency than directly
   // calling update on the projectile.
   for (var i = 0; i < timeDiff; ++i) {
-    projectile.update();
+    projectile.advanceTime();
   }
 };
 
