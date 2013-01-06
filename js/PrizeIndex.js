@@ -15,6 +15,12 @@ goog.require('goog.array');
  */
 dotprod.PrizeIndex = function(game) {
   /**
+   * @type {!dotprod.model.Simulation}
+   * @private
+   */
+  this.simulation_ = game.getSimulation();
+
+  /**
    * @type {!Object}
    */
   this.prizeSettings_ = game.getSettings()['prize'];
@@ -60,8 +66,7 @@ dotprod.PrizeIndex.prototype.addKillPrize = function(x, y) {
   if (this.map_.getTile(xTile, yTile) == 0) {
     var type = this.generatePrizeType_(this.killPrng_);
     var ttl = this.generateTimeToLive_(this.killPrng_);
-    var prize = new dotprod.Prize(type, xTile, yTile, ttl);
-    this.map_.setTile(xTile, yTile, 255);
+    var prize = new dotprod.Prize(this.simulation_, this.map_, type, xTile, yTile, ttl);
     this.prizes_.push(prize);
   }
 };
@@ -86,8 +91,7 @@ dotprod.PrizeIndex.prototype.onSeedUpdate = function(seed, fastForwardTicks) {
     var yTile = Math.floor(this.map_.getHeight() / 2 + this.prng_.random() % prizeRadius * 2 - prizeRadius);
 
     if (this.map_.getTile(xTile, yTile) == 0) {
-      var prize = new dotprod.Prize(type, xTile, yTile, ttl);
-      this.map_.setTile(xTile, yTile, 255);
+      var prize = new dotprod.Prize(this.simulation_, this.map_, type, xTile, yTile, ttl);
       this.prizes_.push(prize);
     }
   }
@@ -102,7 +106,7 @@ dotprod.PrizeIndex.prototype.onSeedUpdate = function(seed, fastForwardTicks) {
  */
 dotprod.PrizeIndex.prototype.getPrize = function(x, y) {
   return /** @type {dotprod.Prize} */ (goog.array.find(this.prizes_, function(prize) {
-    return prize != null && prize.isAlive() && prize.getX() == x && prize.getY() == y;
+    return prize.isValid() && prize.getX() == x && prize.getY() == y;
   }));
 };
 
@@ -110,46 +114,31 @@ dotprod.PrizeIndex.prototype.getPrize = function(x, y) {
  * @param {!dotprod.Prize} prize
  */
 dotprod.PrizeIndex.prototype.removePrize = function(prize) {
-  var prizeIndex = goog.array.findIndex(this.prizes_, function(p) {
-    return p != null && p.isAlive() == prize.isAlive() && prize.getX() == p.getX() && prize.getY() == p.getY();
-  });
-
-  if (prizeIndex == -1) {
-    return null;
-  }
-
-  this.prizes_[prizeIndex] = null;
-  this.map_.setTile(prize.getX(), prize.getY(), 0);
+  goog.array.remove(this.prizes_, prize);
+  prize.invalidate();
 };
 
-dotprod.PrizeIndex.prototype.update = function() {
-  this.update_(1);
-};
+/**
+ * @deprecated
+ */
+dotprod.PrizeIndex.prototype.update = goog.nullFunction;
 
 /**
  * @param {number=} opt_fastForwardTicks
  */
 dotprod.PrizeIndex.prototype.update_ = function(opt_fastForwardTicks) {
-  for (var i = 0; i < this.prizes_.length; ++i) {
-    var prize = this.prizes_[i];
-    if (prize) {
-      prize.update(opt_fastForwardTicks);
-      if (!prize.isAlive()) {
-        this.prizes_[i] = null;
-        this.map_.setTile(prize.getX(), prize.getY(), 0);
-      }
-    }
-  }
+  this.forEach(function(prize) {
+    prize.advanceTime(opt_fastForwardTicks);
+  });
 };
 
 /**
  * @param {function(!dotprod.Prize)} cb
  */
 dotprod.PrizeIndex.prototype.forEach = function(cb) {
+  this.prizes_ = goog.array.filter(this.prizes_, function(prize) { return prize.isValid(); });
   goog.array.forEach(this.prizes_, function(prize) {
-    if (prize != null && prize.isAlive()) {
-      cb(prize);
-    }
+    cb(prize);
   });
 };
 

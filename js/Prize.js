@@ -6,19 +6,30 @@
 goog.provide('dotprod.Prize');
 goog.provide('dotprod.Prize.Type');
 
+goog.require('dotprod.model.ModelObject');
+
 /**
  * @constructor
+ * @extends {dotprod.model.ModelObject}
+ * @param {!dotprod.model.Simulation} simulation
+ * @param {!dotprod.Map} map
  * @param {!dotprod.Prize.Type} type
  * @param {number} xTile
  * @param {number} yTile
  * @param {number} ttl
  */
-dotprod.Prize = function(type, xTile, yTile, ttl) {
+dotprod.Prize = function(simulation, map, type, xTile, yTile, ttl) {
+  goog.base(this, simulation);
+
+  this.map_ = map;
   this.type_ = type;
   this.xTile_ = xTile;
   this.yTile_ = yTile;
   this.ttl_ = ttl;
+
+  this.map_.setTile(xTile, yTile, 255);
 };
+goog.inherits(dotprod.Prize, dotprod.model.ModelObject);
 
 /**
  * @enum {number}
@@ -56,15 +67,21 @@ dotprod.Prize.prototype.getY = function() {
 
 /**
  * @param {number=} opt_fastForwardTicks
+ * @override
  */
-dotprod.Prize.prototype.update = function(opt_fastForwardTicks) {
+dotprod.Prize.prototype.advanceTime = function(opt_fastForwardTicks) {
   var ticks = (opt_fastForwardTicks === undefined) ? 1 : opt_fastForwardTicks;
   this.ttl_ = Math.max(0, this.ttl_ - ticks);
+  if (this.ttl_ == 0) {
+    this.invalidate();
+  }
 };
 
 /**
- * @return {boolean}
+ * @override
  */
-dotprod.Prize.prototype.isAlive = function() {
-  return this.ttl_ > 0;
+dotprod.Prize.prototype.invalidate = function() {
+  goog.base(this, 'invalidate');
+
+  this.map_.setTile(this.xTile_, this.yTile_, 0);
 };
