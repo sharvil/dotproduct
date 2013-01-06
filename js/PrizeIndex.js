@@ -96,7 +96,7 @@ dotprod.PrizeIndex.prototype.onSeedUpdate = function(seed, fastForwardTicks) {
     }
   }
 
-  this.update_(fastForwardTicks);
+  this.advanceTime_(fastForwardTicks);
 };
 
 /**
@@ -119,14 +119,10 @@ dotprod.PrizeIndex.prototype.removePrize = function(prize) {
 };
 
 /**
- * @deprecated
- */
-dotprod.PrizeIndex.prototype.update = goog.nullFunction;
-
-/**
  * @param {number=} opt_fastForwardTicks
+ * @private
  */
-dotprod.PrizeIndex.prototype.update_ = function(opt_fastForwardTicks) {
+dotprod.PrizeIndex.prototype.advanceTime_ = function(opt_fastForwardTicks) {
   this.forEach(function(prize) {
     prize.advanceTime(opt_fastForwardTicks);
   });

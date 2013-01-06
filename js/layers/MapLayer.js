@@ -26,12 +26,6 @@ dotprod.layers.MapLayer = function(game) {
   this.game_ = game;
 
   /**
-   * @type {!dotprod.PrizeIndex}
-   * @private
-   */
-  this.prizeIndex_ = game.getPrizeIndex();
-
-  /**
    * @type {!dotprod.Animation}
    * @private
    */
@@ -49,7 +43,6 @@ dotprod.layers.MapLayer = function(game) {
  * @override
  */
 dotprod.layers.MapLayer.prototype.update = function() {
-  this.prizeIndex_.update();
   this.prizeAnimation_.update();
 };
 
