@@ -9,7 +9,7 @@ goog.require('goog.object');
 
 /**
  * @constructor
- * @param {!dotprod.entities.LocalPlayer} localPlayer
+ * @param {!dotprod.model.player.LocalPlayer} localPlayer
  */
 dotprod.PlayerIndex = function(localPlayer) {
   /**
@@ -19,7 +19,7 @@ dotprod.PlayerIndex = function(localPlayer) {
   this.players_ = {};
 
   /**
-   * @type {!dotprod.entities.LocalPlayer}
+   * @type {!dotprod.model.player.LocalPlayer}
    * @private
    */
   this.localPlayer_ = localPlayer;
@@ -77,7 +77,7 @@ dotprod.PlayerIndex.prototype.some = function(cb) {
 };
 
 /**
- * @return {!dotprod.entities.LocalPlayer}
+ * @return {!dotprod.model.player.LocalPlayer}
  */
 dotprod.PlayerIndex.prototype.getLocalPlayer = function() {
   return this.localPlayer_;

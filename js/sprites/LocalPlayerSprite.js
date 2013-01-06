@@ -6,13 +6,13 @@
 goog.provide('dotprod.sprites.LocalPlayerSprite');
 
 goog.require('goog.array');
-goog.require('dotprod.entities.LocalPlayer');
+goog.require('dotprod.model.player.LocalPlayer');
 goog.require('dotprod.sprites.PlayerSprite');
 goog.require('dotprod.sprites.Sprite');
 
 /**
  * @constructor
- * @extends {dotprod.entities.LocalPlayer}
+ * @extends {dotprod.model.player.LocalPlayer}
  * @implements {dotprod.sprites.Sprite}
  * @param {!dotprod.Game} game
  * @param {string} id
@@ -23,7 +23,7 @@ goog.require('dotprod.sprites.Sprite');
 dotprod.sprites.LocalPlayerSprite = function(game, id, name, team, ship) {
   goog.base(this, game, id, name, team, ship);
 };
-goog.inherits(dotprod.sprites.LocalPlayerSprite, dotprod.entities.LocalPlayer);
+goog.inherits(dotprod.sprites.LocalPlayerSprite, dotprod.model.player.LocalPlayer);
 
 /**
  * @override

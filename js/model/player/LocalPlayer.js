@@ -3,7 +3,7 @@
  * @author sharvil.nanavati@gmail.com (Sharvil Nanavati)
  */
 
-goog.provide('dotprod.entities.LocalPlayer');
+goog.provide('dotprod.model.player.LocalPlayer');
 
 goog.require('goog.events');
 goog.require('goog.events.KeyCodes');
@@ -25,7 +25,7 @@ goog.require('dotprod.math.Vector');
  * @param {number} team
  * @param {number} ship
  */
-dotprod.entities.LocalPlayer = function(game, id, name, team, ship) {
+dotprod.model.player.LocalPlayer = function(game, id, name, team, ship) {
   /**
    * @type {!dotprod.ProjectileIndex}
    * @private
@@ -70,19 +70,19 @@ dotprod.entities.LocalPlayer = function(game, id, name, team, ship) {
 
   goog.base(this, game, id, name, team, ship, 0 /* bounty */);
 };
-goog.inherits(dotprod.entities.LocalPlayer, dotprod.model.player.Player);
+goog.inherits(dotprod.model.player.LocalPlayer, dotprod.model.player.Player);
 
 /**
  * @type {number}
  * @const
  * @private
  */
-dotprod.entities.LocalPlayer.ANGLE_STEPS_ = 40;
+dotprod.model.player.LocalPlayer.ANGLE_STEPS_ = 40;
 
 /**
  * @override
  */
-dotprod.entities.LocalPlayer.prototype.collectPrize_ = function(prize) {
+dotprod.model.player.LocalPlayer.prototype.collectPrize_ = function(prize) {
   goog.base(this, 'collectPrize_', prize);
 
   // TODO(sharvil): we shouldn't reach into game's private member...
@@ -115,7 +115,7 @@ dotprod.entities.LocalPlayer.prototype.collectPrize_ = function(prize) {
 /**
  * @override
  */
-dotprod.entities.LocalPlayer.prototype.onDamage = function(shooter, projectile, energy) {
+dotprod.model.player.LocalPlayer.prototype.onDamage = function(shooter, projectile, energy) {
   if (!this.isAlive()) {
     return;
   }
@@ -136,7 +136,7 @@ dotprod.entities.LocalPlayer.prototype.onDamage = function(shooter, projectile, 
 /**
  * @override
  */
-dotprod.entities.LocalPlayer.prototype.onDeath = function() {
+dotprod.model.player.LocalPlayer.prototype.onDeath = function() {
   goog.base(this, 'onDeath');
   this.respawnTimer_ = this.shipSettings_['respawnDelay'];
 };
@@ -144,7 +144,7 @@ dotprod.entities.LocalPlayer.prototype.onDeath = function() {
 /**
  * @override
  */
-dotprod.entities.LocalPlayer.prototype.respawn = function(angle, position, velocity) {
+dotprod.model.player.LocalPlayer.prototype.respawn = function(angle, position, velocity) {
   this.angleInRadians_ = angle;
   this.position_ = position;
   this.velocity_ = velocity;
@@ -156,7 +156,7 @@ dotprod.entities.LocalPlayer.prototype.respawn = function(angle, position, veloc
 /**
  * @override
  */
-dotprod.entities.LocalPlayer.prototype.setShip = function(ship) {
+dotprod.model.player.LocalPlayer.prototype.setShip = function(ship) {
   goog.base(this, 'setShip', ship);
 
   var angle = Math.random() * 2 * Math.PI;
@@ -168,7 +168,7 @@ dotprod.entities.LocalPlayer.prototype.setShip = function(ship) {
 /**
  * @override
  */
-dotprod.entities.LocalPlayer.prototype.setPresence = function(presence) {
+dotprod.model.player.LocalPlayer.prototype.setPresence = function(presence) {
   goog.base(this, 'setPresence', presence);
   this.game_.getProtocol().sendSetPresence(this.presence_);
 };
@@ -176,7 +176,7 @@ dotprod.entities.LocalPlayer.prototype.setPresence = function(presence) {
 /**
  * @override
  */
-dotprod.entities.LocalPlayer.prototype.clearPresence = function(presence) {
+dotprod.model.player.LocalPlayer.prototype.clearPresence = function(presence) {
   goog.base(this, 'clearPresence', presence);
   this.game_.getProtocol().sendSetPresence(this.presence_);
 };
@@ -184,7 +184,7 @@ dotprod.entities.LocalPlayer.prototype.clearPresence = function(presence) {
 /**
  * @override
  */
-dotprod.entities.LocalPlayer.prototype.advanceTime = function() {
+dotprod.model.player.LocalPlayer.prototype.advanceTime = function() {
   var forceSendUpdate = false;
   var keyboard = this.game_.getKeyboard();
 
@@ -308,7 +308,7 @@ dotprod.entities.LocalPlayer.prototype.advanceTime = function() {
  * @param {!dotprod.math.Vector} thrustVector
  * @private
  */
-dotprod.entities.LocalPlayer.prototype.applyThrust_ = function(thrustVector) {
+dotprod.model.player.LocalPlayer.prototype.applyThrust_ = function(thrustVector) {
   this.velocity_ = this.velocity_.add(thrustVector);
 
   if (!this.exhaustTimer_.isLow()) {
@@ -332,7 +332,7 @@ dotprod.entities.LocalPlayer.prototype.applyThrust_ = function(thrustVector) {
  * @param {boolean} isAccelerating
  * @param {dotprod.entities.Projectile=} opt_projectile
  */
-dotprod.entities.LocalPlayer.prototype.sendPositionUpdate_ = function(forceSendUpdate, isAccelerating, opt_projectile) {
+dotprod.model.player.LocalPlayer.prototype.sendPositionUpdate_ = function(forceSendUpdate, isAccelerating, opt_projectile) {
   if (!forceSendUpdate) {
     var sendPositionDelay = this.settings_['network']['sendPositionDelay'];
     if (isAccelerating) {
@@ -351,6 +351,6 @@ dotprod.entities.LocalPlayer.prototype.sendPositionUpdate_ = function(forceSendU
 /**
  * @return {number}
  */
-dotprod.entities.LocalPlayer.prototype.getAngle_ = function() {
-  return 2 * Math.PI * Math.floor(this.angleInRadians_ / (2 * Math.PI) * dotprod.entities.LocalPlayer.ANGLE_STEPS_) / dotprod.entities.LocalPlayer.ANGLE_STEPS_;
+dotprod.model.player.LocalPlayer.prototype.getAngle_ = function() {
+  return 2 * Math.PI * Math.floor(this.angleInRadians_ / (2 * Math.PI) * dotprod.model.player.LocalPlayer.ANGLE_STEPS_) / dotprod.model.player.LocalPlayer.ANGLE_STEPS_;
 };

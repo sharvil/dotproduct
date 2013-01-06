@@ -16,7 +16,7 @@ dotprod.model.ModelObjectFactory = goog.nullFunction;
  * @param {string} name
  * @param {number} team
  * @param {number} ship
- * @return {!dotprod.entities.LocalPlayer}
+ * @return {!dotprod.model.player.LocalPlayer}
  */
 dotprod.model.ModelObjectFactory.prototype.newLocalPlayer = goog.abstractMethod;
 

@@ -22,7 +22,7 @@ dotprod.views.ChatView = function(game) {
   goog.base(this);
 
   /**
-   * @type {!dotprod.entities.LocalPlayer}
+   * @type {!dotprod.model.player.LocalPlayer}
    * @private
    */
   this.localPlayer_ = game.getPlayerIndex().getLocalPlayer();

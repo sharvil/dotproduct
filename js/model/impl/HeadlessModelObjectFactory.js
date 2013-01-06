@@ -8,7 +8,7 @@ goog.provide('dotprod.model.impl.HeadlessModelObjectFactory');
 goog.require('dotprod.model.ModelObjectFactory');
 goog.require('dotprod.entities.Bomb');
 goog.require('dotprod.entities.Bullet');
-goog.require('dotprod.entities.LocalPlayer');
+goog.require('dotprod.model.player.LocalPlayer');
 goog.require('dotprod.entities.RemotePlayer');
 
 /**
@@ -21,7 +21,7 @@ dotprod.model.impl.HeadlessModelObjectFactory = function() {};
  * @override
  */
 dotprod.model.impl.HeadlessModelObjectFactory.prototype.newLocalPlayer = function(game, id, name, team, ship) {
-  return new dotprod.entities.LocalPlayer(game, id, name, team, ship);
+  return new dotprod.model.player.LocalPlayer(game, id, name, team, ship);
 };
 
 /**

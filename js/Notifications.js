@@ -14,11 +14,11 @@ goog.require('dotprod.model.player.Player.Presence');
 
 /**
  * @constructor
- * @param {!dotprod.entities.LocalPlayer} localPlayer
+ * @param {!dotprod.model.player.LocalPlayer} localPlayer
  */
 dotprod.Notifications = function(localPlayer) {
   /**
-   * @type {!dotprod.entities.LocalPlayer}
+   * @type {!dotprod.model.player.LocalPlayer}
    * @private
    */
   this.localPlayer_ = localPlayer;
