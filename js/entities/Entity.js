@@ -11,21 +11,17 @@ goog.require('dotprod.model.ModelObject');
 
 /**
  * @constructor
- * @implements {dotprod.model.ModelObject}
+ * @extends {dotprod.model.ModelObject}
  * @param {!dotprod.Game} game
  */
 dotprod.entities.Entity = function(game) {
+  goog.base(this, game.getSimulation());
+
   /**
    * @type {!dotprod.Game}
    * @protected
    */
   this.game_ = game;
-
-  /**
-   * @type {boolean}
-   * @private
-   */
-  this.isValid_ = true;
 
   /**
    * @type {!dotprod.math.Vector}
@@ -50,23 +46,8 @@ dotprod.entities.Entity = function(game) {
    * @protected
    */
   this.yRadius_ = 0;
-
-  game.getSimulation().registerObject(this);
 };
-
-/**
- * @override
- */
-dotprod.entities.Entity.prototype.isValid = function() {
-  return this.isValid_;
-};
-
-/**
- * @override
- */
-dotprod.entities.Entity.prototype.invalidate = function() {
-  this.isValid_ = false;
-};
+goog.inherits(dotprod.entities.Entity, dotprod.model.ModelObject);
 
 /**
  * @return {!dotprod.math.Vector}
@@ -103,11 +84,6 @@ dotprod.entities.Entity.prototype.getDimensions = function() {
     boundingRect: new dotprod.math.Rect(x - this.xRadius_, y - this.yRadius_, this.xRadius_ * 2, this.yRadius_ * 2)
   };
 };
-
-/**
- * @override
- */
-dotprod.entities.Entity.prototype.advanceTime = goog.abstractMethod;
 
 /**
  * @param {number=} opt_bounceFactor

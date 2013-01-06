@@ -11,13 +11,15 @@ goog.require('dotprod.model.ModelObject');
 
 /**
  * @constructor
- * @implements {dotprod.model.ModelObject}
+ * @extends {dotprod.model.ModelObject}
  * @param {!dotprod.Game} game
  * @param {!dotprod.Animation} animation
  * @param {!dotprod.math.Vector} position
  * @param {!dotprod.math.Vector} velocity
  */
 dotprod.entities.Effect = function(game, animation, position, velocity) {
+  goog.base(this, game.getSimulation());
+
   /**
    * @type {boolean}
    * @private
@@ -42,20 +44,9 @@ dotprod.entities.Effect = function(game, animation, position, velocity) {
    */
   this.velocity_ = velocity;
 
-  game.getSimulation().registerObject(this);
   game.getEffectIndex().addEffect(this);
 };
-
-/**
- * @override
- */
-dotprod.entities.Effect.prototype.isValid = function() {
-  return this.isValid_;
-};
-
-dotprod.entities.Effect.prototype.invalidate = function() {
-  this.isValid_ = false;
-};
+goog.inherits(dotprod.entities.Effect, dotprod.model.ModelObject);
 
 dotprod.entities.Effect.prototype.advanceTime = function() {
   this.animation_.update();

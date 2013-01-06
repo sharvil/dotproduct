@@ -6,15 +6,35 @@
 goog.provide('dotprod.model.ModelObject');
 
 /**
- * @interface
+ * @constructor
+ * @param {!dotprod.model.Simulation} simulation
  */
-dotprod.model.ModelObject = goog.nullFunction;
+dotprod.model.ModelObject = function(simulation) {
+  /**
+   * @type {!dotprod.model.Simulation}
+   * @protected
+   */
+  this.simulation_ = simulation;
+
+  /**
+   * @type {boolean}
+   * @private
+   */
+  this.isValid_ = true;
+
+  this.simulation_.registerObject(this);
+};
 
 dotprod.model.ModelObject.prototype.advanceTime = goog.abstractMethod;
 
 /**
  * @return {boolean} Returns true if the object is still valid, false otherwise.
  */
-dotprod.model.ModelObject.prototype.isValid = goog.abstractMethod;
+dotprod.model.ModelObject.prototype.isValid = function() {
+  return this.isValid_;
+};
 
-dotprod.model.ModelObject.prototype.invalidate = goog.abstractMethod;
+dotprod.model.ModelObject.prototype.invalidate = function() {
+  this.isValid_ = false;
+  this.simulation_.unregisterObject(this);
+};

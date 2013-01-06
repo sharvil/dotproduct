@@ -46,8 +46,4 @@ dotprod.model.Simulation.prototype.advanceTime = function() {
   goog.array.forEach(this.registeredObjects_, function(obj) {
     obj.advanceTime();
   });
-
-  this.registeredObjects_ = goog.array.filter(this.registeredObjects_, function(obj) {
-    return obj.isValid();
-  });
 };
