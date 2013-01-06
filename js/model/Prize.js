@@ -80,8 +80,6 @@ dotprod.model.Prize.prototype.advanceTime = function(opt_fastForwardTicks) {
 /**
  * @override
  */
-dotprod.model.Prize.prototype.invalidate = function() {
-  goog.base(this, 'invalidate');
-
+dotprod.model.Prize.prototype.onInvalidate_ = function() {
   this.map_.setTile(this.xTile_, this.yTile_, 0);
 };

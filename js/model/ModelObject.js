@@ -37,4 +37,10 @@ dotprod.model.ModelObject.prototype.isValid = function() {
 dotprod.model.ModelObject.prototype.invalidate = function() {
   this.isValid_ = false;
   this.simulation_.unregisterObject(this);
+  this.onInvalidate_();
 };
+
+/**
+ * @protected
+ */
+dotprod.model.ModelObject.prototype.onInvalidate_ = goog.nullFunction;
