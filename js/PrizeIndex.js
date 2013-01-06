@@ -5,9 +5,9 @@
 
 goog.provide('dotprod.PrizeIndex');
 
-goog.require('dotprod.math.Prng');
-goog.require('dotprod.Prize');
 goog.require('goog.array');
+goog.require('dotprod.math.Prng');
+goog.require('dotprod.model.Prize');
 
 /**
  * @constructor
@@ -48,7 +48,7 @@ dotprod.PrizeIndex = function(game) {
   this.killPrng_ = new dotprod.math.Prng();
 
   /**
-   * @type {!Array.<dotprod.Prize>}
+   * @type {!Array.<dotprod.model.Prize>}
    * @private
    */
   this.prizes_ = [];
@@ -66,7 +66,7 @@ dotprod.PrizeIndex.prototype.addKillPrize = function(x, y) {
   if (this.map_.getTile(xTile, yTile) == 0) {
     var type = this.generatePrizeType_(this.killPrng_);
     var ttl = this.generateTimeToLive_(this.killPrng_);
-    var prize = new dotprod.Prize(this.simulation_, this.map_, type, xTile, yTile, ttl);
+    var prize = new dotprod.model.Prize(this.simulation_, this.map_, type, xTile, yTile, ttl);
     this.prizes_.push(prize);
   }
 };
@@ -91,7 +91,7 @@ dotprod.PrizeIndex.prototype.onSeedUpdate = function(seed, fastForwardTicks) {
     var yTile = Math.floor(this.map_.getHeight() / 2 + this.prng_.random() % prizeRadius * 2 - prizeRadius);
 
     if (this.map_.getTile(xTile, yTile) == 0) {
-      var prize = new dotprod.Prize(this.simulation_, this.map_, type, xTile, yTile, ttl);
+      var prize = new dotprod.model.Prize(this.simulation_, this.map_, type, xTile, yTile, ttl);
       this.prizes_.push(prize);
     }
   }
@@ -102,16 +102,16 @@ dotprod.PrizeIndex.prototype.onSeedUpdate = function(seed, fastForwardTicks) {
 /**
  * @param {number} x
  * @param {number} y
- * @return {dotprod.Prize}
+ * @return {dotprod.model.Prize}
  */
 dotprod.PrizeIndex.prototype.getPrize = function(x, y) {
-  return /** @type {dotprod.Prize} */ (goog.array.find(this.prizes_, function(prize) {
+  return /** @type {dotprod.model.Prize} */ (goog.array.find(this.prizes_, function(prize) {
     return prize.isValid() && prize.getX() == x && prize.getY() == y;
   }));
 };
 
 /**
- * @param {!dotprod.Prize} prize
+ * @param {!dotprod.model.Prize} prize
  */
 dotprod.PrizeIndex.prototype.removePrize = function(prize) {
   goog.array.remove(this.prizes_, prize);
@@ -129,7 +129,7 @@ dotprod.PrizeIndex.prototype.advanceTime_ = function(opt_fastForwardTicks) {
 };
 
 /**
- * @param {function(!dotprod.Prize)} cb
+ * @param {function(!dotprod.model.Prize)} cb
  */
 dotprod.PrizeIndex.prototype.forEach = function(cb) {
   this.prizes_ = goog.array.filter(this.prizes_, function(prize) { return prize.isValid(); });
@@ -140,11 +140,11 @@ dotprod.PrizeIndex.prototype.forEach = function(cb) {
 
 /**
  * @param {!dotprod.math.Prng} prng
- * @return {!dotprod.Prize.Type}
+ * @return {!dotprod.model.Prize.Type}
  */
 dotprod.PrizeIndex.prototype.generatePrizeType_ = function(prng) {
   var prizeWeights = this.prizeSettings_['weights'];
-  goog.asserts.assert(prizeWeights.length == dotprod.Prize.NUM_PRIZE_TYPES, 'Prize weights do not match prize types.');
+  goog.asserts.assert(prizeWeights.length == dotprod.model.Prize.NUM_PRIZE_TYPES, 'Prize weights do not match prize types.');
 
   var sum = 0;
   for (var i = 0; i < prizeWeights.length; ++i) {
@@ -162,7 +162,7 @@ dotprod.PrizeIndex.prototype.generatePrizeType_ = function(prng) {
     }
   }
 
-  return /** @type {!dotprod.Prize.Type} */ (type);
+  return /** @type {!dotprod.model.Prize.Type} */ (type);
 };
 
 /**

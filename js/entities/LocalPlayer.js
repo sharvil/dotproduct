@@ -87,22 +87,22 @@ dotprod.entities.LocalPlayer.prototype.collectPrize_ = function(prize) {
 
   // TODO(sharvil): we shouldn't reach into game's private member...
   switch (prize.getType()) {
-    case dotprod.Prize.Type.NONE:
+    case dotprod.model.Prize.Type.NONE:
       this.game_.notifications_.addMessage('No prize for you. Sadface.');
       break;
-    case dotprod.Prize.Type.GUN_UPGRADE:
+    case dotprod.model.Prize.Type.GUN_UPGRADE:
       this.gun_.upgrade();
       this.game_.notifications_.addMessage('Guns upgraded!');
       break;
-    case dotprod.Prize.Type.BOMB_UPGRADE:
+    case dotprod.model.Prize.Type.BOMB_UPGRADE:
       this.bombBay_.upgrade();
       this.game_.notifications_.addMessage('Bombs upgraded!');
       break;
-    case dotprod.Prize.Type.FULL_ENERGY:
+    case dotprod.model.Prize.Type.FULL_ENERGY:
       this.game_.notifications_.addMessage('Full charge!');
       this.energy_ = this.maxEnergy_;
       break;
-    case dotprod.Prize.Type.BOUNCING_BULLETS:
+    case dotprod.model.Prize.Type.BOUNCING_BULLETS:
       this.game_.notifications_.addMessage('Bouncing bullets!');
       this.gun_.setBounces(true);
       break;
