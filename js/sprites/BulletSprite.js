@@ -5,14 +5,14 @@
 
 goog.provide('dotprod.sprites.BulletSprite');
 
-goog.require('dotprod.entities.Bullet');
+goog.require('dotprod.model.projectile.Bullet');
 goog.require('dotprod.model.Effect');
 goog.require('dotprod.math.Vector');
 goog.require('dotprod.sprites.Sprite');
 
 /**
  * @constructor
- * @extends {dotprod.entities.Bullet}
+ * @extends {dotprod.model.projectile.Bullet}
  * @implements {dotprod.sprites.Sprite}
  * @param {!dotprod.Game} game
  * @param {!dotprod.model.player.Player} owner
@@ -40,7 +40,7 @@ dotprod.sprites.BulletSprite = function(game, owner, level, position, velocity, 
    this.bouncingAnimation_ = game.getResourceManager().getVideoEnsemble('bullets').getAnimation(5 + level);
    this.bouncingAnimation_.setRepeatCount(-1);
 };
-goog.inherits(dotprod.sprites.BulletSprite, dotprod.entities.Bullet);
+goog.inherits(dotprod.sprites.BulletSprite, dotprod.model.projectile.Bullet);
 
 /**
  * @override

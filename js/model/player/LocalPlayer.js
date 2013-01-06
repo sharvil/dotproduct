@@ -9,7 +9,7 @@ goog.require('goog.events');
 goog.require('goog.events.KeyCodes');
 goog.require('goog.object');
 goog.require('dotprod.model.projectile.Bomb');
-goog.require('dotprod.entities.Bullet');
+goog.require('dotprod.model.projectile.Bullet');
 goog.require('dotprod.entities.Exhaust');
 goog.require('dotprod.model.player.Player');
 goog.require('dotprod.input.Keymap');

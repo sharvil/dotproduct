@@ -7,7 +7,7 @@ goog.provide('dotprod.model.impl.HeadlessModelObjectFactory');
 
 goog.require('dotprod.model.ModelObjectFactory');
 goog.require('dotprod.model.projectile.Bomb');
-goog.require('dotprod.entities.Bullet');
+goog.require('dotprod.model.projectile.Bullet');
 goog.require('dotprod.model.player.LocalPlayer');
 goog.require('dotprod.model.player.RemotePlayer');
 
@@ -35,7 +35,7 @@ dotprod.model.impl.HeadlessModelObjectFactory.prototype.newRemotePlayer = functi
  * @override
  */
 dotprod.model.impl.HeadlessModelObjectFactory.prototype.newBullet = function(game, owner, level, position, velocity, lifetime, damage, bounceCount) {
-  return new dotprod.entities.Bullet(game, owner, level, position, velocity, lifetime, damage, bounceCount);
+  return new dotprod.model.projectile.Bullet(game, owner, level, position, velocity, lifetime, damage, bounceCount);
 };
 
 /**

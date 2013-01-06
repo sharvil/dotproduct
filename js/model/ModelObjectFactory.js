@@ -41,7 +41,7 @@ dotprod.model.ModelObjectFactory.prototype.newRemotePlayer = goog.abstractMethod
  * @param {number} lifetime
  * @param {number} damage
  * @param {number} bounceCount
- * @return {!dotprod.entities.Bullet}
+ * @return {!dotprod.model.projectile.Bullet}
  */
 dotprod.model.ModelObjectFactory.prototype.newBullet = goog.abstractMethod;
 
