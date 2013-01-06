@@ -8,12 +8,12 @@ goog.provide('dotprod.model.player.LocalPlayerSprite');
 goog.require('goog.array');
 goog.require('dotprod.model.player.LocalPlayer');
 goog.require('dotprod.model.player.PlayerSprite');
-goog.require('dotprod.sprites.Sprite');
+goog.require('dotprod.Drawable');
 
 /**
  * @constructor
  * @extends {dotprod.model.player.LocalPlayer}
- * @implements {dotprod.sprites.Sprite}
+ * @implements {dotprod.Drawable}
  * @param {!dotprod.Game} game
  * @param {string} id
  * @param {string} name

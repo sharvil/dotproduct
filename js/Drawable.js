@@ -3,14 +3,14 @@
  * @author sharvil.nanavati@gmail.com (Sharvil Nanavati)
  */
 
-goog.provide('dotprod.sprites.Sprite');
+goog.provide('dotprod.Drawable');
 
 /**
  * @interface
  */
-dotprod.sprites.Sprite = goog.nullFunction;
+dotprod.Drawable = goog.nullFunction;
 
 /**
  * @param {!dotprod.Camera} camera
  */
-dotprod.sprites.Sprite.prototype.render = goog.abstractMethod;
+dotprod.Drawable.prototype.render = goog.abstractMethod;

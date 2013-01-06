@@ -7,12 +7,12 @@ goog.provide('dotprod.model.player.RemotePlayerSprite');
 
 goog.require('dotprod.model.player.RemotePlayer');
 goog.require('dotprod.model.player.PlayerSprite');
-goog.require('dotprod.sprites.Sprite');
+goog.require('dotprod.Drawable');
 
 /**
  * @constructor
  * @extends {dotprod.model.player.RemotePlayer}
- * @implements {dotprod.sprites.Sprite}
+ * @implements {dotprod.Drawable}
  * @param {!dotprod.Game} game
  * @param {string} id
  * @param {string} name

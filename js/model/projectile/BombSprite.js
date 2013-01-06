@@ -8,12 +8,12 @@ goog.provide('dotprod.model.projectile.BombSprite');
 goog.require('dotprod.model.projectile.Bomb');
 goog.require('dotprod.model.Effect');
 goog.require('dotprod.math.Vector');
-goog.require('dotprod.sprites.Sprite');
+goog.require('dotprod.Drawable');
 
 /**
  * @constructor
  * @extends {dotprod.model.projectile.Bomb}
- * @implements {dotprod.sprites.Sprite}
+ * @implements {dotprod.Drawable}
  * @param {!dotprod.Game} game
  * @param {!dotprod.model.player.Player} owner
  * @param {number} level
