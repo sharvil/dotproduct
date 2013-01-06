@@ -16,6 +16,7 @@ goog.require('html5.Notifications');
 
 goog.require('dotprod.Viewport');
 goog.require('dotprod.EffectIndex');
+goog.require('dotprod.graphics.Painter');
 goog.require('dotprod.input.Keyboard');
 goog.require('dotprod.layers.EffectLayer');
 goog.require('dotprod.layers.HudLayer');
@@ -24,7 +25,7 @@ goog.require('dotprod.layers.MapLayer');
 goog.require('dotprod.layers.ProjectileLayer');
 goog.require('dotprod.layers.RadarLayer');
 goog.require('dotprod.layers.ShipLayer');
-goog.require('dotprod.layers.StarLayer');
+goog.require('dotprod.layers.Starfield');
 goog.require('dotprod.Map');
 goog.require('dotprod.model.impl.GraphicalModelObjectFactory');
 goog.require('dotprod.model.impl.HeadlessModelObjectFactory');
@@ -74,6 +75,12 @@ dotprod.Game = function(protocol, resourceManager, settings, mapData) {
    * @private
    */
   this.simulation_ = new dotprod.model.Simulation(this.modelObjectFactory_);
+
+  /**
+   * @type {!dotprod.graphics.Painter}
+   * @private
+   */
+  this.painter_ = new dotprod.graphics.Painter();
 
   /**
    * @type {!Object}
@@ -162,8 +169,6 @@ dotprod.Game = function(protocol, resourceManager, settings, mapData) {
    * @private
    */
   this.layers_ = [
-      new dotprod.layers.StarLayer(),
-      new dotprod.layers.MapLayer(this),
       new dotprod.layers.ProjectileLayer(this),
       new dotprod.layers.ShipLayer(this.playerIndex_),
       new dotprod.layers.EffectLayer(this.effectIndex_),
@@ -189,6 +194,9 @@ dotprod.Game = function(protocol, resourceManager, settings, mapData) {
    * @private
    */
   this.animationId_ = 0;
+
+  new dotprod.layers.Starfield(this);
+  new dotprod.layers.MapLayer(this);
 
   this.protocol_.registerHandler(dotprod.Protocol.S2CPacketType.PLAYER_ENTERED, goog.bind(this.onPlayerEntered_, this));
   this.protocol_.registerHandler(dotprod.Protocol.S2CPacketType.PLAYER_LEFT, goog.bind(this.onPlayerLeft_, this));
@@ -253,6 +261,13 @@ dotprod.Game.prototype.renderDom = function(rootNode) {
  */
 dotprod.Game.prototype.getSimulation = function() {
   return this.simulation_;
+};
+
+/**
+ * @return {!dotprod.graphics.Painter}
+ */
+dotprod.Game.prototype.getPainter = function() {
+  return this.painter_;
 };
 
 /**
@@ -356,11 +371,10 @@ dotprod.Game.prototype.renderingLoop_ = function() {
   }
 
   this.viewport_.update();
+  this.painter_.render(this.viewport_);
 
   var context = this.viewport_.getContext();
   context.save();
-    context.fillStyle = '#000';
-    context.fillRect(0, 0, this.canvas_.width, this.canvas_.height);
     for (var i = 0; i < this.layers_.length; ++i) {
       this.layers_[i].render(this.viewport_);
     }

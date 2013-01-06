@@ -5,53 +5,67 @@
 
 goog.provide('dotprod.layers.MapLayer');
 
-goog.require('goog.dom');
-goog.require('goog.events');
+goog.require('goog.asserts.assert');
+
 goog.require('dotprod.Viewport');
+goog.require('dotprod.graphics.Drawable');
 goog.require('dotprod.graphics.Image');
-goog.require('dotprod.layers.Layer');
+goog.require('dotprod.graphics.Painter.Layer');
 goog.require('dotprod.Map');
+goog.require('dotprod.model.ModelObject');
 goog.require('dotprod.ResourceManager');
 
 /**
  * @constructor
- * @implements {dotprod.layers.Layer}
+ * @extends {dotprod.model.ModelObject}
+ * @implements {dotprod.graphics.Drawable}
  * @param {!dotprod.Game} game
  */
 dotprod.layers.MapLayer = function(game) {
+  goog.base(this, game.getSimulation());
+
   /**
-   * @type {!dotprod.Game}
+   * @type {!dotprod.Map}
    * @private
    */
-  this.game_ = game;
+  this.map_ = game.getMap();
 
   /**
    * @type {!dotprod.graphics.Animation}
    * @private
    */
-  this.prizeAnimation_ = this.game_.getResourceManager().getVideoEnsemble('prize').getAnimation(0);
+  this.prizeAnimation_ = game.getResourceManager().getVideoEnsemble('prize').getAnimation(0);
   this.prizeAnimation_.setRepeatCount(-1);
 
   /**
    * @type {!dotprod.graphics.Image}
    * @private
    */
-  this.tileset_ = this.game_.getResourceManager().getImage('tileset');
+  this.tileset_ = game.getResourceManager().getImage('tileset');
+
+  game.getPainter().registerDrawable(dotprod.graphics.Painter.Layer.MAP, this);
 };
+goog.inherits(dotprod.layers.MapLayer, dotprod.model.ModelObject);
 
 /**
  * @override
  */
-dotprod.layers.MapLayer.prototype.update = function() {
+dotprod.layers.MapLayer.prototype.advanceTime = function() {
   this.prizeAnimation_.update();
 };
 
 /**
- * @param {!dotprod.Viewport} viewport
+ * @override
+ */
+dotprod.layers.MapLayer.prototype.onInvalidate_ = function() {
+  goog.asserts.assert(false, 'Map should never be invalidated.');
+};
+
+/**
  * @override
  */
 dotprod.layers.MapLayer.prototype.render = function(viewport) {
-  var map = this.game_.getMap();
+  var map = this.map_;
   var dimensions = viewport.getDimensions();
   var context = viewport.getContext();
 
