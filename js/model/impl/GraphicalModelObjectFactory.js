@@ -8,7 +8,7 @@ goog.provide('dotprod.model.impl.GraphicalModelObjectFactory');
 goog.require('dotprod.model.ModelObjectFactory');
 goog.require('dotprod.sprites.BombSprite');
 goog.require('dotprod.sprites.BulletSprite');
-goog.require('dotprod.sprites.LocalPlayerSprite');
+goog.require('dotprod.model.player.LocalPlayerSprite');
 goog.require('dotprod.sprites.RemotePlayerSprite');
 
 /**
@@ -21,7 +21,7 @@ dotprod.model.impl.GraphicalModelObjectFactory = function() {};
  * @override
  */
 dotprod.model.impl.GraphicalModelObjectFactory.prototype.newLocalPlayer = function(game, id, name, team, ship) {
-  return new dotprod.sprites.LocalPlayerSprite(game, id, name, team, ship);
+  return new dotprod.model.player.LocalPlayerSprite(game, id, name, team, ship);
 };
 
 /**

@@ -3,7 +3,7 @@
  * @author sharvil.nanavati@gmail.com (Sharvil Nanavati)
  */
 
-goog.provide('dotprod.sprites.LocalPlayerSprite');
+goog.provide('dotprod.model.player.LocalPlayerSprite');
 
 goog.require('goog.array');
 goog.require('dotprod.model.player.LocalPlayer');
@@ -20,25 +20,25 @@ goog.require('dotprod.sprites.Sprite');
  * @param {number} team
  * @param {number} ship
  */
-dotprod.sprites.LocalPlayerSprite = function(game, id, name, team, ship) {
+dotprod.model.player.LocalPlayerSprite = function(game, id, name, team, ship) {
   goog.base(this, game, id, name, team, ship);
 };
-goog.inherits(dotprod.sprites.LocalPlayerSprite, dotprod.model.player.LocalPlayer);
+goog.inherits(dotprod.model.player.LocalPlayerSprite, dotprod.model.player.LocalPlayer);
 
 /**
  * @override
  */
-dotprod.sprites.LocalPlayerSprite.prototype.respawn = dotprod.model.player.PlayerSprite.prototype.respawn;
+dotprod.model.player.LocalPlayerSprite.prototype.respawn = dotprod.model.player.PlayerSprite.prototype.respawn;
 
 /**
  * @override
  */
-dotprod.sprites.LocalPlayerSprite.prototype.onDeath = dotprod.model.player.PlayerSprite.prototype.onDeath;
+dotprod.model.player.LocalPlayerSprite.prototype.onDeath = dotprod.model.player.PlayerSprite.prototype.onDeath;
 
 /**
  * @override
  */
-dotprod.sprites.LocalPlayerSprite.prototype.render = function(camera) {
+dotprod.model.player.LocalPlayerSprite.prototype.render = function(camera) {
   var context = camera.getContext();
   var dimensions = camera.getDimensions();
 
