@@ -5,7 +5,7 @@
 goog.provide('dotprod.layers.HudLayer');
 
 goog.require('dotprod.entities.LocalPlayer');
-goog.require('dotprod.entities.Player');
+goog.require('dotprod.model.player.Player');
 goog.require('dotprod.layers.Layer');
 
 /**
@@ -27,7 +27,7 @@ dotprod.layers.HudLayer = function(game) {
   this.resourceManager_ = game.getResourceManager();
 
   /**
-   * @type {!dotprod.entities.Player}
+   * @type {!dotprod.model.player.Player}
    * @private
    */
   this.player_ = game.getPlayerIndex().getLocalPlayer();

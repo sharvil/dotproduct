@@ -34,7 +34,7 @@ dotprod.model.ModelObjectFactory.prototype.newRemotePlayer = goog.abstractMethod
 
 /**
  * @param {!dotprod.Game} game
- * @param {!dotprod.entities.Player} owner
+ * @param {!dotprod.model.player.Player} owner
  * @param {number} level
  * @param {!dotprod.math.Vector} position
  * @param {!dotprod.math.Vector} velocity
@@ -47,7 +47,7 @@ dotprod.model.ModelObjectFactory.prototype.newBullet = goog.abstractMethod;
 
 /**
  * @param {!dotprod.Game} game
- * @param {!dotprod.entities.Player} owner
+ * @param {!dotprod.model.player.Player} owner
  * @param {number} level
  * @param {!dotprod.math.Vector} position
  * @param {!dotprod.math.Vector} velocity

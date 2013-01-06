@@ -11,7 +11,7 @@ goog.require('dotprod.model.Entity');
  * @constructor
  * @extends {dotprod.model.Entity}
  * @param {!dotprod.Game} game
- * @param {!dotprod.entities.Player} owner
+ * @param {!dotprod.model.player.Player} owner
  * @param {number} level
  * @param {number} lifetime
  * @param {number} damage
@@ -21,7 +21,7 @@ dotprod.entities.Projectile = function(game, owner, level, lifetime, damage, bou
   goog.base(this, game);
 
   /**
-   * @type {!dotprod.entities.Player}
+   * @type {!dotprod.model.player.Player}
    * @protected
    */
   this.owner_ = owner;
@@ -57,13 +57,13 @@ goog.inherits(dotprod.entities.Projectile, dotprod.model.Entity);
 dotprod.entities.Projectile.prototype.getType = goog.abstractMethod;
 
 /**
- * @param {!dotprod.entities.Player} player
+ * @param {!dotprod.model.player.Player} player
  * @protected
  */
 dotprod.entities.Projectile.prototype.checkPlayerCollision_ = goog.abstractMethod;
 
 /**
- * @param {dotprod.entities.Player} player The player who was directly hit or null if there was no direct hit.
+ * @param {dotprod.model.player.Player} player The player who was directly hit or null if there was no direct hit.
  * @protected
  */
 dotprod.entities.Projectile.prototype.explode_ = goog.abstractMethod;

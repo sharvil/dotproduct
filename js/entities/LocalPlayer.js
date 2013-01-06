@@ -11,14 +11,14 @@ goog.require('goog.object');
 goog.require('dotprod.entities.Bomb');
 goog.require('dotprod.entities.Bullet');
 goog.require('dotprod.entities.Exhaust');
-goog.require('dotprod.entities.Player');
+goog.require('dotprod.model.player.Player');
 goog.require('dotprod.input.Keymap');
 goog.require('dotprod.math.Range');
 goog.require('dotprod.math.Vector');
 
 /**
  * @constructor
- * @extends {dotprod.entities.Player}
+ * @extends {dotprod.model.player.Player}
  * @param {!dotprod.Game} game
  * @param {string} id
  * @param {string} name
@@ -70,7 +70,7 @@ dotprod.entities.LocalPlayer = function(game, id, name, team, ship) {
 
   goog.base(this, game, id, name, team, ship, 0 /* bounty */);
 };
-goog.inherits(dotprod.entities.LocalPlayer, dotprod.entities.Player);
+goog.inherits(dotprod.entities.LocalPlayer, dotprod.model.player.Player);
 
 /**
  * @type {number}

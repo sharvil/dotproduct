@@ -13,7 +13,7 @@ goog.require('dotprod.math.Vector');
  * @constructor
  * @extends {dotprod.entities.Projectile}
  * @param {!dotprod.Game} game
- * @param {!dotprod.entities.Player} owner
+ * @param {!dotprod.model.player.Player} owner
  * @param {number} level
  * @param {!dotprod.math.Vector} position
  * @param {!dotprod.math.Vector} velocity
@@ -42,7 +42,7 @@ dotprod.entities.Bomb = function(game, owner, level, position, velocity, lifetim
   this.proxRadius_ = proxRadius;
 
   /**
-   * @type {dotprod.entities.Player}
+   * @type {dotprod.model.player.Player}
    * @private
    */
    this.proxActivator_;

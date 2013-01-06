@@ -30,14 +30,14 @@ dotprod.Camera = function(game, context) {
   this.context_ = context;
 
   /**
-   * @type {dotprod.entities.Player}
+   * @type {dotprod.model.player.Player}
    * @private
    */
   this.followingPlayer_;
 };
 
 /**
- * @param {!dotprod.entities.Player} player
+ * @param {!dotprod.model.player.Player} player
  */
 dotprod.Camera.prototype.followPlayer = function(player) {
   this.followingPlayer_ = player;

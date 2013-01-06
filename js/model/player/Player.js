@@ -3,8 +3,8 @@
  * @author sharvil.nanavati@gmail.com (Sharvil Nanavati)
  */
 
-goog.provide('dotprod.entities.Player');
-goog.provide('dotprod.entities.Player.Presence');
+goog.provide('dotprod.model.player.Player');
+goog.provide('dotprod.model.player.Player.Presence');
 
 goog.require('dotprod.model.Entity');
 goog.require('dotprod.model.BombBay');
@@ -21,7 +21,7 @@ goog.require('dotprod.model.Weapon.Type');
  * @param {number} ship
  * @param {number} bounty
  */
-dotprod.entities.Player = function(game, id, name, team, ship, bounty) {
+dotprod.model.player.Player = function(game, id, name, team, ship, bounty) {
   goog.base(this, game);
 
   /**
@@ -97,10 +97,10 @@ dotprod.entities.Player = function(game, id, name, team, ship, bounty) {
   this.bounty_;
 
   /**
-   * @type {!dotprod.entities.Player.Presence}
+   * @type {!dotprod.model.player.Player.Presence}
    * @protected
    */
-  this.presence_ = dotprod.entities.Player.Presence.DEFAULT;
+  this.presence_ = dotprod.model.player.Player.Presence.DEFAULT;
 
   /**
    * @type {number}
@@ -123,12 +123,12 @@ dotprod.entities.Player = function(game, id, name, team, ship, bounty) {
   this.setShip(ship);
   this.bounty_ = bounty;
 };
-goog.inherits(dotprod.entities.Player, dotprod.model.Entity);
+goog.inherits(dotprod.model.player.Player, dotprod.model.Entity);
 
 /**
  * @enum {number}
  */
-dotprod.entities.Player.Presence = {
+dotprod.model.player.Player.Presence = {
   DEFAULT: 0,
   TYPING: 1,
   AWAY: 2,
@@ -139,107 +139,107 @@ dotprod.entities.Player.Presence = {
  * @type {string}
  * @const
  */
-dotprod.entities.Player.SYSTEM_PLAYER_ID = '0';
+dotprod.model.player.Player.SYSTEM_PLAYER_ID = '0';
 
 /**
  * @return {string}
  */
-dotprod.entities.Player.prototype.getId = function() {
+dotprod.model.player.Player.prototype.getId = function() {
   return this.id_;
 };
 
 /**
  * @return {string}
  */
-dotprod.entities.Player.prototype.getName = function() {
+dotprod.model.player.Player.prototype.getName = function() {
   return this.name_;
 };
 
 /**
  * @return {number}
  */
-dotprod.entities.Player.prototype.getEnergy = function () {
+dotprod.model.player.Player.prototype.getEnergy = function () {
   return Math.floor(this.energy_);
 };
 
 /**
  * @return {number}
  */
-dotprod.entities.Player.prototype.getMaxEnergy = function () {
+dotprod.model.player.Player.prototype.getMaxEnergy = function () {
   return this.maxEnergy_;
 };
 
 /**
  * @return {number}
  */
-dotprod.entities.Player.prototype.getShip = function() {
+dotprod.model.player.Player.prototype.getShip = function() {
   return this.ship_;
 };
 
 /**
  * @return {number}
  */
-dotprod.entities.Player.prototype.getTeam = function() {
+dotprod.model.player.Player.prototype.getTeam = function() {
   return this.team_;
 };
 
 /**
  * @return {number}
  */
-dotprod.entities.Player.prototype.getPoints = function() {
+dotprod.model.player.Player.prototype.getPoints = function() {
   return this.points_;
 };
 
 /**
  * @return {number}
  */
-dotprod.entities.Player.prototype.getBounty = function () {
+dotprod.model.player.Player.prototype.getBounty = function () {
   return this.bounty_;
 };
 
 /**
  * @return {boolean} True if the player is alive in-game, false otherwise.
  */
-dotprod.entities.Player.prototype.isAlive = function() {
+dotprod.model.player.Player.prototype.isAlive = function() {
   return this.energy_ > 0;
 };
 
 /**
  * Returns true if this player is a friend of (on the same team as) the other player.
  *
- * @param {!dotprod.entities.Player} other
+ * @param {!dotprod.model.player.Player} other
  * @return {boolean}
  */
-dotprod.entities.Player.prototype.isFriend = function(other) {
+dotprod.model.player.Player.prototype.isFriend = function(other) {
   return this.team_ == other.team_;
 };
 
 /**
- * @param {dotprod.entities.Player.Presence} presence
+ * @param {dotprod.model.player.Player.Presence} presence
  */
-dotprod.entities.Player.prototype.setPresence = function(presence) {
+dotprod.model.player.Player.prototype.setPresence = function(presence) {
   this.presence_ |= presence;
 };
 
 /**
- * @param {dotprod.entities.Player.Presence} presence
+ * @param {dotprod.model.player.Player.Presence} presence
  */
-dotprod.entities.Player.prototype.clearPresence = function(presence) {
+dotprod.model.player.Player.prototype.clearPresence = function(presence) {
   this.presence_ &= ~presence;
 };
 
 /**
- * @param {dotprod.entities.Player.Presence} presence
+ * @param {dotprod.model.player.Player.Presence} presence
  * @return {boolean}
  */
-dotprod.entities.Player.prototype.hasPresence = function(presence) {
+dotprod.model.player.Player.prototype.hasPresence = function(presence) {
   return (this.presence_ & presence) != 0;
 };
 
 /**
  * @param {number} ship
  */
-dotprod.entities.Player.prototype.setShip = function(ship) {
+dotprod.model.player.Player.prototype.setShip = function(ship) {
   this.ship_ = ship;
   this.shipSettings_ = this.settings_['ships'][this.ship_];
   this.gun_ = new dotprod.model.Gun(this.game_, this.shipSettings_['bullet'], this);
@@ -261,7 +261,7 @@ dotprod.entities.Player.prototype.setShip = function(ship) {
  * @param {!dotprod.math.Vector} position
  * @param {!dotprod.math.Vector} velocity
  */
-dotprod.entities.Player.prototype.fireWeapon = function(timeDiff, type, level, bounceCount, position, velocity) {
+dotprod.model.player.Player.prototype.fireWeapon = function(timeDiff, type, level, bounceCount, position, velocity) {
   var projectile;
   switch (type) {
     case dotprod.model.Weapon.Type.BULLET:
@@ -286,21 +286,21 @@ dotprod.entities.Player.prototype.fireWeapon = function(timeDiff, type, level, b
  * @param {!dotprod.math.Vector} position
  * @param {!dotprod.math.Vector} velocity
  */
-dotprod.entities.Player.prototype.respawn = goog.abstractMethod;
+dotprod.model.player.Player.prototype.respawn = goog.abstractMethod;
 
 /**
  * Called when the player takes damage from a projectile fired by some other player.
  *
- * @param {!dotprod.entities.Player} player The player whose projectile is causing the damage.
+ * @param {!dotprod.model.player.Player} player The player whose projectile is causing the damage.
  * @param {!dotprod.entities.Projectile} projectile The projectile that caused the damage.
  * @param {number} damage The damage, in energy units, caused by the projectile.
  */
-dotprod.entities.Player.prototype.onDamage = goog.nullFunction;
+dotprod.model.player.Player.prototype.onDamage = goog.nullFunction;
 
 /**
  * Called when this player is killed by someone.
  */
-dotprod.entities.Player.prototype.onDeath = function() {
+dotprod.model.player.Player.prototype.onDeath = function() {
   ++this.losses_;
   this.bounty_ = 0;
   this.energy_ = 0;
@@ -309,10 +309,10 @@ dotprod.entities.Player.prototype.onDeath = function() {
 /**
  * Called when this player kills someone.
  *
- * @param {!dotprod.entities.Player} killee The player who we just killed.
+ * @param {!dotprod.model.player.Player} killee The player who we just killed.
  * @param {number} extraPoints How many points were gained by killing this player.
  */
-dotprod.entities.Player.prototype.onKill = function(killee, extraPoints) {
+dotprod.model.player.Player.prototype.onKill = function(killee, extraPoints) {
   this.points_ += this.settings_['game']['killPoints'] + extraPoints;
   ++this.wins_;
 };
@@ -324,7 +324,7 @@ dotprod.entities.Player.prototype.onKill = function(killee, extraPoints) {
  * @param {number} wins
  * @param {number} losses
  */
-dotprod.entities.Player.prototype.onScoreUpdate = function(points, wins, losses) {
+dotprod.model.player.Player.prototype.onScoreUpdate = function(points, wins, losses) {
   this.points_ = points;
   this.wins_ = wins;
   this.losses_ = losses;
@@ -333,6 +333,6 @@ dotprod.entities.Player.prototype.onScoreUpdate = function(points, wins, losses)
 /**
  * Called when the server tells us that this player collected a prize.
  */
-dotprod.entities.Player.prototype.onPrizeCollected = function() {
+dotprod.model.player.Player.prototype.onPrizeCollected = function() {
   ++this.bounty_;
 };

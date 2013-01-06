@@ -10,7 +10,7 @@ goog.require('goog.array');
 
 goog.require('html5.Notifications');
 
-goog.require('dotprod.entities.Player.Presence');
+goog.require('dotprod.model.player.Player.Presence');
 
 /**
  * @constructor
@@ -88,7 +88,7 @@ dotprod.Notifications.prototype.addMessage_ = function(type, message) {
   this.insertIndex_ = (this.insertIndex_ + 1) % dotprod.Notifications.MAX_MESSAGES_;
 
   // Only show desktop notifications if the user isn't focused on the game.
-  if (this.localPlayer_.hasPresence(dotprod.entities.Player.Presence.AWAY)) {
+  if (this.localPlayer_.hasPresence(dotprod.model.player.Player.Presence.AWAY)) {
     var notification = html5.Notifications.createNotification('img/dotproduct_logo_128.png', 'dotproduct', message);
     setTimeout(function() { notification.close(); }, 5000);
     notification.show();

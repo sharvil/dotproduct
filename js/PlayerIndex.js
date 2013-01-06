@@ -13,7 +13,7 @@ goog.require('goog.object');
  */
 dotprod.PlayerIndex = function(localPlayer) {
   /**
-   * @type {!Object.<string, !dotprod.entities.Player>}
+   * @type {!Object.<string, !dotprod.model.player.Player>}
    * @private
    */
   this.players_ = {};
@@ -28,14 +28,14 @@ dotprod.PlayerIndex = function(localPlayer) {
 };
 
 /**
- * @param {!dotprod.entities.Player} player
+ * @param {!dotprod.model.player.Player} player
  */
 dotprod.PlayerIndex.prototype.addPlayer = function(player) {
   goog.object.add(this.players_, player.getId(), player);
 };
 
 /**
- * @param {!dotprod.entities.Player} player
+ * @param {!dotprod.model.player.Player} player
  */
 dotprod.PlayerIndex.prototype.removePlayer = function(player) {
   player.invalidate();
@@ -44,7 +44,7 @@ dotprod.PlayerIndex.prototype.removePlayer = function(player) {
 
 /**
  * @param {string} id
- * @return {!dotprod.entities.Player|undefined}
+ * @return {!dotprod.model.player.Player|undefined}
  */
 dotprod.PlayerIndex.prototype.findById = function(id) {
   return this.players_[id];
@@ -58,7 +58,7 @@ dotprod.PlayerIndex.prototype.getCount = function() {
 };
 
 /**
- * @param {function(!dotprod.entities.Player)} cb
+ * @param {function(!dotprod.model.player.Player)} cb
  * @param {function(*, *): number=} opt_compareFn
  */
 dotprod.PlayerIndex.prototype.forEach = function(cb, opt_compareFn) {
@@ -70,7 +70,7 @@ dotprod.PlayerIndex.prototype.forEach = function(cb, opt_compareFn) {
 };
 
 /**
- * @param {function(!dotprod.entities.Player): boolean} cb
+ * @param {function(!dotprod.model.player.Player): boolean} cb
  */
 dotprod.PlayerIndex.prototype.some = function(cb) {
   goog.object.some(this.players_, cb);

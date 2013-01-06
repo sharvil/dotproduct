@@ -65,9 +65,9 @@ dotprod.sprites.PlayerSprite.prototype.render = function(camera) {
   shipImage.render(context, x, y, tileNum);
 
   var presenceImage = null;
-  if (this.hasPresence(dotprod.entities.Player.Presence.AWAY)) {
+  if (this.hasPresence(dotprod.model.player.Player.Presence.AWAY)) {
     presenceImage = awayImage;
-  } else if (this.hasPresence(dotprod.entities.Player.Presence.TYPING)) {
+  } else if (this.hasPresence(dotprod.model.player.Player.Presence.TYPING)) {
     presenceImage = typingImage;
   }
 

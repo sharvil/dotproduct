@@ -219,7 +219,7 @@ dotprod.Protocol.prototype.onClockSyncReply_ = function(packet) {
 
 /**
  * @param {!dotprod.math.Vector} position The position of the local player at the time of death.
- * @param {!dotprod.entities.Player} killer
+ * @param {!dotprod.model.player.Player} killer
  */
 dotprod.Protocol.prototype.sendDeath = function(position, killer) {
   this.send_([dotprod.Protocol.C2SPacketType_.PLAYER_DIED, this.asRemoteTime_(goog.now()), position.getX(), position.getY(), killer.getId()]);
@@ -254,7 +254,7 @@ dotprod.Protocol.prototype.registerName = function(name) {
 };
 
 /**
- * @param {dotprod.entities.Player.Presence} presence
+ * @param {dotprod.model.player.Player.Presence} presence
  */
 dotprod.Protocol.prototype.sendSetPresence = function(presence) {
   this.send_([dotprod.Protocol.C2SPacketType_.SET_PRESENCE, presence]);

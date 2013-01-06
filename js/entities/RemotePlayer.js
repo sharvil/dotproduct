@@ -5,13 +5,13 @@
 
 goog.provide('dotprod.entities.RemotePlayer');
 
-goog.require('dotprod.entities.Player');
+goog.require('dotprod.model.player.Player');
 goog.require('dotprod.Timer');
 goog.require('dotprod.math.Vector');
 
 /**
  * @constructor
- * @extends {dotprod.entities.Player}
+ * @extends {dotprod.model.player.Player}
  * @param {!dotprod.Game} game
  * @param {string} id
  * @param {string} name
@@ -52,7 +52,7 @@ dotprod.entities.RemotePlayer = function(game, id, name, team, isAlive, ship, bo
 
   this.energy_ = isAlive ? 1 : 0;
 };
-goog.inherits(dotprod.entities.RemotePlayer, dotprod.entities.Player);
+goog.inherits(dotprod.entities.RemotePlayer, dotprod.model.player.Player);
 
 /**
  * @type {number}

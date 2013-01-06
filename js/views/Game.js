@@ -207,8 +207,8 @@ dotprod.Game = function(protocol, resourceManager, settings, mapData) {
   goog.events.listen(window, goog.events.EventType.RESIZE, goog.bind(this.onResize_, this));
   goog.events.listen(this.canvas_, goog.events.EventType.MOUSEMOVE, goog.bind(this.onMouseMoved_, this));
 
-  goog.events.listen(window, goog.events.EventType.FOCUS, function() { localPlayer.clearPresence(dotprod.entities.Player.Presence.AWAY); });
-  goog.events.listen(window, goog.events.EventType.BLUR, function() { localPlayer.setPresence(dotprod.entities.Player.Presence.AWAY); });
+  goog.events.listen(window, goog.events.EventType.FOCUS, function() { localPlayer.clearPresence(dotprod.model.player.Player.Presence.AWAY); });
+  goog.events.listen(window, goog.events.EventType.BLUR, function() { localPlayer.setPresence(dotprod.model.player.Player.Presence.AWAY); });
 
   // TODO(sharvil): hack, come up with a better interface.
   goog.events.listen(window, goog.events.EventType.MOUSEDOWN, function() { html5.Notifications.requestPermission(); });
@@ -385,7 +385,7 @@ dotprod.Game.prototype.onPlayerEntered_ = function(packet) {
   var isAlive = packet[3];
   var ship = packet[4];
   var bounty = packet[5];
-  var presence = /** @type {!dotprod.entities.Player.Presence} */ (packet[6]);
+  var presence = /** @type {!dotprod.model.player.Player.Presence} */ (packet[6]);
 
   var player = this.modelObjectFactory_.newRemotePlayer(this, id, name, team, isAlive, ship, bounty);
   player.setPresence(presence);
@@ -483,7 +483,7 @@ dotprod.Game.prototype.onChatMessage_ = function(packet) {
   var playerId = packet[0];
   var message = packet[1];
 
-  if (playerId == dotprod.entities.Player.SYSTEM_PLAYER_ID) {
+  if (playerId == dotprod.model.player.Player.SYSTEM_PLAYER_ID) {
     this.chatView_.addSystemMessage(message);
   } else {
     var player = this.playerIndex_.findById(packet[0]);
@@ -534,8 +534,8 @@ dotprod.Game.prototype.onPrizeCollected_ = function(packet) {
  */
 dotprod.Game.prototype.onSetPresence_ = function(packet) {
   var player = this.playerIndex_.findById(packet[0]);
-  var presence = /** @type {dotprod.entities.Player.Presence} */ (packet[1]);
-  player.clearPresence(dotprod.entities.Player.Presence.ALL);
+  var presence = /** @type {dotprod.model.player.Player.Presence} */ (packet[1]);
+  player.clearPresence(dotprod.model.player.Player.Presence.ALL);
   player.setPresence(presence);
 };
 

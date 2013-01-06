@@ -6,7 +6,7 @@
 goog.provide('dotprod.layers.RadarLayer');
 
 goog.require('dotprod.entities.LocalPlayer');
-goog.require('dotprod.entities.Player');
+goog.require('dotprod.model.player.Player');
 goog.require('dotprod.layers.Layer');
 goog.require('dotprod.Palette');
 goog.require('dotprod.math.Rect');

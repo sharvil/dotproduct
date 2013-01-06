@@ -74,8 +74,8 @@ dotprod.views.ChatView = function(game) {
   goog.events.listen(this.chatBox_, goog.events.EventType.KEYUP, goog.bind(this.keyFilter_, this));
 
   var self = this;
-  goog.events.listen(this.chatBox_, goog.events.EventType.BLUR, function() { self.localPlayer_.clearPresence(dotprod.entities.Player.Presence.TYPING); });
-  goog.events.listen(this.chatBox_, goog.events.EventType.FOCUS, function() { self.localPlayer_.setPresence(dotprod.entities.Player.Presence.TYPING); });
+  goog.events.listen(this.chatBox_, goog.events.EventType.BLUR, function() { self.localPlayer_.clearPresence(dotprod.model.player.Player.Presence.TYPING); });
+  goog.events.listen(this.chatBox_, goog.events.EventType.FOCUS, function() { self.localPlayer_.setPresence(dotprod.model.player.Player.Presence.TYPING); });
 };
 goog.inherits(dotprod.views.ChatView, dotprod.views.View);
 
@@ -137,7 +137,7 @@ dotprod.views.ChatView.prototype.renderDom = function(rootNode) {
 };
 
 /**
- * @param {!dotprod.entities.Player} player
+ * @param {!dotprod.model.player.Player} player
  * @param {string} message
  */
 dotprod.views.ChatView.prototype.addMessage = function(player, message) {
@@ -237,7 +237,7 @@ dotprod.views.ChatView.prototype.keyFilter_ = function(event) {
 };
 
 /**
- * @param {!dotprod.entities.Player} player
+ * @param {!dotprod.model.player.Player} player
  * @private
  */
 dotprod.views.ChatView.prototype.onNameClicked_ = function(player) {

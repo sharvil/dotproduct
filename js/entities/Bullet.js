@@ -13,7 +13,7 @@ goog.require('dotprod.math.Vector');
  * @constructor
  * @extends {dotprod.entities.Projectile}
  * @param {!dotprod.Game} game
- * @param {!dotprod.entities.Player} owner
+ * @param {!dotprod.model.player.Player} owner
  * @param {number} level
  * @param {!dotprod.math.Vector} position
  * @param {!dotprod.math.Vector} velocity

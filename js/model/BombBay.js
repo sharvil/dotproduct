@@ -11,7 +11,7 @@ goog.require('dotprod.math.Range');
  * @constructor
  * @param {!dotprod.Game} game
  * @param {!Object} bombBaySettings
- * @param {!dotprod.entities.Player} owner
+ * @param {!dotprod.model.player.Player} owner
  */
 dotprod.model.BombBay = function(game, bombBaySettings, owner) {
   /**
@@ -27,7 +27,7 @@ dotprod.model.BombBay = function(game, bombBaySettings, owner) {
   this.bombBaySettings_ = bombBaySettings;
 
   /**
-   * @type {!dotprod.entities.Player}
+   * @type {!dotprod.model.player.Player}
    * @private
    */
   this.owner_ = owner;
