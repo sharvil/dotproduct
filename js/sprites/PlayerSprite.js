@@ -5,7 +5,7 @@
 
 goog.provide('dotprod.sprites.PlayerSprite');
 
-goog.require('dotprod.entities.Effect');
+goog.require('dotprod.model.Effect');
 goog.require('dotprod.math.Vector');
 
 /**
@@ -23,7 +23,7 @@ dotprod.sprites.PlayerSprite.prototype.respawn = function(angle, position, veloc
 
   var resourceManager = this.game_.getResourceManager();
   var animation = resourceManager.getVideoEnsemble('warp').getAnimation(0);
-  var effect = new dotprod.entities.Effect(this.game_, animation, this.position_, new dotprod.math.Vector(0, 0));
+  var effect = new dotprod.model.Effect(this.game_, animation, this.position_, new dotprod.math.Vector(0, 0));
 };
 
 dotprod.sprites.PlayerSprite.prototype.onDeath = function() {
@@ -31,13 +31,13 @@ dotprod.sprites.PlayerSprite.prototype.onDeath = function() {
 
   var resourceManager = this.game_.getResourceManager();
   var ensemble = resourceManager.getVideoEnsemble('explode1');
-  var effect = new dotprod.entities.Effect(this.game_, ensemble.getAnimation(0), this.position_, this.velocity_);
+  var effect = new dotprod.model.Effect(this.game_, ensemble.getAnimation(0), this.position_, this.velocity_);
 
   ensemble = resourceManager.getVideoEnsemble('ship' + this.ship_ + '_junk');
   for (var i = 0; i < ensemble.getNumAnimations(); ++i) {
     var animation = ensemble.getAnimation(i);
     var deltaVelocity = dotprod.math.Vector.fromPolar(Math.random() * 2, Math.random() * 2 * Math.PI);
-    var piece = new dotprod.entities.Effect(this.game_, animation, this.position_, this.velocity_.add(deltaVelocity));
+    var piece = new dotprod.model.Effect(this.game_, animation, this.position_, this.velocity_.add(deltaVelocity));
   }
 };
 

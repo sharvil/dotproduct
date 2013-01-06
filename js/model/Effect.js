@@ -3,7 +3,7 @@
  * @author sharvil.nanavati@gmail.com (Sharvil Nanavati)
  */
 
-goog.provide('dotprod.entities.Effect');
+goog.provide('dotprod.model.Effect');
 
 goog.require('dotprod.Animation');
 goog.require('dotprod.math.Vector');
@@ -17,7 +17,7 @@ goog.require('dotprod.model.ModelObject');
  * @param {!dotprod.math.Vector} position
  * @param {!dotprod.math.Vector} velocity
  */
-dotprod.entities.Effect = function(game, animation, position, velocity) {
+dotprod.model.Effect = function(game, animation, position, velocity) {
   goog.base(this, game.getSimulation());
 
   /**
@@ -46,9 +46,9 @@ dotprod.entities.Effect = function(game, animation, position, velocity) {
 
   game.getEffectIndex().addEffect(this);
 };
-goog.inherits(dotprod.entities.Effect, dotprod.model.ModelObject);
+goog.inherits(dotprod.model.Effect, dotprod.model.ModelObject);
 
-dotprod.entities.Effect.prototype.advanceTime = function() {
+dotprod.model.Effect.prototype.advanceTime = function() {
   this.animation_.update();
   this.position_ = this.position_.add(this.velocity_);
   if (!this.animation_.isRunning()) {
@@ -56,7 +56,7 @@ dotprod.entities.Effect.prototype.advanceTime = function() {
   }
 };
 
-dotprod.entities.Effect.prototype.render = function(camera) {
+dotprod.model.Effect.prototype.render = function(camera) {
   var context = camera.getContext();
   var dimensions = camera.getDimensions();
 

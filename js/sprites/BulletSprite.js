@@ -6,7 +6,7 @@
 goog.provide('dotprod.sprites.BulletSprite');
 
 goog.require('dotprod.entities.Bullet');
-goog.require('dotprod.entities.Effect');
+goog.require('dotprod.model.Effect');
 goog.require('dotprod.math.Vector');
 goog.require('dotprod.sprites.Sprite');
 
@@ -70,5 +70,5 @@ dotprod.sprites.BulletSprite.prototype.explode_ = function(hitPlayer) {
   goog.base(this, 'explode_', hitPlayer);
 
   var animation = this.game_.getResourceManager().getVideoEnsemble('explode0').getAnimation(0);
-  var explosion = new dotprod.entities.Effect(this.game_, animation, this.position_, new dotprod.math.Vector(0, 0));
+  var explosion = new dotprod.model.Effect(this.game_, animation, this.position_, new dotprod.math.Vector(0, 0));
 };
