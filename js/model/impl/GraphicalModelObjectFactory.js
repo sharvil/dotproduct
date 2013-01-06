@@ -7,7 +7,7 @@ goog.provide('dotprod.model.impl.GraphicalModelObjectFactory');
 
 goog.require('dotprod.model.ModelObjectFactory');
 goog.require('dotprod.model.projectile.BombSprite');
-goog.require('dotprod.sprites.BulletSprite');
+goog.require('dotprod.model.projectile.BulletSprite');
 goog.require('dotprod.model.player.LocalPlayerSprite');
 goog.require('dotprod.model.player.RemotePlayerSprite');
 
@@ -35,7 +35,7 @@ dotprod.model.impl.GraphicalModelObjectFactory.prototype.newRemotePlayer = funct
  * @override
  */
 dotprod.model.impl.GraphicalModelObjectFactory.prototype.newBullet = function(game, owner, level, position, velocity, lifetime, damage, bounceCount) {
-  return new dotprod.sprites.BulletSprite(game, owner, level, position, velocity, lifetime, damage, bounceCount);
+  return new dotprod.model.projectile.BulletSprite(game, owner, level, position, velocity, lifetime, damage, bounceCount);
 };
 
 /**

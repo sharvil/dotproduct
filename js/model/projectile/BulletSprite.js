@@ -3,7 +3,7 @@
  * @author sharvil.nanavati@gmail.com (Sharvil Nanavati)
  */
 
-goog.provide('dotprod.sprites.BulletSprite');
+goog.provide('dotprod.model.projectile.BulletSprite');
 
 goog.require('dotprod.model.projectile.Bullet');
 goog.require('dotprod.model.Effect');
@@ -23,7 +23,7 @@ goog.require('dotprod.sprites.Sprite');
  * @param {number} damage
  * @param {number} bounceCount
  */
-dotprod.sprites.BulletSprite = function(game, owner, level, position, velocity, lifetime, damage, bounceCount) {
+dotprod.model.projectile.BulletSprite = function(game, owner, level, position, velocity, lifetime, damage, bounceCount) {
   goog.base(this, game, owner, level, position, velocity, lifetime, damage, bounceCount);
 
   /**
@@ -40,12 +40,12 @@ dotprod.sprites.BulletSprite = function(game, owner, level, position, velocity, 
    this.bouncingAnimation_ = game.getResourceManager().getVideoEnsemble('bullets').getAnimation(5 + level);
    this.bouncingAnimation_.setRepeatCount(-1);
 };
-goog.inherits(dotprod.sprites.BulletSprite, dotprod.model.projectile.Bullet);
+goog.inherits(dotprod.model.projectile.BulletSprite, dotprod.model.projectile.Bullet);
 
 /**
  * @override
  */
-dotprod.sprites.BulletSprite.prototype.advanceTime = function() {
+dotprod.model.projectile.BulletSprite.prototype.advanceTime = function() {
   goog.base(this, 'advanceTime');
   this.animation_.update();
   this.bouncingAnimation_.update();
@@ -54,7 +54,7 @@ dotprod.sprites.BulletSprite.prototype.advanceTime = function() {
 /**
  * @override
  */
-dotprod.sprites.BulletSprite.prototype.render = function(camera) {
+dotprod.model.projectile.BulletSprite.prototype.render = function(camera) {
   var dimensions = camera.getDimensions();
   var x = Math.floor(this.position_.getX() - dimensions.left - this.animation_.getWidth() / 2);
   var y = Math.floor(this.position_.getY() - dimensions.top - this.animation_.getHeight() / 2);
@@ -66,7 +66,7 @@ dotprod.sprites.BulletSprite.prototype.render = function(camera) {
 /**
  * @override
  */
-dotprod.sprites.BulletSprite.prototype.explode_ = function(hitPlayer) {
+dotprod.model.projectile.BulletSprite.prototype.explode_ = function(hitPlayer) {
   goog.base(this, 'explode_', hitPlayer);
 
   var animation = this.game_.getResourceManager().getVideoEnsemble('explode0').getAnimation(0);
