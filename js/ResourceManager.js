@@ -8,7 +8,7 @@ goog.provide('dotprod.ResourceManager');
 goog.require('goog.asserts');
 goog.require('goog.debug.Logger');
 goog.require('dotprod.graphics.Image');
-goog.require('dotprod.VideoEnsemble');
+goog.require('dotprod.graphics.VideoEnsemble');
 
 /**
  * @constructor
@@ -27,7 +27,7 @@ dotprod.ResourceManager = function() {
   this.images_ = {};
 
   /**
-   * @type {!Object.<string, !dotprod.VideoEnsemble>}
+   * @type {!Object.<string, !dotprod.graphics.VideoEnsemble>}
    * @private
    */
   this.videoEnsembles_ = {};
@@ -75,7 +75,7 @@ dotprod.ResourceManager.prototype.loadVideoEnsemble = function(name, url, xTiles
   };
 
   this.logger_.info('Loading video ensemble: "' + name + '" using URL: ' + url);
-  this.videoEnsembles_[name] = new dotprod.VideoEnsemble(xTiles, yTiles, frames, period);
+  this.videoEnsembles_[name] = new dotprod.graphics.VideoEnsemble(xTiles, yTiles, frames, period);
   this.videoEnsembles_[name].load(url, callback)
 }
 
@@ -119,7 +119,7 @@ dotprod.ResourceManager.prototype.getImage = function(name) {
 
 /**
  * @param {string} name
- * @return {!dotprod.VideoEnsemble}
+ * @return {!dotprod.graphics.VideoEnsemble}
  */
 dotprod.ResourceManager.prototype.getVideoEnsemble = function(name) {
   goog.asserts.assert(this.videoEnsembles_[name], 'Requesting missing video ensemble: ' + name);

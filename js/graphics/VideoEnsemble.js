@@ -3,7 +3,7 @@
  * @author sharvil.nanavati@gmail.com (Sharvil Nanavati)
  */
 
-goog.provide('dotprod.VideoEnsemble');
+goog.provide('dotprod.graphics.VideoEnsemble');
 
 goog.require('goog.asserts');
 goog.require('dotprod.graphics.Image');
@@ -15,7 +15,7 @@ goog.require('dotprod.graphics.Image');
  * @param {number} framesPerAnimation
  * @param {number} period
  */
-dotprod.VideoEnsemble = function(tilesPerRow, tilesPerCol, framesPerAnimation, period) {
+dotprod.graphics.VideoEnsemble = function(tilesPerRow, tilesPerCol, framesPerAnimation, period) {
   goog.asserts.assert(tilesPerRow * tilesPerCol % framesPerAnimation == 0, 'Invalid animation parameters.');
 
   /**
@@ -46,7 +46,7 @@ dotprod.VideoEnsemble = function(tilesPerRow, tilesPerCol, framesPerAnimation, p
 /**
  * @return {boolean} True if this animation has been loaded, false otherwise.
  */
-dotprod.VideoEnsemble.prototype.isLoaded = function() {
+dotprod.graphics.VideoEnsemble.prototype.isLoaded = function() {
   return this.image_.isLoaded();
 };
 
@@ -54,14 +54,14 @@ dotprod.VideoEnsemble.prototype.isLoaded = function() {
  * @param {string} resourceName
  * @param {function(string)=} opt_loadCb
  */
-dotprod.VideoEnsemble.prototype.load = function(resourceName, opt_loadCb) {
+dotprod.graphics.VideoEnsemble.prototype.load = function(resourceName, opt_loadCb) {
   this.image_.load(resourceName, opt_loadCb);
 };
 
 /**
  * @return {number}
  */
-dotprod.VideoEnsemble.prototype.getNumAnimations = function() {
+dotprod.graphics.VideoEnsemble.prototype.getNumAnimations = function() {
   return this.numAnimations_;
 };
 
@@ -69,7 +69,7 @@ dotprod.VideoEnsemble.prototype.getNumAnimations = function() {
  * @param {number} index
  * @return {!dotprod.graphics.Animation}
  */
-dotprod.VideoEnsemble.prototype.getAnimation = function(index) {
+dotprod.graphics.VideoEnsemble.prototype.getAnimation = function(index) {
   goog.asserts.assert(index >= 0, 'Negative index specified.');
   goog.asserts.assert(index < this.getNumAnimations(), 'Index out of bounds: ' + index);
   goog.asserts.assert(this.isLoaded(), 'Animation requested before loading finished.');
