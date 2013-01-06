@@ -3,7 +3,7 @@
  * @author sharvil.nanavati@gmail.com (Sharvil Nanavati)
  */
 
-goog.provide('dotprod.entities.Bomb');
+goog.provide('dotprod.model.projectile.Bomb');
 
 goog.require('dotprod.model.projectile.Projectile');
 goog.require('dotprod.model.Weapon.Type');
@@ -23,7 +23,7 @@ goog.require('dotprod.math.Vector');
  * @param {number} blastRadius
  * @param {number} proxRadius
  */
-dotprod.entities.Bomb = function(game, owner, level, position, velocity, lifetime, damage, bounceCount, blastRadius, proxRadius) {
+dotprod.model.projectile.Bomb = function(game, owner, level, position, velocity, lifetime, damage, bounceCount, blastRadius, proxRadius) {
   goog.base(this, game, owner, level, lifetime, damage, bounceCount);
 
   this.position_ = position;
@@ -53,19 +53,19 @@ dotprod.entities.Bomb = function(game, owner, level, position, velocity, lifetim
    */
   this.lastDistanceToProxActivator_;
 };
-goog.inherits(dotprod.entities.Bomb, dotprod.model.projectile.Projectile);
+goog.inherits(dotprod.model.projectile.Bomb, dotprod.model.projectile.Projectile);
 
 /**
  * @override
  */
-dotprod.entities.Bomb.prototype.getType = function() {
+dotprod.model.projectile.Bomb.prototype.getType = function() {
   return dotprod.model.Weapon.Type.BOMB;
 };
 
 /**
  * @override
  */
-dotprod.entities.Bomb.prototype.checkPlayerCollision_ = function(player) {
+dotprod.model.projectile.Bomb.prototype.checkPlayerCollision_ = function(player) {
   if (!player.isAlive() || this.owner_.isFriend(player)) {
     return false;
   }
@@ -92,7 +92,7 @@ dotprod.entities.Bomb.prototype.checkPlayerCollision_ = function(player) {
 /**
  * @override
  */
-dotprod.entities.Bomb.prototype.explode_ = function(hitPlayer) {
+dotprod.model.projectile.Bomb.prototype.explode_ = function(hitPlayer) {
   // Reset bomb state.
   this.velocity_ = new dotprod.math.Vector(0, 0);
   this.lifetime_ = 0;

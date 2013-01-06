@@ -56,6 +56,6 @@ dotprod.model.ModelObjectFactory.prototype.newBullet = goog.abstractMethod;
  * @param {number} bounceCount
  * @param {number} blastRadius
  * @param {number} proxRadius
- * @return {!dotprod.entities.Bomb}
+ * @return {!dotprod.model.projectile.Bomb}
  */
 dotprod.model.ModelObjectFactory.prototype.newBomb = goog.abstractMethod;

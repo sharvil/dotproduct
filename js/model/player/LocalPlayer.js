@@ -8,7 +8,7 @@ goog.provide('dotprod.model.player.LocalPlayer');
 goog.require('goog.events');
 goog.require('goog.events.KeyCodes');
 goog.require('goog.object');
-goog.require('dotprod.entities.Bomb');
+goog.require('dotprod.model.projectile.Bomb');
 goog.require('dotprod.entities.Bullet');
 goog.require('dotprod.entities.Exhaust');
 goog.require('dotprod.model.player.Player');

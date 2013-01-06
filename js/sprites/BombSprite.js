@@ -5,14 +5,14 @@
 
 goog.provide('dotprod.sprites.BombSprite');
 
-goog.require('dotprod.entities.Bomb');
+goog.require('dotprod.model.projectile.Bomb');
 goog.require('dotprod.model.Effect');
 goog.require('dotprod.math.Vector');
 goog.require('dotprod.sprites.Sprite');
 
 /**
  * @constructor
- * @extends {dotprod.entities.Bomb}
+ * @extends {dotprod.model.projectile.Bomb}
  * @implements {dotprod.sprites.Sprite}
  * @param {!dotprod.Game} game
  * @param {!dotprod.model.player.Player} owner
@@ -42,7 +42,7 @@ dotprod.sprites.BombSprite = function(game, owner, level, position, velocity, li
   this.bouncingAnimation_ = game.getResourceManager().getVideoEnsemble('bombs').getAnimation(level + 8);
   this.bouncingAnimation_.setRepeatCount(-1);
 };
-goog.inherits(dotprod.sprites.BombSprite, dotprod.entities.Bomb);
+goog.inherits(dotprod.sprites.BombSprite, dotprod.model.projectile.Bomb);
 
 /**
  * @override
