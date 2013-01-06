@@ -3,7 +3,7 @@
  * @author sharvil.nanavati@gmail.com (Sharvil Nanavati)
  */
 
-goog.provide('dotprod.sprites.RemotePlayerSprite');
+goog.provide('dotprod.model.player.RemotePlayerSprite');
 
 goog.require('dotprod.model.player.RemotePlayer');
 goog.require('dotprod.model.player.PlayerSprite');
@@ -21,22 +21,22 @@ goog.require('dotprod.sprites.Sprite');
  * @param {number} ship
  * @param {number} bounty
  */
-dotprod.sprites.RemotePlayerSprite = function(game, id, name, team, isAlive, ship, bounty) {
+dotprod.model.player.RemotePlayerSprite = function(game, id, name, team, isAlive, ship, bounty) {
   goog.base(this, game, id, name, team, isAlive, ship, bounty);
 };
-goog.inherits(dotprod.sprites.RemotePlayerSprite, dotprod.model.player.RemotePlayer);
+goog.inherits(dotprod.model.player.RemotePlayerSprite, dotprod.model.player.RemotePlayer);
 
 /**
  * @override
  */
-dotprod.sprites.RemotePlayerSprite.prototype.respawn = dotprod.model.player.PlayerSprite.prototype.respawn;
+dotprod.model.player.RemotePlayerSprite.prototype.respawn = dotprod.model.player.PlayerSprite.prototype.respawn;
 
 /**
  * @override
  */
-dotprod.sprites.RemotePlayerSprite.prototype.onDeath = dotprod.model.player.PlayerSprite.prototype.onDeath;
+dotprod.model.player.RemotePlayerSprite.prototype.onDeath = dotprod.model.player.PlayerSprite.prototype.onDeath;
 
 /**
  * @override
  */
-dotprod.sprites.RemotePlayerSprite.prototype.render = dotprod.model.player.PlayerSprite.prototype.render;
+dotprod.model.player.RemotePlayerSprite.prototype.render = dotprod.model.player.PlayerSprite.prototype.render;

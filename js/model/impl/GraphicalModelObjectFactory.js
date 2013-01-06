@@ -9,7 +9,7 @@ goog.require('dotprod.model.ModelObjectFactory');
 goog.require('dotprod.sprites.BombSprite');
 goog.require('dotprod.sprites.BulletSprite');
 goog.require('dotprod.model.player.LocalPlayerSprite');
-goog.require('dotprod.sprites.RemotePlayerSprite');
+goog.require('dotprod.model.player.RemotePlayerSprite');
 
 /**
  * @constructor
@@ -28,7 +28,7 @@ dotprod.model.impl.GraphicalModelObjectFactory.prototype.newLocalPlayer = functi
  * @override
  */
 dotprod.model.impl.GraphicalModelObjectFactory.prototype.newRemotePlayer = function(game, id, name, team, isAlive, ship, bounty) {
-  return new dotprod.sprites.RemotePlayerSprite(game, id, name, team, isAlive, ship, bounty);
+  return new dotprod.model.player.RemotePlayerSprite(game, id, name, team, isAlive, ship, bounty);
 };
 
 /**
