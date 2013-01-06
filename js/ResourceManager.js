@@ -7,7 +7,7 @@ goog.provide('dotprod.ResourceManager');
 
 goog.require('goog.asserts');
 goog.require('goog.debug.Logger');
-goog.require('dotprod.Image');
+goog.require('dotprod.graphics.Image');
 goog.require('dotprod.VideoEnsemble');
 
 /**
@@ -21,7 +21,7 @@ dotprod.ResourceManager = function() {
   this.logger_ = goog.debug.Logger.getLogger('dotprod.ResourceManager');
 
   /**
-   * @type {!Object.<string, !dotprod.Image>}
+   * @type {!Object.<string, !dotprod.graphics.Image>}
    * @private
    */
   this.images_ = {};
@@ -54,7 +54,7 @@ dotprod.ResourceManager.prototype.loadImage = function(name, url, xTiles, yTiles
   };
 
   this.logger_.info('Loading image: "' + name + '" using URL: ' + url);
-  this.images_[name] = new dotprod.Image(xTiles, yTiles);
+  this.images_[name] = new dotprod.graphics.Image(xTiles, yTiles);
   this.images_[name].load(url, callback);
 };
 
@@ -110,7 +110,7 @@ dotprod.ResourceManager.prototype.playSound = function(name) {
 
 /**
  * @param {string} name
- * @return {!dotprod.Image}
+ * @return {!dotprod.graphics.Image}
  */
 dotprod.ResourceManager.prototype.getImage = function(name) {
   goog.asserts.assert(this.images_[name], 'Requesting missing image resource: ' + name);

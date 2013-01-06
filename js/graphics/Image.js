@@ -3,14 +3,14 @@
  * @author sharvil.nanavati@gmail.com (Sharvil Nanavati)
  */
 
-goog.provide('dotprod.Image');
+goog.provide('dotprod.graphics.Image');
 
 /**
  * @constructor
  * @param {number=} opt_tilesPerRow
  * @param {number=} opt_tilesPerCol
  */
-dotprod.Image = function(opt_tilesPerRow, opt_tilesPerCol) {
+dotprod.graphics.Image = function(opt_tilesPerRow, opt_tilesPerCol) {
   /**
    * @type {!HTMLImageElement}
    * @private
@@ -35,7 +35,7 @@ dotprod.Image = function(opt_tilesPerRow, opt_tilesPerCol) {
 /**
  * @return {boolean} True if the image has been loaded, false otherwise.
  */
-dotprod.Image.prototype.isLoaded = function() {
+dotprod.graphics.Image.prototype.isLoaded = function() {
   return !!this.node_.src && this.node_.complete;
 };
 
@@ -43,7 +43,7 @@ dotprod.Image.prototype.isLoaded = function() {
  * @param {string} resourceName
  * @param {function(string)=} opt_loadCb
  */
-dotprod.Image.prototype.load = function(resourceName, opt_loadCb) {
+dotprod.graphics.Image.prototype.load = function(resourceName, opt_loadCb) {
   this.node_.src = resourceName;
   if (opt_loadCb) {
     goog.events.listen(this.node_, 'load', goog.bind(opt_loadCb, new String(resourceName)));
@@ -56,7 +56,7 @@ dotprod.Image.prototype.load = function(resourceName, opt_loadCb) {
  * @param {number} y
  * @param {number=} opt_tileNum
  */
-dotprod.Image.prototype.render = function(context, x, y, opt_tileNum) {
+dotprod.graphics.Image.prototype.render = function(context, x, y, opt_tileNum) {
   if (!this.isLoaded()) {
     return;
   }
@@ -94,20 +94,20 @@ dotprod.Image.prototype.render = function(context, x, y, opt_tileNum) {
 /**
  * @return {number}
  */
-dotprod.Image.prototype.getNumTiles = function() {
+dotprod.graphics.Image.prototype.getNumTiles = function() {
   return this.tilesPerRow_ * this.tilesPerCol_;
 };
 
 /**
  * @return {number}
  */
-dotprod.Image.prototype.getTileWidth = function() {
+dotprod.graphics.Image.prototype.getTileWidth = function() {
   return Math.floor(this.node_.width / this.tilesPerRow_);
 };
 
 /**
  * @return {number}
  */
-dotprod.Image.prototype.getTileHeight = function() {
+dotprod.graphics.Image.prototype.getTileHeight = function() {
   return Math.floor(this.node_.height / this.tilesPerCol_);
 };

@@ -33,19 +33,19 @@ dotprod.layers.HudLayer = function(game) {
   this.player_ = game.getPlayerIndex().getLocalPlayer();
 
   /**
-   * @type {!dotprod.Image}
+   * @type {!dotprod.graphics.Image}
    * @private
    */
   this.statusHudImage_ = this.resourceManager_.getImage('statusHud');
 
   /**
-   * @type {!dotprod.Image}
+   * @type {!dotprod.graphics.Image}
    * @private
    */
   this.energyFontImage_ = this.resourceManager_.getImage('energyFont');
 
   /**
-   * @type {!dotprod.Image}
+   * @type {!dotprod.graphics.Image}
    * @private
    */
   this.ledFontImage_ = this.resourceManager_.getImage('ledFont');

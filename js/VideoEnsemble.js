@@ -6,7 +6,7 @@
 goog.provide('dotprod.VideoEnsemble');
 
 goog.require('goog.asserts');
-goog.require('dotprod.Image');
+goog.require('dotprod.graphics.Image');
 
 /**
  * @constructor
@@ -37,10 +37,10 @@ dotprod.VideoEnsemble = function(tilesPerRow, tilesPerCol, framesPerAnimation, p
   this.period_ = period || 1;
 
   /**
-   * @type {!dotprod.Image}
+   * @type {!dotprod.graphics.Image}
    * @private
    */
-  this.image_ = new dotprod.Image(tilesPerRow, tilesPerCol);
+  this.image_ = new dotprod.graphics.Image(tilesPerRow, tilesPerCol);
 };
 
 /**

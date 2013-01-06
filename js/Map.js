@@ -6,7 +6,7 @@
 goog.provide('dotprod.Map');
 
 goog.require('dotprod.model.Entity');
-goog.require('dotprod.Image');
+goog.require('dotprod.graphics.Image');
 goog.require('dotprod.Quadtree');
 goog.require('dotprod.math.Rect');
 goog.require('dotprod.math.Vector');

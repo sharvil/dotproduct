@@ -8,7 +8,7 @@ goog.provide('dotprod.layers.MapLayer');
 goog.require('goog.dom');
 goog.require('goog.events');
 goog.require('dotprod.Viewport');
-goog.require('dotprod.Image');
+goog.require('dotprod.graphics.Image');
 goog.require('dotprod.layers.Layer');
 goog.require('dotprod.Map');
 goog.require('dotprod.ResourceManager');
@@ -33,7 +33,7 @@ dotprod.layers.MapLayer = function(game) {
   this.prizeAnimation_.setRepeatCount(-1);
 
   /**
-   * @type {!dotprod.Image}
+   * @type {!dotprod.graphics.Image}
    * @private
    */
   this.tileset_ = this.game_.getResourceManager().getImage('tileset');

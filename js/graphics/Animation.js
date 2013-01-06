@@ -6,11 +6,11 @@
 goog.provide('dotprod.graphics.Animation');
 
 goog.require('goog.asserts');
-goog.require('dotprod.Image');
+goog.require('dotprod.graphics.Image');
 
 /**
  * @constructor
- * @param {!dotprod.Image} image
+ * @param {!dotprod.graphics.Image} image
  * @param {number} startFrame
  * @param {number} frameCount
  * @param {number} period
@@ -20,7 +20,7 @@ dotprod.graphics.Animation = function(image, startFrame, frameCount, period) {
   goog.asserts.assert(startFrame + frameCount <= image.getNumTiles(), 'Animation length out of bounds.');
 
   /**
-   * @type {!dotprod.Image}
+   * @type {!dotprod.graphics.Image}
    * @private
    */
   this.image_ = image;
