@@ -28,7 +28,7 @@ dotprod.model.ModelObjectFactory.prototype.newLocalPlayer = goog.abstractMethod;
  * @param {boolean} isAlive
  * @param {number} ship
  * @param {number} bounty
- * @return {!dotprod.entities.RemotePlayer}
+ * @return {!dotprod.model.player.RemotePlayer}
  */
 dotprod.model.ModelObjectFactory.prototype.newRemotePlayer = goog.abstractMethod;
 

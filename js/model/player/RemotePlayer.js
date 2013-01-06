@@ -3,7 +3,7 @@
  * @author sharvil.nanavati@gmail.com (Sharvil Nanavati)
  */
 
-goog.provide('dotprod.entities.RemotePlayer');
+goog.provide('dotprod.model.player.RemotePlayer');
 
 goog.require('dotprod.model.player.Player');
 goog.require('dotprod.Timer');
@@ -20,7 +20,7 @@ goog.require('dotprod.math.Vector');
  * @param {number} ship
  * @param {number} bounty
  */
-dotprod.entities.RemotePlayer = function(game, id, name, team, isAlive, ship, bounty) {
+dotprod.model.player.RemotePlayer = function(game, id, name, team, isAlive, ship, bounty) {
   goog.base(this, game, id, name, team, ship, bounty);
 
   /**
@@ -52,26 +52,26 @@ dotprod.entities.RemotePlayer = function(game, id, name, team, isAlive, ship, bo
 
   this.energy_ = isAlive ? 1 : 0;
 };
-goog.inherits(dotprod.entities.RemotePlayer, dotprod.model.player.Player);
+goog.inherits(dotprod.model.player.RemotePlayer, dotprod.model.player.Player);
 
 /**
  * @type {number}
  * @private
  * @const
  */
-dotprod.entities.RemotePlayer.MAX_DRIFT_PIXELS_ = 64;
+dotprod.model.player.RemotePlayer.MAX_DRIFT_PIXELS_ = 64;
 
 /**
  * @type {number}
  * @private
  * @const
  */
-dotprod.entities.RemotePlayer.VELOCITY_ADJUST_PERIOD_ = 20;
+dotprod.model.player.RemotePlayer.VELOCITY_ADJUST_PERIOD_ = 20;
 
 /**
  * @override
  */
-dotprod.entities.RemotePlayer.prototype.respawn = function(angle, position, velocity) {
+dotprod.model.player.RemotePlayer.prototype.respawn = function(angle, position, velocity) {
   this.energy_ = 1;
   this.bounty_ = 0;
   this.angleInRadians_ = angle;
@@ -86,7 +86,7 @@ dotprod.entities.RemotePlayer.prototype.respawn = function(angle, position, velo
  * @param {!dotprod.math.Vector} position
  * @param {!dotprod.math.Vector} velocity
  */
-dotprod.entities.RemotePlayer.prototype.onPositionUpdate = function(timeDiff, angle, position, velocity) {
+dotprod.model.player.RemotePlayer.prototype.onPositionUpdate = function(timeDiff, angle, position, velocity) {
   if (!this.isAlive()) {
     this.respawn(angle, position, velocity);
     return;
@@ -103,25 +103,25 @@ dotprod.entities.RemotePlayer.prototype.onPositionUpdate = function(timeDiff, an
   this.angleInRadians_ = angle;
   this.velocity_ = velocity;
   this.originalVelocity_ = velocity;
-  this.velocityAdjustTimer_ = dotprod.entities.RemotePlayer.VELOCITY_ADJUST_PERIOD_;
+  this.velocityAdjustTimer_ = dotprod.model.player.RemotePlayer.VELOCITY_ADJUST_PERIOD_;
 
-  if (Math.abs(distance.getX()) >= dotprod.entities.RemotePlayer.MAX_DRIFT_PIXELS_) {
+  if (Math.abs(distance.getX()) >= dotprod.model.player.RemotePlayer.MAX_DRIFT_PIXELS_) {
     this.position_ = new dotprod.math.Vector(finalPosition.getX(), this.position_.getY());
   } else {
-    this.velocity_ = this.velocity_.add(new dotprod.math.Vector(distance.getX(), 0).scale(1 / dotprod.entities.RemotePlayer.VELOCITY_ADJUST_PERIOD_));
+    this.velocity_ = this.velocity_.add(new dotprod.math.Vector(distance.getX(), 0).scale(1 / dotprod.model.player.RemotePlayer.VELOCITY_ADJUST_PERIOD_));
   }
 
-  if (Math.abs(distance.getY()) >= dotprod.entities.RemotePlayer.MAX_DRIFT_PIXELS_) {
+  if (Math.abs(distance.getY()) >= dotprod.model.player.RemotePlayer.MAX_DRIFT_PIXELS_) {
     this.position_ = new dotprod.math.Vector(this.position_.getX(), finalPosition.getY());
   } else {
-    this.velocity_ = this.velocity_.add(new dotprod.math.Vector(0, distance.getY()).scale(1 / dotprod.entities.RemotePlayer.VELOCITY_ADJUST_PERIOD_));
+    this.velocity_ = this.velocity_.add(new dotprod.math.Vector(0, distance.getY()).scale(1 / dotprod.model.player.RemotePlayer.VELOCITY_ADJUST_PERIOD_));
   }
 };
 
 /**
  * @override
  */
-dotprod.entities.RemotePlayer.prototype.advanceTime = function() {
+dotprod.model.player.RemotePlayer.prototype.advanceTime = function() {
   var bounceFactor = this.game_.getSettings()['ships'][this.ship_]['bounceFactor'];
   --this.velocityAdjustTimer_;
   if (this.velocityAdjustTimer_ == 0) {
@@ -138,7 +138,7 @@ dotprod.entities.RemotePlayer.prototype.advanceTime = function() {
  * @return {!dotprod.math.Vector}
  * @private
  */
-dotprod.entities.RemotePlayer.prototype.extrapolatePosition_ = function(timeDiff, startPosition, startVelocity) {
+dotprod.model.player.RemotePlayer.prototype.extrapolatePosition_ = function(timeDiff, startPosition, startVelocity) {
   var bounceFactor = this.game_.getSettings()['ships'][this.ship_]['bounceFactor'];
   var savedPosition = this.position_;
   var savedVelocity = this.velocity_;
@@ -160,7 +160,7 @@ dotprod.entities.RemotePlayer.prototype.extrapolatePosition_ = function(timeDiff
 /**
  * @override
  */
-dotprod.entities.RemotePlayer.prototype.collectPrize_ = function(prize) {
+dotprod.model.player.RemotePlayer.prototype.collectPrize_ = function(prize) {
   goog.base(this, 'collectPrize_', prize);
   return false;
 };
@@ -168,7 +168,7 @@ dotprod.entities.RemotePlayer.prototype.collectPrize_ = function(prize) {
 /**
  * @override
  */
-dotprod.entities.RemotePlayer.prototype.bounce_ = function() {
+dotprod.model.player.RemotePlayer.prototype.bounce_ = function() {
   this.velocityAdjustTimer_ = 0;
   this.bounceTimestamp_ = goog.now();
 };

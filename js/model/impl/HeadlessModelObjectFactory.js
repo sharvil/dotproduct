@@ -9,7 +9,7 @@ goog.require('dotprod.model.ModelObjectFactory');
 goog.require('dotprod.entities.Bomb');
 goog.require('dotprod.entities.Bullet');
 goog.require('dotprod.model.player.LocalPlayer');
-goog.require('dotprod.entities.RemotePlayer');
+goog.require('dotprod.model.player.RemotePlayer');
 
 /**
  * @constructor
@@ -28,7 +28,7 @@ dotprod.model.impl.HeadlessModelObjectFactory.prototype.newLocalPlayer = functio
  * @override
  */
 dotprod.model.impl.HeadlessModelObjectFactory.prototype.newRemotePlayer = function(game, id, name, team, isAlive, ship, bounty) {
-  return new dotprod.entities.RemotePlayer(game, id, name, team, isAlive, ship, bounty);
+  return new dotprod.model.player.RemotePlayer(game, id, name, team, isAlive, ship, bounty);
 };
 
 /**

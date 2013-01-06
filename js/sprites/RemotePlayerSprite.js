@@ -5,13 +5,13 @@
 
 goog.provide('dotprod.sprites.RemotePlayerSprite');
 
-goog.require('dotprod.entities.RemotePlayer');
+goog.require('dotprod.model.player.RemotePlayer');
 goog.require('dotprod.sprites.PlayerSprite');
 goog.require('dotprod.sprites.Sprite');
 
 /**
  * @constructor
- * @extends {dotprod.entities.RemotePlayer}
+ * @extends {dotprod.model.player.RemotePlayer}
  * @implements {dotprod.sprites.Sprite}
  * @param {!dotprod.Game} game
  * @param {string} id
@@ -24,7 +24,7 @@ goog.require('dotprod.sprites.Sprite');
 dotprod.sprites.RemotePlayerSprite = function(game, id, name, team, isAlive, ship, bounty) {
   goog.base(this, game, id, name, team, isAlive, ship, bounty);
 };
-goog.inherits(dotprod.sprites.RemotePlayerSprite, dotprod.entities.RemotePlayer);
+goog.inherits(dotprod.sprites.RemotePlayerSprite, dotprod.model.player.RemotePlayer);
 
 /**
  * @override
