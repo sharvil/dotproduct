@@ -6,7 +6,7 @@
 goog.provide('dotprod.layers.ProjectileLayer');
 
 goog.require('goog.array');
-goog.require('dotprod.Camera');
+goog.require('dotprod.Viewport');
 goog.require('dotprod.layers.Layer');
 goog.require('dotprod.Map');
 goog.require('dotprod.PlayerIndex');
@@ -38,11 +38,11 @@ dotprod.layers.ProjectileLayer = function(game) {
 dotprod.layers.ProjectileLayer.prototype.update = goog.nullFunction;
 
 /**
- * @param {!dotprod.Camera} camera
+ * @param {!dotprod.Viewport} viewport
  * @override
  */
-dotprod.layers.ProjectileLayer.prototype.render = function(camera) {
+dotprod.layers.ProjectileLayer.prototype.render = function(viewport) {
   this.projectileIndex_.forEach(function(projectile) {
-    projectile.render(camera);
+    projectile.render(viewport);
   });
 };

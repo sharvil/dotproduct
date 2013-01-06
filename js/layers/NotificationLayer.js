@@ -5,7 +5,7 @@
 
 goog.provide('dotprod.layers.NotificationLayer');
 
-goog.require('dotprod.Camera');
+goog.require('dotprod.Viewport');
 goog.require('dotprod.FontFoundry');
 goog.require('dotprod.layers.Layer');
 goog.require('dotprod.Palette');
@@ -48,11 +48,11 @@ dotprod.layers.NotificationLayer.prototype.update = function() {
 };
 
 /**
- * @param {dotprod.Camera} camera
+ * @param {dotprod.Viewport} viewport
  * @override
  */
-dotprod.layers.NotificationLayer.prototype.render = function(camera) {
-  var context = camera.getContext();
+dotprod.layers.NotificationLayer.prototype.render = function(viewport) {
+  var context = viewport.getContext();
   var font = dotprod.FontFoundry.notificationsFont();
 
   context.save();

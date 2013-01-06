@@ -6,7 +6,7 @@
 goog.provide('dotprod.layers.EffectLayer');
 
 goog.require('goog.array');
-goog.require('dotprod.Camera');
+goog.require('dotprod.Viewport');
 goog.require('dotprod.layers.Layer');
 goog.require('dotprod.EffectIndex');
 
@@ -30,11 +30,11 @@ dotprod.layers.EffectLayer = function(effectIndex) {
 dotprod.layers.EffectLayer.prototype.update = goog.nullFunction;
 
 /**
- * @param {!dotprod.Camera} camera
+ * @param {!dotprod.Viewport} viewport
  * @override
  */
-dotprod.layers.EffectLayer.prototype.render = function(camera) {
+dotprod.layers.EffectLayer.prototype.render = function(viewport) {
   this.effectIndex_.forEach(function(effect) {
-    effect.render(camera);
+    effect.render(viewport);
   });
 };

@@ -7,7 +7,7 @@ goog.provide('dotprod.layers.MapLayer');
 
 goog.require('goog.dom');
 goog.require('goog.events');
-goog.require('dotprod.Camera');
+goog.require('dotprod.Viewport');
 goog.require('dotprod.Image');
 goog.require('dotprod.layers.Layer');
 goog.require('dotprod.Map');
@@ -47,13 +47,13 @@ dotprod.layers.MapLayer.prototype.update = function() {
 };
 
 /**
- * @param {!dotprod.Camera} camera
+ * @param {!dotprod.Viewport} viewport
  * @override
  */
-dotprod.layers.MapLayer.prototype.render = function(camera) {
+dotprod.layers.MapLayer.prototype.render = function(viewport) {
   var map = this.game_.getMap();
-  var dimensions = camera.getDimensions();
-  var context = camera.getContext();
+  var dimensions = viewport.getDimensions();
+  var context = viewport.getContext();
 
   var tileWidth = this.tileset_.getTileWidth();
   var tileHeight = this.tileset_.getTileHeight();

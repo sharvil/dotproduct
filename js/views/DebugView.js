@@ -5,16 +5,16 @@
 
 goog.provide('dotprod.views.DebugView');
 
-goog.require('dotprod.Camera');
+goog.require('dotprod.Viewport');
 goog.require('dotprod.views.View');
 
 /**
  * @constructor
  * @extends {dotprod.views.View}
  * @param {!dotprod.Game} game
- * @param {!dotprod.Camera} camera
+ * @param {!dotprod.Viewport} viewport
  */
-dotprod.views.DebugView = function(game, camera) {
+dotprod.views.DebugView = function(game, viewport) {
   goog.base(this);
 
   /**
@@ -24,10 +24,10 @@ dotprod.views.DebugView = function(game, camera) {
   this.game_ = game;
 
   /**
-   * @type {!dotprod.Camera}
+   * @type {!dotprod.Viewport}
    * @private
    */
-  this.camera_ = camera;
+  this.viewport_ = viewport;
 
   /**
    * @type {!HTMLDivElement}

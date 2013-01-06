@@ -38,9 +38,9 @@ dotprod.model.player.LocalPlayerSprite.prototype.onDeath = dotprod.model.player.
 /**
  * @override
  */
-dotprod.model.player.LocalPlayerSprite.prototype.render = function(camera) {
-  var context = camera.getContext();
-  var dimensions = camera.getDimensions();
+dotprod.model.player.LocalPlayerSprite.prototype.render = function(viewport) {
+  var context = viewport.getContext();
+  var dimensions = viewport.getDimensions();
 
   if (!this.isAlive()) {
     var millis = dotprod.Timer.ticksToMillis(this.respawnTimer_);
@@ -56,10 +56,10 @@ dotprod.model.player.LocalPlayerSprite.prototype.render = function(camera) {
   }
 
   goog.array.forEach(this.exhaust_, function(e) {
-    e.render(camera);
+    e.render(viewport);
   });
 
-  dotprod.model.player.PlayerSprite.prototype.render.call(this, camera);
+  dotprod.model.player.PlayerSprite.prototype.render.call(this, viewport);
 
   var damageOverlay = this.game_.getResourceManager().getImage('ship' + this.ship_ + 'Red');
   var x = Math.floor((dimensions.width - damageOverlay.getTileWidth()) / 2);

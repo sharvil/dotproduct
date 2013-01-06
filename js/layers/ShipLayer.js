@@ -5,7 +5,7 @@
 
 goog.provide('dotprod.layers.ShipLayer');
 
-goog.require('dotprod.Camera');
+goog.require('dotprod.Viewport');
 goog.require('dotprod.layers.Layer');
 goog.require('dotprod.Map');
 goog.require('dotprod.PlayerIndex');
@@ -30,16 +30,16 @@ dotprod.layers.ShipLayer = function(playerIndex) {
 dotprod.layers.ShipLayer.prototype.update = goog.nullFunction;
 
 /**
- * @param {!dotprod.Camera} camera
+ * @param {!dotprod.Viewport} viewport
  * @override
  */
-dotprod.layers.ShipLayer.prototype.render = function(camera) {
+dotprod.layers.ShipLayer.prototype.render = function(viewport) {
   // Always draw local player last so we never fly under any other ships.
   var localPlayer = this.playerIndex_.getLocalPlayer();
   this.playerIndex_.forEach(function(player) {
     if (player != localPlayer) {
-      player.render(camera);
+      player.render(viewport);
     }
   });
-  localPlayer.render(camera);
+  localPlayer.render(viewport);
 };

@@ -11,6 +11,6 @@ goog.provide('dotprod.Drawable');
 dotprod.Drawable = goog.nullFunction;
 
 /**
- * @param {!dotprod.Camera} camera
+ * @param {!dotprod.Viewport} viewport
  */
 dotprod.Drawable.prototype.render = goog.abstractMethod;

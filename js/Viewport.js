@@ -3,14 +3,14 @@
  * @author sharvil.nanavati@gmail.com (Sharvil Nanavati)
  */
 
-goog.provide('dotprod.Camera');
+goog.provide('dotprod.Viewport');
 
 /**
  * @constructor
  * @param {!dotprod.Game} game
  * @param {!CanvasRenderingContext2D} context
  */
-dotprod.Camera = function(game, context) {
+dotprod.Viewport = function(game, context) {
   /**
    * @type {number}
    * @private
@@ -39,11 +39,11 @@ dotprod.Camera = function(game, context) {
 /**
  * @param {!dotprod.model.player.Player} player
  */
-dotprod.Camera.prototype.followPlayer = function(player) {
+dotprod.Viewport.prototype.followPlayer = function(player) {
   this.followingPlayer_ = player;
 };
 
-dotprod.Camera.prototype.update = function() {
+dotprod.Viewport.prototype.update = function() {
   if (!this.followingPlayer_) {
     return;
   }
@@ -56,7 +56,7 @@ dotprod.Camera.prototype.update = function() {
 /**
  * @return {!Object}
  */
-dotprod.Camera.prototype.getDimensions = function() {
+dotprod.Viewport.prototype.getDimensions = function() {
   return {
     x: this.x_,
     y: this.y_,
@@ -72,6 +72,6 @@ dotprod.Camera.prototype.getDimensions = function() {
 /**
  * @return {!CanvasRenderingContext2D}
  */
-dotprod.Camera.prototype.getContext = function() {
+dotprod.Viewport.prototype.getContext = function() {
   return this.context_;
 };

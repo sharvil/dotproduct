@@ -54,11 +54,11 @@ dotprod.model.Exhaust.prototype.advanceTime = function() {
 };
 
 /**
- * @param {!dotprod.Camera} camera
+ * @param {!dotprod.Viewport} viewport
  */
-dotprod.model.Exhaust.prototype.render = function(camera) {
-  var context = camera.getContext();
-  var dimensions = camera.getDimensions();
+dotprod.model.Exhaust.prototype.render = function(viewport) {
+  var context = viewport.getContext();
+  var dimensions = viewport.getDimensions();
   var x = Math.floor(this.position_.getX() - dimensions.left - this.image_.getWidth() / 2);
   var y = Math.floor(this.position_.getY() - dimensions.top - this.image_.getHeight() / 2);
 

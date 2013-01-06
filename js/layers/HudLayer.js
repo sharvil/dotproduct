@@ -57,12 +57,12 @@ dotprod.layers.HudLayer = function(game) {
 dotprod.layers.HudLayer.prototype.update = goog.nullFunction;
 
 /**
- * @param {!dotprod.Camera} camera
+ * @param {!dotprod.Viewport} viewport
  * @override
  */
-dotprod.layers.HudLayer.prototype.render = function(camera) {
-  var context = camera.getContext();
-  var dimensions = camera.getDimensions();
+dotprod.layers.HudLayer.prototype.render = function(viewport) {
+  var context = viewport.getContext();
+  var dimensions = viewport.getDimensions();
 
   this.renderEnergyBar_(context, dimensions);
   this.renderNearShipEnergyDisplay_(context, dimensions);

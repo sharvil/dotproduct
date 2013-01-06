@@ -14,7 +14,7 @@ goog.require('goog.events.EventType');
 goog.require('html5.AnimationFrame');
 goog.require('html5.Notifications');
 
-goog.require('dotprod.Camera');
+goog.require('dotprod.Viewport');
 goog.require('dotprod.EffectIndex');
 goog.require('dotprod.input.Keyboard');
 goog.require('dotprod.layers.EffectLayer');
@@ -95,10 +95,10 @@ dotprod.Game = function(protocol, resourceManager, settings, mapData) {
   this.canvas_.className = dotprod.Game.CANVAS_CLASS_NAME_;
 
   /**
-   * @type {!dotprod.Camera}
+   * @type {!dotprod.Viewport}
    * @private
    */
-  this.camera_ = new dotprod.Camera(this, /** @type {!CanvasRenderingContext2D} */ (this.canvas_.getContext('2d')));
+  this.viewport_ = new dotprod.Viewport(this, /** @type {!CanvasRenderingContext2D} */ (this.canvas_.getContext('2d')));
 
   /**
    * @type {!dotprod.Map}
@@ -155,7 +155,7 @@ dotprod.Game = function(protocol, resourceManager, settings, mapData) {
    * @type {!dotprod.views.DebugView}
    * @private
    */
-  this.debugView_ = new dotprod.views.DebugView(this, this.camera_);
+  this.debugView_ = new dotprod.views.DebugView(this, this.viewport_);
 
   /**
    * @type {!Array.<dotprod.layers.Layer>}
@@ -202,7 +202,7 @@ dotprod.Game = function(protocol, resourceManager, settings, mapData) {
   this.protocol_.registerHandler(dotprod.Protocol.S2CPacketType.SET_PRESENCE, goog.bind(this.onSetPresence_, this));
   this.protocol_.startGame(startingShip);
 
-  this.camera_.followPlayer(localPlayer);
+  this.viewport_.followPlayer(localPlayer);
 
   goog.events.listen(window, goog.events.EventType.RESIZE, goog.bind(this.onResize_, this));
   goog.events.listen(this.canvas_, goog.events.EventType.MOUSEMOVE, goog.bind(this.onMouseMoved_, this));
@@ -355,14 +355,14 @@ dotprod.Game.prototype.renderingLoop_ = function() {
     }
   }
 
-  this.camera_.update();
+  this.viewport_.update();
 
-  var context = this.camera_.getContext();
+  var context = this.viewport_.getContext();
   context.save();
     context.fillStyle = '#000';
     context.fillRect(0, 0, this.canvas_.width, this.canvas_.height);
     for (var i = 0; i < this.layers_.length; ++i) {
-      this.layers_[i].render(this.camera_);
+      this.layers_[i].render(this.viewport_);
     }
   context.restore();
 

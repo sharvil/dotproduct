@@ -56,9 +56,9 @@ dotprod.model.Effect.prototype.advanceTime = function() {
   }
 };
 
-dotprod.model.Effect.prototype.render = function(camera) {
-  var context = camera.getContext();
-  var dimensions = camera.getDimensions();
+dotprod.model.Effect.prototype.render = function(viewport) {
+  var context = viewport.getContext();
+  var dimensions = viewport.getDimensions();
 
   var x = Math.floor(this.position_.getX() - dimensions.left - this.animation_.getWidth() / 2);
   var y = Math.floor(this.position_.getY() - dimensions.top - this.animation_.getHeight() / 2);

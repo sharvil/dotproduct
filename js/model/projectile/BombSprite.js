@@ -56,15 +56,15 @@ dotprod.model.projectile.BombSprite.prototype.advanceTime = function() {
 /**
  * @override
  */
-dotprod.model.projectile.BombSprite.prototype.render = function(camera) {
-  var dimensions = camera.getDimensions();
+dotprod.model.projectile.BombSprite.prototype.render = function(viewport) {
+  var dimensions = viewport.getDimensions();
   var x = Math.floor(this.position_.getX() - dimensions.left - this.animation_.getWidth() / 2);
   var y = Math.floor(this.position_.getY() - dimensions.top - this.animation_.getHeight() / 2);
 
   if(this.bounceCount_) {
-    this.bouncingAnimation_.render(camera.getContext(), x, y);
+    this.bouncingAnimation_.render(viewport.getContext(), x, y);
   } else {
-    this.animation_.render(camera.getContext(), x, y);
+    this.animation_.render(viewport.getContext(), x, y);
   }
 };
 

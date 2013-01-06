@@ -54,13 +54,13 @@ dotprod.model.projectile.BulletSprite.prototype.advanceTime = function() {
 /**
  * @override
  */
-dotprod.model.projectile.BulletSprite.prototype.render = function(camera) {
-  var dimensions = camera.getDimensions();
+dotprod.model.projectile.BulletSprite.prototype.render = function(viewport) {
+  var dimensions = viewport.getDimensions();
   var x = Math.floor(this.position_.getX() - dimensions.left - this.animation_.getWidth() / 2);
   var y = Math.floor(this.position_.getY() - dimensions.top - this.animation_.getHeight() / 2);
   var animation = this.bounceCount_ ? this.bouncingAnimation_ : this.animation_;
 
-  animation.render(camera.getContext(), x, y);
+  animation.render(viewport.getContext(), x, y);
 };
 
 /**

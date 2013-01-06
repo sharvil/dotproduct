@@ -86,9 +86,9 @@ dotprod.layers.RadarLayer.prototype.update = function() {
 /**
  * @override
  */
-dotprod.layers.RadarLayer.prototype.render = function(camera) {
-  var context = camera.getContext();
-  var dimensions = camera.getDimensions();
+dotprod.layers.RadarLayer.prototype.render = function(viewport) {
+  var context = viewport.getContext();
+  var dimensions = viewport.getDimensions();
 
 //  var radarWidth = Math.floor(dimensions.width * dotprod.layers.RadarLayer.SCALE_FACTOR_);
   var radarHeight = Math.floor(dimensions.height * dotprod.layers.RadarLayer.SCALE_FACTOR_);

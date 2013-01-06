@@ -13,6 +13,6 @@ dotprod.layers.Layer = goog.nullFunction;
 dotprod.layers.Layer.prototype.update = goog.abstractMethod;
 
 /**
- * @param {!dotprod.Camera} camera
+ * @param {!dotprod.Viewport} viewport
  */
 dotprod.layers.Layer.prototype.render = goog.abstractMethod;

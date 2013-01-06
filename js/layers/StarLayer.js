@@ -5,7 +5,7 @@
 
 goog.provide('dotprod.layers.StarLayer');
 
-goog.require('dotprod.Camera');
+goog.require('dotprod.Viewport');
 goog.require('dotprod.layers.Layer');
 
 /**
@@ -76,9 +76,9 @@ dotprod.layers.StarLayer.prototype.update = goog.nullFunction;
 /**
  * @override
  */
-dotprod.layers.StarLayer.prototype.render = function(camera) {
-  var context = camera.getContext();
-  var dimensions = camera.getDimensions();
+dotprod.layers.StarLayer.prototype.render = function(viewport) {
+  var context = viewport.getContext();
+  var dimensions = viewport.getDimensions();
   var x = dimensions.x;
   var y = dimensions.y;
   var w = dimensions.width;

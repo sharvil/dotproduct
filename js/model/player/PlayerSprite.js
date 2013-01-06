@@ -42,9 +42,9 @@ dotprod.model.player.PlayerSprite.prototype.onDeath = function() {
 };
 
 /**
- * @param {!dotprod.Camera} camera
+ * @param {!dotprod.Viewport} viewport
  */
-dotprod.model.player.PlayerSprite.prototype.render = function(camera) {
+dotprod.model.player.PlayerSprite.prototype.render = function(viewport) {
   if (!this.isAlive()) {
     return;
   }
@@ -56,8 +56,8 @@ dotprod.model.player.PlayerSprite.prototype.render = function(camera) {
 
   var localPlayer = this.game_.getPlayerIndex().getLocalPlayer();
   var tileNum = Math.floor(this.angleInRadians_ / (2 * Math.PI) * shipImage.getNumTiles());
-  var dimensions = camera.getDimensions();
-  var context = camera.getContext();
+  var dimensions = viewport.getDimensions();
+  var context = viewport.getContext();
 
   var x = Math.floor(this.position_.getX() - dimensions.left - shipImage.getTileWidth() / 2);
   var y = Math.floor(this.position_.getY() - dimensions.top - shipImage.getTileHeight() / 2);
