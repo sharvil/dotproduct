@@ -48,7 +48,7 @@ dotprod.model.BombBay.prototype.upgrade = function() {
  * @param {!dotprod.math.Vector} position
  * @param {!dotprod.math.Vector} velocity
  * @param {function(number, number, number): boolean} commitFireFn
- * @return {dotprod.entities.Projectile}
+ * @return {dotprod.model.projectile.Projectile}
  */
 dotprod.model.BombBay.prototype.fire = function(angle, position, velocity, commitFireFn) {
   var level = this.level_.getValue();
@@ -82,7 +82,7 @@ dotprod.model.BombBay.prototype.fire = function(angle, position, velocity, commi
  * @param {number} bounceCount
  * @param {!dotprod.math.Vector} position
  * @param {!dotprod.math.Vector} velocity
- * @return {dotprod.entities.Projectile}
+ * @return {dotprod.model.projectile.Projectile}
  */
 dotprod.model.BombBay.prototype.fireSynthetic = function(level, bounceCount, position, velocity) {
   this.level_.setValue(level);

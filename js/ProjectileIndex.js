@@ -7,7 +7,7 @@ goog.provide('dotprod.ProjectileIndex');
 
 goog.require('goog.array');
 goog.require('dotprod.model.player.Player');
-goog.require('dotprod.entities.Projectile');
+goog.require('dotprod.model.projectile.Projectile');
 
 /**
  * @constructor
@@ -29,7 +29,7 @@ dotprod.ProjectileIndex.prototype.getCount = function() {
 
 /**
  * @param {!dotprod.model.player.Player} player
- * @param {!dotprod.entities.Projectile} projectile
+ * @param {!dotprod.model.projectile.Projectile} projectile
  */
 dotprod.ProjectileIndex.prototype.addProjectile = function(player, projectile) {
   this.projectiles_.push({player: player, projectile: projectile});
@@ -47,7 +47,7 @@ dotprod.ProjectileIndex.prototype.removeProjectiles = function(player) {
 };
 
 /**
- * @param {function(!dotprod.entities.Projectile)} cb
+ * @param {function(!dotprod.model.projectile.Projectile)} cb
  */
 dotprod.ProjectileIndex.prototype.forEach = function(cb) {
   this.projectiles_ = goog.array.filter(this.projectiles_, function(element) { return element.projectile.isValid(); });

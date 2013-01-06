@@ -292,7 +292,7 @@ dotprod.model.player.Player.prototype.respawn = goog.abstractMethod;
  * Called when the player takes damage from a projectile fired by some other player.
  *
  * @param {!dotprod.model.player.Player} player The player whose projectile is causing the damage.
- * @param {!dotprod.entities.Projectile} projectile The projectile that caused the damage.
+ * @param {!dotprod.model.projectile.Projectile} projectile The projectile that caused the damage.
  * @param {number} damage The damage, in energy units, caused by the projectile.
  */
 dotprod.model.player.Player.prototype.onDamage = goog.nullFunction;

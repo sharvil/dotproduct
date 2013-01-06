@@ -3,7 +3,7 @@
  * @author sharvil.nanavati@gmail.com (Sharvil Nanavati)
  */
 
-goog.provide('dotprod.entities.Projectile');
+goog.provide('dotprod.model.projectile.Projectile');
 
 goog.require('dotprod.model.Entity');
 
@@ -17,7 +17,7 @@ goog.require('dotprod.model.Entity');
  * @param {number} damage
  * @param {number} bounceCount
  */
-dotprod.entities.Projectile = function(game, owner, level, lifetime, damage, bounceCount) {
+dotprod.model.projectile.Projectile = function(game, owner, level, lifetime, damage, bounceCount) {
   goog.base(this, game);
 
   /**
@@ -52,37 +52,37 @@ dotprod.entities.Projectile = function(game, owner, level, lifetime, damage, bou
 
   game.getProjectileIndex().addProjectile(owner, this);
 };
-goog.inherits(dotprod.entities.Projectile, dotprod.model.Entity);
+goog.inherits(dotprod.model.projectile.Projectile, dotprod.model.Entity);
 
-dotprod.entities.Projectile.prototype.getType = goog.abstractMethod;
+dotprod.model.projectile.Projectile.prototype.getType = goog.abstractMethod;
 
 /**
  * @param {!dotprod.model.player.Player} player
  * @protected
  */
-dotprod.entities.Projectile.prototype.checkPlayerCollision_ = goog.abstractMethod;
+dotprod.model.projectile.Projectile.prototype.checkPlayerCollision_ = goog.abstractMethod;
 
 /**
  * @param {dotprod.model.player.Player} player The player who was directly hit or null if there was no direct hit.
  * @protected
  */
-dotprod.entities.Projectile.prototype.explode_ = goog.abstractMethod;
+dotprod.model.projectile.Projectile.prototype.explode_ = goog.abstractMethod;
 
 /**
  * @return {number}
  */
-dotprod.entities.Projectile.prototype.getLevel = function() {
+dotprod.model.projectile.Projectile.prototype.getLevel = function() {
   return this.level_;
 };
 
 /**
  * @return {number}
  */
-dotprod.entities.Projectile.prototype.getBounceCount = function() {
+dotprod.model.projectile.Projectile.prototype.getBounceCount = function() {
   return this.bounceCount_;
 };
 
-dotprod.entities.Projectile.prototype.advanceTime = function() {
+dotprod.model.projectile.Projectile.prototype.advanceTime = function() {
   if (--this.lifetime_ <= 0) {
     this.invalidate();
     return;
@@ -95,7 +95,7 @@ dotprod.entities.Projectile.prototype.advanceTime = function() {
 /**
  * @override
  */
-dotprod.entities.Projectile.prototype.bounce_ = function() {
+dotprod.model.projectile.Projectile.prototype.bounce_ = function() {
   if (this.bounceCount_ == 0) {
     this.explode_(null);
   } else if (this.bounceCount_ > 0) {

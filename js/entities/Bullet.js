@@ -5,13 +5,13 @@
 
 goog.provide('dotprod.entities.Bullet');
 
-goog.require('dotprod.entities.Projectile');
+goog.require('dotprod.model.projectile.Projectile');
 goog.require('dotprod.model.Weapon.Type');
 goog.require('dotprod.math.Vector');
 
 /**
  * @constructor
- * @extends {dotprod.entities.Projectile}
+ * @extends {dotprod.model.projectile.Projectile}
  * @param {!dotprod.Game} game
  * @param {!dotprod.model.player.Player} owner
  * @param {number} level
@@ -27,7 +27,7 @@ dotprod.entities.Bullet = function(game, owner, level, position, velocity, lifet
   this.position_ = position;
   this.velocity_ = velocity;
 };
-goog.inherits(dotprod.entities.Bullet, dotprod.entities.Projectile);
+goog.inherits(dotprod.entities.Bullet, dotprod.model.projectile.Projectile);
 
 /**
  * @override

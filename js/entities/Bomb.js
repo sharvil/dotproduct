@@ -5,13 +5,13 @@
 
 goog.provide('dotprod.entities.Bomb');
 
-goog.require('dotprod.entities.Projectile');
+goog.require('dotprod.model.projectile.Projectile');
 goog.require('dotprod.model.Weapon.Type');
 goog.require('dotprod.math.Vector');
 
 /**
  * @constructor
- * @extends {dotprod.entities.Projectile}
+ * @extends {dotprod.model.projectile.Projectile}
  * @param {!dotprod.Game} game
  * @param {!dotprod.model.player.Player} owner
  * @param {number} level
@@ -53,7 +53,7 @@ dotprod.entities.Bomb = function(game, owner, level, position, velocity, lifetim
    */
   this.lastDistanceToProxActivator_;
 };
-goog.inherits(dotprod.entities.Bomb, dotprod.entities.Projectile);
+goog.inherits(dotprod.entities.Bomb, dotprod.model.projectile.Projectile);
 
 /**
  * @override

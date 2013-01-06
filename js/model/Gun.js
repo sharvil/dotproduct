@@ -61,7 +61,7 @@ dotprod.model.Gun.prototype.setBounces = function(bounces) {
  * @param {!dotprod.math.Vector} position
  * @param {!dotprod.math.Vector} velocity
  * @param {function(number, number): boolean} commitFireFn
- * @return {dotprod.entities.Projectile}
+ * @return {dotprod.model.projectile.Projectile}
  */
 dotprod.model.Gun.prototype.fire = function(angle, position, velocity, commitFireFn) {
   var fireEnergy = this.getFireEnergy_();
@@ -88,7 +88,7 @@ dotprod.model.Gun.prototype.fire = function(angle, position, velocity, commitFir
  * @param {number} bounceCount
  * @param {!dotprod.math.Vector} position
  * @param {!dotprod.math.Vector} velocity
- * @return {dotprod.entities.Projectile}
+ * @return {dotprod.model.projectile.Projectile}
  */
 dotprod.model.Gun.prototype.fireSynthetic = function(level, bounceCount, position, velocity) {
   this.level_.setValue(level);

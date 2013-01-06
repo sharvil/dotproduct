@@ -330,7 +330,7 @@ dotprod.model.player.LocalPlayer.prototype.applyThrust_ = function(thrustVector)
 /**
  * @param {boolean} forceSendUpdate
  * @param {boolean} isAccelerating
- * @param {dotprod.entities.Projectile=} opt_projectile
+ * @param {dotprod.model.projectile.Projectile=} opt_projectile
  */
 dotprod.model.player.LocalPlayer.prototype.sendPositionUpdate_ = function(forceSendUpdate, isAccelerating, opt_projectile) {
   if (!forceSendUpdate) {
