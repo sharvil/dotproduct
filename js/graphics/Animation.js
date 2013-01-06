@@ -3,7 +3,7 @@
  * @author sharvil.nanavati@gmail.com (Sharvil Nanavati)
  */
 
-goog.provide('dotprod.Animation');
+goog.provide('dotprod.graphics.Animation');
 
 goog.require('goog.asserts');
 goog.require('dotprod.Image');
@@ -15,7 +15,7 @@ goog.require('dotprod.Image');
  * @param {number} frameCount
  * @param {number} period
  */
-dotprod.Animation = function(image, startFrame, frameCount, period) {
+dotprod.graphics.Animation = function(image, startFrame, frameCount, period) {
   goog.asserts.assert(startFrame < image.getNumTiles(), 'Invalid starting frame for animation.');
   goog.asserts.assert(startFrame + frameCount <= image.getNumTiles(), 'Animation length out of bounds.');
 
@@ -65,32 +65,32 @@ dotprod.Animation = function(image, startFrame, frameCount, period) {
 /**
  * @param {number} repeatCount
  */
-dotprod.Animation.prototype.setRepeatCount = function(repeatCount) {
+dotprod.graphics.Animation.prototype.setRepeatCount = function(repeatCount) {
   this.repeatCount_ = repeatCount;
 };
 
 /**
  * @return {boolean}
  */
-dotprod.Animation.prototype.isRunning = function() {
+dotprod.graphics.Animation.prototype.isRunning = function() {
   return this.currentFrame_ < this.end_;
 };
 
 /**
  * @return {number}
  */
-dotprod.Animation.prototype.getWidth = function() {
+dotprod.graphics.Animation.prototype.getWidth = function() {
   return this.image_.getTileWidth();
 };
 
 /**
  * @return {number}
  */
-dotprod.Animation.prototype.getHeight = function() {
+dotprod.graphics.Animation.prototype.getHeight = function() {
   return this.image_.getTileHeight();
 };
 
-dotprod.Animation.prototype.update = function() {
+dotprod.graphics.Animation.prototype.update = function() {
   if (this.isRunning()) {
     if (!--this.counter_) {
       ++this.currentFrame_;
@@ -109,7 +109,7 @@ dotprod.Animation.prototype.update = function() {
  * @param {number} x
  * @param {number} y
  */
-dotprod.Animation.prototype.render = function(context, x, y) {
+dotprod.graphics.Animation.prototype.render = function(context, x, y) {
   if (this.isRunning()) {
     this.image_.render(context, x, y, this.currentFrame_);
   }

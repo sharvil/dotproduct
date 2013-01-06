@@ -21,7 +21,7 @@ dotprod.model.Exhaust = function(game, position, velocity) {
   this.velocity_ = velocity;
 
   /**
-   * @type {!dotprod.Animation}
+   * @type {!dotprod.graphics.Animation}
    * @private
    */
   this.image_ = game.getResourceManager().getVideoEnsemble('exhaust').getAnimation(0);

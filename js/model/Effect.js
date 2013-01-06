@@ -5,7 +5,7 @@
 
 goog.provide('dotprod.model.Effect');
 
-goog.require('dotprod.Animation');
+goog.require('dotprod.graphics.Animation');
 goog.require('dotprod.math.Vector');
 goog.require('dotprod.model.ModelObject');
 
@@ -13,7 +13,7 @@ goog.require('dotprod.model.ModelObject');
  * @constructor
  * @extends {dotprod.model.ModelObject}
  * @param {!dotprod.Game} game
- * @param {!dotprod.Animation} animation
+ * @param {!dotprod.graphics.Animation} animation
  * @param {!dotprod.math.Vector} position
  * @param {!dotprod.math.Vector} velocity
  */
@@ -27,7 +27,7 @@ dotprod.model.Effect = function(game, animation, position, velocity) {
   this.isValid_ = true;
 
   /**
-   * @type {!dotprod.Animation}
+   * @type {!dotprod.graphics.Animation}
    * @private
    */
   this.animation_ = animation;

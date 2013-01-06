@@ -29,14 +29,14 @@ dotprod.model.projectile.BombSprite = function(game, owner, level, position, vel
   goog.base(this, game, owner, level, position, velocity, lifetime, damage, bounceCount, blastRadius, proxRadius);
 
   /**
-   * @type {!dotprod.Animation}
+   * @type {!dotprod.graphics.Animation}
    * @private
    */
   this.animation_ = game.getResourceManager().getVideoEnsemble('bombs').getAnimation(level);
   this.animation_.setRepeatCount(-1);
 
   /**
-   * @type {!dotprod.Animation}
+   * @type {!dotprod.graphics.Animation}
    * @private
    */
   this.bouncingAnimation_ = game.getResourceManager().getVideoEnsemble('bombs').getAnimation(level + 8);

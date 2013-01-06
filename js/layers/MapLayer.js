@@ -26,7 +26,7 @@ dotprod.layers.MapLayer = function(game) {
   this.game_ = game;
 
   /**
-   * @type {!dotprod.Animation}
+   * @type {!dotprod.graphics.Animation}
    * @private
    */
   this.prizeAnimation_ = this.game_.getResourceManager().getVideoEnsemble('prize').getAnimation(0);

@@ -67,12 +67,12 @@ dotprod.VideoEnsemble.prototype.getNumAnimations = function() {
 
 /**
  * @param {number} index
- * @return {!dotprod.Animation}
+ * @return {!dotprod.graphics.Animation}
  */
 dotprod.VideoEnsemble.prototype.getAnimation = function(index) {
   goog.asserts.assert(index >= 0, 'Negative index specified.');
   goog.asserts.assert(index < this.getNumAnimations(), 'Index out of bounds: ' + index);
   goog.asserts.assert(this.isLoaded(), 'Animation requested before loading finished.');
 
-  return new dotprod.Animation(this.image_, index * this.framesPerAnimation_, this.framesPerAnimation_, this.period_);
+  return new dotprod.graphics.Animation(this.image_, index * this.framesPerAnimation_, this.framesPerAnimation_, this.period_);
 };

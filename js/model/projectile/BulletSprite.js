@@ -27,14 +27,14 @@ dotprod.model.projectile.BulletSprite = function(game, owner, level, position, v
   goog.base(this, game, owner, level, position, velocity, lifetime, damage, bounceCount);
 
   /**
-   * @type {!dotprod.Animation}
+   * @type {!dotprod.graphics.Animation}
    * @private
    */
   this.animation_ = game.getResourceManager().getVideoEnsemble('bullets').getAnimation(level);
   this.animation_.setRepeatCount(-1);
 
   /**
-   * @type {!dotprod.Animation}
+   * @type {!dotprod.graphics.Animation}
    * @private
    */
    this.bouncingAnimation_ = game.getResourceManager().getVideoEnsemble('bullets').getAnimation(5 + level);
