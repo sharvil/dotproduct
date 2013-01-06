@@ -3,7 +3,7 @@
  * @author sharvil.nanavati@gmail.com (Sharvil Nanavati)
  */
 
-goog.provide('dotprod.sprites.BombSprite');
+goog.provide('dotprod.model.projectile.BombSprite');
 
 goog.require('dotprod.model.projectile.Bomb');
 goog.require('dotprod.model.Effect');
@@ -25,7 +25,7 @@ goog.require('dotprod.sprites.Sprite');
  * @param {number} blastRadius
  * @param {number} proxRadius
  */
-dotprod.sprites.BombSprite = function(game, owner, level, position, velocity, lifetime, damage, bounceCount, blastRadius, proxRadius) {
+dotprod.model.projectile.BombSprite = function(game, owner, level, position, velocity, lifetime, damage, bounceCount, blastRadius, proxRadius) {
   goog.base(this, game, owner, level, position, velocity, lifetime, damage, bounceCount, blastRadius, proxRadius);
 
   /**
@@ -42,12 +42,12 @@ dotprod.sprites.BombSprite = function(game, owner, level, position, velocity, li
   this.bouncingAnimation_ = game.getResourceManager().getVideoEnsemble('bombs').getAnimation(level + 8);
   this.bouncingAnimation_.setRepeatCount(-1);
 };
-goog.inherits(dotprod.sprites.BombSprite, dotprod.model.projectile.Bomb);
+goog.inherits(dotprod.model.projectile.BombSprite, dotprod.model.projectile.Bomb);
 
 /**
  * @override
  */
-dotprod.sprites.BombSprite.prototype.advanceTime = function() {
+dotprod.model.projectile.BombSprite.prototype.advanceTime = function() {
   goog.base(this, 'advanceTime');
   this.animation_.update();
   this.bouncingAnimation_.update();
@@ -56,7 +56,7 @@ dotprod.sprites.BombSprite.prototype.advanceTime = function() {
 /**
  * @override
  */
-dotprod.sprites.BombSprite.prototype.render = function(camera) {
+dotprod.model.projectile.BombSprite.prototype.render = function(camera) {
   var dimensions = camera.getDimensions();
   var x = Math.floor(this.position_.getX() - dimensions.left - this.animation_.getWidth() / 2);
   var y = Math.floor(this.position_.getY() - dimensions.top - this.animation_.getHeight() / 2);
@@ -71,7 +71,7 @@ dotprod.sprites.BombSprite.prototype.render = function(camera) {
 /**
  * @override
  */
-dotprod.sprites.BombSprite.prototype.explode_ = function(hitPlayer) {
+dotprod.model.projectile.BombSprite.prototype.explode_ = function(hitPlayer) {
   goog.base(this, 'explode_', hitPlayer);
 
   // Add an explosion animation.
