@@ -10,7 +10,7 @@ goog.require('goog.events.KeyCodes');
 goog.require('goog.object');
 goog.require('dotprod.model.projectile.Bomb');
 goog.require('dotprod.model.projectile.Bullet');
-goog.require('dotprod.entities.Exhaust');
+goog.require('dotprod.model.Exhaust');
 goog.require('dotprod.model.player.Player');
 goog.require('dotprod.input.Keymap');
 goog.require('dotprod.math.Range');
@@ -57,7 +57,7 @@ dotprod.model.player.LocalPlayer = function(game, id, name, team, ship) {
   this.ticksSincePositionUpdate_ = 999999;
 
   /**
-   * @type {!Array.<!dotprod.entities.Exhaust>}
+   * @type {!Array.<!dotprod.model.Exhaust>}
    * @private
    */
   this.exhaust_ = [];
@@ -320,8 +320,8 @@ dotprod.model.player.LocalPlayer.prototype.applyThrust_ = function(thrustVector)
   var exhaustVelocity = this.velocity_.subtract(thrustVector.resize(5));
   var perpendicular = dotprod.math.Vector.fromPolar(1, angle + Math.PI / 2);
 
-  var e1 = new dotprod.entities.Exhaust(this.game_, bottomOfShip.add(perpendicular.scale(3)), exhaustVelocity.add(perpendicular));
-  var e2 = new dotprod.entities.Exhaust(this.game_, bottomOfShip.subtract(perpendicular.scale(3)), exhaustVelocity.subtract(perpendicular));
+  var e1 = new dotprod.model.Exhaust(this.game_, bottomOfShip.add(perpendicular.scale(3)), exhaustVelocity.add(perpendicular));
+  var e2 = new dotprod.model.Exhaust(this.game_, bottomOfShip.subtract(perpendicular.scale(3)), exhaustVelocity.subtract(perpendicular));
   this.exhaust_.push(e1);
   this.exhaust_.push(e2);
   this.exhaustTimer_.setHigh();

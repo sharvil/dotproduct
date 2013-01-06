@@ -3,7 +3,7 @@
  * @author sharvil.nanavati@gmail.com (Sharvil Nanavati)
  */
 
-goog.provide('dotprod.entities.Exhaust');
+goog.provide('dotprod.model.Exhaust');
 
 goog.require('dotprod.model.Entity');
 
@@ -14,7 +14,7 @@ goog.require('dotprod.model.Entity');
  * @param {!dotprod.math.Vector} position
  * @param {!dotprod.math.Vector} velocity
  */
-dotprod.entities.Exhaust = function(game, position, velocity) {
+dotprod.model.Exhaust = function(game, position, velocity) {
   goog.base(this, game);
 
   this.position_ = position;
@@ -37,9 +37,9 @@ dotprod.entities.Exhaust = function(game, position, velocity) {
    */
   this.hack_ = 0;
 };
-goog.inherits(dotprod.entities.Exhaust, dotprod.model.Entity);
+goog.inherits(dotprod.model.Exhaust, dotprod.model.Entity);
 
-dotprod.entities.Exhaust.prototype.advanceTime = function() {
+dotprod.model.Exhaust.prototype.advanceTime = function() {
   if (++this.hack_ % 2) {
     return;
   }
@@ -56,7 +56,7 @@ dotprod.entities.Exhaust.prototype.advanceTime = function() {
 /**
  * @param {!dotprod.Camera} camera
  */
-dotprod.entities.Exhaust.prototype.render = function(camera) {
+dotprod.model.Exhaust.prototype.render = function(camera) {
   var context = camera.getContext();
   var dimensions = camera.getDimensions();
   var x = Math.floor(this.position_.getX() - dimensions.left - this.image_.getWidth() / 2);
