@@ -43,7 +43,9 @@ dotprod.model.Simulation.prototype.unregisterObject = function(obj) {
 };
 
 dotprod.model.Simulation.prototype.advanceTime = function() {
-  goog.array.forEach(this.registeredObjects_, function(obj) {
+  /** @type {!Array.<!dotprod.model.ModelObject>} */
+  var objectSnapshot = goog.array.clone(this.registeredObjects_);
+  goog.array.forEach(objectSnapshot, function(obj) {
     obj.advanceTime();
   });
 };
