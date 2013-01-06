@@ -5,11 +5,11 @@
 
 goog.provide('dotprod.entities.Exhaust');
 
-goog.require('dotprod.entities.Entity');
+goog.require('dotprod.model.Entity');
 
 /**
  * @constructor
- * @extends {dotprod.entities.Entity}
+ * @extends {dotprod.model.Entity}
  * @param {!dotprod.Game} game
  * @param {!dotprod.math.Vector} position
  * @param {!dotprod.math.Vector} velocity
@@ -37,7 +37,7 @@ dotprod.entities.Exhaust = function(game, position, velocity) {
    */
   this.hack_ = 0;
 };
-goog.inherits(dotprod.entities.Exhaust, dotprod.entities.Entity);
+goog.inherits(dotprod.entities.Exhaust, dotprod.model.Entity);
 
 dotprod.entities.Exhaust.prototype.advanceTime = function() {
   if (++this.hack_ % 2) {

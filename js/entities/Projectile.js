@@ -5,11 +5,11 @@
 
 goog.provide('dotprod.entities.Projectile');
 
-goog.require('dotprod.entities.Entity');
+goog.require('dotprod.model.Entity');
 
 /**
  * @constructor
- * @extends {dotprod.entities.Entity}
+ * @extends {dotprod.model.Entity}
  * @param {!dotprod.Game} game
  * @param {!dotprod.entities.Player} owner
  * @param {number} level
@@ -52,7 +52,7 @@ dotprod.entities.Projectile = function(game, owner, level, lifetime, damage, bou
 
   game.getProjectileIndex().addProjectile(owner, this);
 };
-goog.inherits(dotprod.entities.Projectile, dotprod.entities.Entity);
+goog.inherits(dotprod.entities.Projectile, dotprod.model.Entity);
 
 dotprod.entities.Projectile.prototype.getType = goog.abstractMethod;
 

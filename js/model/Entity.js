@@ -3,7 +3,7 @@
  * @author sharvil.nanavati@gmail.com (Sharvil Nanavati)
  */
 
-goog.provide('dotprod.entities.Entity');
+goog.provide('dotprod.model.Entity');
 
 goog.require('dotprod.math.Rect');
 goog.require('dotprod.math.Vector');
@@ -14,7 +14,7 @@ goog.require('dotprod.model.ModelObject');
  * @extends {dotprod.model.ModelObject}
  * @param {!dotprod.Game} game
  */
-dotprod.entities.Entity = function(game) {
+dotprod.model.Entity = function(game) {
   goog.base(this, game.getSimulation());
 
   /**
@@ -47,26 +47,26 @@ dotprod.entities.Entity = function(game) {
    */
   this.yRadius_ = 0;
 };
-goog.inherits(dotprod.entities.Entity, dotprod.model.ModelObject);
+goog.inherits(dotprod.model.Entity, dotprod.model.ModelObject);
 
 /**
  * @return {!dotprod.math.Vector}
  */
-dotprod.entities.Entity.prototype.getPosition = function() {
+dotprod.model.Entity.prototype.getPosition = function() {
   return this.position_;
 };
 
 /**
  * @return {!dotprod.math.Vector}
  */
-dotprod.entities.Entity.prototype.getVelocity = function() {
+dotprod.model.Entity.prototype.getVelocity = function() {
   return this.velocity_;
 };
 
 /**
  * return {!Object}
  */
-dotprod.entities.Entity.prototype.getDimensions = function() {
+dotprod.model.Entity.prototype.getDimensions = function() {
   var x = this.position_.getX();
   var y = this.position_.getY();
 
@@ -89,7 +89,7 @@ dotprod.entities.Entity.prototype.getDimensions = function() {
  * @param {number=} opt_bounceFactor
  * @protected
  */
-dotprod.entities.Entity.prototype.updatePosition_ = function(opt_bounceFactor) {
+dotprod.model.Entity.prototype.updatePosition_ = function(opt_bounceFactor) {
   var bounceFactor = opt_bounceFactor || 1;
   var map = this.game_.getMap();
   var prizeIndex = this.game_.getPrizeIndex();
@@ -148,9 +148,9 @@ dotprod.entities.Entity.prototype.updatePosition_ = function(opt_bounceFactor) {
  * @param {!dotprod.model.Prize} prize
  * @return {boolean}
  */
-dotprod.entities.Entity.prototype.collectPrize_ = goog.nullFunction;
+dotprod.model.Entity.prototype.collectPrize_ = goog.nullFunction;
 
 /**
  * @protected
  */
-dotprod.entities.Entity.prototype.bounce_ = goog.nullFunction;
+dotprod.model.Entity.prototype.bounce_ = goog.nullFunction;

@@ -6,14 +6,14 @@
 goog.provide('dotprod.entities.Player');
 goog.provide('dotprod.entities.Player.Presence');
 
-goog.require('dotprod.entities.Entity');
+goog.require('dotprod.model.Entity');
 goog.require('dotprod.model.BombBay');
 goog.require('dotprod.model.Gun');
 goog.require('dotprod.model.Weapon.Type');
 
 /**
  * @constructor
- * @extends {dotprod.entities.Entity}
+ * @extends {dotprod.model.Entity}
  * @param {!dotprod.Game} game
  * @param {string} id
  * @param {string} name
@@ -123,7 +123,7 @@ dotprod.entities.Player = function(game, id, name, team, ship, bounty) {
   this.setShip(ship);
   this.bounty_ = bounty;
 };
-goog.inherits(dotprod.entities.Player, dotprod.entities.Entity);
+goog.inherits(dotprod.entities.Player, dotprod.model.Entity);
 
 /**
  * @enum {number}

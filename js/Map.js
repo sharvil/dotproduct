@@ -5,7 +5,7 @@
 
 goog.provide('dotprod.Map');
 
-goog.require('dotprod.entities.Entity');
+goog.require('dotprod.model.Entity');
 goog.require('dotprod.Image');
 goog.require('dotprod.Quadtree');
 goog.require('dotprod.math.Rect');
@@ -156,7 +156,7 @@ dotprod.Map.prototype.getTiles = function(rect) {
 };
 
 /**
- * @param {!dotprod.entities.Entity} entity
+ * @param {!dotprod.model.Entity} entity
  * @return {!dotprod.math.Vector}
  */
 dotprod.Map.prototype.getSpawnLocation = function(entity) {
@@ -186,7 +186,7 @@ dotprod.Map.prototype.getSpawnLocation = function(entity) {
 };
 
 /**
- * @param {!dotprod.entities.Entity} entity
+ * @param {!dotprod.model.Entity} entity
  * @return {Object}
  */
 dotprod.Map.prototype.getCollision = function(entity) {
