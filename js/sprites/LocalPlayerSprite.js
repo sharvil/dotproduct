@@ -7,7 +7,7 @@ goog.provide('dotprod.sprites.LocalPlayerSprite');
 
 goog.require('goog.array');
 goog.require('dotprod.model.player.LocalPlayer');
-goog.require('dotprod.sprites.PlayerSprite');
+goog.require('dotprod.model.player.PlayerSprite');
 goog.require('dotprod.sprites.Sprite');
 
 /**
@@ -28,12 +28,12 @@ goog.inherits(dotprod.sprites.LocalPlayerSprite, dotprod.model.player.LocalPlaye
 /**
  * @override
  */
-dotprod.sprites.LocalPlayerSprite.prototype.respawn = dotprod.sprites.PlayerSprite.prototype.respawn;
+dotprod.sprites.LocalPlayerSprite.prototype.respawn = dotprod.model.player.PlayerSprite.prototype.respawn;
 
 /**
  * @override
  */
-dotprod.sprites.LocalPlayerSprite.prototype.onDeath = dotprod.sprites.PlayerSprite.prototype.onDeath;
+dotprod.sprites.LocalPlayerSprite.prototype.onDeath = dotprod.model.player.PlayerSprite.prototype.onDeath;
 
 /**
  * @override
@@ -59,7 +59,7 @@ dotprod.sprites.LocalPlayerSprite.prototype.render = function(camera) {
     e.render(camera);
   });
 
-  dotprod.sprites.PlayerSprite.prototype.render.call(this, camera);
+  dotprod.model.player.PlayerSprite.prototype.render.call(this, camera);
 
   var damageOverlay = this.game_.getResourceManager().getImage('ship' + this.ship_ + 'Red');
   var x = Math.floor((dimensions.width - damageOverlay.getTileWidth()) / 2);

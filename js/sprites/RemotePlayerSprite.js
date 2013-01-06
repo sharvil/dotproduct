@@ -6,7 +6,7 @@
 goog.provide('dotprod.sprites.RemotePlayerSprite');
 
 goog.require('dotprod.model.player.RemotePlayer');
-goog.require('dotprod.sprites.PlayerSprite');
+goog.require('dotprod.model.player.PlayerSprite');
 goog.require('dotprod.sprites.Sprite');
 
 /**
@@ -29,14 +29,14 @@ goog.inherits(dotprod.sprites.RemotePlayerSprite, dotprod.model.player.RemotePla
 /**
  * @override
  */
-dotprod.sprites.RemotePlayerSprite.prototype.respawn = dotprod.sprites.PlayerSprite.prototype.respawn;
+dotprod.sprites.RemotePlayerSprite.prototype.respawn = dotprod.model.player.PlayerSprite.prototype.respawn;
 
 /**
  * @override
  */
-dotprod.sprites.RemotePlayerSprite.prototype.onDeath = dotprod.sprites.PlayerSprite.prototype.onDeath;
+dotprod.sprites.RemotePlayerSprite.prototype.onDeath = dotprod.model.player.PlayerSprite.prototype.onDeath;
 
 /**
  * @override
  */
-dotprod.sprites.RemotePlayerSprite.prototype.render = dotprod.sprites.PlayerSprite.prototype.render;
+dotprod.sprites.RemotePlayerSprite.prototype.render = dotprod.model.player.PlayerSprite.prototype.render;

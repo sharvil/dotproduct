@@ -3,7 +3,7 @@
  * @author sharvil.nanavati@gmail.com (Sharvil Nanavati)
  */
 
-goog.provide('dotprod.sprites.PlayerSprite');
+goog.provide('dotprod.model.player.PlayerSprite');
 
 goog.require('dotprod.model.Effect');
 goog.require('dotprod.math.Vector');
@@ -11,14 +11,14 @@ goog.require('dotprod.math.Vector');
 /**
  * @constructor
  */
-dotprod.sprites.PlayerSprite = goog.abstractMethod;
+dotprod.model.player.PlayerSprite = goog.abstractMethod;
 
 /**
  * @param {number} angle
  * @param {!dotprod.math.Vector} position
  * @param {!dotprod.math.Vector} velocity
  */
-dotprod.sprites.PlayerSprite.prototype.respawn = function(angle, position, velocity) {
+dotprod.model.player.PlayerSprite.prototype.respawn = function(angle, position, velocity) {
   goog.base(this, 'respawn', angle, position, velocity);
 
   var resourceManager = this.game_.getResourceManager();
@@ -26,7 +26,7 @@ dotprod.sprites.PlayerSprite.prototype.respawn = function(angle, position, veloc
   var effect = new dotprod.model.Effect(this.game_, animation, this.position_, new dotprod.math.Vector(0, 0));
 };
 
-dotprod.sprites.PlayerSprite.prototype.onDeath = function() {
+dotprod.model.player.PlayerSprite.prototype.onDeath = function() {
   goog.base(this, 'onDeath');
 
   var resourceManager = this.game_.getResourceManager();
@@ -44,7 +44,7 @@ dotprod.sprites.PlayerSprite.prototype.onDeath = function() {
 /**
  * @param {!dotprod.Camera} camera
  */
-dotprod.sprites.PlayerSprite.prototype.render = function(camera) {
+dotprod.model.player.PlayerSprite.prototype.render = function(camera) {
   if (!this.isAlive()) {
     return;
   }
