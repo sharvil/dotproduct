@@ -76,6 +76,5 @@ dotprod.sprites.BombSprite.prototype.explode_ = function(hitPlayer) {
 
   // Add an explosion animation.
   var animation = this.game_.getResourceManager().getVideoEnsemble('explode2').getAnimation(0);
-  var explosion = new dotprod.entities.Effect(animation, this.position_, new dotprod.math.Vector(0, 0));
-  this.game_.getEffectIndex().addEffect(explosion);
+  var explosion = new dotprod.entities.Effect(this.game_, animation, this.position_, new dotprod.math.Vector(0, 0));
 };

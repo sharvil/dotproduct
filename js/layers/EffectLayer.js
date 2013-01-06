@@ -24,13 +24,10 @@ dotprod.layers.EffectLayer = function(effectIndex) {
 };
 
 /**
+ * @deprecated
  * @override
  */
-dotprod.layers.EffectLayer.prototype.update = function() {
-  this.effectIndex_.forEach(function(effect) {
-    effect.update();
-  });
-};
+dotprod.layers.EffectLayer.prototype.update = goog.nullFunction;
 
 /**
  * @param {!dotprod.Camera} camera

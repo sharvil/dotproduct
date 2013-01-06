@@ -30,6 +30,6 @@ dotprod.EffectIndex.prototype.addEffect = function(effect) {
  * @param {function(!dotprod.entities.Effect)} cb
  */
 dotprod.EffectIndex.prototype.forEach = function(cb) {
-  this.effects_ = goog.array.filter(this.effects_, function(effect) { return effect.isAlive(); });
+  this.effects_ = goog.array.filter(this.effects_, function(effect) { return effect.isValid(); });
   goog.array.forEach(this.effects_, cb);
 };

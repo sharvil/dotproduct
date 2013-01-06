@@ -7,11 +7,23 @@ goog.provide('dotprod.entities.Effect');
 
 goog.require('dotprod.Animation');
 goog.require('dotprod.math.Vector');
+goog.require('dotprod.model.ModelObject');
 
 /**
  * @constructor
+ * @implements {dotprod.model.ModelObject}
+ * @param {!dotprod.Game} game
+ * @param {!dotprod.Animation} animation
+ * @param {!dotprod.math.Vector} position
+ * @param {!dotprod.math.Vector} velocity
  */
-dotprod.entities.Effect = function(animation, position, velocity) {
+dotprod.entities.Effect = function(game, animation, position, velocity) {
+  /**
+   * @type {boolean}
+   * @private
+   */
+  this.isValid_ = true;
+
   /**
    * @type {!dotprod.Animation}
    * @private
@@ -29,15 +41,28 @@ dotprod.entities.Effect = function(animation, position, velocity) {
    * @private
    */
   this.velocity_ = velocity;
+
+  game.getSimulation().registerObject(this);
+  game.getEffectIndex().addEffect(this);
 };
 
-dotprod.entities.Effect.prototype.isAlive = function() {
-  return this.animation_.isRunning();
+/**
+ * @override
+ */
+dotprod.entities.Effect.prototype.isValid = function() {
+  return this.isValid_;
 };
 
-dotprod.entities.Effect.prototype.update = function() {
+dotprod.entities.Effect.prototype.invalidate = function() {
+  this.isValid_ = false;
+};
+
+dotprod.entities.Effect.prototype.advanceTime = function() {
   this.animation_.update();
   this.position_ = this.position_.add(this.velocity_);
+  if (!this.animation_.isRunning()) {
+    this.invalidate();
+  }
 };
 
 dotprod.entities.Effect.prototype.render = function(camera) {
