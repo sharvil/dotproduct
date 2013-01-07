@@ -5,24 +5,41 @@
 
 goog.provide('dotprod.layers.NotificationLayer');
 
-goog.require('dotprod.Viewport');
+goog.require('goog.asserts');
+
 goog.require('dotprod.FontFoundry');
-goog.require('dotprod.layers.Layer');
+goog.require('dotprod.graphics.Drawable');
+goog.require('dotprod.graphics.Painter.Layer');
+goog.require('dotprod.model.ModelObject');
 goog.require('dotprod.Palette');
 goog.require('dotprod.Notifications');
+goog.require('dotprod.Viewport');
 
 /**
  * @constructor
- * @implements {dotprod.layers.Layer}
+ * @extends {dotprod.model.ModelObject}
+ * @implements {dotprod.graphics.Drawable}
+ * @param {!dotprod.Game} game
  * @param {!dotprod.Notifications} notifications
  */
-dotprod.layers.NotificationLayer = function(notifications) {
+dotprod.layers.NotificationLayer = function(game, notifications) {
+  goog.base(this, game.getSimulation());
+
+  /**
+   * @type {!dotprod.Game}
+   * @private
+   */
+  this.game_ = game;
+
   /**
    * @type {!dotprod.Notifications}
    * @private
    */
   this.notifications_ = notifications;
+
+  game.getPainter().registerDrawable(dotprod.graphics.Painter.Layer.HUD, this);
 };
+goog.inherits(dotprod.layers.NotificationLayer, dotprod.model.ModelObject);
 
 /**
  * @type {number}
@@ -41,14 +58,13 @@ dotprod.layers.NotificationLayer.FADE_PERIOD_ = 50;
 /**
  * @override
  */
-dotprod.layers.NotificationLayer.prototype.update = function() {
+dotprod.layers.NotificationLayer.prototype.advanceTime = function() {
   this.notifications_.forEach(function(message, index) {
     ++message.ticks;
   });
 };
 
 /**
- * @param {dotprod.Viewport} viewport
  * @override
  */
 dotprod.layers.NotificationLayer.prototype.render = function(viewport) {
@@ -85,4 +101,11 @@ dotprod.layers.NotificationLayer.prototype.render = function(viewport) {
     });
 
   context.restore();
+};
+
+/**
+ * @override
+ */
+dotprod.layers.NotificationLayer.prototype.onInvalidate_ = function() {
+  goog.asserts.assert(false, 'Notification layer should never be invalidated.');
 };

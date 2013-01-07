@@ -34,8 +34,7 @@ dotprod.graphics.Painter.Layer = {
   PLAYERS: 3,
   LOCAL_PLAYER: 4,
   EFFECTS: 5,
-  NOTIFICATIONS: 6,
-  HUD: 7
+  HUD: 6
 };
 
 /**
@@ -43,7 +42,7 @@ dotprod.graphics.Painter.Layer = {
  * @const
  * @private
  */
-dotprod.graphics.Painter.NUM_LAYERS_ = 8;
+dotprod.graphics.Painter.NUM_LAYERS_ = 7;
 
 /**
  * @param {dotprod.graphics.Painter.Layer} layer
