@@ -5,13 +5,16 @@
 
 goog.provide('dotprod.model.Effect');
 
-goog.require('dotprod.graphics.Animation');
 goog.require('dotprod.math.Vector');
 goog.require('dotprod.model.ModelObject');
+goog.require('dotprod.graphics.Animation');
+goog.require('dotprod.graphics.Drawable');
+goog.require('dotprod.graphics.Painter.Layer');
 
 /**
  * @constructor
  * @extends {dotprod.model.ModelObject}
+ * @implements {dotprod.graphics.Drawable}
  * @param {!dotprod.Game} game
  * @param {!dotprod.graphics.Animation} animation
  * @param {!dotprod.math.Vector} position
@@ -21,10 +24,10 @@ dotprod.model.Effect = function(game, animation, position, velocity) {
   goog.base(this, game.getSimulation());
 
   /**
-   * @type {boolean}
+   * @type {!dotprod.Game}
    * @private
    */
-  this.isValid_ = true;
+  this.game_ = game;
 
   /**
    * @type {!dotprod.graphics.Animation}
@@ -44,7 +47,7 @@ dotprod.model.Effect = function(game, animation, position, velocity) {
    */
   this.velocity_ = velocity;
 
-  game.getEffectIndex().addEffect(this);
+  game.getPainter().registerDrawable(dotprod.graphics.Painter.Layer.EFFECTS, this);
 };
 goog.inherits(dotprod.model.Effect, dotprod.model.ModelObject);
 
@@ -56,6 +59,9 @@ dotprod.model.Effect.prototype.advanceTime = function() {
   }
 };
 
+/**
+ * @override
+ */
 dotprod.model.Effect.prototype.render = function(viewport) {
   var context = viewport.getContext();
   var dimensions = viewport.getDimensions();
@@ -64,4 +70,13 @@ dotprod.model.Effect.prototype.render = function(viewport) {
   var y = Math.floor(this.position_.getY() - dimensions.top - this.animation_.getHeight() / 2);
 
   this.animation_.render(context, x, y);
+};
+
+/**
+ * @override
+ */
+dotprod.model.Effect.prototype.onInvalidate_ = function() {
+  goog.base(this, 'onInvalidate_');
+
+  this.game_.getPainter().unregisterDrawable(dotprod.graphics.Painter.Layer.EFFECTS, this);
 };

@@ -15,10 +15,8 @@ goog.require('html5.AnimationFrame');
 goog.require('html5.Notifications');
 
 goog.require('dotprod.Viewport');
-goog.require('dotprod.EffectIndex');
 goog.require('dotprod.graphics.Painter');
 goog.require('dotprod.input.Keyboard');
-goog.require('dotprod.layers.EffectLayer');
 goog.require('dotprod.layers.HudLayer');
 goog.require('dotprod.layers.NotificationLayer');
 goog.require('dotprod.layers.MapLayer');
@@ -116,12 +114,6 @@ dotprod.Game = function(protocol, resourceManager, settings, mapData) {
    */
   this.prizeIndex_ = new dotprod.PrizeIndex(this);
 
-  /**
-   * @type {!dotprod.EffectIndex}
-   * @private
-   */
-  this.effectIndex_ = new dotprod.EffectIndex();
-
   var startingShip = Math.floor(Math.random() * this.settings_['ships'].length);
   var localPlayer = this.modelObjectFactory_.newLocalPlayer(this, this.settings_['id'], this.settings_['name'], this.settings_['team'], startingShip);
 
@@ -160,7 +152,6 @@ dotprod.Game = function(protocol, resourceManager, settings, mapData) {
    * @private
    */
   this.layers_ = [
-      new dotprod.layers.EffectLayer(this.effectIndex_),
       new dotprod.layers.NotificationLayer(this.notifications_),
       new dotprod.layers.RadarLayer(this),
       new dotprod.layers.HudLayer(this)
@@ -306,13 +297,6 @@ dotprod.Game.prototype.getPlayerIndex = function() {
  */
 dotprod.Game.prototype.getPrizeIndex = function() {
   return this.prizeIndex_;
-};
-
-/**
- * @return {!dotprod.EffectIndex}
- */
-dotprod.Game.prototype.getEffectIndex = function() {
-  return this.effectIndex_;
 };
 
 /**
