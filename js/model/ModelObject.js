@@ -35,6 +35,9 @@ dotprod.model.ModelObject.prototype.isValid = function() {
 };
 
 dotprod.model.ModelObject.prototype.invalidate = function() {
+  if (!this.isValid_) {
+    return;
+  }
   this.isValid_ = false;
   this.simulation_.unregisterObject(this);
   this.onInvalidate_();

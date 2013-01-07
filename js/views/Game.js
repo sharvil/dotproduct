@@ -22,7 +22,6 @@ goog.require('dotprod.layers.EffectLayer');
 goog.require('dotprod.layers.HudLayer');
 goog.require('dotprod.layers.NotificationLayer');
 goog.require('dotprod.layers.MapLayer');
-goog.require('dotprod.layers.ProjectileLayer');
 goog.require('dotprod.layers.RadarLayer');
 goog.require('dotprod.layers.ShipLayer');
 goog.require('dotprod.layers.Starfield');
@@ -34,7 +33,6 @@ goog.require('dotprod.model.Simulation');
 goog.require('dotprod.Notifications');
 goog.require('dotprod.PlayerIndex');
 goog.require('dotprod.PrizeIndex');
-goog.require('dotprod.ProjectileIndex');
 goog.require('dotprod.Protocol');
 goog.require('dotprod.Timer');
 goog.require('dotprod.Timestamp');
@@ -120,12 +118,6 @@ dotprod.Game = function(protocol, resourceManager, settings, mapData) {
   this.prizeIndex_ = new dotprod.PrizeIndex(this);
 
   /**
-   * @type {!dotprod.ProjectileIndex}
-   * @private
-   */
-  this.projectileIndex_ = new dotprod.ProjectileIndex();
-
-  /**
    * @type {!dotprod.EffectIndex}
    * @private
    */
@@ -169,7 +161,6 @@ dotprod.Game = function(protocol, resourceManager, settings, mapData) {
    * @private
    */
   this.layers_ = [
-      new dotprod.layers.ProjectileLayer(this),
       new dotprod.layers.ShipLayer(this.playerIndex_),
       new dotprod.layers.EffectLayer(this.effectIndex_),
       new dotprod.layers.NotificationLayer(this.notifications_),
@@ -320,13 +311,6 @@ dotprod.Game.prototype.getPrizeIndex = function() {
 };
 
 /**
- * @return {!dotprod.ProjectileIndex}
- */
-dotprod.Game.prototype.getProjectileIndex = function() {
-  return this.projectileIndex_;
-};
-
-/**
  * @return {!dotprod.EffectIndex}
  */
 dotprod.Game.prototype.getEffectIndex = function() {
@@ -416,7 +400,6 @@ dotprod.Game.prototype.onPlayerLeft_ = function(packet) {
   var id = packet[0];
   var player = this.playerIndex_.findById(id);
   if (player) {
-    this.projectileIndex_.removeProjectiles(player);
     this.playerIndex_.removePlayer(player);
     this.notifications_.addEnterMessage('Player left: ' + player.getName());
   }
@@ -486,7 +469,6 @@ dotprod.Game.prototype.onShipChanged_ = function(packet) {
 
   if (player) {
     player.setShip(ship);
-    this.projectileIndex_.removeProjectiles(player);
   }
 };
 

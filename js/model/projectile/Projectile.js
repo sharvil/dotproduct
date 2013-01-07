@@ -49,8 +49,6 @@ dotprod.model.projectile.Projectile = function(game, owner, level, lifetime, dam
    * @protected
    */
   this.bounceCount_ = bounceCount;
-
-  game.getProjectileIndex().addProjectile(owner, this);
 };
 goog.inherits(dotprod.model.projectile.Projectile, dotprod.model.Entity);
 

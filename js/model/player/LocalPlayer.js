@@ -26,11 +26,6 @@ goog.require('dotprod.math.Vector');
  * @param {number} ship
  */
 dotprod.model.player.LocalPlayer = function(game, id, name, team, ship) {
-  /**
-   * @type {!dotprod.ProjectileIndex}
-   * @private
-   */
-  this.projectileIndex_ = game.getProjectileIndex();
 
   /**
    * @type {!dotprod.math.Range}
@@ -150,7 +145,6 @@ dotprod.model.player.LocalPlayer.prototype.respawn = function(angle, position, v
   this.velocity_ = velocity;
   this.energy_ = this.shipSettings_['maxEnergy'];
   this.maxEnergy_ = this.shipSettings_['maxEnergy'];
-  this.projectileIndex_.removeProjectiles(this);
 };
 
 /**
@@ -256,6 +250,9 @@ dotprod.model.player.LocalPlayer.prototype.advanceTime = function() {
         }
         return false;
       }, this));
+    }
+    if (projectile) {
+      this.addProjectile_(projectile);
     }
   }
 

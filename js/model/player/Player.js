@@ -6,6 +6,8 @@
 goog.provide('dotprod.model.player.Player');
 goog.provide('dotprod.model.player.Player.Presence');
 
+goog.require('goog.array');
+
 goog.require('dotprod.model.Entity');
 goog.require('dotprod.model.BombBay');
 goog.require('dotprod.model.Gun');
@@ -95,6 +97,12 @@ dotprod.model.player.Player = function(game, id, name, team, ship, bounty) {
    * @protected
    */
   this.bounty_;
+
+  /**
+   * @type {!Array.<!dotprod.model.projectile.Projectile>}
+   * @private
+   */
+  this.projectiles_ = [];
 
   /**
    * @type {!dotprod.model.player.Player.Presence}
@@ -251,6 +259,7 @@ dotprod.model.player.Player.prototype.setShip = function(ship) {
   this.bounty_ = 0;
   this.xRadius_ = this.shipSettings_['xRadius'];
   this.yRadius_ = this.shipSettings_['yRadius'];
+  this.clearProjectiles_();
 };
 
 /**
@@ -271,7 +280,11 @@ dotprod.model.player.Player.prototype.fireWeapon = function(timeDiff, type, leve
       projectile = this.bombBay_.fireSynthetic(level, bounceCount, position, velocity);
       break;
     default:
-      return;
+      break;
+  }
+
+  if (!projectile) {
+    return;
   }
 
   // TODO(sharvil): we need a better way to account for latency than directly
@@ -279,6 +292,7 @@ dotprod.model.player.Player.prototype.fireWeapon = function(timeDiff, type, leve
   for (var i = 0; i < timeDiff; ++i) {
     projectile.advanceTime();
   }
+  this.addProjectile_(projectile);
 };
 
 /**
@@ -335,4 +349,30 @@ dotprod.model.player.Player.prototype.onScoreUpdate = function(points, wins, los
  */
 dotprod.model.player.Player.prototype.onPrizeCollected = function() {
   ++this.bounty_;
+};
+
+/**
+ * @param {!dotprod.model.projectile.Projectile} projectile
+ * @protected
+ */
+dotprod.model.player.Player.prototype.addProjectile_ = function(projectile) {
+  this.projectiles_ = goog.array.filter(this.projectiles_, function(p) { return p.isValid(); });
+  goog.array.extend(this.projectiles_, projectile);
+};
+
+/**
+ * @protected
+ */
+dotprod.model.player.Player.prototype.clearProjectiles_ = function() {
+  goog.array.forEach(this.projectiles_, function(projectile) {
+    projectile.invalidate();
+  });
+  this.projectiles_ = [];
+};
+
+/**
+ * @override
+ */
+dotprod.model.player.Player.prototype.onInvalidate_ = function() {
+  this.clearProjectiles_();
 };

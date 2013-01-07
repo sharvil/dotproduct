@@ -9,6 +9,7 @@ goog.require('dotprod.model.projectile.Bullet');
 goog.require('dotprod.model.Effect');
 goog.require('dotprod.math.Vector');
 goog.require('dotprod.graphics.Drawable');
+goog.require('dotprod.graphics.Painter.Layer');
 
 /**
  * @constructor
@@ -37,8 +38,10 @@ dotprod.model.projectile.BulletSprite = function(game, owner, level, position, v
    * @type {!dotprod.graphics.Animation}
    * @private
    */
-   this.bouncingAnimation_ = game.getResourceManager().getVideoEnsemble('bullets').getAnimation(5 + level);
-   this.bouncingAnimation_.setRepeatCount(-1);
+  this.bouncingAnimation_ = game.getResourceManager().getVideoEnsemble('bullets').getAnimation(5 + level);
+  this.bouncingAnimation_.setRepeatCount(-1);
+
+  game.getPainter().registerDrawable(dotprod.graphics.Painter.Layer.PROJECTILES, this);
 };
 goog.inherits(dotprod.model.projectile.BulletSprite, dotprod.model.projectile.Bullet);
 
@@ -71,4 +74,11 @@ dotprod.model.projectile.BulletSprite.prototype.explode_ = function(hitPlayer) {
 
   var animation = this.game_.getResourceManager().getVideoEnsemble('explode0').getAnimation(0);
   var explosion = new dotprod.model.Effect(this.game_, animation, this.position_, new dotprod.math.Vector(0, 0));
+};
+
+/**
+ * @override
+ */
+dotprod.model.projectile.BulletSprite.prototype.onInvalidate_ = function() {
+  this.game_.getPainter().unregisterDrawable(dotprod.graphics.Painter.Layer.PROJECTILES, this);
 };

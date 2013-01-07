@@ -92,9 +92,7 @@ dotprod.model.BombBay.prototype.fireSynthetic = function(level, bounceCount, pos
   var blastRadius = this.getBlastRadius_();
   var proxRadius = this.getProxRadius_();
 
-  var projectile = this.game_.getModelObjectFactory().newBomb(this.game_, this.owner_, this.level_.getValue(), position, velocity, lifetime, damage, bounceCount, blastRadius, proxRadius);
-  this.game_.getProjectileIndex().addProjectile(this.owner_, projectile);
-  return projectile;
+  return this.game_.getModelObjectFactory().newBomb(this.game_, this.owner_, this.level_.getValue(), position, velocity, lifetime, damage, bounceCount, blastRadius, proxRadius);
 };
 
 /**

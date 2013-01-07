@@ -5,7 +5,7 @@
 
 goog.provide('dotprod.layers.MapLayer');
 
-goog.require('goog.asserts.assert');
+goog.require('goog.asserts');
 
 goog.require('dotprod.Viewport');
 goog.require('dotprod.graphics.Drawable');

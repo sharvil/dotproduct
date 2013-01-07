@@ -96,9 +96,7 @@ dotprod.model.Gun.prototype.fireSynthetic = function(level, bounceCount, positio
   var lifetime = this.getLifetime_();
   var damage = this.getDamage_();
 
-  var projectile = this.game_.getModelObjectFactory().newBullet(this.game_, this.owner_, this.level_.getValue(), position, velocity, lifetime, damage, bounceCount);
-  this.game_.getProjectileIndex().addProjectile(this.owner_, projectile);
-  return projectile;
+  return this.game_.getModelObjectFactory().newBullet(this.game_, this.owner_, this.level_.getValue(), position, velocity, lifetime, damage, bounceCount);
 };
 
 /**

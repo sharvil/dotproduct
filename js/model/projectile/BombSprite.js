@@ -9,6 +9,7 @@ goog.require('dotprod.model.projectile.Bomb');
 goog.require('dotprod.model.Effect');
 goog.require('dotprod.math.Vector');
 goog.require('dotprod.graphics.Drawable');
+goog.require('dotprod.graphics.Painter.Layer');
 
 /**
  * @constructor
@@ -41,6 +42,8 @@ dotprod.model.projectile.BombSprite = function(game, owner, level, position, vel
    */
   this.bouncingAnimation_ = game.getResourceManager().getVideoEnsemble('bombs').getAnimation(level + 8);
   this.bouncingAnimation_.setRepeatCount(-1);
+
+  game.getPainter().registerDrawable(dotprod.graphics.Painter.Layer.PROJECTILES, this);
 };
 goog.inherits(dotprod.model.projectile.BombSprite, dotprod.model.projectile.Bomb);
 
@@ -77,4 +80,11 @@ dotprod.model.projectile.BombSprite.prototype.explode_ = function(hitPlayer) {
   // Add an explosion animation.
   var animation = this.game_.getResourceManager().getVideoEnsemble('explode2').getAnimation(0);
   var explosion = new dotprod.model.Effect(this.game_, animation, this.position_, new dotprod.math.Vector(0, 0));
+};
+
+/**
+ * @override
+ */
+dotprod.model.projectile.BombSprite.prototype.onInvalidate_ = function() {
+  this.game_.getPainter().unregisterDrawable(dotprod.graphics.Painter.Layer.PROJECTILES, this);
 };
