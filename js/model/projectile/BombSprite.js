@@ -86,5 +86,7 @@ dotprod.model.projectile.BombSprite.prototype.explode_ = function(hitPlayer) {
  * @override
  */
 dotprod.model.projectile.BombSprite.prototype.onInvalidate_ = function() {
+  goog.base(this, 'onInvalidate_');
+
   this.game_.getPainter().unregisterDrawable(dotprod.graphics.Painter.Layer.PROJECTILES, this);
 };

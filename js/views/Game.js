@@ -23,7 +23,6 @@ goog.require('dotprod.layers.HudLayer');
 goog.require('dotprod.layers.NotificationLayer');
 goog.require('dotprod.layers.MapLayer');
 goog.require('dotprod.layers.RadarLayer');
-goog.require('dotprod.layers.ShipLayer');
 goog.require('dotprod.layers.Starfield');
 goog.require('dotprod.Map');
 goog.require('dotprod.model.impl.GraphicalModelObjectFactory');
@@ -161,7 +160,6 @@ dotprod.Game = function(protocol, resourceManager, settings, mapData) {
    * @private
    */
   this.layers_ = [
-      new dotprod.layers.ShipLayer(this.playerIndex_),
       new dotprod.layers.EffectLayer(this.effectIndex_),
       new dotprod.layers.NotificationLayer(this.notifications_),
       new dotprod.layers.RadarLayer(this),

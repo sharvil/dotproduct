@@ -9,6 +9,7 @@ goog.require('goog.array');
 goog.require('dotprod.model.player.LocalPlayer');
 goog.require('dotprod.model.player.PlayerSprite');
 goog.require('dotprod.graphics.Drawable');
+goog.require('dotprod.graphics.Painter.Layer');
 
 /**
  * @constructor
@@ -22,6 +23,8 @@ goog.require('dotprod.graphics.Drawable');
  */
 dotprod.model.player.LocalPlayerSprite = function(game, id, name, team, ship) {
   goog.base(this, game, id, name, team, ship);
+
+  game.getPainter().registerDrawable(dotprod.graphics.Painter.Layer.LOCAL_PLAYER, this);
 };
 goog.inherits(dotprod.model.player.LocalPlayerSprite, dotprod.model.player.LocalPlayer);
 
@@ -71,4 +74,13 @@ dotprod.model.player.LocalPlayerSprite.prototype.render = function(viewport) {
     context.globalCompositeOperation = 'lighter';
     damageOverlay.render(context, x, y, tileNum);
   context.restore();
+};
+
+/**
+ * @override
+ */
+dotprod.model.player.LocalPlayerSprite.prototype.onInvalidate_ = function() {
+  goog.base(this, 'onInvalidate_');
+
+  this.game_.getPainter().unregisterDrawable(dotprod.graphics.Painter.Layer.LOCAL_PLAYER, this);
 };

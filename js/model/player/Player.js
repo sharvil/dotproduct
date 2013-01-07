@@ -374,5 +374,7 @@ dotprod.model.player.Player.prototype.clearProjectiles_ = function() {
  * @override
  */
 dotprod.model.player.Player.prototype.onInvalidate_ = function() {
+  goog.base(this, 'onInvalidate_');
+
   this.clearProjectiles_();
 };
