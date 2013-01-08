@@ -152,7 +152,6 @@ dotprod.Game = function(protocol, resourceManager, settings, mapData) {
    * @private
    */
   this.layers_ = [
-      new dotprod.layers.RadarLayer(this),
       new dotprod.layers.HudLayer(this)
     ];
 
@@ -177,6 +176,7 @@ dotprod.Game = function(protocol, resourceManager, settings, mapData) {
   new dotprod.layers.Starfield(this);
   new dotprod.layers.MapLayer(this);
   new dotprod.layers.NotificationLayer(this, this.notifications_);
+  new dotprod.layers.RadarLayer(this);
 
   this.protocol_.registerHandler(dotprod.Protocol.S2CPacketType.PLAYER_ENTERED, goog.bind(this.onPlayerEntered_, this));
   this.protocol_.registerHandler(dotprod.Protocol.S2CPacketType.PLAYER_LEFT, goog.bind(this.onPlayerLeft_, this));

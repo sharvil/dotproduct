@@ -5,18 +5,23 @@
 
 goog.provide('dotprod.layers.RadarLayer');
 
+goog.require('dotprod.graphics.Drawable');
+goog.require('dotprod.graphics.Painter.Layer');
+goog.require('dotprod.math.Rect');
+goog.require('dotprod.model.ModelObject');
 goog.require('dotprod.model.player.LocalPlayer');
 goog.require('dotprod.model.player.Player');
-goog.require('dotprod.layers.Layer');
 goog.require('dotprod.Palette');
-goog.require('dotprod.math.Rect');
 
 /**
  * @constructor
- * @implements {dotprod.layers.Layer}
+ * @extends {dotprod.model.ModelObject}
+ * @implements {dotprod.graphics.Drawable}
  * @param {!dotprod.Game} game
  */
 dotprod.layers.RadarLayer = function(game) {
+  goog.base(this, game.getSimulation());
+
   /**
    * @type {!dotprod.Game}
    * @private
@@ -46,7 +51,10 @@ dotprod.layers.RadarLayer = function(game) {
    * @private
    */
   this.blinkAlpha_ = 1;
+
+  game.getPainter().registerDrawable(dotprod.graphics.Painter.Layer.HUD, this);
 };
+goog.inherits(dotprod.layers.RadarLayer, dotprod.model.ModelObject);
 
 /**
  * @const
@@ -72,7 +80,7 @@ dotprod.layers.RadarLayer.BLINK_DELTA_ = 0.03;
 /**
  * @override
  */
-dotprod.layers.RadarLayer.prototype.update = function() {
+dotprod.layers.RadarLayer.prototype.advanceTime = function() {
   this.blinkAlpha_ += this.blinkDirection_ * dotprod.layers.RadarLayer.BLINK_DELTA_;
   if (this.blinkAlpha_ >= 1) {
     this.blinkDirection_ = -1;
@@ -214,4 +222,11 @@ dotprod.layers.RadarLayer.prototype.renderPlayers_ = function(context, dimension
     context.fillStyle = player.isFriend(localPlayer) ? dotprod.Palette.friendColor(alpha) : dotprod.Palette.foeColor();
     context.fillRect(x - 1, y - 1, 3, 3);
   });
+};
+
+/**
+ * @override
+ */
+dotprod.layers.RadarLayer.prototype.onInvalidate_ = function() {
+  goog.asserts.assert(false, 'Radar layer should never be invalidated.');
 };
