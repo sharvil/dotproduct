@@ -30,7 +30,7 @@ goog.require('dotprod.model.Simulation');
 goog.require('dotprod.Notifications');
 goog.require('dotprod.PlayerIndex');
 goog.require('dotprod.PrizeIndex');
-goog.require('dotprod.Protocol');
+goog.require('dotprod.net.Protocol');
 goog.require('dotprod.Timer');
 goog.require('dotprod.Timestamp');
 goog.require('dotprod.views.ChatView');
@@ -41,14 +41,14 @@ goog.require('dotprod.views.View');
 /**
  * @constructor
  * @extends {dotprod.views.View}
- * @param {!dotprod.Protocol} protocol
+ * @param {!dotprod.net.Protocol} protocol
  * @param {!dotprod.ResourceManager} resourceManager
  * @param {!Object} settings
  * @param {!Object.<number, number>} mapData
  */
 dotprod.Game = function(protocol, resourceManager, settings, mapData) {
   /**
-   * @type {!dotprod.Protocol}
+   * @type {!dotprod.net.Protocol}
    * @private
    */
   this.protocol_ = protocol;
@@ -171,16 +171,16 @@ dotprod.Game = function(protocol, resourceManager, settings, mapData) {
   new dotprod.layers.RadarLayer(this);
   new dotprod.layers.HudLayer(this);
 
-  this.protocol_.registerHandler(dotprod.Protocol.S2CPacketType.PLAYER_ENTERED, goog.bind(this.onPlayerEntered_, this));
-  this.protocol_.registerHandler(dotprod.Protocol.S2CPacketType.PLAYER_LEFT, goog.bind(this.onPlayerLeft_, this));
-  this.protocol_.registerHandler(dotprod.Protocol.S2CPacketType.PLAYER_POSITION, goog.bind(this.onPlayerPosition_, this));
-  this.protocol_.registerHandler(dotprod.Protocol.S2CPacketType.PLAYER_DIED, goog.bind(this.onPlayerDied_, this));
-  this.protocol_.registerHandler(dotprod.Protocol.S2CPacketType.CHAT_MESSAGE, goog.bind(this.onChatMessage_, this));
-  this.protocol_.registerHandler(dotprod.Protocol.S2CPacketType.SHIP_CHANGE, goog.bind(this.onShipChanged_, this));
-  this.protocol_.registerHandler(dotprod.Protocol.S2CPacketType.SCORE_UPDATE, goog.bind(this.onScoreUpdated_, this));
-  this.protocol_.registerHandler(dotprod.Protocol.S2CPacketType.PRIZE_SEED_UPDATE, goog.bind(this.onPrizeSeedUpdated_, this));
-  this.protocol_.registerHandler(dotprod.Protocol.S2CPacketType.PRIZE_COLLECTED, goog.bind(this.onPrizeCollected_, this));
-  this.protocol_.registerHandler(dotprod.Protocol.S2CPacketType.SET_PRESENCE, goog.bind(this.onSetPresence_, this));
+  this.protocol_.registerHandler(dotprod.net.Protocol.S2CPacketType.PLAYER_ENTERED, goog.bind(this.onPlayerEntered_, this));
+  this.protocol_.registerHandler(dotprod.net.Protocol.S2CPacketType.PLAYER_LEFT, goog.bind(this.onPlayerLeft_, this));
+  this.protocol_.registerHandler(dotprod.net.Protocol.S2CPacketType.PLAYER_POSITION, goog.bind(this.onPlayerPosition_, this));
+  this.protocol_.registerHandler(dotprod.net.Protocol.S2CPacketType.PLAYER_DIED, goog.bind(this.onPlayerDied_, this));
+  this.protocol_.registerHandler(dotprod.net.Protocol.S2CPacketType.CHAT_MESSAGE, goog.bind(this.onChatMessage_, this));
+  this.protocol_.registerHandler(dotprod.net.Protocol.S2CPacketType.SHIP_CHANGE, goog.bind(this.onShipChanged_, this));
+  this.protocol_.registerHandler(dotprod.net.Protocol.S2CPacketType.SCORE_UPDATE, goog.bind(this.onScoreUpdated_, this));
+  this.protocol_.registerHandler(dotprod.net.Protocol.S2CPacketType.PRIZE_SEED_UPDATE, goog.bind(this.onPrizeSeedUpdated_, this));
+  this.protocol_.registerHandler(dotprod.net.Protocol.S2CPacketType.PRIZE_COLLECTED, goog.bind(this.onPrizeCollected_, this));
+  this.protocol_.registerHandler(dotprod.net.Protocol.S2CPacketType.SET_PRESENCE, goog.bind(this.onSetPresence_, this));
   this.protocol_.startGame(startingShip);
 
   this.viewport_.followPlayer(localPlayer);
@@ -244,7 +244,7 @@ dotprod.Game.prototype.getPainter = function() {
 };
 
 /**
- * @return {!dotprod.Protocol}
+ * @return {!dotprod.net.Protocol}
  */
 dotprod.Game.prototype.getProtocol = function() {
   return this.protocol_;

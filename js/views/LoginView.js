@@ -8,15 +8,15 @@ goog.provide('dotprod.views.LoginView');
 goog.require('goog.dom');
 goog.require('goog.events');
 goog.require('goog.events.EventType');
-goog.require('dotprod.Protocol');
-goog.require('dotprod.Protocol.S2CPacketType');
+goog.require('dotprod.net.Protocol');
+goog.require('dotprod.net.Protocol.S2CPacketType');
 goog.require('dotprod.views.View');
 
 /**
  * @constructor
  * @extends {dotprod.views.View}
  * @param {!Object} loginData
- * @param {!dotprod.Protocol} protocol
+ * @param {!dotprod.net.Protocol} protocol
  * @param {function(!Object.<string, !Object>, !Object, !Object.<number, number>)} successCb
  */
 dotprod.views.LoginView = function(loginData, protocol, successCb) {
@@ -51,13 +51,13 @@ dotprod.views.LoginView = function(loginData, protocol, successCb) {
   this.formNode_.style.display = 'none';
 
   /**
-   * @type {!dotprod.Protocol}
+   * @type {!dotprod.net.Protocol}
    * @private
    */
   this.protocol_ = protocol;
-  this.protocol_.registerHandler(dotprod.Protocol.S2CPacketType.LOGIN_REPLY, goog.bind(this.onLoginReply_, this));
-  this.protocol_.registerHandler(dotprod.Protocol.S2CPacketType.QUERY_NAME_REPLY, goog.bind(this.onQueryNameReply_, this));
-  this.protocol_.registerHandler(dotprod.Protocol.S2CPacketType.REGISTER_NAME_REPLY, goog.bind(this.onRegisterNameReply_, this));
+  this.protocol_.registerHandler(dotprod.net.Protocol.S2CPacketType.LOGIN_REPLY, goog.bind(this.onLoginReply_, this));
+  this.protocol_.registerHandler(dotprod.net.Protocol.S2CPacketType.QUERY_NAME_REPLY, goog.bind(this.onQueryNameReply_, this));
+  this.protocol_.registerHandler(dotprod.net.Protocol.S2CPacketType.REGISTER_NAME_REPLY, goog.bind(this.onRegisterNameReply_, this));
   this.protocol_.login(loginData);
 
   /**

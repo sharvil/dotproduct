@@ -9,7 +9,7 @@ goog.require('goog.dom');
 goog.require('goog.events.BrowserEvent');
 goog.require('goog.events.Event');
 goog.require('goog.events.EventType');
-goog.require('dotprod.Protocol');
+goog.require('dotprod.net.Protocol');
 goog.require('dotprod.Timestamp');
 goog.require('dotprod.views.View');
 
@@ -34,7 +34,7 @@ dotprod.views.ChatView = function(game) {
   this.settings_ = game.getSettings();
 
   /**
-   * @type {!dotprod.Protocol}
+   * @type {!dotprod.net.Protocol}
    * @private
    */
   this.protocol_ = game.getProtocol();

@@ -3,24 +3,25 @@
  * @author sharvil.nanavati@gmail.com (Sharvil Nanavati)
  */
 
-goog.provide('dotprod.Protocol');
-goog.provide('dotprod.Protocol.S2CPacketType');
+goog.provide('dotprod.net.Protocol');
+goog.provide('dotprod.net.Protocol.S2CPacketType');
 
 goog.require('goog.debug.Logger');
+
+goog.require('dotprod.math.Vector');
 goog.require('dotprod.model.projectile.Projectile');
 goog.require('dotprod.Timer');
-goog.require('dotprod.math.Vector');
 
 /**
  * @constructor
  * @param {string} url The server URL to connect to.
  */
-dotprod.Protocol = function(url) {
+dotprod.net.Protocol = function(url) {
   /**
    * @type {!goog.debug.Logger}
    * @private
    */
-  this.logger_ = goog.debug.Logger.getLogger('dotprod.Protocol');
+  this.logger_ = goog.debug.Logger.getLogger('dotprod.net.Protocol');
 
   /**
    * @type {string}
@@ -41,12 +42,12 @@ dotprod.Protocol = function(url) {
   this.packetQueue_ = [];
 
   /**
-   * @type {!Object.<dotprod.Protocol.S2CPacketType, !Array.<function(!Array)>>}
+   * @type {!Object.<dotprod.net.Protocol.S2CPacketType, !Array.<function(!Array)>>}
    * @private
    */
   this.handlers_ = {};
-  for (var i in dotprod.Protocol.S2CPacketType) {
-    this.handlers_[dotprod.Protocol.S2CPacketType[i]] = [];
+  for (var i in dotprod.net.Protocol.S2CPacketType) {
+    this.handlers_[dotprod.net.Protocol.S2CPacketType[i]] = [];
   }
 
   /**
@@ -67,20 +68,20 @@ dotprod.Protocol = function(url) {
    */
   this.roundTripTime_ = 0;
 
-  this.registerHandler(dotprod.Protocol.S2CPacketType.CLOCK_SYNC_REPLY, goog.bind(this.onClockSyncReply_, this));
+  this.registerHandler(dotprod.net.Protocol.S2CPacketType.CLOCK_SYNC_REPLY, goog.bind(this.onClockSyncReply_, this));
 };
 
 /**
  * @type {string}
  * @private
  */
-dotprod.Protocol.PROTOCOL_VERSION_ = 'dotproduct.v1';
+dotprod.net.Protocol.PROTOCOL_VERSION_ = 'dotproduct.v1';
 
 /**
  * @enum {number}
  * @private
  */
-dotprod.Protocol.C2SPacketType_ = {
+dotprod.net.Protocol.C2SPacketType_ = {
   LOGIN: 1,
   START_GAME: 2,
   POSITION: 3,
@@ -97,7 +98,7 @@ dotprod.Protocol.C2SPacketType_ = {
 /**
  * @enum {number}
  */
-dotprod.Protocol.S2CPacketType = {
+dotprod.net.Protocol.S2CPacketType = {
   LOGIN_REPLY: 1,
   PLAYER_ENTERED: 2,
   PLAYER_LEFT: 3,
@@ -119,13 +120,13 @@ dotprod.Protocol.S2CPacketType = {
  * @private
  * @const
  */
-dotprod.Protocol.CLOCK_SYNC_PERIOD_ = 2000;
+dotprod.net.Protocol.CLOCK_SYNC_PERIOD_ = 2000;
 
 /**
  * @param {number} timestamp
  * @return {number} The number of milliseconds elapsed since the specified server timestamp.
  */
-dotprod.Protocol.prototype.getMillisSinceServerTime = function(timestamp) {
+dotprod.net.Protocol.prototype.getMillisSinceServerTime = function(timestamp) {
   var diff = timestamp - this.serverTimeDelta_;
   if (diff < 0) {
     diff += 0x100000000;
@@ -140,32 +141,32 @@ dotprod.Protocol.prototype.getMillisSinceServerTime = function(timestamp) {
 /**
  * @return {number}
  */
-dotprod.Protocol.prototype.getRoundTripTime = function() {
+dotprod.net.Protocol.prototype.getRoundTripTime = function() {
   return this.roundTripTime_;
 };
 
 /**
- * @param {dotprod.Protocol.S2CPacketType} packetType
+ * @param {dotprod.net.Protocol.S2CPacketType} packetType
  * @param {function()} cb
  */
-dotprod.Protocol.prototype.registerHandler = function(packetType, cb) {
+dotprod.net.Protocol.prototype.registerHandler = function(packetType, cb) {
   this.handlers_[packetType].push(cb);
 };
 
 /**
  * @param {!Object} loginData
  */
-dotprod.Protocol.prototype.login = function(loginData) {
-  this.send_([dotprod.Protocol.C2SPacketType_.LOGIN, loginData]);
+dotprod.net.Protocol.prototype.login = function(loginData) {
+  this.send_([dotprod.net.Protocol.C2SPacketType_.LOGIN, loginData]);
 };
 
 /**
  * @param {number} ship
  */
-dotprod.Protocol.prototype.startGame = function(ship) {
-  this.send_([dotprod.Protocol.C2SPacketType_.START_GAME, ship]);
+dotprod.net.Protocol.prototype.startGame = function(ship) {
+  this.send_([dotprod.net.Protocol.C2SPacketType_.START_GAME, ship]);
   this.syncClocks_();
-  this.syncTimer_ = dotprod.Timer.setInterval(goog.bind(this.syncClocks_, this), dotprod.Protocol.CLOCK_SYNC_PERIOD_);
+  this.syncTimer_ = dotprod.Timer.setInterval(goog.bind(this.syncClocks_, this), dotprod.net.Protocol.CLOCK_SYNC_PERIOD_);
 };
 
 /**
@@ -174,8 +175,8 @@ dotprod.Protocol.prototype.startGame = function(ship) {
  * @param {!dotprod.math.Vector} velocity
  * @param {dotprod.model.projectile.Projectile=} opt_projectile
  */
-dotprod.Protocol.prototype.sendPosition = function(direction, position, velocity, opt_projectile) {
-  var packet = [dotprod.Protocol.C2SPacketType_.POSITION, this.asRemoteTime_(goog.now()), direction, position.getX(), position.getY(), velocity.getX(), velocity.getY()];
+dotprod.net.Protocol.prototype.sendPosition = function(direction, position, velocity, opt_projectile) {
+  var packet = [dotprod.net.Protocol.C2SPacketType_.POSITION, this.asRemoteTime_(goog.now()), direction, position.getX(), position.getY(), velocity.getX(), velocity.getY()];
   if (opt_projectile) {
     position = opt_projectile.getPosition();
     velocity = opt_projectile.getVelocity();
@@ -189,15 +190,15 @@ dotprod.Protocol.prototype.sendPosition = function(direction, position, velocity
  * @param {number} x
  * @param {number} y
  */
-dotprod.Protocol.prototype.sendPrizeCollected = function(type, x, y) {
-  this.send_([dotprod.Protocol.C2SPacketType_.PRIZE_COLLECTED, type, x, y]);
+dotprod.net.Protocol.prototype.sendPrizeCollected = function(type, x, y) {
+  this.send_([dotprod.net.Protocol.C2SPacketType_.PRIZE_COLLECTED, type, x, y]);
 };
 
-dotprod.Protocol.prototype.syncClocks_ = function() {
-  this.send_([dotprod.Protocol.C2SPacketType_.CLOCK_SYNC, this.asUint32_(goog.now())]);
+dotprod.net.Protocol.prototype.syncClocks_ = function() {
+  this.send_([dotprod.net.Protocol.C2SPacketType_.CLOCK_SYNC, this.asUint32_(goog.now())]);
 };
 
-dotprod.Protocol.prototype.onClockSyncReply_ = function(packet) {
+dotprod.net.Protocol.prototype.onClockSyncReply_ = function(packet) {
   var clientTime0 = packet[0];
   var serverTime = packet[1];
   var rtt = this.asUint32_(goog.now()) - clientTime0;
@@ -221,46 +222,46 @@ dotprod.Protocol.prototype.onClockSyncReply_ = function(packet) {
  * @param {!dotprod.math.Vector} position The position of the local player at the time of death.
  * @param {!dotprod.model.player.Player} killer
  */
-dotprod.Protocol.prototype.sendDeath = function(position, killer) {
-  this.send_([dotprod.Protocol.C2SPacketType_.PLAYER_DIED, this.asRemoteTime_(goog.now()), position.getX(), position.getY(), killer.getId()]);
+dotprod.net.Protocol.prototype.sendDeath = function(position, killer) {
+  this.send_([dotprod.net.Protocol.C2SPacketType_.PLAYER_DIED, this.asRemoteTime_(goog.now()), position.getX(), position.getY(), killer.getId()]);
 };
 
 /**
  * @param {string} message
  */
-dotprod.Protocol.prototype.sendChat = function(message) {
-  this.send_([dotprod.Protocol.C2SPacketType_.CHAT_MESSAGE, message]);
+dotprod.net.Protocol.prototype.sendChat = function(message) {
+  this.send_([dotprod.net.Protocol.C2SPacketType_.CHAT_MESSAGE, message]);
 };
 
 /**
  * @param {number} ship
  */
-dotprod.Protocol.prototype.sendShipChange = function(ship) {
-  this.send_([dotprod.Protocol.C2SPacketType_.SHIP_CHANGE, ship]);
+dotprod.net.Protocol.prototype.sendShipChange = function(ship) {
+  this.send_([dotprod.net.Protocol.C2SPacketType_.SHIP_CHANGE, ship]);
 };
 
 /**
  * @param {string} name
  */
-dotprod.Protocol.prototype.queryName = function(name) {
-  this.send_([dotprod.Protocol.C2SPacketType_.QUERY_NAME, name]);
+dotprod.net.Protocol.prototype.queryName = function(name) {
+  this.send_([dotprod.net.Protocol.C2SPacketType_.QUERY_NAME, name]);
 };
 
 /**
  * @param {string} name
  */
-dotprod.Protocol.prototype.registerName = function(name) {
-  this.send_([dotprod.Protocol.C2SPacketType_.REGISTER_NAME, name]);
+dotprod.net.Protocol.prototype.registerName = function(name) {
+  this.send_([dotprod.net.Protocol.C2SPacketType_.REGISTER_NAME, name]);
 };
 
 /**
  * @param {dotprod.model.player.Player.Presence} presence
  */
-dotprod.Protocol.prototype.sendSetPresence = function(presence) {
-  this.send_([dotprod.Protocol.C2SPacketType_.SET_PRESENCE, presence]);
+dotprod.net.Protocol.prototype.sendSetPresence = function(presence) {
+  this.send_([dotprod.net.Protocol.C2SPacketType_.SET_PRESENCE, presence]);
 };
 
-dotprod.Protocol.prototype.onOpen_ = function() {
+dotprod.net.Protocol.prototype.onOpen_ = function() {
   for (var i = 0; i < this.packetQueue_.length; ++i) {
     this.socket_.send(this.packetQueue_[i]);
   }
@@ -268,12 +269,12 @@ dotprod.Protocol.prototype.onOpen_ = function() {
   this.packetQueue_ = [];
 };
 
-dotprod.Protocol.prototype.onError_ = function() {
+dotprod.net.Protocol.prototype.onError_ = function() {
   // TODO(sharvil): drop connection, retry w/ binary exponential backoff
   this.logger_.warning('Error communicating with server.');
 };
 
-dotprod.Protocol.prototype.onClose_ = function() {
+dotprod.net.Protocol.prototype.onClose_ = function() {
   dotprod.Timer.clearInterval(this.syncTimer_);
   this.syncTimer_ = 0;
   this.packetQueue_ = [];
@@ -287,7 +288,7 @@ dotprod.Protocol.prototype.onClose_ = function() {
  * @param {!goog.events.Event} event
  * @private
  */
-dotprod.Protocol.prototype.onMessage_ = function(event) {
+dotprod.net.Protocol.prototype.onMessage_ = function(event) {
   var obj;
   try {
     var msg = /** @type {string} */ (event.getBrowserEvent().data);
@@ -312,7 +313,7 @@ dotprod.Protocol.prototype.onMessage_ = function(event) {
  * @param {!Object} data
  * @private
  */
-dotprod.Protocol.prototype.send_ = function(data) {
+dotprod.net.Protocol.prototype.send_ = function(data) {
   var packet = window.JSON.stringify(data);
 
   this.createSocket_();
@@ -324,12 +325,12 @@ dotprod.Protocol.prototype.send_ = function(data) {
   }
 };
 
-dotprod.Protocol.prototype.createSocket_ = function() {
+dotprod.net.Protocol.prototype.createSocket_ = function() {
   if (this.socket_) {
     return;
   }
 
-  this.socket_ = new WebSocket(this.url_, dotprod.Protocol.PROTOCOL_VERSION_);
+  this.socket_ = new WebSocket(this.url_, dotprod.net.Protocol.PROTOCOL_VERSION_);
 
   goog.events.listen(this.socket_, 'open', goog.bind(this.onOpen_, this));
   goog.events.listen(this.socket_, 'error', goog.bind(this.onError_, this));
@@ -342,13 +343,13 @@ dotprod.Protocol.prototype.createSocket_ = function() {
  * @return {number}
  * @private
  */
-dotprod.Protocol.prototype.asUint32_ = function(num) {
+dotprod.net.Protocol.prototype.asUint32_ = function(num) {
   return num >>> 0;
 };
 
 /**
  * @return {number}
  */
-dotprod.Protocol.prototype.asRemoteTime_ = function(timestamp) {
+dotprod.net.Protocol.prototype.asRemoteTime_ = function(timestamp) {
   return this.asUint32_(timestamp + this.serverTimeDelta_);
 };

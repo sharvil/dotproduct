@@ -13,7 +13,7 @@ goog.require('goog.events.EventType');
 goog.require('html5.Fullscreen');
 
 goog.require('dotprod.Game');
-goog.require('dotprod.Protocol');
+goog.require('dotprod.net.Protocol');
 goog.require('dotprod.ResourceManager');
 goog.require('dotprod.Timestamp');
 goog.require('dotprod.views.LoadingView');
@@ -29,10 +29,10 @@ dotprod.Application = function(settings, url) {
   new goog.debug.Console().setCapturing(true);
 
   /**
-   * @type {!dotprod.Protocol}
+   * @type {!dotprod.net.Protocol}
    * @private
    */
-  this.protocol_ = new dotprod.Protocol(url);
+  this.protocol_ = new dotprod.net.Protocol(url);
 
   /**
    * @type {!dotprod.ResourceManager}
