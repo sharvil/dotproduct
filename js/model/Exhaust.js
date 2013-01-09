@@ -24,7 +24,7 @@ dotprod.model.Exhaust = function(game, position, velocity) {
    * @type {!dotprod.graphics.Animation}
    * @private
    */
-  this.image_ = game.getResourceManager().getVideoEnsemble('exhaust').getAnimation(0);
+  this.image_ = game.getResourceManager().getSpriteSheet('exhaust').getAnimation(0);
 
   /**
    * This variable is a tick counter. When it reaches 2, it's reset to 0

@@ -31,14 +31,14 @@ dotprod.model.projectile.BulletSprite = function(game, owner, level, position, v
    * @type {!dotprod.graphics.Animation}
    * @private
    */
-  this.animation_ = game.getResourceManager().getVideoEnsemble('bullets').getAnimation(level);
+  this.animation_ = game.getResourceManager().getSpriteSheet('bullets').getAnimation(level);
   this.animation_.setRepeatCount(-1);
 
   /**
    * @type {!dotprod.graphics.Animation}
    * @private
    */
-  this.bouncingAnimation_ = game.getResourceManager().getVideoEnsemble('bullets').getAnimation(5 + level);
+  this.bouncingAnimation_ = game.getResourceManager().getSpriteSheet('bullets').getAnimation(5 + level);
   this.bouncingAnimation_.setRepeatCount(-1);
 
   game.getPainter().registerDrawable(dotprod.graphics.Layer.PROJECTILES, this);
@@ -72,7 +72,7 @@ dotprod.model.projectile.BulletSprite.prototype.render = function(viewport) {
 dotprod.model.projectile.BulletSprite.prototype.explode_ = function(hitPlayer) {
   goog.base(this, 'explode_', hitPlayer);
 
-  var animation = this.game_.getResourceManager().getVideoEnsemble('explode0').getAnimation(0);
+  var animation = this.game_.getResourceManager().getSpriteSheet('explode0').getAnimation(0);
   var explosion = new dotprod.model.Effect(this.game_, animation, this.position_, new dotprod.math.Vector(0, 0));
 };
 

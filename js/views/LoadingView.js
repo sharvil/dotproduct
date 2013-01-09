@@ -92,7 +92,7 @@ dotprod.views.LoadingView.prototype.load = function(resources) {
 
   for (var name in resources['videoensembles']) {
     var resource = resources['videoensembles'][name];
-    this.resourceManager_.loadVideoEnsemble(name, resource['url'], resource['xTiles'], resource['yTiles'], resource['frames'], resource['period'], completionCb);
+    this.resourceManager_.loadSpriteSheet(name, resource['url'], resource['xTiles'], resource['yTiles'], resource['frames'], resource['period'], completionCb);
     ++totalResources;
   }
 

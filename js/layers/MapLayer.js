@@ -34,7 +34,7 @@ dotprod.layers.MapLayer = function(game) {
    * @type {!dotprod.graphics.Animation}
    * @private
    */
-  this.prizeAnimation_ = game.getResourceManager().getVideoEnsemble('prize').getAnimation(0);
+  this.prizeAnimation_ = game.getResourceManager().getSpriteSheet('prize').getAnimation(0);
   this.prizeAnimation_.setRepeatCount(-1);
 
   /**
