@@ -78,7 +78,7 @@ dotprod.model.player.PlayerSprite.prototype.render = function(viewport) {
   }
 
   context.save();
-    context.font = dotprod.FontFoundry.playerFont();
+    context.font = dotprod.Font.playerFont();
     context.fillStyle = this.isFriend(localPlayer) ? dotprod.Palette.friendColor() : dotprod.Palette.foeColor();
     context.textAlign = 'center';
     context.textBaseline = 'top';

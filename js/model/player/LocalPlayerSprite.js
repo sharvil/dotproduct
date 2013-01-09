@@ -51,7 +51,7 @@ dotprod.model.player.LocalPlayerSprite.prototype.render = function(viewport) {
     var tenths = Math.floor((millis % 1000) / 100);
     var time = seconds + '.' + tenths;
     context.save();
-      context.font = dotprod.FontFoundry.playerFont();
+      context.font = dotprod.Font.playerFont();
       context.fillStyle = dotprod.Palette.friendColor();
       context.fillText(time, dimensions.width / 2, dimensions.height / 2);
     context.restore();

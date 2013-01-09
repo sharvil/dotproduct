@@ -7,7 +7,7 @@ goog.provide('dotprod.layers.NotificationLayer');
 
 goog.require('goog.asserts');
 
-goog.require('dotprod.FontFoundry');
+goog.require('dotprod.Font');
 goog.require('dotprod.graphics.Drawable');
 goog.require('dotprod.graphics.Layer');
 goog.require('dotprod.model.ModelObject');
@@ -69,7 +69,7 @@ dotprod.layers.NotificationLayer.prototype.advanceTime = function() {
  */
 dotprod.layers.NotificationLayer.prototype.render = function(viewport) {
   var context = viewport.getContext();
-  var font = dotprod.FontFoundry.notificationsFont();
+  var font = dotprod.Font.notificationsFont();
 
   context.save();
     context.font = font;
