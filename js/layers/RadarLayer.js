@@ -6,7 +6,7 @@
 goog.provide('dotprod.layers.RadarLayer');
 
 goog.require('dotprod.graphics.Drawable');
-goog.require('dotprod.graphics.Painter.Layer');
+goog.require('dotprod.graphics.Layer');
 goog.require('dotprod.math.Rect');
 goog.require('dotprod.model.ModelObject');
 goog.require('dotprod.model.player.LocalPlayer');
@@ -52,7 +52,7 @@ dotprod.layers.RadarLayer = function(game) {
    */
   this.blinkAlpha_ = 1;
 
-  game.getPainter().registerDrawable(dotprod.graphics.Painter.Layer.HUD, this);
+  game.getPainter().registerDrawable(dotprod.graphics.Layer.HUD, this);
 };
 goog.inherits(dotprod.layers.RadarLayer, dotprod.model.ModelObject);
 

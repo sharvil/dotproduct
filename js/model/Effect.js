@@ -9,7 +9,7 @@ goog.require('dotprod.math.Vector');
 goog.require('dotprod.model.ModelObject');
 goog.require('dotprod.graphics.Animation');
 goog.require('dotprod.graphics.Drawable');
-goog.require('dotprod.graphics.Painter.Layer');
+goog.require('dotprod.graphics.Layer');
 
 /**
  * @constructor
@@ -47,7 +47,7 @@ dotprod.model.Effect = function(game, animation, position, velocity) {
    */
   this.velocity_ = velocity;
 
-  game.getPainter().registerDrawable(dotprod.graphics.Painter.Layer.EFFECTS, this);
+  game.getPainter().registerDrawable(dotprod.graphics.Layer.EFFECTS, this);
 };
 goog.inherits(dotprod.model.Effect, dotprod.model.ModelObject);
 
@@ -78,5 +78,5 @@ dotprod.model.Effect.prototype.render = function(viewport) {
 dotprod.model.Effect.prototype.onInvalidate_ = function() {
   goog.base(this, 'onInvalidate_');
 
-  this.game_.getPainter().unregisterDrawable(dotprod.graphics.Painter.Layer.EFFECTS, this);
+  this.game_.getPainter().unregisterDrawable(dotprod.graphics.Layer.EFFECTS, this);
 };

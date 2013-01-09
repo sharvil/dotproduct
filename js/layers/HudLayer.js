@@ -50,7 +50,7 @@ dotprod.layers.HudLayer = function(game) {
    */
   this.ledFontImage_ = this.resourceManager_.getImage('ledFont');
 
-  game.getPainter().registerDrawable(dotprod.graphics.Painter.Layer.HUD, this);
+  game.getPainter().registerDrawable(dotprod.graphics.Layer.HUD, this);
 };
 
 /**

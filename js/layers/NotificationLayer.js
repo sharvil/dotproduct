@@ -9,7 +9,7 @@ goog.require('goog.asserts');
 
 goog.require('dotprod.FontFoundry');
 goog.require('dotprod.graphics.Drawable');
-goog.require('dotprod.graphics.Painter.Layer');
+goog.require('dotprod.graphics.Layer');
 goog.require('dotprod.model.ModelObject');
 goog.require('dotprod.Palette');
 goog.require('dotprod.Notifications');
@@ -37,7 +37,7 @@ dotprod.layers.NotificationLayer = function(game, notifications) {
    */
   this.notifications_ = notifications;
 
-  game.getPainter().registerDrawable(dotprod.graphics.Painter.Layer.HUD, this);
+  game.getPainter().registerDrawable(dotprod.graphics.Layer.HUD, this);
 };
 goog.inherits(dotprod.layers.NotificationLayer, dotprod.model.ModelObject);
 

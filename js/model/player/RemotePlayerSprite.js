@@ -8,7 +8,7 @@ goog.provide('dotprod.model.player.RemotePlayerSprite');
 goog.require('dotprod.model.player.RemotePlayer');
 goog.require('dotprod.model.player.PlayerSprite');
 goog.require('dotprod.graphics.Drawable');
-goog.require('dotprod.graphics.Painter.Layer');
+goog.require('dotprod.graphics.Layer');
 
 /**
  * @constructor
@@ -25,7 +25,7 @@ goog.require('dotprod.graphics.Painter.Layer');
 dotprod.model.player.RemotePlayerSprite = function(game, id, name, team, isAlive, ship, bounty) {
   goog.base(this, game, id, name, team, isAlive, ship, bounty);
 
-  game.getPainter().registerDrawable(dotprod.graphics.Painter.Layer.PLAYERS, this);
+  game.getPainter().registerDrawable(dotprod.graphics.Layer.PLAYERS, this);
 };
 goog.inherits(dotprod.model.player.RemotePlayerSprite, dotprod.model.player.RemotePlayer);
 
@@ -50,5 +50,5 @@ dotprod.model.player.RemotePlayerSprite.prototype.render = dotprod.model.player.
 dotprod.model.player.RemotePlayerSprite.prototype.onInvalidate_ = function() {
   goog.base(this, 'onInvalidate_');
 
-  this.game_.getPainter().unregisterDrawable(dotprod.graphics.Painter.Layer.PLAYERS, this);
+  this.game_.getPainter().unregisterDrawable(dotprod.graphics.Layer.PLAYERS, this);
 };

@@ -6,7 +6,7 @@
 goog.provide('dotprod.layers.Starfield');
 
 goog.require('dotprod.graphics.Drawable');
-goog.require('dotprod.graphics.Painter.Layer');
+goog.require('dotprod.graphics.Layer');
 goog.require('dotprod.Viewport');
 
 /**
@@ -41,7 +41,7 @@ dotprod.layers.Starfield = function(game) {
     this.stars2_.push({x: x2, y: y2});
   }
 
-  game.getPainter().registerDrawable(dotprod.graphics.Painter.Layer.STARFIELD, this);
+  game.getPainter().registerDrawable(dotprod.graphics.Layer.STARFIELD, this);
 };
 
 /**
