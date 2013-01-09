@@ -26,7 +26,7 @@ dotprod.PrizeIndex = function(game) {
   this.prizeSettings_ = game.getSettings()['prize'];
 
   /**
-   * @type {!dotprod.Map}
+   * @type {!dotprod.model.Map}
    * @private
    */
   this.map_ = game.getMap();

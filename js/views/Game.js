@@ -22,7 +22,7 @@ goog.require('dotprod.layers.NotificationLayer');
 goog.require('dotprod.layers.MapLayer');
 goog.require('dotprod.layers.RadarLayer');
 goog.require('dotprod.layers.Starfield');
-goog.require('dotprod.Map');
+goog.require('dotprod.model.Map');
 goog.require('dotprod.model.impl.GraphicalModelObjectFactory');
 goog.require('dotprod.model.impl.HeadlessModelObjectFactory');
 goog.require('dotprod.model.Prize');
@@ -103,10 +103,10 @@ dotprod.Game = function(protocol, resourceManager, settings, mapData) {
   this.viewport_ = new dotprod.Viewport(this, /** @type {!CanvasRenderingContext2D} */ (this.canvas_.getContext('2d')));
 
   /**
-   * @type {!dotprod.Map}
+   * @type {!dotprod.model.Map}
    * @private
    */
-  this.map_ = new dotprod.Map(this, mapData);
+  this.map_ = new dotprod.model.Map(this, mapData);
 
   /**
    * @type {!dotprod.PrizeIndex}
@@ -272,7 +272,7 @@ dotprod.Game.prototype.getSettings = function() {
 };
 
 /**
- * @return {!dotprod.Map}
+ * @return {!dotprod.model.Map}
  */
 dotprod.Game.prototype.getMap = function() {
   return this.map_;

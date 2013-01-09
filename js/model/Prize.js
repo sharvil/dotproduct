@@ -12,7 +12,7 @@ goog.require('dotprod.model.ModelObject');
  * @constructor
  * @extends {dotprod.model.ModelObject}
  * @param {!dotprod.model.Simulation} simulation
- * @param {!dotprod.Map} map
+ * @param {!dotprod.model.Map} map
  * @param {!dotprod.model.Prize.Type} type
  * @param {number} xTile
  * @param {number} yTile

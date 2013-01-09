@@ -11,7 +11,7 @@ goog.require('dotprod.Viewport');
 goog.require('dotprod.graphics.Drawable');
 goog.require('dotprod.graphics.Image');
 goog.require('dotprod.graphics.Layer');
-goog.require('dotprod.Map');
+goog.require('dotprod.model.Map');
 goog.require('dotprod.model.ModelObject');
 goog.require('dotprod.ResourceManager');
 
@@ -25,7 +25,7 @@ dotprod.layers.MapLayer = function(game) {
   goog.base(this, game.getSimulation());
 
   /**
-   * @type {!dotprod.Map}
+   * @type {!dotprod.model.Map}
    * @private
    */
   this.map_ = game.getMap();
