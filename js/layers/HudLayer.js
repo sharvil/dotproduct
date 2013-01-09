@@ -4,13 +4,13 @@
 
 goog.provide('dotprod.layers.HudLayer');
 
+goog.require('dotprod.graphics.Drawable');
 goog.require('dotprod.model.player.LocalPlayer');
 goog.require('dotprod.model.player.Player');
-goog.require('dotprod.layers.Layer');
 
 /**
  * @constructor
- * @implements {dotprod.layers.Layer}
+ * @implements {dotprod.graphics.Drawable}
  * @param {!dotprod.Game} game
  */
 dotprod.layers.HudLayer = function(game) {
@@ -49,15 +49,11 @@ dotprod.layers.HudLayer = function(game) {
    * @private
    */
   this.ledFontImage_ = this.resourceManager_.getImage('ledFont');
+
+  game.getPainter().registerDrawable(dotprod.graphics.Painter.Layer.HUD, this);
 };
 
 /**
- * @override
- */
-dotprod.layers.HudLayer.prototype.update = goog.nullFunction;
-
-/**
- * @param {!dotprod.Viewport} viewport
  * @override
  */
 dotprod.layers.HudLayer.prototype.render = function(viewport) {

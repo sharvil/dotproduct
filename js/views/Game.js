@@ -148,14 +148,6 @@ dotprod.Game = function(protocol, resourceManager, settings, mapData) {
   this.debugView_ = new dotprod.views.DebugView(this, this.viewport_);
 
   /**
-   * @type {!Array.<dotprod.layers.Layer>}
-   * @private
-   */
-  this.layers_ = [
-      new dotprod.layers.HudLayer(this)
-    ];
-
-  /**
    * @type {number}
    * @private
    */
@@ -177,6 +169,7 @@ dotprod.Game = function(protocol, resourceManager, settings, mapData) {
   new dotprod.layers.MapLayer(this);
   new dotprod.layers.NotificationLayer(this, this.notifications_);
   new dotprod.layers.RadarLayer(this);
+  new dotprod.layers.HudLayer(this);
 
   this.protocol_.registerHandler(dotprod.Protocol.S2CPacketType.PLAYER_ENTERED, goog.bind(this.onPlayerEntered_, this));
   this.protocol_.registerHandler(dotprod.Protocol.S2CPacketType.PLAYER_LEFT, goog.bind(this.onPlayerLeft_, this));
@@ -331,20 +324,10 @@ dotprod.Game.prototype.renderingLoop_ = function() {
 
   for (var i = 0; i < timeDiff; ++i) {
     this.simulation_.advanceTime();
-    for (var j = 0; j < this.layers_.length; ++j) {
-      this.layers_[j].update();
-    }
   }
 
   this.viewport_.update();
   this.painter_.render(this.viewport_);
-
-  var context = this.viewport_.getContext();
-  context.save();
-    for (var i = 0; i < this.layers_.length; ++i) {
-      this.layers_[i].render(this.viewport_);
-    }
-  context.restore();
 
   this.scoreboardView_.update();
   this.debugView_.update();
