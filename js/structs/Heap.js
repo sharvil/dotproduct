@@ -76,7 +76,7 @@ dotprod.structs.Heap.prototype.remove = function(value) {
   var nodes = this.heap_;
   var count = this.getCount();
   for (var i = 0; i < count; ++i) {
-    if (this.compare_(value, nodes[i]) == 0) {
+    if (value == nodes[i]) {
       nodes[i] = nodes.pop();
       this.floatDown_(i);
       return;
