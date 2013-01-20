@@ -16,12 +16,14 @@ goog.require('html5.Notifications');
 
 goog.require('dotprod.Viewport');
 goog.require('dotprod.graphics.Painter');
+goog.require('dotprod.graphics.Tween');
 goog.require('dotprod.input.Keyboard');
 goog.require('dotprod.layers.HudLayer');
 goog.require('dotprod.layers.NotificationLayer');
 goog.require('dotprod.layers.MapLayer');
 goog.require('dotprod.layers.RadarLayer');
 goog.require('dotprod.layers.Starfield');
+goog.require('dotprod.layers.WeaponIndicators');
 goog.require('dotprod.model.Map');
 goog.require('dotprod.model.impl.GraphicalModelObjectFactory');
 goog.require('dotprod.model.impl.HeadlessModelObjectFactory');
@@ -170,6 +172,7 @@ dotprod.Game = function(protocol, resourceManager, settings, mapData) {
   new dotprod.layers.NotificationLayer(this, this.notifications_);
   new dotprod.layers.RadarLayer(this);
   new dotprod.layers.HudLayer(this);
+  new dotprod.layers.WeaponIndicators(this);
 
   this.protocol_.registerHandler(dotprod.net.Protocol.S2CPacketType.PLAYER_ENTERED, goog.bind(this.onPlayerEntered_, this));
   this.protocol_.registerHandler(dotprod.net.Protocol.S2CPacketType.PLAYER_LEFT, goog.bind(this.onPlayerLeft_, this));
@@ -327,6 +330,11 @@ dotprod.Game.prototype.renderingLoop_ = function() {
   }
 
   this.viewport_.update();
+
+  for (var i = 0; i < timeDiff; ++i) {
+    dotprod.graphics.Tween.advanceAll();
+  }
+
   this.painter_.render(this.viewport_);
 
   this.scoreboardView_.update();

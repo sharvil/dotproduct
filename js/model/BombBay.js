@@ -39,6 +39,13 @@ dotprod.model.BombBay = function(game, bombBaySettings, owner) {
   this.level_ = new dotprod.math.Range(Math.min(0, bombBaySettings['maxLevel']), bombBaySettings['maxLevel'], 1);
 };
 
+/**
+ * @return {number}
+ */
+dotprod.model.BombBay.prototype.getLevel = function() {
+  return this.level_.getValue();
+};
+
 dotprod.model.BombBay.prototype.upgrade = function() {
   this.level_.increment();
 };

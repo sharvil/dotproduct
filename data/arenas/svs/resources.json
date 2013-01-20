@@ -82,6 +82,12 @@
       "url": "data/shared/graphics/led_font.png",
       "xTiles": 10,
       "yTiles": 1
+    },
+
+    "icons": {
+      "url": "data/shared/graphics/icons.png",
+      "xTiles": 9,
+      "yTiles": 6
     }
   },
 

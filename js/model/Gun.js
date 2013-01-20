@@ -45,6 +45,13 @@ dotprod.model.Gun = function(game, gunSettings, owner) {
   this.bouncingBullets_ = false;
 };
 
+/**
+ * @return {number}
+ */
+dotprod.model.Gun.prototype.getLevel = function() {
+  return this.level_.getValue();
+};
+
 dotprod.model.Gun.prototype.upgrade = function() {
   this.level_.increment();
 };
