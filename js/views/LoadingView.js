@@ -84,14 +84,14 @@ dotprod.views.LoadingView.prototype.load = function(resources) {
     }
   };
 
-  for (var name in resources['graphics']) {
-    var resource = resources['graphics'][name];
+  for (var name in resources['images']) {
+    var resource = resources['images'][name];
     this.resourceManager_.loadImage(name, resource['url'], resource['xTiles'], resource['yTiles'], completionCb);
     ++totalResources;
   }
 
-  for (var name in resources['videoensembles']) {
-    var resource = resources['videoensembles'][name];
+  for (var name in resources['spritesheets']) {
+    var resource = resources['spritesheets'][name];
     this.resourceManager_.loadSpriteSheet(name, resource['url'], resource['xTiles'], resource['yTiles'], resource['frames'], resource['period'], completionCb);
     ++totalResources;
   }
