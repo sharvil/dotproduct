@@ -88,10 +88,12 @@ dotprod.Application = function(settings, url) {
  * @param {!Object.<string, !Object>} resources
  * @param {!Object} settings
  * @param {!Object.<number, number>} mapData
+ * @param {!Array.<!Object>} mapProperties
  */
-dotprod.Application.prototype.startGame_ = function(resources, settings, mapData) {
+dotprod.Application.prototype.startGame_ = function(resources, settings, mapData, mapProperties) {
   this.settings_ = settings;
   this.mapData_ = mapData;
+  this.mapProperties_ = mapProperties;
 
   this.loginView_.hide();
   this.loadingView_.show();
@@ -101,7 +103,7 @@ dotprod.Application.prototype.startGame_ = function(resources, settings, mapData
 dotprod.Application.prototype.onLoadComplete_ = function() {
   this.loadingView_.hide();
 
-  this.game_ = new dotprod.Game(this.protocol_, this.resourceManager_, this.settings_, this.mapData_);
+  this.game_ = new dotprod.Game(this.protocol_, this.resourceManager_, this.settings_, this.mapData_, this.mapProperties_);
   this.game_.renderDom(/** @type {!HTMLDivElement} */ (goog.dom.$('game')));
 };
 

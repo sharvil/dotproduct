@@ -123,8 +123,9 @@ dotprod.views.LoginView.prototype.onLoginReply_ = function(packet) {
       var resources = packet[1];
       var settings = packet[2];
       var mapData = packet[3];
+      var mapProperties = packet[4];
 
-      this.successCb_(resources, settings, mapData);
+      this.successCb_(resources, settings, mapData, mapProperties);
       break;
     }
     case 2: {

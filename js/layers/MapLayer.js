@@ -97,17 +97,23 @@ dotprod.layers.MapLayer.prototype.render = function(viewport) {
     for (var y = topTile; y <= topTile + numVertTiles; ++y) {
       for (var x = leftTile; x <= leftTile + numHorizTiles; ++x) {
         var tileNum = map.getTile(x, y);
-        if (tileNum == 0) {
+        if (tileNum == dotprod.TileType.NONE) {
           continue;
-        } else if (tileNum == 255) {
+        }
+
+        var tileProperties = map.getTileProperties(tileNum);
+        if (!tileProperties['animated']) {
+          if (tileProperties['index'] <= this.tileset_.getNumTiles()) {
+            this.tileset_.render(context,
+                                x * tileWidth - dimensions.x + halfWidth,
+                                y * tileHeight - dimensions.y + halfHeight,
+                                tileProperties['index']);
+          }
+        } else {
+          // Animated tile.
           this.prizeAnimation_.render(context,
                                       x * tileWidth - dimensions.x + halfWidth,
                                       y * tileHeight - dimensions.y + halfHeight);
-        } else if (tileNum <= this.tileset_.getNumTiles()){
-          this.tileset_.render(context,
-                              x * tileWidth - dimensions.x + halfWidth,
-                              y * tileHeight - dimensions.y + halfHeight,
-                              tileNum - 1);
         }
       }
     }

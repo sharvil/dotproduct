@@ -144,7 +144,6 @@ dotprod.PrizeIndex.prototype.forEach = function(cb) {
  */
 dotprod.PrizeIndex.prototype.generatePrizeType_ = function(prng) {
   var prizeWeights = this.prizeSettings_['weights'];
-  goog.asserts.assert(prizeWeights.length == dotprod.model.Prize.NUM_PRIZE_TYPES, 'Prize weights do not match prize types.');
 
   var sum = 0;
   for (var i = 0; i < prizeWeights.length; ++i) {

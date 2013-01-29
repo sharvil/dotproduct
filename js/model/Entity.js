@@ -8,6 +8,7 @@ goog.provide('dotprod.model.Entity');
 goog.require('dotprod.math.Rect');
 goog.require('dotprod.math.Vector');
 goog.require('dotprod.model.ModelObject');
+goog.require('dotprod.TileType');
 
 /**
  * @constructor
@@ -103,7 +104,7 @@ dotprod.model.Entity.prototype.updatePosition_ = function(opt_bounceFactor) {
 
     var collision = map.getCollision(this);
     if (collision) {
-      if (collision.tileValue == 255) {
+      if (collision.tileValue == dotprod.TileType.PRIZE) {
         var prize = prizeIndex.getPrize(collision.xTile, collision.yTile);
         if (prize && this.collectPrize_(prize)) {
           prizeIndex.removePrize(prize);
@@ -126,7 +127,7 @@ dotprod.model.Entity.prototype.updatePosition_ = function(opt_bounceFactor) {
 
     var collision = this.game_.getMap().getCollision(this);
     if (collision) {
-      if (collision.tileValue == 255) {
+      if (collision.tileValue == dotprod.TileType.PRIZE) {
         var prize = prizeIndex.getPrize(collision.xTile, collision.yTile);
         if (prize && this.collectPrize_(prize)) {
           prizeIndex.removePrize(prize);

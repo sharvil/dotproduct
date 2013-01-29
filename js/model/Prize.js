@@ -4,16 +4,17 @@
  */
 
 goog.provide('dotprod.model.Prize');
-goog.provide('dotprod.model.Prize.Type');
 
 goog.require('dotprod.model.ModelObject');
+goog.require('dotprod.PrizeType');
+goog.require('dotprod.TileType');
 
 /**
  * @constructor
  * @extends {dotprod.model.ModelObject}
  * @param {!dotprod.model.Simulation} simulation
  * @param {!dotprod.model.Map} map
- * @param {!dotprod.model.Prize.Type} type
+ * @param {!dotprod.PrizeType} type
  * @param {number} xTile
  * @param {number} yTile
  * @param {number} ttl
@@ -27,25 +28,12 @@ dotprod.model.Prize = function(simulation, map, type, xTile, yTile, ttl) {
   this.yTile_ = yTile;
   this.ttl_ = ttl;
 
-  this.map_.setTile(xTile, yTile, 255);
+  this.map_.setTile(xTile, yTile, dotprod.TileType.PRIZE);
 };
 goog.inherits(dotprod.model.Prize, dotprod.model.ModelObject);
 
 /**
- * @enum {number}
- */
-dotprod.model.Prize.Type = {
-  NONE: 0,
-  GUN_UPGRADE: 1,
-  BOMB_UPGRADE: 2,
-  FULL_ENERGY: 3,
-  BOUNCING_BULLETS: 4
-};
-
-dotprod.model.Prize.NUM_PRIZE_TYPES = 5;
-
-/**
- * @return {dotprod.model.Prize.Type}
+ * @return {dotprod.PrizeType}
  */
 dotprod.model.Prize.prototype.getType = function() {
   return this.type_;

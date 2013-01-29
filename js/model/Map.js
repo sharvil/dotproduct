@@ -12,13 +12,15 @@ goog.require('dotprod.graphics.Image');
 goog.require('dotprod.Quadtree');
 goog.require('dotprod.math.Rect');
 goog.require('dotprod.math.Vector');
+goog.require('dotprod.TileType');
 
 /**
  * @constructor
  * @param {!dotprod.Game} game
  * @param {!Object.<number, number>} mapData
+ * @param {!Array.<!Object>} tileProperties
  */
-dotprod.model.Map = function(game, mapData) {
+dotprod.model.Map = function(game, mapData, tileProperties) {
   var settings = game.getSettings();
   var tileset = game.getResourceManager().getImage('tileset');
 
@@ -27,6 +29,12 @@ dotprod.model.Map = function(game, mapData) {
    * @private
    */
    this.mapData_ = mapData;
+
+   /**
+    * @type {!Array.<!Object>}
+    * @private
+    */
+   this.tileProperties_ = tileProperties;
 
   /**
    * @type {number}
@@ -128,7 +136,7 @@ dotprod.model.Map.prototype.toTileCoordinates = function(vector) {
  */
 dotprod.model.Map.prototype.getTile = function(x, y) {
   var index = x + y * this.width_;
-  return this.mapData_[index] ? this.mapData_[index] : 0;
+  return this.mapData_[index] ? this.mapData_[index] : dotprod.TileType.NONE;
 };
 
 /**
@@ -141,11 +149,19 @@ dotprod.model.Map.prototype.setTile = function(x, y, value) {
   goog.asserts.assert(y >= 0 && y < this.height_, 'Invalid y coordinate.');
 
   var index = x + y * this.width_;
-  if (value == 0) {
+  if (value == dotprod.TileType.NONE) {
     delete this.mapData_[index];
   } else {
     this.mapData_[index] = value;
   }
+};
+
+/**
+ * @return {!Object}
+ */
+dotprod.model.Map.prototype.getTileProperties = function(tileValue) {
+  goog.asserts.assert(tileValue >= 0 && tileValue < this.tileProperties_.length, 'Tile value out of bounds: ' + tileValue);
+  return this.tileProperties_[tileValue];
 };
 
 /**
@@ -244,7 +260,12 @@ dotprod.model.Map.prototype.getCollision_ = function(dimensions) {
   for (var yTile = topTile; yTile <= bottomTile; ++yTile) {
     for (var xTile = leftTile; xTile <= rightTile; ++xTile) {
       var tileValue = this.getTile(xTile, yTile);
-      if (tileValue != 0) {
+      if (tileValue == dotprod.TileType.NONE) {
+        continue;
+      }
+
+      var tileProperties = this.getTileProperties(tileValue);
+      if (tileProperties['collision']) {
         ret = {
           left: xTile * this.tileWidth_ - dotprod.model.Map.COLLISION_EPSILON_ - xRadius,
           right: (xTile + 1) * this.tileWidth_ + xRadius,
@@ -258,7 +279,7 @@ dotprod.model.Map.prototype.getCollision_ = function(dimensions) {
         // If the collision was due to a prize, we keep checking for a more concrete
         // collision. Otherwise, we know we've collided with a solid object and should
         // cause a bounce / explosion.
-        if (tileValue != 255) {
+        if (!tileProperties['object']) {
           break;
         }
       }

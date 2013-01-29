@@ -8,13 +8,15 @@ goog.provide('dotprod.model.player.LocalPlayer');
 goog.require('goog.events');
 goog.require('goog.events.KeyCodes');
 goog.require('goog.object');
+
+goog.require('dotprod.input.Keymap');
+goog.require('dotprod.math.Range');
+goog.require('dotprod.math.Vector');
 goog.require('dotprod.model.projectile.Bomb');
 goog.require('dotprod.model.projectile.Bullet');
 goog.require('dotprod.model.Exhaust');
 goog.require('dotprod.model.player.Player');
-goog.require('dotprod.input.Keymap');
-goog.require('dotprod.math.Range');
-goog.require('dotprod.math.Vector');
+goog.require('dotprod.PrizeType');
 
 /**
  * @constructor
@@ -82,22 +84,22 @@ dotprod.model.player.LocalPlayer.prototype.collectPrize_ = function(prize) {
 
   // TODO(sharvil): we shouldn't reach into game's private member...
   switch (prize.getType()) {
-    case dotprod.model.Prize.Type.NONE:
+    case dotprod.PrizeType.NONE:
       this.game_.notifications_.addMessage('No prize for you. Sadface.');
       break;
-    case dotprod.model.Prize.Type.GUN_UPGRADE:
+    case dotprod.PrizeType.GUN_UPGRADE:
       this.gun_.upgrade();
       this.game_.notifications_.addMessage('Guns upgraded!');
       break;
-    case dotprod.model.Prize.Type.BOMB_UPGRADE:
+    case dotprod.PrizeType.BOMB_UPGRADE:
       this.bombBay_.upgrade();
       this.game_.notifications_.addMessage('Bombs upgraded!');
       break;
-    case dotprod.model.Prize.Type.FULL_ENERGY:
+    case dotprod.PrizeType.FULL_ENERGY:
       this.game_.notifications_.addMessage('Full charge!');
       this.energy_ = this.maxEnergy_;
       break;
-    case dotprod.model.Prize.Type.BOUNCING_BULLETS:
+    case dotprod.PrizeType.BOUNCING_BULLETS:
       this.game_.notifications_.addMessage('Bouncing bullets!');
       this.gun_.setBounces(true);
       break;

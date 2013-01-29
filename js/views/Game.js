@@ -47,8 +47,9 @@ goog.require('dotprod.views.View');
  * @param {!dotprod.ResourceManager} resourceManager
  * @param {!Object} settings
  * @param {!Object.<number, number>} mapData
+ * @param {!Array.<!Object>} tileProperties
  */
-dotprod.Game = function(protocol, resourceManager, settings, mapData) {
+dotprod.Game = function(protocol, resourceManager, settings, mapData, tileProperties) {
   /**
    * @type {!dotprod.net.Protocol}
    * @private
@@ -108,7 +109,7 @@ dotprod.Game = function(protocol, resourceManager, settings, mapData) {
    * @type {!dotprod.model.Map}
    * @private
    */
-  this.map_ = new dotprod.model.Map(this, mapData);
+  this.map_ = new dotprod.model.Map(this, mapData, tileProperties);
 
   /**
    * @type {!dotprod.PrizeIndex}
