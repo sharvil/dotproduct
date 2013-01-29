@@ -85,8 +85,13 @@ dotprod.model.player.RemotePlayer.prototype.respawn = function(angle, position, 
  * @param {number} angle
  * @param {!dotprod.math.Vector} position
  * @param {!dotprod.math.Vector} velocity
+ * @param {boolean} isSafe
  */
-dotprod.model.player.RemotePlayer.prototype.onPositionUpdate = function(timeDiff, angle, position, velocity) {
+dotprod.model.player.RemotePlayer.prototype.onPositionUpdate = function(timeDiff, angle, position, velocity, isSafe) {
+  if (isSafe) {
+    this.clearProjectiles_();
+  }
+
   if (!this.isAlive()) {
     this.respawn(angle, position, velocity);
     return;

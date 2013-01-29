@@ -113,7 +113,7 @@ dotprod.model.player.LocalPlayer.prototype.collectPrize_ = function(prize) {
  * @override
  */
 dotprod.model.player.LocalPlayer.prototype.onDamage = function(shooter, projectile, energy) {
-  if (!this.isAlive()) {
+  if (!this.isAlive() || this.isSafe_()) {
     return;
   }
 
@@ -183,6 +183,7 @@ dotprod.model.player.LocalPlayer.prototype.clearPresence = function(presence) {
 dotprod.model.player.LocalPlayer.prototype.advanceTime = function() {
   var forceSendUpdate = false;
   var keyboard = this.game_.getKeyboard();
+  var isSafe = this.isSafe_();
 
   --this.respawnTimer_;
   if (this.respawnTimer_ > 0) {
@@ -196,7 +197,7 @@ dotprod.model.player.LocalPlayer.prototype.advanceTime = function() {
   this.shipChangeDelay_.decrement();
   this.projectileFireDelay_.decrement();
   this.exhaustTimer_.decrement();
-  this.energy_ = Math.min(this.energy_ + this.shipSettings_['rechargeRate'], this.maxEnergy_);
+  this.energy_ = isSafe ? this.maxEnergy_ : Math.min(this.energy_ + this.shipSettings_['rechargeRate'], this.maxEnergy_);
   this.exhaust_ = goog.array.filter(this.exhaust_, function(e) { return e.isValid(); });
 
   // Check for ship change before we read any ship settings.
@@ -226,32 +227,40 @@ dotprod.model.player.LocalPlayer.prototype.advanceTime = function() {
 
   if (this.projectileFireDelay_.isLow()) {
     if (keyboard.isKeyPressed(dotprod.input.Keymap.FIRE_GUN)) {
-      var angle = this.getAngle_();
-      var position = new dotprod.math.Vector(0, -this.yRadius_).rotate(angle).add(this.position_);
-      var velocity = this.velocity_;
+      if (isSafe) {
+        this.velocity_ = new dotprod.math.Vector(0, 0);
+      } else {
+        var angle = this.getAngle_();
+        var position = new dotprod.math.Vector(0, -this.yRadius_).rotate(angle).add(this.position_);
+        var velocity = this.velocity_;
 
-      projectile = this.gun_.fire(angle, position, velocity, goog.bind(function(fireEnergy, fireDelay) {
-        if (this.energy_ > fireEnergy) {
-          this.energy_ -= fireEnergy;
-          this.projectileFireDelay_.setValue(fireDelay);
-          return true;
-        }
-        return false;
-      }, this));
+        projectile = this.gun_.fire(angle, position, velocity, goog.bind(function(fireEnergy, fireDelay) {
+          if (this.energy_ > fireEnergy) {
+            this.energy_ -= fireEnergy;
+            this.projectileFireDelay_.setValue(fireDelay);
+            return true;
+          }
+          return false;
+        }, this));
+      }
     } else if (keyboard.isKeyPressed(dotprod.input.Keymap.FIRE_BOMB)) {
-      var angle = this.getAngle_();
-      var position = new dotprod.math.Vector(0, -this.yRadius_).rotate(angle).add(this.position_);
-      var velocity = this.velocity_;
+      if (isSafe) {
+        this.velocity_ = new dotprod.math.Vector(0, 0);
+      } else {
+        var angle = this.getAngle_();
+        var position = new dotprod.math.Vector(0, -this.yRadius_).rotate(angle).add(this.position_);
+        var velocity = this.velocity_;
 
-      projectile = this.bombBay_.fire(angle, position, velocity, goog.bind(function(fireEnergy, fireDelay, recoil) {
-        if (this.energy_ > fireEnergy) {
-          this.energy_ -= fireEnergy;
-          this.projectileFireDelay_.setValue(fireDelay);
-          this.velocity_ = this.velocity_.subtract(dotprod.math.Vector.fromPolar(recoil, angle));
-          return true;
-        }
-        return false;
-      }, this));
+        projectile = this.bombBay_.fire(angle, position, velocity, goog.bind(function(fireEnergy, fireDelay, recoil) {
+          if (this.energy_ > fireEnergy) {
+            this.energy_ -= fireEnergy;
+            this.projectileFireDelay_.setValue(fireDelay);
+            this.velocity_ = this.velocity_.subtract(dotprod.math.Vector.fromPolar(recoil, angle));
+            return true;
+          }
+          return false;
+        }, this));
+      }
     }
     if (projectile) {
       this.addProjectile_(projectile);
@@ -300,6 +309,16 @@ dotprod.model.player.LocalPlayer.prototype.advanceTime = function() {
   }
 
   this.updatePosition_(this.shipSettings_['bounceFactor']);
+
+  // If, after the position update, we moved into / out of a safe zone, send a force update.
+  if (this.isSafe_() != isSafe) {
+    // This convoluted bit of logic says that if we transitioned from !safe -> safe, we should
+    // remove all projectiles.
+    if (!isSafe) {
+      this.clearProjectiles_();
+    }
+    forceSendUpdate = true;
+  }
   this.sendPositionUpdate_(forceSendUpdate, this.velocity_ != oldVelocity || this.angleInRadians_ != oldAngle, projectile);
 };
 
@@ -343,13 +362,26 @@ dotprod.model.player.LocalPlayer.prototype.sendPositionUpdate_ = function(forceS
     }
   }
 
-  this.game_.getProtocol().sendPosition(this.angleInRadians_, this.position_, this.velocity_, opt_projectile);
+  this.game_.getProtocol().sendPosition(this.angleInRadians_, this.position_, this.velocity_, this.isSafe_(), opt_projectile);
   this.ticksSincePositionUpdate_ = 0;
 };
 
 /**
  * @return {number}
+ * @private
  */
 dotprod.model.player.LocalPlayer.prototype.getAngle_ = function() {
   return 2 * Math.PI * Math.floor(this.angleInRadians_ / (2 * Math.PI) * dotprod.model.player.LocalPlayer.ANGLE_STEPS_) / dotprod.model.player.LocalPlayer.ANGLE_STEPS_;
+};
+
+/**
+ * @return {boolean}
+ * @protected
+ */
+dotprod.model.player.LocalPlayer.prototype.isSafe_ = function() {
+  var map = this.game_.getMap();
+  var pos = map.toTileCoordinates(this.position_);
+  var tile = map.getTile(pos.getX(), pos.getY());
+  var tileProperties = map.getTileProperties(tile);
+  return !!tileProperties['safe'];
 };

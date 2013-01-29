@@ -389,18 +389,19 @@ dotprod.Game.prototype.onPlayerPosition_ = function(packet) {
   var angle = packet[2];
   var position = new dotprod.math.Vector(packet[3], packet[4]);
   var velocity = new dotprod.math.Vector(packet[5], packet[6]);
+  var isSafe = packet[7];
 
   timeDiff = Math.min(timeDiff, 150);
 
   var player = this.playerIndex_.findById(id);
   if (player) {
-    player.onPositionUpdate(timeDiff, angle, position, velocity);
-    if (packet.length > 7) {
-      var type = packet[7];
-      var level = packet[8];
-      var bounceCount = packet[9];
-      position = new dotprod.math.Vector(packet[10], packet[11]);
-      velocity = new dotprod.math.Vector(packet[12], packet[13]);
+    player.onPositionUpdate(timeDiff, angle, position, velocity, isSafe);
+    if (packet.length > 8) {
+      var type = packet[8];
+      var level = packet[9];
+      var bounceCount = packet[10];
+      position = new dotprod.math.Vector(packet[11], packet[12]);
+      velocity = new dotprod.math.Vector(packet[13], packet[14]);
 
       player.fireWeapon(timeDiff, type, level, bounceCount, position, velocity);
     }

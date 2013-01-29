@@ -74,6 +74,16 @@ dotprod.model.player.LocalPlayerSprite.prototype.render = function(viewport) {
     context.globalCompositeOperation = 'lighter';
     damageOverlay.render(context, x, y, tileNum);
   context.restore();
+
+  if (this.isSafe_()) {
+    context.save();
+      context.font = dotprod.Font.playerFont();
+      context.fillStyle = dotprod.Palette.friendColor();
+      context.textAlign = 'center';
+      context.textBaseline = 'top';
+      context.fillText('Safety - weapons disabled.', x, y - 40);
+    context.restore();
+  }
 };
 
 /**
