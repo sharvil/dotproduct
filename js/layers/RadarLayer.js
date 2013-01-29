@@ -5,6 +5,8 @@
 
 goog.provide('dotprod.layers.RadarLayer');
 
+goog.require('goog.dom');
+
 goog.require('dotprod.graphics.Drawable');
 goog.require('dotprod.graphics.Layer');
 goog.require('dotprod.math.Rect');
@@ -41,6 +43,12 @@ dotprod.layers.RadarLayer = function(game) {
   this.tileHeight_ = this.game_.getResourceManager().getImage('tileset').getTileHeight();
 
   /**
+   * @type {HTMLCanvasElement}
+   * @private
+   */
+  this.mapCanvas_ = null;
+
+  /**
    * @type {number}
    * @private
    */
@@ -61,14 +69,14 @@ goog.inherits(dotprod.layers.RadarLayer, dotprod.model.ModelObject);
  * @type {number}
  * @private
  */
-dotprod.layers.RadarLayer.SCALE_FACTOR_ = 0.3;
+dotprod.layers.RadarLayer.SCALE_FACTOR_ = 0.12;
 
 /**
  * @const
  * @type {number}
  * @private
  */
-dotprod.layers.RadarLayer.ZOOM_FACTOR_ = 2.5;
+dotprod.layers.RadarLayer.RADAR_SIZE_PERCENT_ = 0.3;
 
 /**
  * @const
@@ -98,8 +106,7 @@ dotprod.layers.RadarLayer.prototype.render = function(viewport) {
   var context = viewport.getContext();
   var dimensions = viewport.getDimensions();
 
-//  var radarWidth = Math.floor(dimensions.width * dotprod.layers.RadarLayer.SCALE_FACTOR_);
-  var radarHeight = Math.floor(dimensions.height * dotprod.layers.RadarLayer.SCALE_FACTOR_);
+  var radarHeight = Math.floor(dimensions.height * dotprod.layers.RadarLayer.RADAR_SIZE_PERCENT_);
   var radarWidth = radarHeight;
 
   context.save();
@@ -134,36 +141,39 @@ dotprod.layers.RadarLayer.prototype.render = function(viewport) {
  * @param {number} radarHeight
  */
 dotprod.layers.RadarLayer.prototype.renderMap_ = function(context, dimensions, radarWidth, radarHeight) {
-  var map = this.game_.getMap();
+  if (!this.mapCanvas_) {
+    this.prerenderMapOnCanvas_();
+  }
+
   var SCALE_FACTOR = dotprod.layers.RadarLayer.SCALE_FACTOR_;
-  var ZOOM_FACTOR = dotprod.layers.RadarLayer.ZOOM_FACTOR_;
 
   var tileWidth = this.tileWidth_;
   var tileHeight = this.tileHeight_;
-  var scaledTileWidth = Math.floor(tileWidth * SCALE_FACTOR / ZOOM_FACTOR) || 1;
-  var scaledTileHeight = Math.floor(tileHeight * SCALE_FACTOR / ZOOM_FACTOR) || 1;
+  var scaledTileWidth = Math.floor(tileWidth * SCALE_FACTOR) || 1;
+  var scaledTileHeight = Math.floor(tileHeight * SCALE_FACTOR) || 1;
 
-  context.fillStyle = dotprod.Palette.radarTileColor();
-  var leftTile = Math.floor(dimensions.x / tileWidth - (radarWidth / 2 / scaledTileWidth));
-  var topTile = Math.floor(dimensions.y / tileHeight - (radarHeight / 2 / scaledTileHeight));
-  var rightTile = Math.ceil(dimensions.x / tileWidth + (radarWidth / 2 / scaledTileWidth));
-  var bottomTile = Math.ceil(dimensions.y / tileHeight + (radarHeight / 2 / scaledTileHeight));
+  var sourceX = Math.floor((dimensions.x * scaledTileWidth / tileWidth) - (radarWidth / 2));
+  var sourceY = Math.floor((dimensions.y * scaledTileHeight / tileHeight) - (radarHeight / 2));
+  var destX = 0;
+  var destY = 0;
 
-  leftTile = Math.max(leftTile, 0);
-  topTile = Math.max(topTile, 0);
-  rightTile = Math.min(rightTile, map.getWidth());
-  bottomTile = Math.min(bottomTile, map.getHeight());
-
-  var tiles = map.getTiles(dotprod.math.Rect.fromBox(leftTile, topTile, rightTile, bottomTile));
-  for (var i = 0; i < tiles.length; ++i) {
-    var tile = tiles[i];
-    var xPixels = (tile.x - dimensions.x / tileWidth) * scaledTileWidth;
-    var yPixels = (tile.y - dimensions.y / tileHeight) * scaledTileHeight;
-    var x = Math.floor(xPixels + radarWidth / 2);
-    var y = Math.floor(yPixels + radarHeight / 2);
-
-    context.fillRect(x, y, scaledTileWidth, scaledTileHeight);
+  // Make sure all source dimensions fall within the source image. If they don't, the drawImage
+  // will fail.
+  if (sourceX < 0) {
+    destX = -sourceX;
+    sourceX = 0;
+  } else if (sourceX + radarWidth > this.mapCanvas_.width) {
+    radarWidth = this.mapCanvas_.width - sourceX;
   }
+
+  if (sourceY < 0) {
+    destY = -sourceY;
+    sourceY = 0;
+  } else if (sourceY + radarHeight > this.mapCanvas_.height) {
+    radarHeight = this.mapCanvas_.height - sourceY;
+  }
+
+  context.drawImage(this.mapCanvas_, sourceX, sourceY, radarWidth, radarHeight, destX, destY, radarWidth, radarHeight);
 };
 
 /**
@@ -174,12 +184,11 @@ dotprod.layers.RadarLayer.prototype.renderMap_ = function(context, dimensions, r
  */
 dotprod.layers.RadarLayer.prototype.renderPrizes_ = function(context, dimensions, radarWidth, radarHeight) {
   var SCALE_FACTOR = dotprod.layers.RadarLayer.SCALE_FACTOR_;
-  var ZOOM_FACTOR = dotprod.layers.RadarLayer.ZOOM_FACTOR_;
 
   var tileWidth = this.tileWidth_;
   var tileHeight = this.tileHeight_;
-  var scaledTileWidth = Math.floor(tileWidth * SCALE_FACTOR / ZOOM_FACTOR) || 1;
-  var scaledTileHeight = Math.floor(tileHeight * SCALE_FACTOR / ZOOM_FACTOR) || 1;
+  var scaledTileWidth = Math.floor(tileWidth * SCALE_FACTOR) || 1;
+  var scaledTileHeight = Math.floor(tileHeight * SCALE_FACTOR) || 1;
 
   context.fillStyle = dotprod.Palette.radarPrizeColor();
   this.game_.getPrizeIndex().forEach(function(prize) {
@@ -203,9 +212,8 @@ dotprod.layers.RadarLayer.prototype.renderPlayers_ = function(context, dimension
   var localPlayer = this.game_.getPlayerIndex().getLocalPlayer();
 
   var SCALE_FACTOR = dotprod.layers.RadarLayer.SCALE_FACTOR_;
-  var ZOOM_FACTOR = dotprod.layers.RadarLayer.ZOOM_FACTOR_;
-  var actualXScale = (Math.floor(this.tileWidth_ * SCALE_FACTOR / ZOOM_FACTOR) || 1) / this.tileWidth_;
-  var actualYScale = (Math.floor(this.tileHeight_ * SCALE_FACTOR / ZOOM_FACTOR) || 1) / this.tileHeight_;
+  var actualXScale = (Math.floor(this.tileWidth_ * SCALE_FACTOR) || 1) / this.tileWidth_;
+  var actualYScale = (Math.floor(this.tileHeight_ * SCALE_FACTOR) || 1) / this.tileHeight_;
 
   this.game_.getPlayerIndex().forEach(function(player) {
     if (!player.isAlive()) {
@@ -222,6 +230,31 @@ dotprod.layers.RadarLayer.prototype.renderPlayers_ = function(context, dimension
     context.fillStyle = player.isFriend(localPlayer) ? dotprod.Palette.friendColor(alpha) : dotprod.Palette.foeColor();
     context.fillRect(x - 1, y - 1, 3, 3);
   });
+};
+
+dotprod.layers.RadarLayer.prototype.prerenderMapOnCanvas_ = function() {
+  var SCALE_FACTOR = dotprod.layers.RadarLayer.SCALE_FACTOR_;
+  var map = this.game_.getMap();
+  var tileWidth = this.tileWidth_;
+  var tileHeight = this.tileHeight_;
+  var scaledTileWidth = Math.floor(tileWidth * SCALE_FACTOR) || 1;
+  var scaledTileHeight = Math.floor(tileHeight * SCALE_FACTOR) || 1;
+
+  this.mapCanvas_ = /** @type {!HTMLCanvasElement} */ (goog.dom.createElement('canvas'));
+  this.mapCanvas_.width = Math.ceil(map.getWidth() * scaledTileWidth);
+  this.mapCanvas_.height = Math.ceil(map.getHeight() * scaledTileHeight);
+
+  var context = this.mapCanvas_.getContext('2d');
+  var tiles = map.getTiles(dotprod.math.Rect.fromBox(0, 0, map.getWidth() - 1, map.getHeight() - 1));
+
+  context.fillStyle = dotprod.Palette.radarTileColor();
+  for (var i = 0; i < tiles.length; ++i) {
+    var tile = tiles[i];
+    var x = tile.x * scaledTileWidth;
+    var y = tile.y * scaledTileHeight;
+
+    context.fillRect(x, y, scaledTileWidth, scaledTileHeight);
+  }
 };
 
 /**
