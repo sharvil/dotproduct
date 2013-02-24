@@ -1,7 +1,8 @@
 {
   "game":
   {
-    "killPoints": 20
+    "killPoints": 20,
+    "maxTeams": 2
   },
 
   "network":
