@@ -37,6 +37,7 @@ dotprod.model.Gun = function(game, gunSettings, owner) {
    * @private
    */
   this.level_ = new dotprod.math.Range(Math.min(0, this.gunSettings_['maxLevel']), this.gunSettings_['maxLevel'], 1);
+  this.level_.setValue(this.gunSettings_['initialLevel']);
 
   /**
    * @type {boolean}
