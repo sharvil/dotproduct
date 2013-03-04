@@ -10,5 +10,6 @@ goog.provide('dotprod.model.Weapon.Type');
  */
 dotprod.model.Weapon.Type = {
   BULLET: 1,
-  BOMB: 2
+  BOMB: 2,
+  MINE: 3
 };

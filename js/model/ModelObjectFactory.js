@@ -59,3 +59,14 @@ dotprod.model.ModelObjectFactory.prototype.newBullet = goog.abstractMethod;
  * @return {!dotprod.model.projectile.Bomb}
  */
 dotprod.model.ModelObjectFactory.prototype.newBomb = goog.abstractMethod;
+
+/**
+ * @param {!dotprod.Game} game
+ * @param {!dotprod.model.player.Player} owner
+ * @param {number} level
+ * @param {!dotprod.math.Vector} position
+ * @param {number} lifetime
+ * @param {number} damage
+ * @return {!dotprod.model.projectile.Mine}
+ */
+dotprod.model.ModelObjectFactory.prototype.newMine = goog.abstractMethod;

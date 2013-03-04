@@ -165,7 +165,7 @@
     },
 
     "ship2_junk": {
-      "url": "data/shared/graphics/ship3_junk.png",
+      "url": "data/shared/graphics/ship2_junk.png",
       "xTiles": 10,
       "yTiles": 9,
       "frames": 10,
@@ -173,6 +173,38 @@
     },
 
     "ship3_junk": {
+      "url": "data/shared/graphics/ship3_junk.png",
+      "xTiles": 10,
+      "yTiles": 9,
+      "frames": 10,
+      "period": 15
+    },
+
+    "ship4_junk": {
+      "url": "data/shared/graphics/ship4_junk.png",
+      "xTiles": 10,
+      "yTiles": 9,
+      "frames": 10,
+      "period": 15
+    },
+
+    "ship5_junk": {
+      "url": "data/shared/graphics/ship5_junk.png",
+      "xTiles": 10,
+      "yTiles": 9,
+      "frames": 10,
+      "period": 15
+    },
+
+    "ship6_junk": {
+      "url": "data/shared/graphics/ship6_junk.png",
+      "xTiles": 10,
+      "yTiles": 9,
+      "frames": 10,
+      "period": 15
+    },
+
+    "ship7_junk": {
       "url": "data/shared/graphics/ship7_junk.png",
       "xTiles": 10,
       "yTiles": 9,
@@ -216,6 +248,14 @@
       "url": "data/shared/graphics/bombs.png",
       "xTiles": 10,
       "yTiles": 13,
+      "frames": 10,
+      "period": 10
+    },
+
+    "mines": {
+      "url": "data/shared/graphics/mines.png",
+      "xTiles": 10,
+      "yTiles": 8,
       "frames": 10,
       "period": 10
     },

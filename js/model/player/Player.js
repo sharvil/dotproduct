@@ -11,6 +11,7 @@ goog.require('goog.array');
 goog.require('dotprod.model.Entity');
 goog.require('dotprod.model.BombBay');
 goog.require('dotprod.model.Gun');
+goog.require('dotprod.model.MineLayer');
 goog.require('dotprod.model.Weapon.Type');
 
 /**
@@ -49,6 +50,12 @@ dotprod.model.player.Player = function(game, id, name, team, ship, bounty) {
    * @protected
    */
   this.bombBay_ = new dotprod.model.BombBay(game, this.shipSettings_['bomb'], this);
+
+  /**
+   * @type {!dotprod.model.MineLayer}
+   * @protected
+   */
+  this.mineLayer_ = new dotprod.model.MineLayer(game, this.shipSettings_['bomb'], this);
 
   /**
    * @type {string}
@@ -252,6 +259,7 @@ dotprod.model.player.Player.prototype.setShip = function(ship) {
   this.shipSettings_ = this.settings_['ships'][this.ship_];
   this.gun_ = new dotprod.model.Gun(this.game_, this.shipSettings_['bullet'], this);
   this.bombBay_ = new dotprod.model.BombBay(this.game_, this.shipSettings_['bomb'], this);
+  this.mineLayer_ = new dotprod.model.MineLayer(this.game_, this.shipSettings_['bomb'], this);
 
   this.position_ = new dotprod.math.Vector(0, 0);
   this.velocity_ = new dotprod.math.Vector(0, 0);
@@ -278,6 +286,9 @@ dotprod.model.player.Player.prototype.fireWeapon = function(timeDiff, type, leve
       break;
     case dotprod.model.Weapon.Type.BOMB:
       projectile = this.bombBay_.fireSynthetic(level, bounceCount, position, velocity);
+      break;
+    case dotprod.model.Weapon.Type.MINE:
+      projectile = this.mineLayer_.fireSynthetic(level, position);
       break;
     default:
       break;

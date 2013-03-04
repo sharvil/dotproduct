@@ -93,6 +93,7 @@ dotprod.model.player.LocalPlayer.prototype.collectPrize_ = function(prize) {
       break;
     case dotprod.PrizeType.BOMB_UPGRADE:
       this.bombBay_.upgrade();
+      this.mineLayer_.upgrade();
       this.game_.notifications_.addMessage('Bombs upgraded!');
       break;
     case dotprod.PrizeType.FULL_ENERGY:
@@ -261,6 +262,16 @@ dotprod.model.player.LocalPlayer.prototype.advanceTime = function() {
           return false;
         }, this));
       }
+    } else if (keyboard.isKeyPressed(dotprod.input.Keymap.FIRE_MINE)) {
+      var self = this;
+      projectile = this.mineLayer_.fire(this.position_, function(fireEnergy, fireDelay) {
+        if (self.energy_ > fireEnergy) {
+          self.energy_ -= fireEnergy;
+          self.projectileFireDelay_.setValue(fireDelay);
+          return true;
+        }
+        return false;
+      });
     }
     if (projectile) {
       this.addProjectile_(projectile);

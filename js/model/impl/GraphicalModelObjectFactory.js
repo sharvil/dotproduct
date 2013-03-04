@@ -6,10 +6,11 @@
 goog.provide('dotprod.model.impl.GraphicalModelObjectFactory');
 
 goog.require('dotprod.model.ModelObjectFactory');
-goog.require('dotprod.model.projectile.BombSprite');
-goog.require('dotprod.model.projectile.BulletSprite');
 goog.require('dotprod.model.player.LocalPlayerSprite');
 goog.require('dotprod.model.player.RemotePlayerSprite');
+goog.require('dotprod.model.projectile.BombSprite');
+goog.require('dotprod.model.projectile.BulletSprite');
+goog.require('dotprod.model.projectile.MineSprite');
 
 /**
  * @constructor
@@ -43,4 +44,11 @@ dotprod.model.impl.GraphicalModelObjectFactory.prototype.newBullet = function(ga
  */
 dotprod.model.impl.GraphicalModelObjectFactory.prototype.newBomb = function(game, owner, level, position, velocity, lifetime, damage, bounceCount, blastRadius, proxRadius) {
   return new dotprod.model.projectile.BombSprite(game, owner, level, position, velocity, lifetime, damage, bounceCount, blastRadius, proxRadius);
+};
+
+/**
+ * @override
+ */
+dotprod.model.impl.GraphicalModelObjectFactory.prototype.newMine = function(game, owner, level, position, lifetime, damage) {
+  return new dotprod.model.projectile.MineSprite(game, owner, level, position, lifetime, damage);
 };
