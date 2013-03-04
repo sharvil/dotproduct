@@ -25,23 +25,28 @@ dotprod.layers.MapLayer = function(game) {
   goog.base(this, game.getSimulation());
 
   /**
+   * @type {!dotprod.ResourceManager}
+   * @private
+   */
+  this.resourceManager_ = game.getResourceManager();
+
+  /**
    * @type {!dotprod.model.Map}
    * @private
    */
   this.map_ = game.getMap();
 
   /**
-   * @type {!dotprod.graphics.Animation}
+   * @type {!Array.<dotprod.graphics.Animation>}
    * @private
    */
-  this.prizeAnimation_ = game.getResourceManager().getSpriteSheet('prize').getAnimation(0);
-  this.prizeAnimation_.setRepeatCount(-1);
+  this.animations_ = [];
 
   /**
    * @type {!dotprod.graphics.Image}
    * @private
    */
-  this.tileset_ = game.getResourceManager().getImage('tileset');
+  this.tileset_ = this.resourceManager_.getImage('tileset');
 
   game.getPainter().registerDrawable(dotprod.graphics.Layer.MAP, this);
 };
@@ -51,7 +56,11 @@ goog.inherits(dotprod.layers.MapLayer, dotprod.model.ModelObject);
  * @override
  */
 dotprod.layers.MapLayer.prototype.advanceTime = function() {
-  this.prizeAnimation_.update();
+  for (var i = 0; i < this.animations_.length; ++i) {
+    if (this.animations_[i]) {
+      this.animations_[i].update();
+    }
+  }
 };
 
 /**
@@ -102,16 +111,21 @@ dotprod.layers.MapLayer.prototype.render = function(viewport) {
         }
 
         var tileProperties = map.getTileProperties(tileNum);
+        var index = tileProperties['index'];
         if (!tileProperties['animated']) {
-          if (tileProperties['index'] <= this.tileset_.getNumTiles()) {
+          if (index <= this.tileset_.getNumTiles()) {
             this.tileset_.render(context,
                                 x * tileWidth - dimensions.x + halfWidth,
                                 y * tileHeight - dimensions.y + halfHeight,
-                                tileProperties['index']);
+                                index);
           }
         } else {
           // Animated tile.
-          this.prizeAnimation_.render(context,
+          if (!this.animations_[index]) {
+            this.animations_[index] = this.resourceManager_.getSpriteSheet('anim' + index).getAnimation(0);
+            this.animations_[index].setRepeatCount(-1);
+          }
+          this.animations_[index].render(context,
                                       x * tileWidth - dimensions.x + halfWidth,
                                       y * tileHeight - dimensions.y + halfHeight);
         }
