@@ -1,0 +1,273 @@
+{
+  "images": {
+    "tileset": {
+      "url": "data/arenas/trench/tileset.bmp",
+      "xTiles": 19,
+      "yTiles": 10
+    },
+
+    "ship0": {
+      "url": "data/shared/graphics/ship0.png",
+      "xTiles": 10,
+      "yTiles": 4
+    },
+
+    "ship1": {
+      "url": "data/shared/graphics/ship1.png",
+      "xTiles": 10,
+      "yTiles": 4
+    },
+
+    "ship2": {
+      "url": "data/shared/graphics/ship2.png",
+      "xTiles": 10,
+      "yTiles": 4
+    },
+
+    "ship3": {
+      "url": "data/shared/graphics/ship3.png",
+      "xTiles": 10,
+      "yTiles": 4
+    },
+
+    "ship4": {
+      "url": "data/shared/graphics/ship4.png",
+      "xTiles": 10,
+      "yTiles": 4
+    },
+
+    "ship5": {
+      "url": "data/shared/graphics/ship5.png",
+      "xTiles": 10,
+      "yTiles": 4
+    },
+
+    "ship6": {
+      "url": "data/shared/graphics/ship6.png",
+      "xTiles": 10,
+      "yTiles": 4
+    },
+
+    "ship7": {
+      "url": "data/shared/graphics/ship7.png",
+      "xTiles": 10,
+      "yTiles": 4
+    },
+
+    "ship0Red": {
+      "url": "data/shared/graphics/ship0_red.png",
+      "xTiles": 10,
+      "yTiles": 4
+    },
+
+    "ship1Red": {
+      "url": "data/shared/graphics/ship1_red.png",
+      "xTiles": 10,
+      "yTiles": 4
+    },
+
+    "ship2Red": {
+      "url": "data/shared/graphics/ship2_red.png",
+      "xTiles": 10,
+      "yTiles": 4
+    },
+
+    "ship3Red": {
+      "url": "data/shared/graphics/ship3_red.png",
+      "xTiles": 10,
+      "yTiles": 4
+    },
+
+    "ship4Red": {
+      "url": "data/shared/graphics/ship4_red.png",
+      "xTiles": 10,
+      "yTiles": 4
+    },
+
+    "ship5Red": {
+      "url": "data/shared/graphics/ship5_red.png",
+      "xTiles": 10,
+      "yTiles": 4
+    },
+
+    "ship6Red": {
+      "url": "data/shared/graphics/ship6_red.png",
+      "xTiles": 10,
+      "yTiles": 4
+    },
+
+    "ship7Red": {
+      "url": "data/shared/graphics/ship7_red.png",
+      "xTiles": 10,
+      "yTiles": 4
+    },
+
+    "presenceTyping": {
+      "url": "data/shared/graphics/presence_typing.png",
+      "xTiles": 1,
+      "yTiles": 1
+    },
+
+    "presenceAway": {
+      "url": "data/shared/graphics/presence_away.png",
+      "xTiles": 1,
+      "yTiles": 1
+    },
+    
+    "statusHud": {
+      "url": "data/shared/graphics/status_hud.png",
+      "xTiles": 1,
+      "yTiles": 1
+    },
+
+    "energyFont": {
+      "url": "data/shared/graphics/energy_font.png",
+      "xTiles": 10,
+      "yTiles": 1
+    },
+
+    "ledFont": {
+      "url": "data/shared/graphics/led_font.png",
+      "xTiles": 10,
+      "yTiles": 1
+    },
+
+    "icons": {
+      "url": "data/shared/graphics/icons.png",
+      "xTiles": 9,
+      "yTiles": 6
+    }
+  },
+
+  "spritesheets": {
+    "exhaust": {
+      "url": "data/shared/graphics/exhaust.png",
+      "xTiles": 19,
+      "yTiles": 2,
+      "frames": 19,
+      "period": 1
+    },
+
+    "ship0_junk": {
+      "url": "data/shared/graphics/ship0_junk.png",
+      "xTiles": 10,
+      "yTiles": 9,
+      "frames": 10,
+      "period": 10
+    },
+
+    "ship1_junk": {
+      "url": "data/shared/graphics/ship1_junk.png",
+      "xTiles": 10,
+      "yTiles": 9,
+      "frames": 10,
+      "period": 15
+    },
+
+    "ship2_junk": {
+      "url": "data/shared/graphics/ship3_junk.png",
+      "xTiles": 10,
+      "yTiles": 9,
+      "frames": 10,
+      "period": 15
+    },
+
+    "ship3_junk": {
+      "url": "data/shared/graphics/ship7_junk.png",
+      "xTiles": 10,
+      "yTiles": 9,
+      "frames": 10,
+      "period": 15
+    },
+
+    "explode0": {
+      "url": "data/shared/graphics/explode0.png",
+      "xTiles": 7,
+      "yTiles": 1,
+      "frames": 7,
+      "period": 5
+    },
+
+    "explode1": {
+      "url": "data/shared/graphics/explode1.png",
+      "xTiles": 6,
+      "yTiles": 6,
+      "frames": 36,
+      "period": 2
+    },
+
+    "explode2": {
+      "url": "data/shared/graphics/explode2.png",
+      "xTiles": 4,
+      "yTiles": 11,
+      "frames": 44,
+      "period": 2
+    },
+
+    "bullets": {
+      "url": "data/shared/graphics/bullets.png",
+      "xTiles": 4,
+      "yTiles": 10,
+      "frames": 4,
+      "period": 10
+    },
+
+    "bombs": {
+      "url": "data/shared/graphics/bombs.png",
+      "xTiles": 10,
+      "yTiles": 13,
+      "frames": 10,
+      "period": 10
+    },
+
+    "warp": {
+      "url": "data/shared/graphics/warp.png",
+      "xTiles": 6,
+      "yTiles": 3,
+      "frames": 18,
+      "period": 3
+    },
+
+    "anim0": {
+      "url": "data/shared/graphics/prize.png",
+      "xTiles": 10,
+      "yTiles": 1,
+      "frames": 10,
+      "period": 5
+    },
+
+    "anim1": {
+      "url": "data/shared/graphics/over1.png",
+      "xTiles": 15,
+      "yTiles": 2,
+      "frames": 30,
+      "period": 5
+    },
+
+    "anim2": {
+      "url": "data/shared/graphics/over2.png",
+      "xTiles": 10,
+      "yTiles": 3,
+      "frames": 30,
+      "period": 5
+    },
+
+    "anim3": {
+      "url": "data/shared/graphics/over3.png",
+      "xTiles": 15,
+      "yTiles": 2,
+      "frames": 30,
+      "period": 5
+    }
+  },
+
+  "sounds": {
+    "bounce": {
+      "url": "data/shared/sounds/bounce.wav"
+    },
+
+    "bullet": {
+      "url": "data/shared/sounds/gun1.wav"
+    }
+  }
+}
