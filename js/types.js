@@ -22,6 +22,7 @@ dotprod.PrizeType = {
  */
 dotprod.TileType = {
   NONE: 0,
-  SAFE: 1,
-  PRIZE: 2
+  COLLISION: 1,
+  SAFE: 2,
+  PRIZE: 3
 };

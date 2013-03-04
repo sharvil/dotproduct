@@ -9,14 +9,21 @@ import sys
 
 TILE_PROPERTIES = [
   { 'index': -1,  'object': 0, 'animated': False, 'safe': False, 'collision': False },
+  { 'index': -1,  'object': 0, 'animated': False, 'safe': False, 'collision': True  },
   { 'index': 170, 'object': 0, 'animated': False, 'safe': True,  'collision': False },
-  { 'index': 0,   'object': 1, 'animated': True,  'safe': False, 'collision': True  }
+  { 'index': 0,   'object': 1, 'animated': True,  'safe': False, 'collision': True  },
+  { 'index': 1,   'object': 0, 'animated': True,  'safe': False, 'collision': True  },
+  { 'index': 2,   'object': 0, 'animated': True,  'safe': False, 'collision': True  },
+  { 'index': 3,   'object': 0, 'animated': True,  'safe': False, 'collision': True  },
 ]
 
 
 TILE_MAPPING = {
   0: 0,
-  171: 1
+  171: 2,   # Safe
+  216: 4,   # Rock 1
+  217: 5,   # Rock 2
+  218: 6    # Rock 3
 }
 
 
@@ -58,6 +65,10 @@ def toJson(levelFp, outputDir):
     y = (record >> 12) & 0x3FF
     tile = (record >> 24) & 0xFF
     levelObj[x + y * 1024] = mapProperties(tile)
+    if tile == 217:
+      levelObj[(x + 1) + y * 1024] = 1
+      levelObj[x + (y + 1) * 1024] = 1
+      levelObj[(x + 1) + (y + 1) * 1024] = 1
 
   # Draw border around entire map
   for i in range(0, 1024):
