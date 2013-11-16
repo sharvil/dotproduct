@@ -8,6 +8,7 @@ goog.provide('dotprod.model.Entity');
 goog.require('dotprod.math.Rect');
 goog.require('dotprod.math.Vector');
 goog.require('dotprod.model.ModelObject');
+goog.require('dotprod.ObjectType');
 goog.require('dotprod.TileType');
 
 /**
@@ -104,16 +105,23 @@ dotprod.model.Entity.prototype.updatePosition_ = function(opt_bounceFactor) {
 
     var collision = map.getCollision(this);
     if (collision) {
-      if (collision.tileValue == dotprod.TileType.PRIZE) {
-        var prize = prizeIndex.getPrize(collision.xTile, collision.yTile);
-        if (prize && this.collectPrize_(prize)) {
-          prizeIndex.removePrize(prize);
-        }
-      } else {
-        this.position_ = new dotprod.math.Vector(xVel >= 0 ? collision.left : collision.right, this.position_.getY());
-        this.velocity_ = new dotprod.math.Vector(-xVel * bounceFactor, this.velocity_.getY());
-        xSpeed *= bounceFactor;
-        this.bounce_();
+      switch (collision.object) {
+        case dotprod.ObjectType.NONE:
+          this.position_ = new dotprod.math.Vector(xVel >= 0 ? collision.left : collision.right, this.position_.getY());
+          this.velocity_ = new dotprod.math.Vector(-xVel * bounceFactor, this.velocity_.getY());
+          xSpeed *= bounceFactor;
+          this.bounce_();
+          break;
+        case dotprod.ObjectType.PRIZE:
+          var prize = prizeIndex.getPrize(collision.xTile, collision.yTile);
+          if (prize && this.collectPrize_(prize)) {
+            prizeIndex.removePrize(prize);
+          }
+          break;
+        case dotprod.ObjectType.FLAG:
+          break;
+        default:
+          break;
       }
     }
   }
@@ -127,16 +135,23 @@ dotprod.model.Entity.prototype.updatePosition_ = function(opt_bounceFactor) {
 
     var collision = this.game_.getMap().getCollision(this);
     if (collision) {
-      if (collision.tileValue == dotprod.TileType.PRIZE) {
-        var prize = prizeIndex.getPrize(collision.xTile, collision.yTile);
-        if (prize && this.collectPrize_(prize)) {
-          prizeIndex.removePrize(prize);
-        }
-      } else {
-        this.position_ = new dotprod.math.Vector(this.position_.getX(), yVel >= 0 ? collision.top : collision.bottom);
-        this.velocity_ = new dotprod.math.Vector(this.velocity_.getX(), -yVel * bounceFactor);
-        ySpeed *= bounceFactor;
-        this.bounce_();
+      switch (collision.object) {
+        case dotprod.ObjectType.NONE:
+          this.position_ = new dotprod.math.Vector(this.position_.getX(), yVel >= 0 ? collision.top : collision.bottom);
+          this.velocity_ = new dotprod.math.Vector(this.velocity_.getX(), -yVel * bounceFactor);
+          ySpeed *= bounceFactor;
+          this.bounce_();
+          break;
+        case dotprod.ObjectType.PRIZE:
+          var prize = prizeIndex.getPrize(collision.xTile, collision.yTile);
+          if (prize && this.collectPrize_(prize)) {
+            prizeIndex.removePrize(prize);
+          }
+          break;
+        case dotprod.ObjectType.FLAG:
+          break;
+        default:
+          break;
       }
     }
   }

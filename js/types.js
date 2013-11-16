@@ -3,8 +3,18 @@
  * @author sharvil.nanavati@gmail.com (Sharvil Nanavati)
  */
 
+goog.provide('dotprod.ObjectType');
 goog.provide('dotprod.PrizeType');
 goog.provide('dotprod.TileType');
+
+/**
+ * @enum {number}
+ */
+dotprod.ObjectType = {
+  NONE: 0,
+  PRIZE: 1,
+  FLAG: 2
+};
 
 /**
  * @enum {number}

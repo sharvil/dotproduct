@@ -7,11 +7,12 @@ goog.provide('dotprod.model.Map');
 
 goog.require('goog.asserts');
 
-goog.require('dotprod.model.Entity');
-goog.require('dotprod.graphics.Image');
-goog.require('dotprod.Quadtree');
 goog.require('dotprod.math.Rect');
 goog.require('dotprod.math.Vector');
+goog.require('dotprod.model.Entity');
+goog.require('dotprod.graphics.Image');
+goog.require('dotprod.ObjectType');
+goog.require('dotprod.Quadtree');
 goog.require('dotprod.TileType');
 
 /**
@@ -234,7 +235,8 @@ dotprod.model.Map.prototype.getCollision_ = function(dimensions) {
       bottom: this.tileHeight_ + yRadius,
       xTile: 0,
       yTile: 0,
-      tileValue: 1
+      tileValue: dotprod.TileType.COLLISION,
+      object: dotprod.ObjectType.NONE
     };
   }
 
@@ -247,7 +249,8 @@ dotprod.model.Map.prototype.getCollision_ = function(dimensions) {
       bottom: totalHeight + yRadius,
       xTile: this.width_,
       yTile: this.height_,
-      tileValue: 1
+      tileValue: dotprod.TileType.COLLISION,
+      object: dotprod.ObjectType.NONE
     };
   }
 
@@ -273,7 +276,8 @@ dotprod.model.Map.prototype.getCollision_ = function(dimensions) {
           bottom: (yTile + 1) * this.tileHeight_ + yRadius,
           xTile: xTile,
           yTile: yTile,
-          tileValue: tileValue
+          tileValue: tileValue,
+          object: tileProperties['object']
         };
 
         // If the collision was due to a prize, we keep checking for a more concrete
