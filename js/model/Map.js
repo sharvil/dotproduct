@@ -12,7 +12,7 @@ goog.require('dotprod.math.Vector');
 goog.require('dotprod.model.Entity');
 goog.require('dotprod.graphics.Image');
 goog.require('dotprod.ObjectType');
-goog.require('dotprod.Quadtree');
+goog.require('dotprod.structs.Quadtree');
 goog.require('dotprod.TileType');
 
 /**
@@ -68,10 +68,10 @@ dotprod.model.Map = function(game, mapData, tileProperties) {
   this.tileHeight_ = tileset.getTileHeight();
 
   /**
-   * @type {!dotprod.Quadtree}
+   * @type {!dotprod.structs.Quadtree}
    * @private
    */
-  this.quadtree_ = new dotprod.Quadtree(mapData, this.width_, this.height_);
+  this.quadtree_ = new dotprod.structs.Quadtree(mapData, this.width_, this.height_);
 };
 
 /**
