@@ -7,14 +7,23 @@ import struct
 import sys
 
 
+# Enumeration defining the possible object types supported
+# in dotproduct.
+OBJECT_NONE  = 0
+OBJECT_PRIZE = 1
+OBJECT_FLAG  = 2
+
+
 TILE_PROPERTIES = [
-  { 'index': -1,  'object': 0, 'animated': False, 'safe': False, 'collision': False },
-  { 'index': -1,  'object': 0, 'animated': False, 'safe': False, 'collision': True  },
-  { 'index': 170, 'object': 0, 'animated': False, 'safe': True,  'collision': False },
-  { 'index': 0,   'object': 1, 'animated': True,  'safe': False, 'collision': True  },
-  { 'index': 1,   'object': 0, 'animated': True,  'safe': False, 'collision': True  },
-  { 'index': 2,   'object': 0, 'animated': True,  'safe': False, 'collision': True  },
-  { 'index': 3,   'object': 0, 'animated': True,  'safe': False, 'collision': True  },
+  { 'index': -1,  'object': OBJECT_NONE,  'animated': False, 'safe': False, 'collision': False },  #  0: No tile
+  { 'index': -1,  'object': OBJECT_NONE,  'animated': False, 'safe': False, 'collision': True  },  #  1: Collision helper
+  { 'index': 170, 'object': OBJECT_NONE,  'animated': False, 'safe': True,  'collision': False },  #  2: Safe
+  { 'index': 0,   'object': OBJECT_PRIZE, 'animated': True,  'safe': False, 'collision': True  },  #  3: Prize
+  { 'index': 1,   'object': OBJECT_NONE,  'animated': True,  'safe': False, 'collision': True  },  #  4: Rock 1
+  { 'index': 2,   'object': OBJECT_NONE,  'animated': True,  'safe': False, 'collision': True  },  #  5: Rock 2
+  { 'index': 3,   'object': OBJECT_NONE,  'animated': True,  'safe': False, 'collision': True  },  #  6: Rock 3
+  { 'index': 4,   'object': OBJECT_FLAG,  'animated': True,  'safe': False, 'collision': True  },  #  7: Friendly flag
+  { 'index': 5,   'object': OBJECT_FLAG,  'animated': True,  'safe': False, 'collision': True  }   #  8: Foe flag
 ]
 
 
@@ -23,7 +32,8 @@ TILE_MAPPING = {
   171: 2,   # Safe
   216: 4,   # Rock 1
   217: 5,   # Rock 2
-  218: 6    # Rock 3
+  218: 6,   # Rock 3
+  170: 7    # Flag
 }
 
 
