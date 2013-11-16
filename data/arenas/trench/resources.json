@@ -298,6 +298,22 @@
       "yTiles": 2,
       "frames": 30,
       "period": 5
+    },
+
+    "anim4": {
+      "url": "data/shared/graphics/flag_friend.png",
+      "xTiles": 10,
+      "yTiles": 1,
+      "frames": 10,
+      "period": 10
+    },
+
+    "anim5": {
+      "url": "data/shared/graphics/flag_foe.png",
+      "xTiles": 10,
+      "yTiles": 1,
+      "frames": 10,
+      "period": 10
     }
   },
 
