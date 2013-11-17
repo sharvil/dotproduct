@@ -14,6 +14,11 @@ OBJECT_PRIZE = 1
 OBJECT_FLAG  = 2
 
 
+# index: index in tileset to render with if animated==False, or the anim<index> resource to use if animated==True
+# object: the type of map object this tile represents
+# animated: False if the tile comes from the tileset, True if it comes from an anim<index> resource
+# safe: True if players don't take damage while on that tile, False otherwise
+# collision: True if players and weapons collide with the tile, False otherwise
 TILE_PROPERTIES = [
   { 'index': -1,  'object': OBJECT_NONE,  'animated': False, 'safe': False, 'collision': False },  #  0: No tile
   { 'index': -1,  'object': OBJECT_NONE,  'animated': False, 'safe': False, 'collision': True  },  #  1: Collision helper
@@ -22,11 +27,12 @@ TILE_PROPERTIES = [
   { 'index': 1,   'object': OBJECT_NONE,  'animated': True,  'safe': False, 'collision': True  },  #  4: Rock 1
   { 'index': 2,   'object': OBJECT_NONE,  'animated': True,  'safe': False, 'collision': True  },  #  5: Rock 2
   { 'index': 3,   'object': OBJECT_NONE,  'animated': True,  'safe': False, 'collision': True  },  #  6: Rock 3
-  { 'index': 4,   'object': OBJECT_FLAG,  'animated': True,  'safe': False, 'collision': True  },  #  7: Friendly flag
+  { 'index': 4,   'object': OBJECT_FLAG,  'animated': True,  'safe': False, 'collision': True  },  #  7: Friend flag
   { 'index': 5,   'object': OBJECT_FLAG,  'animated': True,  'safe': False, 'collision': True  }   #  8: Foe flag
 ]
 
 
+# Mapping from SubSpace tile numbers to dotproduct tile numbers.
 TILE_MAPPING = {
   0: 0,
   171: 2,   # Safe
