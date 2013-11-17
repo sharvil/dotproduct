@@ -85,10 +85,12 @@ dotprod.layers.MapLayer.prototype.render = function(viewport) {
     var halfWidth = Math.floor(dimensions.width / 2);
     var halfHeight = Math.floor(dimensions.height / 2);
 
-    var leftTile = Math.floor((dimensions.x - halfWidth) / tileWidth);
-    var topTile = Math.floor((dimensions.y - halfHeight) / tileHeight);
-    var numHorizTiles = Math.ceil(dimensions.width / tileWidth);
-    var numVertTiles = Math.ceil(dimensions.height / tileHeight);
+    // Render one extra tile around the top and left in case we have a large
+    // rock that's only partially protruding into the viewport.
+    var leftTile = Math.floor((dimensions.x - halfWidth) / tileWidth) - 1;
+    var topTile = Math.floor((dimensions.y - halfHeight) / tileHeight) - 1;
+    var numHorizTiles = Math.ceil(dimensions.width / tileWidth) + 1;
+    var numVertTiles = Math.ceil(dimensions.height / tileHeight) + 1;
 
     // Don't render tiles before 0th index.
     topTile = Math.max(topTile, 0);
