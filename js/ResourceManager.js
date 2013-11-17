@@ -79,6 +79,11 @@ dotprod.ResourceManager.prototype.loadSpriteSheet = function(name, url, xTiles, 
   this.spriteSheets_[name].load(url, callback)
 }
 
+/**
+ * @param {string} name
+ * @param {string} url
+ * @param {function()} loadCb
+ */
 dotprod.ResourceManager.prototype.loadSound = function(name, url, loadCb) {
   // TODO(sharvil): remove this once Chrome and Safari behave correctly when loading Audio.
   loadCb();
@@ -99,6 +104,9 @@ dotprod.ResourceManager.prototype.loadSound = function(name, url, loadCb) {
 */
 };
 
+/**
+ * @param {string} name
+ */
 dotprod.ResourceManager.prototype.playSound = function(name) {
   // TODO(sharvil): remove this check -- we should always have an Audio object
   // whenever we try to play it. We do this for now since Chrome and Safari's

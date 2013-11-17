@@ -5,6 +5,7 @@
 
 goog.provide('dotprod.Game');
 
+goog.require('goog.asserts');
 goog.require('goog.debug.ErrorHandler');
 goog.require('goog.dom');
 goog.require('goog.events');
@@ -245,6 +246,7 @@ dotprod.Game.prototype.renderDom = function(rootNode) {
  * @return {!dotprod.model.Simulation}
  */
 dotprod.Game.prototype.getSimulation = function() {
+  goog.asserts.assert(!!this.simulation_, 'Simulation is null');
   return this.simulation_;
 };
 
@@ -252,6 +254,7 @@ dotprod.Game.prototype.getSimulation = function() {
  * @return {!dotprod.graphics.Painter}
  */
 dotprod.Game.prototype.getPainter = function() {
+  goog.asserts.assert(!!this.painter_, 'Painter is null');
   return this.painter_;
 };
 
@@ -259,6 +262,7 @@ dotprod.Game.prototype.getPainter = function() {
  * @return {!dotprod.net.Protocol}
  */
 dotprod.Game.prototype.getProtocol = function() {
+  goog.asserts.assert(!!this.protocol_, 'Protocol is null');
   return this.protocol_;
 };
 
@@ -266,6 +270,7 @@ dotprod.Game.prototype.getProtocol = function() {
  * @return {!dotprod.input.Keyboard}
  */
 dotprod.Game.prototype.getKeyboard = function() {
+  goog.asserts.assert(!!this.keyboard_, 'Keyboard is null');
   return this.keyboard_;
 };
 
@@ -273,6 +278,7 @@ dotprod.Game.prototype.getKeyboard = function() {
  * @return {!dotprod.ResourceManager}
  */
 dotprod.Game.prototype.getResourceManager = function() {
+  goog.asserts.assert(!!this.resourceManager_, 'Resource maanger is null');
   return this.resourceManager_;
 };
 
@@ -280,6 +286,7 @@ dotprod.Game.prototype.getResourceManager = function() {
  * @return {!Object}
  */
 dotprod.Game.prototype.getSettings = function() {
+  goog.asserts.assert(!!this.settings_, 'Settings is null');
   return this.settings_;
 };
 
@@ -287,6 +294,7 @@ dotprod.Game.prototype.getSettings = function() {
  * @return {!dotprod.model.Map}
  */
 dotprod.Game.prototype.getMap = function() {
+  goog.asserts.assert(!!this.map_, 'Map is null');
   return this.map_;
 };
 
@@ -294,6 +302,7 @@ dotprod.Game.prototype.getMap = function() {
  * @return {!dotprod.PlayerIndex}
  */
 dotprod.Game.prototype.getPlayerIndex = function() {
+  goog.asserts.assert(!!this.playerIndex_, 'Player index is null');
   return this.playerIndex_;
 };
 
@@ -301,6 +310,7 @@ dotprod.Game.prototype.getPlayerIndex = function() {
  * @return {!dotprod.PrizeIndex}
  */
 dotprod.Game.prototype.getPrizeIndex = function() {
+  goog.asserts.assert(!!this.prizeIndex_, 'Prize index is null');
   return this.prizeIndex_;
 };
 
@@ -308,6 +318,7 @@ dotprod.Game.prototype.getPrizeIndex = function() {
  * @return {!dotprod.FlagIndex}
  */
 dotprod.Game.prototype.getFlagIndex = function() {
+  goog.asserts.assert(!!this.flagIndex_, 'Flag index is null');
   return this.flagIndex_;
 };
 
@@ -315,6 +326,7 @@ dotprod.Game.prototype.getFlagIndex = function() {
  * @return {!dotprod.model.ModelObjectFactory}
  */
 dotprod.Game.prototype.getModelObjectFactory = function() {
+  goog.asserts.assert(!!this.modelObjectFactory_, 'Model object factory is null');
   return this.modelObjectFactory_;
 };
 

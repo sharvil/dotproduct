@@ -6,6 +6,7 @@
 goog.provide('dotprod.PrizeIndex');
 
 goog.require('goog.array');
+goog.require('goog.asserts');
 goog.require('dotprod.math.Prng');
 goog.require('dotprod.model.Prize');
 
@@ -141,6 +142,7 @@ dotprod.PrizeIndex.prototype.forEach = function(cb) {
 /**
  * @param {!dotprod.math.Prng} prng
  * @return {!dotprod.model.Prize.Type}
+ * @private
  */
 dotprod.PrizeIndex.prototype.generatePrizeType_ = function(prng) {
   var prizeWeights = this.prizeSettings_['weights'];
@@ -167,6 +169,7 @@ dotprod.PrizeIndex.prototype.generatePrizeType_ = function(prng) {
 /**
  * @param {!dotprod.math.Prng} prng
  * @return {number}
+ * @private
  */
 dotprod.PrizeIndex.prototype.generateTimeToLive_ = function(prng) {
   return prng.random() % this.prizeSettings_['decayTime'] + 1;

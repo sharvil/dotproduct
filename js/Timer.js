@@ -29,6 +29,7 @@ dotprod.Timer.clearInterval = function(intervalTimer) {
 };
 
 /**
+ * @param {number} millis
  * @return {number}
  */
 dotprod.Timer.millisToTicks = function(millis) {
@@ -36,6 +37,7 @@ dotprod.Timer.millisToTicks = function(millis) {
 };
 
 /**
+ * @param {number} ticks
  * @return {number}
  */
 dotprod.Timer.ticksToMillis = function(ticks) {
