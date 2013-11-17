@@ -34,5 +34,10 @@ dotprod.TileType = {
   NONE: 0,
   COLLISION: 1,
   SAFE: 2,
-  PRIZE: 3
+  PRIZE: 3,
+  ROCK1: 4,
+  ROCK2: 5,
+  ROCK3: 6,
+  FRIEND_FLAG: 7,
+  FOE_FLAG: 8
 };

@@ -95,6 +95,7 @@ dotprod.model.Entity.prototype.updatePosition_ = function(opt_bounceFactor) {
   var bounceFactor = opt_bounceFactor || 1;
   var map = this.game_.getMap();
   var prizeIndex = this.game_.getPrizeIndex();
+  var flagIndex = this.game_.getFlagIndex();
 
   var tileWidth = map.getTileWidth();
   var xSpeed = Math.abs(this.velocity_.getX());
@@ -119,6 +120,8 @@ dotprod.model.Entity.prototype.updatePosition_ = function(opt_bounceFactor) {
           }
           break;
         case dotprod.ObjectType.FLAG:
+          var flag = flagIndex.getFlag(collision.xTile, collision.yTile);
+          this.captureFlag_(flag);
           break;
         default:
           break;
@@ -149,6 +152,8 @@ dotprod.model.Entity.prototype.updatePosition_ = function(opt_bounceFactor) {
           }
           break;
         case dotprod.ObjectType.FLAG:
+          var flag = flagIndex.getFlag(collision.xTile, collision.yTile);
+          this.captureFlag_(flag);
           break;
         default:
           break;
@@ -160,11 +165,17 @@ dotprod.model.Entity.prototype.updatePosition_ = function(opt_bounceFactor) {
 /**
  * This function takes a prize and returns true if it should be taken or
  * false if it should not be taken.
- * @protected
  * @param {!dotprod.model.Prize} prize
  * @return {boolean}
+ * @protected
  */
 dotprod.model.Entity.prototype.collectPrize_ = goog.nullFunction;
+
+/**
+ * @param {!dotprod.model.Flag} flag
+ * @protected
+ */
+dotprod.model.Entity.prototype.captureFlag_ = goog.nullFunction;
 
 /**
  * @protected

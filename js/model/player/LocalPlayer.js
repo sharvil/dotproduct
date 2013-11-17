@@ -113,6 +113,17 @@ dotprod.model.player.LocalPlayer.prototype.collectPrize_ = function(prize) {
 /**
  * @override
  */
+dotprod.model.player.LocalPlayer.prototype.captureFlag_ = function(flag) {
+  goog.base(this, 'captureFlag_', flag);
+
+  if (flag.captureFlag(this.getTeam())) {
+    this.game_.getProtocol().sendFlagCaptured(flag.id);
+  }
+};
+
+/**
+ * @override
+ */
 dotprod.model.player.LocalPlayer.prototype.onDamage = function(shooter, projectile, energy) {
   if (!this.isAlive() || this.isSafe_()) {
     return;

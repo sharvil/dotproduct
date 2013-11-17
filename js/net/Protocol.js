@@ -92,7 +92,9 @@ dotprod.net.Protocol.C2SPacketType_ = {
   QUERY_NAME: 8,
   REGISTER_NAME: 9,
   PRIZE_COLLECTED: 10,
-  SET_PRESENCE: 11
+  SET_PRESENCE: 11,
+  TUTORIAL_COMPLETED: 12,
+  FLAG_CAPTURED: 13
 };
 
 /**
@@ -112,7 +114,8 @@ dotprod.net.Protocol.S2CPacketType = {
   REGISTER_NAME_REPLY: 11,
   PRIZE_SEED_UPDATE: 12,
   PRIZE_COLLECTED: 13,
-  SET_PRESENCE: 14
+  SET_PRESENCE: 14,
+  FLAG_UPDATE: 15
 };
 
 /**
@@ -186,15 +189,6 @@ dotprod.net.Protocol.prototype.sendPosition = function(direction, position, velo
   this.send_(packet);
 };
 
-/**
- * @param {number} type
- * @param {number} x
- * @param {number} y
- */
-dotprod.net.Protocol.prototype.sendPrizeCollected = function(type, x, y) {
-  this.send_([dotprod.net.Protocol.C2SPacketType_.PRIZE_COLLECTED, type, x, y]);
-};
-
 dotprod.net.Protocol.prototype.syncClocks_ = function() {
   this.send_([dotprod.net.Protocol.C2SPacketType_.CLOCK_SYNC, this.asUint32_(goog.now())]);
 };
@@ -256,10 +250,26 @@ dotprod.net.Protocol.prototype.registerName = function(name) {
 };
 
 /**
+ * @param {number} type
+ * @param {number} x
+ * @param {number} y
+ */
+dotprod.net.Protocol.prototype.sendPrizeCollected = function(type, x, y) {
+  this.send_([dotprod.net.Protocol.C2SPacketType_.PRIZE_COLLECTED, type, x, y]);
+};
+
+/**
  * @param {dotprod.model.player.Player.Presence} presence
  */
 dotprod.net.Protocol.prototype.sendSetPresence = function(presence) {
   this.send_([dotprod.net.Protocol.C2SPacketType_.SET_PRESENCE, presence]);
+};
+
+/**
+ * @param {number} id
+ */
+dotprod.net.Protocol.prototype.sendFlagCaptured = function(id) {
+  this.send_([dotprod.net.Protocol.C2SPacketType_.FLAG_CAPTURED, this.asRemoteTime_(goog.now()), id]);
 };
 
 dotprod.net.Protocol.prototype.onOpen_ = function() {

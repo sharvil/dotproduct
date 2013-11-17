@@ -14,7 +14,7 @@ goog.require('goog.events.EventType');
 goog.require('html5.AnimationFrame');
 goog.require('html5.Notifications');
 
-goog.require('dotprod.Viewport');
+goog.require('dotprod.FlagIndex');
 goog.require('dotprod.graphics.Painter');
 goog.require('dotprod.graphics.Tween');
 goog.require('dotprod.input.Keyboard');
@@ -35,6 +35,7 @@ goog.require('dotprod.PrizeIndex');
 goog.require('dotprod.net.Protocol');
 goog.require('dotprod.Timer');
 goog.require('dotprod.Timestamp');
+goog.require('dotprod.Viewport');
 goog.require('dotprod.views.ChatView');
 goog.require('dotprod.views.DebugView');
 goog.require('dotprod.views.ScoreboardView');
@@ -111,12 +112,6 @@ dotprod.Game = function(protocol, resourceManager, settings, mapData, tileProper
    */
   this.map_ = new dotprod.model.Map(this, mapData, tileProperties);
 
-  /**
-   * @type {!dotprod.PrizeIndex}
-   * @private
-   */
-  this.prizeIndex_ = new dotprod.PrizeIndex(this);
-
   var startingShip = Math.floor(Math.random() * this.settings_['ships'].length);
   var localPlayer = this.modelObjectFactory_.newLocalPlayer(this, this.settings_['id'], this.settings_['name'], this.settings_['team'], startingShip);
 
@@ -125,6 +120,18 @@ dotprod.Game = function(protocol, resourceManager, settings, mapData, tileProper
    * @private
    */
   this.playerIndex_ = new dotprod.PlayerIndex(localPlayer);
+
+  /**
+   * @type {!dotprod.PrizeIndex}
+   * @private
+   */
+  this.prizeIndex_ = new dotprod.PrizeIndex(this);
+
+  /**
+   * @type {!dotprod.FlagIndex}
+   * @private
+   */
+  this.flagIndex_ = new dotprod.FlagIndex(this);
 
   /**
    * @type {!dotprod.Notifications}
@@ -185,6 +192,7 @@ dotprod.Game = function(protocol, resourceManager, settings, mapData, tileProper
   this.protocol_.registerHandler(dotprod.net.Protocol.S2CPacketType.PRIZE_SEED_UPDATE, goog.bind(this.onPrizeSeedUpdated_, this));
   this.protocol_.registerHandler(dotprod.net.Protocol.S2CPacketType.PRIZE_COLLECTED, goog.bind(this.onPrizeCollected_, this));
   this.protocol_.registerHandler(dotprod.net.Protocol.S2CPacketType.SET_PRESENCE, goog.bind(this.onSetPresence_, this));
+  this.protocol_.registerHandler(dotprod.net.Protocol.S2CPacketType.FLAG_UPDATE, goog.bind(this.onFlagUpdate_, this));
   this.protocol_.startGame(startingShip);
 
   this.viewport_.followPlayer(localPlayer);
@@ -294,6 +302,13 @@ dotprod.Game.prototype.getPlayerIndex = function() {
  */
 dotprod.Game.prototype.getPrizeIndex = function() {
   return this.prizeIndex_;
+};
+
+/**
+ * @return {!dotprod.FlagIndex}
+ */
+dotprod.Game.prototype.getFlagIndex = function() {
+  return this.flagIndex_;
 };
 
 /**
@@ -410,6 +425,7 @@ dotprod.Game.prototype.onPlayerPosition_ = function(packet) {
 
 /**
  * @param {!Object} packet
+ * @private
  */
 dotprod.Game.prototype.onPlayerDied_ = function(packet) {
   var timestamp = packet[0];
@@ -437,6 +453,7 @@ dotprod.Game.prototype.onPlayerDied_ = function(packet) {
 
 /**
  * @param {!Object} packet
+ * @private
  */
 dotprod.Game.prototype.onShipChanged_ = function(packet) {
   var player = this.playerIndex_.findById(packet[0]);
@@ -449,6 +466,7 @@ dotprod.Game.prototype.onShipChanged_ = function(packet) {
 
 /**
  * @param {!Object} packet
+ * @private
  */
 dotprod.Game.prototype.onChatMessage_ = function(packet) {
   var playerId = packet[0];
@@ -466,6 +484,7 @@ dotprod.Game.prototype.onChatMessage_ = function(packet) {
 
 /**
  * @param {!Object} packet
+ * @private
  */
 dotprod.Game.prototype.onScoreUpdated_ = function(packet) {
   var player = this.playerIndex_.findById(packet[0]);
@@ -478,6 +497,10 @@ dotprod.Game.prototype.onScoreUpdated_ = function(packet) {
   }
 };
 
+/**
+ * @param {!Object} packet
+ * @private
+ */
 dotprod.Game.prototype.onPrizeSeedUpdated_ = function(packet) {
   var seed = packet[0];
   var timeDeltaMillis = this.protocol_.getMillisSinceServerTime(packet[1]);
@@ -486,6 +509,10 @@ dotprod.Game.prototype.onPrizeSeedUpdated_ = function(packet) {
   this.prizeIndex_.onSeedUpdate(seed, ticks);
 };
 
+/**
+ * @param {!Object} packet
+ * @private
+ */
 dotprod.Game.prototype.onPrizeCollected_ = function(packet) {
   var player = this.playerIndex_.findById(packet[0]);
   var type = packet[1];
@@ -508,6 +535,19 @@ dotprod.Game.prototype.onSetPresence_ = function(packet) {
   var presence = /** @type {dotprod.model.player.Player.Presence} */ (packet[1]);
   player.clearPresence(dotprod.model.player.Player.Presence.ALL);
   player.setPresence(presence);
+};
+
+/**
+ * @param {!Object} packet
+ * @private
+ */
+dotprod.Game.prototype.onFlagUpdate_ = function(packet) {
+  var id = packet[0];
+  var team = packet[1];
+  var xTile = packet[2];
+  var yTile = packet[3];
+
+  this.flagIndex_.updateFlag(id, team, xTile, yTile);
 };
 
 /**
