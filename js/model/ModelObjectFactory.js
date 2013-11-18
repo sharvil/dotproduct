@@ -70,3 +70,14 @@ dotprod.model.ModelObjectFactory.prototype.newBomb = goog.abstractMethod;
  * @return {!dotprod.model.projectile.Mine}
  */
 dotprod.model.ModelObjectFactory.prototype.newMine = goog.abstractMethod;
+
+/**
+ * @param {!dotprod.Game} game
+ * @param {!dotprod.model.player.Player} owner
+ * @param {number} shrapnelCount
+ * @param {!dotprod.math.Vector} position
+ * @param {number} lifetime
+ * @param {number} damage
+ * @return {!dotprod.model.projectile.Burst}
+ */
+dotprod.model.ModelObjectFactory.prototype.newBurst = goog.abstractMethod;

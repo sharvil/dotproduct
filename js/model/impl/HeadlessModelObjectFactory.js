@@ -10,6 +10,7 @@ goog.require('dotprod.model.player.LocalPlayer');
 goog.require('dotprod.model.player.RemotePlayer');
 goog.require('dotprod.model.projectile.Bomb');
 goog.require('dotprod.model.projectile.Bullet');
+goog.require('dotprod.model.projectile.Burst');
 goog.require('dotprod.model.projectile.Mine');
 
 
@@ -52,4 +53,11 @@ dotprod.model.impl.HeadlessModelObjectFactory.prototype.newBomb = function(game,
  */
 dotprod.model.impl.HeadlessModelObjectFactory.prototype.newMine = function(game, owner, level, position, lifetime, damage) {
   return new dotprod.model.projectile.Mine(game, owner, level, position, lifetime, damage);
+};
+
+/**
+ * @override
+ */
+dotprod.model.impl.HeadlessModelObjectFactory.prototype.newBurst = function(game, owner, shrapnelCount, position, lifetime, damage) {
+  return new dotprod.model.projectile.Burst(game, owner, shrapnelCount, position, lifetime, damage);
 };

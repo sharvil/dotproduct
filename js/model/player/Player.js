@@ -10,6 +10,7 @@ goog.require('goog.array');
 
 goog.require('dotprod.model.Entity');
 goog.require('dotprod.model.BombBay');
+goog.require('dotprod.model.Burst');
 goog.require('dotprod.model.Gun');
 goog.require('dotprod.model.MineLayer');
 goog.require('dotprod.model.Weapon.Type');
@@ -56,6 +57,12 @@ dotprod.model.player.Player = function(game, id, name, team, ship, bounty) {
    * @protected
    */
   this.mineLayer_ = new dotprod.model.MineLayer(game, this.shipSettings_['bomb'], this);
+
+  /**
+   * @type {!dotprod.model.Burst}
+   * @protected
+   */
+  this.burst_ = new dotprod.model.Burst(game, this.shipSettings_['burst'], this);
 
   /**
    * @type {string}
@@ -260,6 +267,7 @@ dotprod.model.player.Player.prototype.setShip = function(ship) {
   this.gun_ = new dotprod.model.Gun(this.game_, this.shipSettings_['bullet'], this);
   this.bombBay_ = new dotprod.model.BombBay(this.game_, this.shipSettings_['bomb'], this);
   this.mineLayer_ = new dotprod.model.MineLayer(this.game_, this.shipSettings_['bomb'], this);
+  this.burst_ = new dotprod.model.Burst(this.game_, this.shipSettings_['burst'], this);
 
   this.position_ = new dotprod.math.Vector(0, 0);
   this.velocity_ = new dotprod.math.Vector(0, 0);

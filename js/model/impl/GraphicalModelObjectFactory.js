@@ -10,6 +10,7 @@ goog.require('dotprod.model.player.LocalPlayerSprite');
 goog.require('dotprod.model.player.RemotePlayerSprite');
 goog.require('dotprod.model.projectile.BombSprite');
 goog.require('dotprod.model.projectile.BulletSprite');
+goog.require('dotprod.model.projectile.BurstSprite');
 goog.require('dotprod.model.projectile.MineSprite');
 
 /**
@@ -51,4 +52,11 @@ dotprod.model.impl.GraphicalModelObjectFactory.prototype.newBomb = function(game
  */
 dotprod.model.impl.GraphicalModelObjectFactory.prototype.newMine = function(game, owner, level, position, lifetime, damage) {
   return new dotprod.model.projectile.MineSprite(game, owner, level, position, lifetime, damage);
+};
+
+/**
+ * @override
+ */
+dotprod.model.impl.GraphicalModelObjectFactory.prototype.newBurst = function(game, owner, shrapnelCount, position, lifetime, damage) {
+  return new dotprod.model.projectile.BurstSprite(game, owner, shrapnelCount, position, lifetime, damage);
 };
