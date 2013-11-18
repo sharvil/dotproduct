@@ -68,8 +68,18 @@ def convertShip(name, settings):
   bomb['bounceCount'] = int(settings[name]['BombBounceCount'])
   bomb['recoilAcceleration'] = int(settings[name]['BombThrust']) / 1000.0
 
+  burst = {}
+  burst['fireDelay'] = int(settings[name]['BulletFireDelay'])  # Assume burst fire delay is the same as the bullet fire delay
+  burst['lifetime'] = int(settings['Bullet']['BulletAliveTime'])  # Assume burst lifetime is the same as a regular bullet
+  burst['damage'] = int(settings['Bullet']['BulletDamageLevel']) + 4 * int(settings['Bullet']['BulletDamageUpgrade'])
+  burst['speed'] = int(settings[name]['BurstSpeed']) / 1000.0
+  burst['shrapnelCount'] = int(settings[name]['BurstShrapnel'])
+  burst['initialCount'] = int(settings[name]['InitialBurst'])
+  burst['maxCount'] = int(settings[name]['BurstMax'])
+
   jsonSettings['bullet'] = bullet
   jsonSettings['bomb'] = bomb
+  jsonSettings['burst'] = burst
 
   return jsonSettings
 
