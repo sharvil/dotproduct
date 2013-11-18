@@ -49,6 +49,15 @@
         "lifetime": 800, 
         "speed": 5.0
       }, 
+      "burst": {
+        "initialCount": 0, 
+        "fireDelay": 100, 
+        "maxCount": 0, 
+        "damage": 2600, 
+        "shrapnelCount": 1, 
+        "lifetime": 800, 
+        "speed": 0.001
+      }, 
       "xRadius": 14, 
       "name": "Warbird"
     }, 
@@ -91,6 +100,15 @@
         "damageUpgrade": 520, 
         "lifetime": 800, 
         "speed": -0.9
+      }, 
+      "burst": {
+        "initialCount": 0, 
+        "fireDelay": 60, 
+        "maxCount": 0, 
+        "damage": 2600, 
+        "shrapnelCount": 1, 
+        "lifetime": 800, 
+        "speed": 0.001
       }, 
       "xRadius": 14, 
       "name": "Javelin"
@@ -135,6 +153,15 @@
         "lifetime": 800, 
         "speed": 4.0
       }, 
+      "burst": {
+        "initialCount": 0, 
+        "fireDelay": 35, 
+        "maxCount": 0, 
+        "damage": 2600, 
+        "shrapnelCount": 1, 
+        "lifetime": 800, 
+        "speed": 0.001
+      }, 
       "xRadius": 14, 
       "name": "Spider"
     }, 
@@ -177,6 +204,15 @@
         "damageUpgrade": 520, 
         "lifetime": 800, 
         "speed": 1.0
+      }, 
+      "burst": {
+        "initialCount": 0, 
+        "fireDelay": 60, 
+        "maxCount": 0, 
+        "damage": 2600, 
+        "shrapnelCount": 1, 
+        "lifetime": 800, 
+        "speed": 0.001
       }, 
       "xRadius": 14, 
       "name": "Leviathan"
@@ -221,6 +257,15 @@
         "lifetime": 800, 
         "speed": 0.8
       }, 
+      "burst": {
+        "initialCount": 1, 
+        "fireDelay": 75, 
+        "maxCount": 1, 
+        "damage": 2600, 
+        "shrapnelCount": 3, 
+        "lifetime": 800, 
+        "speed": 3.5
+      }, 
       "xRadius": 14, 
       "name": "Terrier"
     }, 
@@ -263,6 +308,15 @@
         "damageUpgrade": 520, 
         "lifetime": 800, 
         "speed": 1.0
+      }, 
+      "burst": {
+        "initialCount": 0, 
+        "fireDelay": 40, 
+        "maxCount": 0, 
+        "damage": 2600, 
+        "shrapnelCount": 1, 
+        "lifetime": 800, 
+        "speed": 0.001
       }, 
       "xRadius": 7, 
       "name": "Weasel"
@@ -307,6 +361,15 @@
         "lifetime": 800, 
         "speed": 3.65
       }, 
+      "burst": {
+        "initialCount": 0, 
+        "fireDelay": 45, 
+        "maxCount": 0, 
+        "damage": 2600, 
+        "shrapnelCount": 1, 
+        "lifetime": 800, 
+        "speed": 0.001
+      }, 
       "xRadius": 14, 
       "name": "Lancaster"
     }, 
@@ -347,6 +410,15 @@
         "damage": 520, 
         "initialLevel": -1, 
         "damageUpgrade": 520, 
+        "lifetime": 800, 
+        "speed": 0.001
+      }, 
+      "burst": {
+        "initialCount": 0, 
+        "fireDelay": 10, 
+        "maxCount": 0, 
+        "damage": 2600, 
+        "shrapnelCount": 1, 
         "lifetime": 800, 
         "speed": 0.001
       }, 
