@@ -69,17 +69,17 @@ dotprod.Application = function(settings, url) {
    * @private
    */
   this.loadingView_ = new dotprod.views.LoadingView(this.resourceManager_, goog.bind(this.onLoadComplete_, this));
-  this.loadingView_.renderDom(/** @type {!HTMLDivElement} */ (goog.dom.$('loading')));
+  this.loadingView_.renderDom(/** @type {!HTMLDivElement} */ (goog.dom.getElement('loading')));
   this.loadingView_.hide();
 
-  this.loginView_.renderDom(/** @type {!HTMLDivElement} */ (goog.dom.$('login')));
+  this.loginView_.renderDom(/** @type {!HTMLDivElement} */ (goog.dom.getElement('login')));
   this.loginView_.show();
 
   /**
    * @type {!HTMLElement}
    * @private
    */
-  // this.fullscreenToggle_ = /** @type {!HTMLElement} */ (goog.dom.$('fullscreenToggle'));
+  // this.fullscreenToggle_ = /** @type {!HTMLElement} */ (goog.dom.getElement('fullscreenToggle'));
   // this.fullscreenToggle_.style.display = (window == window.top) ? '' : 'none';
   // goog.events.listen(this.fullscreenToggle_, goog.events.EventType.CLICK, goog.bind(this.onFullscreenToggleClicked_, this));
 };
@@ -104,7 +104,7 @@ dotprod.Application.prototype.onLoadComplete_ = function() {
   this.loadingView_.hide();
 
   this.game_ = new dotprod.Game(this.protocol_, this.resourceManager_, this.settings_, this.mapData_, this.mapProperties_);
-  this.game_.renderDom(/** @type {!HTMLDivElement} */ (goog.dom.$('game')));
+  this.game_.renderDom(/** @type {!HTMLDivElement} */ (goog.dom.getElement('game')));
 };
 
 /**

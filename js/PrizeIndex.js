@@ -141,7 +141,7 @@ dotprod.PrizeIndex.prototype.forEach = function(cb) {
 
 /**
  * @param {!dotprod.math.Prng} prng
- * @return {!dotprod.model.Prize.Type}
+ * @return {!dotprod.PrizeType}
  * @private
  */
 dotprod.PrizeIndex.prototype.generatePrizeType_ = function(prng) {
@@ -163,7 +163,7 @@ dotprod.PrizeIndex.prototype.generatePrizeType_ = function(prng) {
     }
   }
 
-  return /** @type {!dotprod.model.Prize.Type} */ (type);
+  return /** @type {!dotprod.PrizeType} */ (type);
 };
 
 /**

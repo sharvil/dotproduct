@@ -150,7 +150,7 @@ dotprod.net.Protocol.prototype.getRoundTripTime = function() {
 
 /**
  * @param {dotprod.net.Protocol.S2CPacketType} packetType
- * @param {function()} cb
+ * @param {function(!Object)} cb
  */
 dotprod.net.Protocol.prototype.registerHandler = function(packetType, cb) {
   this.handlers_[packetType].push(cb);
@@ -193,6 +193,10 @@ dotprod.net.Protocol.prototype.syncClocks_ = function() {
   this.send_([dotprod.net.Protocol.C2SPacketType_.CLOCK_SYNC, this.asUint32_(goog.now())]);
 };
 
+/**
+ * @param {!Object} packet
+ * @private
+ */
 dotprod.net.Protocol.prototype.onClockSyncReply_ = function(packet) {
   var clientTime0 = packet[0];
   var serverTime = packet[1];

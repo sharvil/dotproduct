@@ -53,7 +53,7 @@ dotprod.model.MineLayer.prototype.upgrade = function() {
 
 /**
  * @param {!dotprod.math.Vector} position
- * @param {function(number, number, number): boolean} commitFireFn
+ * @param {function(number, number): boolean} commitFireFn
  * @return {dotprod.model.projectile.Projectile}
  */
 dotprod.model.MineLayer.prototype.fire = function(position, commitFireFn) {

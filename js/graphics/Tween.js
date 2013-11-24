@@ -74,7 +74,7 @@ dotprod.graphics.Tween.advanceAll = function() {
   });
 
   dotprod.graphics.Tween.instances_ = goog.array.filter(dotprod.graphics.Tween.instances_, function(tween) {
-    if (!tween.isActive()) {
+    if (!tween.isActive_()) {
       tween.didUnregister_();
       return false;
     }

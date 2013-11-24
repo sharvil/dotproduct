@@ -43,7 +43,7 @@ dotprod.model.player.LocalPlayer = function(game, id, name, team, ship) {
 
   /**
    * @type {number}
-   * @private
+   * @protected
    */
   this.respawnTimer_ = 0;
 
@@ -55,7 +55,7 @@ dotprod.model.player.LocalPlayer = function(game, id, name, team, ship) {
 
   /**
    * @type {!Array.<!dotprod.model.Exhaust>}
-   * @private
+   * @protected
    */
   this.exhaust_ = [];
 
@@ -117,7 +117,7 @@ dotprod.model.player.LocalPlayer.prototype.captureFlag_ = function(flag) {
   goog.base(this, 'captureFlag_', flag);
 
   if (flag.captureFlag(this.getTeam())) {
-    this.game_.getProtocol().sendFlagCaptured(flag.id);
+    this.game_.getProtocol().sendFlagCaptured(flag.getId());
   }
 };
 

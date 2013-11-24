@@ -21,6 +21,5 @@ dotprod.graphics.Layer = {
 /**
  * @type {number}
  * @const
- * @private
  */
 dotprod.graphics.NUM_LAYERS = 7;

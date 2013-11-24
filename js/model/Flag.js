@@ -18,7 +18,7 @@ goog.require('dotprod.TileType');
  */
 dotprod.model.Flag = function(game, map, id, team, xTile, yTile) {
   /**
-   * @type {!dotprod.model.players.LocalPlayer}
+   * @type {!dotprod.model.player.LocalPlayer}
    * @private
    */
   this.localPlayer_ = game.getPlayerIndex().getLocalPlayer();
