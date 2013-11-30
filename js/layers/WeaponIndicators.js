@@ -37,6 +37,7 @@ dotprod.layers.WeaponIndicators.prototype.render = function(viewport) {
   // TODO(sharvil): don't reach into Player's private members.
   var gunLevel = this.localPlayer_.gun_.getLevel();
   var bombLevel = this.localPlayer_.bombBay_.getLevel();
+  var bursts = this.localPlayer_.burst_.getCount();
   var numIndicators = 2;
   var padding = 1;
 
@@ -46,6 +47,8 @@ dotprod.layers.WeaponIndicators.prototype.render = function(viewport) {
   this.renderLeveledWeapon_(context, left, top, gunLevel, 0);
   top += padding + this.icons_.getTileHeight();
   this.renderLeveledWeapon_(context, left, top, bombLevel, 18);
+
+  this.icons_.render(context, (bursts > 0) ? 0 : 4 - this.icons_.getTileWidth(), top, 30);
 };
 
 /**

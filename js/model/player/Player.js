@@ -293,6 +293,9 @@ dotprod.model.player.Player.prototype.onWeaponFired = function(timeDiff, weaponD
     case this.mineLayer_.getType():
       this.mineLayer_.onFired(timeDiff, weaponData);
       break;
+    case this.burst_.getType():
+      this.burst_.onFired(timeDiff, weaponData);
+      break;
     default:
       break;
   }

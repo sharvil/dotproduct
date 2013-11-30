@@ -74,8 +74,8 @@ dotprod.model.ModelObjectFactory.prototype.newMine = goog.abstractMethod;
 /**
  * @param {!dotprod.Game} game
  * @param {!dotprod.model.player.Player} owner
- * @param {number} shrapnelCount
  * @param {!dotprod.math.Vector} position
+ * @param {!dotprod.math.Vector} velocity
  * @param {number} lifetime
  * @param {number} damage
  * @return {!dotprod.model.projectile.Burst}

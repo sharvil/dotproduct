@@ -17,20 +17,27 @@ goog.require('dotprod.graphics.Layer');
  * @implements {dotprod.graphics.Drawable}
  * @param {!dotprod.Game} game
  * @param {!dotprod.model.player.Player} owner
- * @param {number} level
  * @param {!dotprod.math.Vector} position
+ * @param {!dotprod.math.Vector} velocity
  * @param {number} lifetime
  * @param {number} damage
  */
-dotprod.model.projectile.BurstSprite = function(game, owner, level, position, lifetime, damage) {
-  goog.base(this, game, owner, level, position, lifetime, damage);
+dotprod.model.projectile.BurstSprite = function(game, owner, position, velocity, lifetime, damage) {
+  goog.base(this, game, owner, position, velocity, lifetime, damage);
 
   /**
    * @type {!dotprod.graphics.Animation}
    * @private
    */
-  this.animation_ = game.getResourceManager().getSpriteSheet('bullets').getAnimation(5);
-  this.animation_.setRepeatCount(-1);
+  this.activeAnimation_ = game.getResourceManager().getSpriteSheet('bullets').getAnimation(9);
+  this.activeAnimation_.setRepeatCount(-1);
+
+  /**
+   * @type {!dotprod.graphics.Animation}
+   * @private
+   */
+  this.inactiveAnimation_ = game.getResourceManager().getSpriteSheet('bullets').getAnimation(4);
+  this.inactiveAnimation_.setRepeatCount(-1);
 
   game.getPainter().registerDrawable(dotprod.graphics.Layer.PROJECTILES, this);
 };
@@ -41,18 +48,20 @@ goog.inherits(dotprod.model.projectile.BurstSprite, dotprod.model.projectile.Bur
  */
 dotprod.model.projectile.BurstSprite.prototype.advanceTime = function() {
   goog.base(this, 'advanceTime');
-  this.animation_.update();
+  this.activeAnimation_.update();
+  this.inactiveAnimation_.update();
 };
 
 /**
  * @override
  */
 dotprod.model.projectile.BurstSprite.prototype.render = function(viewport) {
+  var animation = this.isActive_ ? this.activeAnimation_ : this.inactiveAnimation_;
   var dimensions = viewport.getDimensions();
-  var x = Math.floor(this.position_.getX() - dimensions.left - this.animation_.getWidth() / 2);
-  var y = Math.floor(this.position_.getY() - dimensions.top - this.animation_.getHeight() / 2);
+  var x = Math.floor(this.position_.getX() - dimensions.left - animation.getWidth() / 2);
+  var y = Math.floor(this.position_.getY() - dimensions.top - animation.getHeight() / 2);
 
-  this.animation_.render(viewport.getContext(), x, y);
+  animation.render(viewport.getContext(), x, y);
 };
 
 /**
@@ -62,7 +71,7 @@ dotprod.model.projectile.BurstSprite.prototype.explode_ = function(hitPlayer) {
   goog.base(this, 'explode_', hitPlayer);
 
   // Add an explosion animation.
-  var animation = this.game_.getResourceManager().getSpriteSheet('explode2').getAnimation(0);
+  var animation = this.game_.getResourceManager().getSpriteSheet('explode0').getAnimation(0);
   var explosion = new dotprod.model.Effect(this.game_, animation, this.position_, new dotprod.math.Vector(0, 0));
 };
 

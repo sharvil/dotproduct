@@ -14,30 +14,39 @@ goog.require('dotprod.math.Vector');
  * @extends {dotprod.model.projectile.Projectile}
  * @param {!dotprod.Game} game
  * @param {!dotprod.model.player.Player} owner
- * @param {number} shrapnelCount
  * @param {!dotprod.math.Vector} position
+ * @param {!dotprod.math.Vector} velocity
  * @param {number} lifetime
  * @param {number} damage
  */
-dotprod.model.projectile.Burst = function(game, owner, shrapnelCount, position, lifetime, damage) {
-  goog.base(this, game, owner, 0, lifetime, damage, 1);
+dotprod.model.projectile.Burst = function(game, owner, position, velocity, lifetime, damage) {
+  goog.base(this, game, owner, 4 /* level */, lifetime, damage, -1 /* bounceCount */);
+
+  /**
+   * @type {boolean}
+   * @protected
+   */
+  this.isActive_ = false;
 
   this.position_ = position;
+  this.velocity_ = velocity;
 };
 goog.inherits(dotprod.model.projectile.Burst, dotprod.model.projectile.Projectile);
 
 /**
  * @override
  */
-dotprod.model.projectile.Burst.prototype.getType = function() {
-  return dotprod.model.Weapon.Type.BURST;
+dotprod.model.projectile.Burst.prototype.bounce_ = function() {
+  goog.base(this, 'bounce_');
+
+  this.isActive_ = true;
 };
 
 /**
  * @override
  */
 dotprod.model.projectile.Burst.prototype.checkPlayerCollision_ = function(player) {
-  if (!player.isAlive() || this.owner_.isFriend(player)) {
+  if (!player.isAlive() || this.owner_.isFriend(player) || !this.isActive_) {
     return false;
   }
 

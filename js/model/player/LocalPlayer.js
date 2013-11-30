@@ -285,8 +285,9 @@ dotprod.model.player.LocalPlayer.prototype.advanceTime = function() {
       });
     } else if (keyboard.isKeyPressed(dotprod.input.Keymap.FIRE_BURST)) {
       var self = this;
-      projectile = this.burst_.fire(this.position_, function(fireEnergy, fireDelay) {
+      weaponData = this.burst_.fire(this.position_, function(fireEnergy, fireDelay) {
         self.projectileFireDelay_.setValue(fireDelay);
+        return true;
       });
     }
   }
