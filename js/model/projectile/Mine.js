@@ -29,13 +29,6 @@ goog.inherits(dotprod.model.projectile.Mine, dotprod.model.projectile.Projectile
 /**
  * @override
  */
-dotprod.model.projectile.Mine.prototype.getType = function() {
-  return dotprod.model.Weapon.Type.MINE;
-};
-
-/**
- * @override
- */
 dotprod.model.projectile.Mine.prototype.checkPlayerCollision_ = function(player) {
   if (!player.isAlive() || this.owner_.isFriend(player)) {
     return false;

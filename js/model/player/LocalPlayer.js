@@ -235,7 +235,7 @@ dotprod.model.player.LocalPlayer.prototype.advanceTime = function() {
 
   var oldAngle = this.angleInRadians_;
   var oldVelocity = this.velocity_;
-  var projectile;
+  var weaponData;
 
   if (this.projectileFireDelay_.isLow()) {
     if (keyboard.isKeyPressed(dotprod.input.Keymap.FIRE_GUN)) {
@@ -246,7 +246,7 @@ dotprod.model.player.LocalPlayer.prototype.advanceTime = function() {
         var position = new dotprod.math.Vector(0, -this.yRadius_).rotate(angle).add(this.position_);
         var velocity = this.velocity_;
 
-        projectile = this.gun_.fire(angle, position, velocity, goog.bind(function(fireEnergy, fireDelay) {
+        weaponData = this.gun_.fire(angle, position, velocity, goog.bind(function(fireEnergy, fireDelay) {
           if (this.energy_ > fireEnergy) {
             this.energy_ -= fireEnergy;
             this.projectileFireDelay_.setValue(fireDelay);
@@ -263,7 +263,7 @@ dotprod.model.player.LocalPlayer.prototype.advanceTime = function() {
         var position = new dotprod.math.Vector(0, -this.yRadius_).rotate(angle).add(this.position_);
         var velocity = this.velocity_;
 
-        projectile = this.bombBay_.fire(angle, position, velocity, goog.bind(function(fireEnergy, fireDelay, recoil) {
+        weaponData = this.bombBay_.fire(angle, position, velocity, goog.bind(function(fireEnergy, fireDelay, recoil) {
           if (this.energy_ > fireEnergy) {
             this.energy_ -= fireEnergy;
             this.projectileFireDelay_.setValue(fireDelay);
@@ -275,7 +275,7 @@ dotprod.model.player.LocalPlayer.prototype.advanceTime = function() {
       }
     } else if (keyboard.isKeyPressed(dotprod.input.Keymap.FIRE_MINE)) {
       var self = this;
-      projectile = this.mineLayer_.fire(this.position_, function(fireEnergy, fireDelay) {
+      weaponData = this.mineLayer_.fire(this.position_, function(fireEnergy, fireDelay) {
         if (self.energy_ > fireEnergy) {
           self.energy_ -= fireEnergy;
           self.projectileFireDelay_.setValue(fireDelay);
@@ -283,9 +283,6 @@ dotprod.model.player.LocalPlayer.prototype.advanceTime = function() {
         }
         return false;
       });
-    }
-    if (projectile) {
-      this.addProjectile_(projectile);
     }
   }
 
@@ -341,7 +338,7 @@ dotprod.model.player.LocalPlayer.prototype.advanceTime = function() {
     }
     forceSendUpdate = true;
   }
-  this.sendPositionUpdate_(forceSendUpdate, this.velocity_ != oldVelocity || this.angleInRadians_ != oldAngle, projectile);
+  this.sendPositionUpdate_(forceSendUpdate, this.velocity_ != oldVelocity || this.angleInRadians_ != oldAngle, weaponData);
 };
 
 /**
@@ -370,21 +367,21 @@ dotprod.model.player.LocalPlayer.prototype.applyThrust_ = function(thrustVector)
 /**
  * @param {boolean} forceSendUpdate
  * @param {boolean} isAccelerating
- * @param {dotprod.model.projectile.Projectile=} opt_projectile
+ * @param {Object=} opt_weaponData
  */
-dotprod.model.player.LocalPlayer.prototype.sendPositionUpdate_ = function(forceSendUpdate, isAccelerating, opt_projectile) {
+dotprod.model.player.LocalPlayer.prototype.sendPositionUpdate_ = function(forceSendUpdate, isAccelerating, opt_weaponData) {
   if (!forceSendUpdate) {
     var sendPositionDelay = this.settings_['network']['sendPositionDelay'];
     if (isAccelerating) {
       sendPositionDelay = this.settings_['network']['fastSendPositionDelay'];
     }
 
-    if (!opt_projectile && this.ticksSincePositionUpdate_ < sendPositionDelay) {
+    if (!opt_weaponData && this.ticksSincePositionUpdate_ < sendPositionDelay) {
       return;
     }
   }
 
-  this.game_.getProtocol().sendPosition(this.angleInRadians_, this.position_, this.velocity_, this.isSafe_(), opt_projectile);
+  this.game_.getProtocol().sendPosition(this.angleInRadians_, this.position_, this.velocity_, this.isSafe_(), opt_weaponData);
   this.ticksSincePositionUpdate_ = 0;
 };
 

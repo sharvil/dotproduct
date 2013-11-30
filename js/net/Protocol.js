@@ -177,14 +177,12 @@ dotprod.net.Protocol.prototype.startGame = function(ship) {
  * @param {!dotprod.math.Vector} position
  * @param {!dotprod.math.Vector} velocity
  * @param {boolean} isSafe
- * @param {dotprod.model.projectile.Projectile=} opt_projectile
+ * @param {Object=} opt_weaponData
  */
-dotprod.net.Protocol.prototype.sendPosition = function(direction, position, velocity, isSafe, opt_projectile) {
+dotprod.net.Protocol.prototype.sendPosition = function(direction, position, velocity, isSafe, opt_weaponData) {
   var packet = [dotprod.net.Protocol.C2SPacketType_.POSITION, this.asRemoteTime_(goog.now()), direction, position.getX(), position.getY(), velocity.getX(), velocity.getY(), isSafe];
-  if (opt_projectile) {
-    position = opt_projectile.getPosition();
-    velocity = opt_projectile.getVelocity();
-    packet = packet.concat([opt_projectile.getType(), opt_projectile.getLevel(), opt_projectile.getBounceCount(), position.getX(), position.getY(), velocity.getX(), velocity.getY()]);
+  if (opt_weaponData) {
+    packet.push(opt_weaponData);
   }
   this.send_(packet);
 };

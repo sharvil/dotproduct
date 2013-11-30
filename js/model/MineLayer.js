@@ -5,10 +5,13 @@
 
 goog.provide('dotprod.model.MineLayer');
 
+goog.require('goog.asserts');
 goog.require('dotprod.math.Range');
+goog.require('dotprod.model.Weapon.Type');
 
 /**
  * @constructor
+ * @implements dotprod.model.Weapon
  * @param {!dotprod.Game} game
  * @param {!Object} bombBaySettings
  * @param {!dotprod.model.player.Player} owner
@@ -41,6 +44,13 @@ dotprod.model.MineLayer = function(game, bombBaySettings, owner) {
 };
 
 /**
+ * @override
+ */
+dotprod.model.MineLayer.prototype.getType = function() {
+  return dotprod.model.Weapon.Type.MINE;
+};
+
+/**
  * @return {number}
  */
 dotprod.model.MineLayer.prototype.getLevel = function() {
@@ -54,7 +64,7 @@ dotprod.model.MineLayer.prototype.upgrade = function() {
 /**
  * @param {!dotprod.math.Vector} position
  * @param {function(number, number): boolean} commitFireFn
- * @return {dotprod.model.projectile.Projectile}
+ * @return {Object}
  */
 dotprod.model.MineLayer.prototype.fire = function(position, commitFireFn) {
   var level = this.level_.getValue();
@@ -73,23 +83,33 @@ dotprod.model.MineLayer.prototype.fire = function(position, commitFireFn) {
   var damage = this.getDamage_();
   var projectile = this.game_.getModelObjectFactory().newMine(this.game_, this.owner_, level, position, lifetime, damage);
 
+  this.onwer_.addProjectile(projectile);
   this.game_.getResourceManager().playSound('mine');
 
-  return projectile;
+  return {
+    'type': this.getType(),
+    'level': level,
+    'pos': position.toArray()
+  };
 };
 
 /**
- * @param {number} level
- * @param {!dotprod.math.Vector} position
- * @return {dotprod.model.projectile.Projectile}
+ * @override
  */
-dotprod.model.MineLayer.prototype.fireSynthetic = function(level, position) {
+dotprod.model.MineLayer.prototype.onFired = function(timeDiff, weaponData) {
+  goog.asserts.assert(weaponData['type'] == this.getType(), 'Cannot fire mine with incorrect weapon type: ' + weaponData['type']);
+
+  var level = weaponData['level'];
+  var position = dotprod.math.Vector.fromArray(weaponData['pos']);
+
+  // Make sure the level is correct so the following getters use the right value for their calculations.
   this.level_.setValue(level);
 
-  var lifetime = this.getLifetime_();
-  var damage = this.getDamage_();
-
-  return this.game_.getModelObjectFactory().newMine(this.game_, this.owner_, this.level_.getValue(), position, lifetime, damage);
+  var projectile = this.game_.getModelObjectFactory().newMine(this.game_, this.owner_, this.level_.getValue(), position, this.getLifetime_(), this.getDamage_());
+  for (var i = 0; i < timeDiff; ++i) {
+    projectile.advanceTime();
+  }
+  this.owner_.addProjectile(projectile);
 };
 
 /**

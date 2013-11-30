@@ -52,8 +52,6 @@ dotprod.model.projectile.Projectile = function(game, owner, level, lifetime, dam
 };
 goog.inherits(dotprod.model.projectile.Projectile, dotprod.model.Entity);
 
-dotprod.model.projectile.Projectile.prototype.getType = goog.abstractMethod;
-
 /**
  * @param {!dotprod.model.player.Player} player
  * @protected

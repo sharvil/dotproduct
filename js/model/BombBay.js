@@ -5,10 +5,13 @@
 
 goog.provide('dotprod.model.BombBay');
 
+goog.require('goog.asserts');
 goog.require('dotprod.math.Range');
+goog.require('dotprod.model.Weapon.Type');
 
 /**
  * @constructor
+ * @implements {dotprod.model.Weapon}
  * @param {!dotprod.Game} game
  * @param {!Object} bombBaySettings
  * @param {!dotprod.model.player.Player} owner
@@ -41,6 +44,13 @@ dotprod.model.BombBay = function(game, bombBaySettings, owner) {
 };
 
 /**
+ * @override
+ */
+dotprod.model.BombBay.prototype.getType = function() {
+  return dotprod.model.Weapon.Type.BOMB;
+};
+
+/**
  * @return {number}
  */
 dotprod.model.BombBay.prototype.getLevel = function() {
@@ -56,7 +66,7 @@ dotprod.model.BombBay.prototype.upgrade = function() {
  * @param {!dotprod.math.Vector} position
  * @param {!dotprod.math.Vector} velocity
  * @param {function(number, number, number): boolean} commitFireFn
- * @return {dotprod.model.projectile.Projectile}
+ * @return {Object}
  */
 dotprod.model.BombBay.prototype.fire = function(angle, position, velocity, commitFireFn) {
   var level = this.level_.getValue();
@@ -80,27 +90,37 @@ dotprod.model.BombBay.prototype.fire = function(angle, position, velocity, commi
   var newVelocity = velocity.add(dotprod.math.Vector.fromPolar(this.getBombSpeed_(), angle));
   var projectile = this.game_.getModelObjectFactory().newBomb(this.game_, this.owner_, level, position, newVelocity, lifetime, damage, bounceCount, blastRadius, proxRadius);
 
+  this.owner_.addProjectile(projectile);
   this.game_.getResourceManager().playSound('bomb');
 
-  return projectile;
+  return {
+    'type': this.getType(),
+    'level': level,
+    'pos': position.toArray(),
+    'vel': newVelocity.toArray(),
+    'bounceCount': bounceCount
+  };
 };
 
 /**
- * @param {number} level
- * @param {number} bounceCount
- * @param {!dotprod.math.Vector} position
- * @param {!dotprod.math.Vector} velocity
- * @return {dotprod.model.projectile.Projectile}
+ * @override
  */
-dotprod.model.BombBay.prototype.fireSynthetic = function(level, bounceCount, position, velocity) {
+dotprod.model.BombBay.prototype.onFired = function(timeDiff, weaponData) {
+  goog.asserts.assert(weaponData['type'] == this.getType(), 'Cannot fire bomb with incorrect weapon type: ' + weaponData['type']);
+
+  var level = weaponData['level'];
+  var position = dotprod.math.Vector.fromArray(weaponData['pos']);
+  var velocity = dotprod.math.Vector.fromArray(weaponData['vel']);
+  var bounceCount = weaponData['bounceCount'];
+
+  // Make sure the level is correct so the following getters use the right value for their calculations.
   this.level_.setValue(level);
 
-  var lifetime = this.getLifetime_();
-  var damage = this.getDamage_();
-  var blastRadius = this.getBlastRadius_();
-  var proxRadius = this.getProxRadius_();
-
-  return this.game_.getModelObjectFactory().newBomb(this.game_, this.owner_, this.level_.getValue(), position, velocity, lifetime, damage, bounceCount, blastRadius, proxRadius);
+  var projectile = this.game_.getModelObjectFactory().newBomb(this.game_, this.owner_, this.level_.getValue(), position, velocity, this.getLifetime_(), this.getDamage_(), bounceCount, this.getBlastRadius_(), this.getProxRadius_());
+  for (var i = 0; i < timeDiff; ++i) {
+    projectile.advanceTime();
+  }
+  this.owner_.addProjectile(projectile);
 };
 
 /**
