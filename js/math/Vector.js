@@ -29,6 +29,15 @@ dotprod.math.Vector = function(x, y) {
 };
 
 /**
+ * @param {!Array.<number>} array An array of 2 elements containing the x and y values.
+ * @return {!dotprod.math.Vector}
+ */
+dotprod.math.Vector.fromArray = function(array) {
+  goog.asserts.assert(array.length == 2, 'Cannot call toArray with array of length ' + array.length);
+  return new dotprod.math.Vector(array[0], array[1]);
+};
+
+/**
  * @param {number} r The magnitude of the vector. Must be a nonnegative number.
  * @param {number} theta The angle, in radians, of the vector.
  * @return {!dotprod.math.Vector}
