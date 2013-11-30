@@ -5,6 +5,7 @@
 
 goog.provide('dotprod.model.Entity');
 
+goog.require('goog.asserts');
 goog.require('dotprod.math.Rect');
 goog.require('dotprod.math.Vector');
 goog.require('dotprod.model.ModelObject');
@@ -121,7 +122,11 @@ dotprod.model.Entity.prototype.updatePosition_ = function(opt_bounceFactor) {
           break;
         case dotprod.ObjectType.FLAG:
           var flag = flagIndex.getFlag(collision.xTile, collision.yTile);
-          this.captureFlag_(flag);
+          if (flag != null) {
+            this.captureFlag_(flag);
+          } else {
+            goog.asserts.assert(false, 'Flag at ' + collision.xTile + ', ' + collision.yTile + ' not found.');
+          }
           break;
         default:
           break;
@@ -153,7 +158,11 @@ dotprod.model.Entity.prototype.updatePosition_ = function(opt_bounceFactor) {
           break;
         case dotprod.ObjectType.FLAG:
           var flag = flagIndex.getFlag(collision.xTile, collision.yTile);
-          this.captureFlag_(flag);
+          if (flag != null) {
+            this.captureFlag_(flag);
+          } else {
+            goog.asserts.assert(false, 'Flag at ' + collision.xTile + ', ' + collision.yTile + ' not found.');
+          }
           break;
         default:
           break;

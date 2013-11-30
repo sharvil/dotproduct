@@ -150,7 +150,7 @@ dotprod.net.Protocol.prototype.getRoundTripTime = function() {
 
 /**
  * @param {dotprod.net.Protocol.S2CPacketType} packetType
- * @param {function()} cb
+ * @param {function(!Object)} cb
  */
 dotprod.net.Protocol.prototype.registerHandler = function(packetType, cb) {
   this.handlers_[packetType].push(cb);
@@ -177,14 +177,12 @@ dotprod.net.Protocol.prototype.startGame = function(ship) {
  * @param {!dotprod.math.Vector} position
  * @param {!dotprod.math.Vector} velocity
  * @param {boolean} isSafe
- * @param {dotprod.model.projectile.Projectile=} opt_projectile
+ * @param {Object=} opt_weaponData
  */
-dotprod.net.Protocol.prototype.sendPosition = function(direction, position, velocity, isSafe, opt_projectile) {
+dotprod.net.Protocol.prototype.sendPosition = function(direction, position, velocity, isSafe, opt_weaponData) {
   var packet = [dotprod.net.Protocol.C2SPacketType_.POSITION, this.asRemoteTime_(goog.now()), direction, position.getX(), position.getY(), velocity.getX(), velocity.getY(), isSafe];
-  if (opt_projectile) {
-    position = opt_projectile.getPosition();
-    velocity = opt_projectile.getVelocity();
-    packet = packet.concat([opt_projectile.getType(), opt_projectile.getLevel(), opt_projectile.getBounceCount(), position.getX(), position.getY(), velocity.getX(), velocity.getY()]);
+  if (opt_weaponData) {
+    packet.push(opt_weaponData);
   }
   this.send_(packet);
 };
@@ -193,6 +191,10 @@ dotprod.net.Protocol.prototype.syncClocks_ = function() {
   this.send_([dotprod.net.Protocol.C2SPacketType_.CLOCK_SYNC, this.asUint32_(goog.now())]);
 };
 
+/**
+ * @param {!Object} packet
+ * @private
+ */
 dotprod.net.Protocol.prototype.onClockSyncReply_ = function(packet) {
   var clientTime0 = packet[0];
   var serverTime = packet[1];

@@ -13,7 +13,7 @@ goog.require('dotprod.graphics.Drawable');
  */
 dotprod.layers.WeaponIndicators = function(game) {
   /**
-   * @type {!dotprod.model.players.LocalPlayer}
+   * @type {!dotprod.model.player.LocalPlayer}
    * @private
    */
   this.localPlayer_ = game.getPlayerIndex().getLocalPlayer();
@@ -51,7 +51,7 @@ dotprod.layers.WeaponIndicators.prototype.render = function(viewport) {
 /**
  * @param {!CanvasRenderingContext2D} context
  * @param {number} left
- * @param {number} right
+ * @param {number} top
  * @param {number} level
  * @param {number} tileNum
  */

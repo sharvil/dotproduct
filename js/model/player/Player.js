@@ -280,38 +280,22 @@ dotprod.model.player.Player.prototype.setShip = function(ship) {
 
 /**
  * @param {number} timeDiff
- * @param {number} type
- * @param {number} level
- * @param {number} bounceCount
- * @param {!dotprod.math.Vector} position
- * @param {!dotprod.math.Vector} velocity
+ * @param {!Object} weaponData
  */
-dotprod.model.player.Player.prototype.fireWeapon = function(timeDiff, type, level, bounceCount, position, velocity) {
-  var projectile;
-  switch (type) {
-    case dotprod.model.Weapon.Type.BULLET:
-      projectile = this.gun_.fireSynthetic(level, bounceCount, position, velocity);
+dotprod.model.player.Player.prototype.onWeaponFired = function(timeDiff, weaponData) {
+  switch (weaponData['type']) {
+    case this.gun_.getType():
+      this.gun_.onFired(timeDiff, weaponData);
       break;
-    case dotprod.model.Weapon.Type.BOMB:
-      projectile = this.bombBay_.fireSynthetic(level, bounceCount, position, velocity);
+    case this.bombBay_.getType():
+      this.bombBay_.onFired(timeDiff, weaponData);
       break;
-    case dotprod.model.Weapon.Type.MINE:
-      projectile = this.mineLayer_.fireSynthetic(level, position);
+    case this.mineLayer_.getType():
+      this.mineLayer_.onFired(timeDiff, weaponData);
       break;
     default:
       break;
   }
-
-  if (!projectile) {
-    return;
-  }
-
-  // TODO(sharvil): we need a better way to account for latency than directly
-  // calling update on the projectile.
-  for (var i = 0; i < timeDiff; ++i) {
-    projectile.advanceTime();
-  }
-  this.addProjectile_(projectile);
 };
 
 /**
@@ -372,9 +356,8 @@ dotprod.model.player.Player.prototype.onPrizeCollected = function() {
 
 /**
  * @param {!dotprod.model.projectile.Projectile} projectile
- * @protected
  */
-dotprod.model.player.Player.prototype.addProjectile_ = function(projectile) {
+dotprod.model.player.Player.prototype.addProjectile = function(projectile) {
   this.projectiles_ = goog.array.filter(this.projectiles_, function(p) { return p.isValid(); });
   goog.array.extend(this.projectiles_, projectile);
 };

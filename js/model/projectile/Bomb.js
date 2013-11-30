@@ -58,13 +58,6 @@ goog.inherits(dotprod.model.projectile.Bomb, dotprod.model.projectile.Projectile
 /**
  * @override
  */
-dotprod.model.projectile.Bomb.prototype.getType = function() {
-  return dotprod.model.Weapon.Type.BOMB;
-};
-
-/**
- * @override
- */
 dotprod.model.projectile.Bomb.prototype.checkPlayerCollision_ = function(player) {
   if (!player.isAlive() || this.owner_.isFriend(player)) {
     return false;

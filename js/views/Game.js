@@ -424,13 +424,7 @@ dotprod.Game.prototype.onPlayerPosition_ = function(packet) {
   if (player) {
     player.onPositionUpdate(timeDiff, angle, position, velocity, isSafe);
     if (packet.length > 8) {
-      var type = packet[8];
-      var level = packet[9];
-      var bounceCount = packet[10];
-      position = new dotprod.math.Vector(packet[11], packet[12]);
-      velocity = new dotprod.math.Vector(packet[13], packet[14]);
-
-      player.fireWeapon(timeDiff, type, level, bounceCount, position, velocity);
+      player.onWeaponFired(timeDiff, packet[8]);
     }
   }
 };

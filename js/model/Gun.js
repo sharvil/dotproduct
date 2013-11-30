@@ -5,10 +5,13 @@
 
 goog.provide('dotprod.model.Gun');
 
+goog.require('goog.asserts');
 goog.require('dotprod.math.Range');
+goog.require('dotprod.model.Weapon.Type');
 
 /**
  * @constructor
+ * @implements dotprod.model.Weapon
  * @param {!dotprod.Game} game
  * @param {!Object} gunSettings
  * @param {!dotprod.model.player.Player} owner
@@ -47,6 +50,13 @@ dotprod.model.Gun = function(game, gunSettings, owner) {
 };
 
 /**
+ * @override
+ */
+dotprod.model.Gun.prototype.getType = function() {
+  return dotprod.model.Weapon.Type.GUN;
+};
+
+/**
  * @return {number}
  */
 dotprod.model.Gun.prototype.getLevel = function() {
@@ -69,7 +79,7 @@ dotprod.model.Gun.prototype.setBounces = function(bounces) {
  * @param {!dotprod.math.Vector} position
  * @param {!dotprod.math.Vector} velocity
  * @param {function(number, number): boolean} commitFireFn
- * @return {dotprod.model.projectile.Projectile}
+ * @return {Object}
  */
 dotprod.model.Gun.prototype.fire = function(angle, position, velocity, commitFireFn) {
   var fireEnergy = this.getFireEnergy_();
@@ -86,25 +96,38 @@ dotprod.model.Gun.prototype.fire = function(angle, position, velocity, commitFir
   var newVelocity = velocity.add(dotprod.math.Vector.fromPolar(this.getBulletSpeed_(), angle));
   var projectile = this.game_.getModelObjectFactory().newBullet(this.game_, this.owner_, level, position, newVelocity, lifetime, damage, bounceCount);
 
+  this.owner_.addProjectile(projectile);
   this.game_.getResourceManager().playSound('bullet');
 
-  return projectile;
+  return {
+    'type': this.getType(),
+    'level': level,
+    'pos': position.toArray(),
+    'vel': newVelocity.toArray(),
+    'bounceCount': bounceCount
+  };
 };
 
 /**
- * @param {number} level
- * @param {number} bounceCount
- * @param {!dotprod.math.Vector} position
- * @param {!dotprod.math.Vector} velocity
- * @return {dotprod.model.projectile.Projectile}
+ * @override
  */
-dotprod.model.Gun.prototype.fireSynthetic = function(level, bounceCount, position, velocity) {
+dotprod.model.Gun.prototype.onFired = function(timeDiff, weaponData) {
+  goog.asserts.assert(weaponData['type'] == this.getType(), 'Cannot fire gun with incorrect weapon type: ' + weaponData['type']);
+
+  var level = weaponData['level'];
+  var position = dotprod.math.Vector.fromArray(weaponData['pos']);
+  var velocity = dotprod.math.Vector.fromArray(weaponData['vel']);
+  var bounceCount = weaponData['bounceCount'];
+
+  // Make sure the level is correct so the following getters use the right value for their calculations.
   this.level_.setValue(level);
 
-  var lifetime = this.getLifetime_();
-  var damage = this.getDamage_();
+  var projectile = this.game_.getModelObjectFactory().newBullet(this.game_, this.owner_, this.level_.getValue(), position, velocity, this.getLifetime_(), this.getDamage_(), bounceCount);
+  for (var i = 0; i < timeDiff; ++i) {
+    projectile.advanceTime();
+  }
 
-  return this.game_.getModelObjectFactory().newBullet(this.game_, this.owner_, this.level_.getValue(), position, velocity, lifetime, damage, bounceCount);
+  this.owner_.addProjectile(projectile);
 };
 
 /**

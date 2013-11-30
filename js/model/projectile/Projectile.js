@@ -52,8 +52,6 @@ dotprod.model.projectile.Projectile = function(game, owner, level, lifetime, dam
 };
 goog.inherits(dotprod.model.projectile.Projectile, dotprod.model.Entity);
 
-dotprod.model.projectile.Projectile.prototype.getType = goog.abstractMethod;
-
 /**
  * @param {!dotprod.model.player.Player} player
  * @protected
@@ -65,20 +63,6 @@ dotprod.model.projectile.Projectile.prototype.checkPlayerCollision_ = goog.abstr
  * @protected
  */
 dotprod.model.projectile.Projectile.prototype.explode_ = goog.abstractMethod;
-
-/**
- * @return {number}
- */
-dotprod.model.projectile.Projectile.prototype.getLevel = function() {
-  return this.level_;
-};
-
-/**
- * @return {number}
- */
-dotprod.model.projectile.Projectile.prototype.getBounceCount = function() {
-  return this.bounceCount_;
-};
 
 dotprod.model.projectile.Projectile.prototype.advanceTime = function() {
   if (--this.lifetime_ <= 0) {
