@@ -64,20 +64,6 @@ dotprod.model.projectile.Projectile.prototype.checkPlayerCollision_ = goog.abstr
  */
 dotprod.model.projectile.Projectile.prototype.explode_ = goog.abstractMethod;
 
-/**
- * @return {number}
- */
-dotprod.model.projectile.Projectile.prototype.getLevel = function() {
-  return this.level_;
-};
-
-/**
- * @return {number}
- */
-dotprod.model.projectile.Projectile.prototype.getBounceCount = function() {
-  return this.bounceCount_;
-};
-
 dotprod.model.projectile.Projectile.prototype.advanceTime = function() {
   if (--this.lifetime_ <= 0) {
     this.invalidate();
