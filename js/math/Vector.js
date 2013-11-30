@@ -127,6 +127,16 @@ dotprod.math.Vector.prototype.resize = function(newMagnitude) {
   return new dotprod.math.Vector(this.x_ * newMagnitude / currentMagnitude, this.y_ * newMagnitude / currentMagnitude);
 };
 
+/**
+ * @return {!Array.<number>}
+ */
+dotprod.math.Vector.prototype.toArray = function() {
+  return [this.x_, this.y_];
+};
+
+/**
+ * @return {string}
+ */
 dotprod.math.Vector.prototype.toString = function() {
   return "[" + this.x_ + ", " + this.y_ + "]";
 };
