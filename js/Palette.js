@@ -3,33 +3,33 @@
  * @author sharvil.nanavati@gmail.com (Sharvil Nanavati)
  */
 
-goog.provide('dotprod.Palette');
+goog.provide('Palette');
 
 /**
  * @return {string}
  */
-dotprod.Palette.borderColor = function() {
+Palette.borderColor = function() {
   return '#222';
 };
 
 /**
  * @return {string}
  */
-dotprod.Palette.radarBgColor = function() {
+Palette.radarBgColor = function() {
   return 'rgba(0, 20, 0, 0.65)';
 };
 
 /**
  * @return {string}
  */
-dotprod.Palette.radarTileColor = function() {
+Palette.radarTileColor = function() {
   return 'rgba(255, 255, 255, 0.3)';
 };
 
 /**
  * @return {string}
  */
-dotprod.Palette.radarPrizeColor = function() {
+Palette.radarPrizeColor = function() {
   return 'rgba(0, 255, 0, 0.8)';
 };
 
@@ -37,7 +37,7 @@ dotprod.Palette.radarPrizeColor = function() {
  * @param {number=} opt_alpha
  * @return {string}
  */
-dotprod.Palette.foeColor = function(opt_alpha) {
+Palette.foeColor = function(opt_alpha) {
   if (opt_alpha === undefined) {
     opt_alpha = 1;
   }
@@ -47,14 +47,14 @@ dotprod.Palette.foeColor = function(opt_alpha) {
 /**
  * @return {string}
  */
-dotprod.Palette.chatNameColor = function() {
+Palette.chatNameColor = function() {
   return 'rgba(155, 215, 254, 1)';
 };
 
 /**
  * @return {string}
  */
-dotprod.Palette.chatTextColor = function() {
+Palette.chatTextColor = function() {
   return 'rgba(190, 190, 190, 1)';
 };
 
@@ -62,7 +62,7 @@ dotprod.Palette.chatTextColor = function() {
  * @param {number=} opt_alpha
  * @return {string}
  */
-dotprod.Palette.friendColor = function(opt_alpha) {
+Palette.friendColor = function(opt_alpha) {
   if (opt_alpha === undefined) {
     opt_alpha = 1;
   }
@@ -73,7 +73,7 @@ dotprod.Palette.friendColor = function(opt_alpha) {
  * @param {number=} opt_alpha
  * @return {string}
  */
-dotprod.Palette.notificationsColor = function(opt_alpha) {
+Palette.notificationsColor = function(opt_alpha) {
   if (opt_alpha === undefined) {
     opt_alpha = 1;
   }
@@ -84,14 +84,14 @@ dotprod.Palette.notificationsColor = function(opt_alpha) {
  * @param {number=} opt_alpha
  * @return {string}
  */
-dotprod.Palette.personalNotificationsColor = function(opt_alpha) {
-  return dotprod.Palette.friendColor(opt_alpha);
+Palette.personalNotificationsColor = function(opt_alpha) {
+  return Palette.friendColor(opt_alpha);
 };
 
 /**
  * @param {number=} opt_alpha
  * @return {string}
  */
-dotprod.Palette.enterNotificationsColor = function(opt_alpha) {
-  return dotprod.Palette.foeColor(opt_alpha);
+Palette.enterNotificationsColor = function(opt_alpha) {
+  return Palette.foeColor(opt_alpha);
 };

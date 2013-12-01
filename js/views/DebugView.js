@@ -3,28 +3,28 @@
  * @author sharvil.nanavati@gmail.com (Sharvil Nanavati)
  */
 
-goog.provide('dotprod.views.DebugView');
+goog.provide('views.DebugView');
 
-goog.require('dotprod.Viewport');
-goog.require('dotprod.views.View');
+goog.require('Viewport');
+goog.require('views.View');
 
 /**
  * @constructor
- * @extends {dotprod.views.View}
- * @param {!dotprod.Game} game
- * @param {!dotprod.Viewport} viewport
+ * @extends {views.View}
+ * @param {!Game} game
+ * @param {!Viewport} viewport
  */
-dotprod.views.DebugView = function(game, viewport) {
+views.DebugView = function(game, viewport) {
   goog.base(this);
 
   /**
-   * @type {!dotprod.Game}
+   * @type {!Game}
    * @private
    */
   this.game_ = game;
 
   /**
-   * @type {!dotprod.Viewport}
+   * @type {!Viewport}
    * @private
    */
   this.viewport_ = viewport;
@@ -34,7 +34,7 @@ dotprod.views.DebugView = function(game, viewport) {
    * @private
    */
   this.view_ = /** @type {!HTMLDivElement} */ (goog.dom.createElement('div'));
-  this.view_.classList.add(dotprod.views.DebugView.VIEW_CLASS_NAME_);
+  this.view_.classList.add(views.DebugView.VIEW_CLASS_NAME_);
 
   /**
    * @type {number}
@@ -48,25 +48,25 @@ dotprod.views.DebugView = function(game, viewport) {
    */
   this.frames_ = 0;
 };
-goog.inherits(dotprod.views.DebugView, dotprod.views.View);
+goog.inherits(views.DebugView, views.View);
 
 /**
  * @type {string}
  * @private
  * @const
  */
-dotprod.views.DebugView.VIEW_CLASS_NAME_ = 'dv';
+views.DebugView.VIEW_CLASS_NAME_ = 'dv';
 
 /**
  * @override
  */
-dotprod.views.DebugView.prototype.renderDom = function(rootNode) {
+views.DebugView.prototype.renderDom = function(rootNode) {
   goog.base(this, 'renderDom', rootNode);
 
   rootNode.appendChild(this.view_);
 };
 
-dotprod.views.DebugView.prototype.getEventTimeString_ = function() {
+views.DebugView.prototype.getEventTimeString_ = function() {
   var daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
   var monthName = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
   var today = new Date();
@@ -101,7 +101,7 @@ dotprod.views.DebugView.prototype.getEventTimeString_ = function() {
   return str;
 };
 
-dotprod.views.DebugView.prototype.update = function() {
+views.DebugView.prototype.update = function() {
   ++this.frames_;
 
   var now = goog.now();

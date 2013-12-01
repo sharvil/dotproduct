@@ -3,61 +3,61 @@
  * @author sharvil.nanavati@gmail.com (Sharvil Nanavati)
  */
 
-goog.provide('dotprod.model.Effect');
+goog.provide('model.Effect');
 
-goog.require('dotprod.math.Vector');
-goog.require('dotprod.model.ModelObject');
-goog.require('dotprod.graphics.Animation');
-goog.require('dotprod.graphics.Drawable');
-goog.require('dotprod.graphics.Layer');
+goog.require('math.Vector');
+goog.require('model.ModelObject');
+goog.require('graphics.Animation');
+goog.require('graphics.Drawable');
+goog.require('graphics.Layer');
 
 /**
  * @constructor
- * @extends {dotprod.model.ModelObject}
- * @implements {dotprod.graphics.Drawable}
- * @param {!dotprod.Game} game
- * @param {!dotprod.graphics.Animation} animation
- * @param {!dotprod.math.Vector} position
- * @param {!dotprod.math.Vector} velocity
- * @param {dotprod.graphics.Layer=} opt_layer
+ * @extends {model.ModelObject}
+ * @implements {graphics.Drawable}
+ * @param {!Game} game
+ * @param {!graphics.Animation} animation
+ * @param {!math.Vector} position
+ * @param {!math.Vector} velocity
+ * @param {graphics.Layer=} opt_layer
  */
-dotprod.model.Effect = function(game, animation, position, velocity, opt_layer) {
+model.Effect = function(game, animation, position, velocity, opt_layer) {
   goog.base(this, game.getSimulation());
 
   /**
-   * @type {!dotprod.Game}
+   * @type {!Game}
    * @private
    */
   this.game_ = game;
 
   /**
-   * @type {!dotprod.graphics.Animation}
+   * @type {!graphics.Animation}
    * @private
    */
   this.animation_ = animation;
 
   /**
-   * @type {!dotprod.math.Vector}
+   * @type {!math.Vector}
    * @private
    */
   this.position_ = position;
 
   /**
-   * @type {!dotprod.math.Vector}
+   * @type {!math.Vector}
    * @private
    */
   this.velocity_ = velocity;
 
-  var layer = dotprod.graphics.Layer.EFFECTS;
+  var layer = graphics.Layer.EFFECTS;
   if (arguments.length >= 5) {
     layer = opt_layer;
   }
 
   game.getPainter().registerDrawable(layer, this);
 };
-goog.inherits(dotprod.model.Effect, dotprod.model.ModelObject);
+goog.inherits(model.Effect, model.ModelObject);
 
-dotprod.model.Effect.prototype.advanceTime = function() {
+model.Effect.prototype.advanceTime = function() {
   this.animation_.update();
   this.position_ = this.position_.add(this.velocity_);
   if (!this.animation_.isRunning()) {
@@ -68,7 +68,7 @@ dotprod.model.Effect.prototype.advanceTime = function() {
 /**
  * @override
  */
-dotprod.model.Effect.prototype.render = function(viewport) {
+model.Effect.prototype.render = function(viewport) {
   var context = viewport.getContext();
   var dimensions = viewport.getDimensions();
 
@@ -81,8 +81,8 @@ dotprod.model.Effect.prototype.render = function(viewport) {
 /**
  * @override
  */
-dotprod.model.Effect.prototype.onInvalidate_ = function() {
+model.Effect.prototype.onInvalidate_ = function() {
   goog.base(this, 'onInvalidate_');
 
-  this.game_.getPainter().unregisterDrawable(dotprod.graphics.Layer.EFFECTS, this);
+  this.game_.getPainter().unregisterDrawable(graphics.Layer.EFFECTS, this);
 };

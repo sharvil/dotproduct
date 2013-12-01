@@ -3,33 +3,33 @@
  * @author sharvil.nanavati@gmail.com (Sharvil Nanavati)
  */
 
-goog.provide('dotprod.model.projectile.Mine');
+goog.provide('model.projectile.Mine');
 
-goog.require('dotprod.model.projectile.Projectile');
-goog.require('dotprod.model.Weapon.Type');
-goog.require('dotprod.math.Vector');
+goog.require('model.projectile.Projectile');
+goog.require('model.Weapon.Type');
+goog.require('math.Vector');
 
 /**
  * @constructor
- * @extends {dotprod.model.projectile.Projectile}
- * @param {!dotprod.Game} game
- * @param {!dotprod.model.player.Player} owner
+ * @extends {model.projectile.Projectile}
+ * @param {!Game} game
+ * @param {!model.player.Player} owner
  * @param {number} level
- * @param {!dotprod.math.Vector} position
+ * @param {!math.Vector} position
  * @param {number} lifetime
  * @param {number} damage
  */
-dotprod.model.projectile.Mine = function(game, owner, level, position, lifetime, damage) {
+model.projectile.Mine = function(game, owner, level, position, lifetime, damage) {
   goog.base(this, game, owner, level, lifetime, damage, 0);
 
   this.position_ = position;
 };
-goog.inherits(dotprod.model.projectile.Mine, dotprod.model.projectile.Projectile);
+goog.inherits(model.projectile.Mine, model.projectile.Projectile);
 
 /**
  * @override
  */
-dotprod.model.projectile.Mine.prototype.checkPlayerCollision_ = function(player) {
+model.projectile.Mine.prototype.checkPlayerCollision_ = function(player) {
   if (!player.isAlive() || this.owner_.isFriend(player)) {
     return false;
   }
@@ -44,7 +44,7 @@ dotprod.model.projectile.Mine.prototype.checkPlayerCollision_ = function(player)
 /**
  * @override
  */
-dotprod.model.projectile.Mine.prototype.explode_ = function(hitPlayer) {
+model.projectile.Mine.prototype.explode_ = function(hitPlayer) {
   this.lifetime_ = 0;
 
   if (hitPlayer) {

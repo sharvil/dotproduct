@@ -3,25 +3,25 @@
  * @author sharvil.nanavati@gmail.com (Sharvil Nanavati)
  */
 
-goog.provide('dotprod.model.Exhaust');
+goog.provide('model.Exhaust');
 
-goog.require('dotprod.model.Entity');
+goog.require('model.Entity');
 
 /**
  * @constructor
- * @extends {dotprod.model.Entity}
- * @param {!dotprod.Game} game
- * @param {!dotprod.math.Vector} position
- * @param {!dotprod.math.Vector} velocity
+ * @extends {model.Entity}
+ * @param {!Game} game
+ * @param {!math.Vector} position
+ * @param {!math.Vector} velocity
  */
-dotprod.model.Exhaust = function(game, position, velocity) {
+model.Exhaust = function(game, position, velocity) {
   goog.base(this, game);
 
   this.position_ = position;
   this.velocity_ = velocity;
 
   /**
-   * @type {!dotprod.graphics.Animation}
+   * @type {!graphics.Animation}
    * @private
    */
   this.image_ = game.getResourceManager().getSpriteSheet('exhaust').getAnimation(0);
@@ -37,9 +37,9 @@ dotprod.model.Exhaust = function(game, position, velocity) {
    */
   this.hack_ = 0;
 };
-goog.inherits(dotprod.model.Exhaust, dotprod.model.Entity);
+goog.inherits(model.Exhaust, model.Entity);
 
-dotprod.model.Exhaust.prototype.advanceTime = function() {
+model.Exhaust.prototype.advanceTime = function() {
   if (++this.hack_ % 2) {
     return;
   }
@@ -54,9 +54,9 @@ dotprod.model.Exhaust.prototype.advanceTime = function() {
 };
 
 /**
- * @param {!dotprod.Viewport} viewport
+ * @param {!Viewport} viewport
  */
-dotprod.model.Exhaust.prototype.render = function(viewport) {
+model.Exhaust.prototype.render = function(viewport) {
   var context = viewport.getContext();
   var dimensions = viewport.getDimensions();
   var x = Math.floor(this.position_.getX() - dimensions.left - this.image_.getWidth() / 2);

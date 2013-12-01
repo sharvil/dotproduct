@@ -3,14 +3,14 @@
  * @author sharvil.nanavati@gmail.com (Sharvil Nanavati)
  */
 
-goog.provide('dotprod.ObjectType');
-goog.provide('dotprod.PrizeType');
-goog.provide('dotprod.TileType');
+goog.provide('ObjectType');
+goog.provide('PrizeType');
+goog.provide('TileType');
 
 /**
  * @enum {number}
  */
-dotprod.ObjectType = {
+ObjectType = {
   NONE: 0,
   PRIZE: 1,
   FLAG: 2
@@ -19,7 +19,7 @@ dotprod.ObjectType = {
 /**
  * @enum {number}
  */
-dotprod.PrizeType = {
+PrizeType = {
   NONE: 0,
   GUN_UPGRADE: 1,
   BOMB_UPGRADE: 2,
@@ -30,7 +30,7 @@ dotprod.PrizeType = {
 /**
  * @enum {number}
  */
-dotprod.TileType = {
+TileType = {
   NONE: 0,
   COLLISION: 1,
   SAFE: 2,

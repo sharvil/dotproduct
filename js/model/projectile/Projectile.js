@@ -3,25 +3,25 @@
  * @author sharvil.nanavati@gmail.com (Sharvil Nanavati)
  */
 
-goog.provide('dotprod.model.projectile.Projectile');
+goog.provide('model.projectile.Projectile');
 
-goog.require('dotprod.model.Entity');
+goog.require('model.Entity');
 
 /**
  * @constructor
- * @extends {dotprod.model.Entity}
- * @param {!dotprod.Game} game
- * @param {!dotprod.model.player.Player} owner
+ * @extends {model.Entity}
+ * @param {!Game} game
+ * @param {!model.player.Player} owner
  * @param {number} level
  * @param {number} lifetime
  * @param {number} damage
  * @param {number} bounceCount
  */
-dotprod.model.projectile.Projectile = function(game, owner, level, lifetime, damage, bounceCount) {
+model.projectile.Projectile = function(game, owner, level, lifetime, damage, bounceCount) {
   goog.base(this, game);
 
   /**
-   * @type {!dotprod.model.player.Player}
+   * @type {!model.player.Player}
    * @protected
    */
   this.owner_ = owner;
@@ -50,21 +50,21 @@ dotprod.model.projectile.Projectile = function(game, owner, level, lifetime, dam
    */
   this.bounceCount_ = bounceCount;
 };
-goog.inherits(dotprod.model.projectile.Projectile, dotprod.model.Entity);
+goog.inherits(model.projectile.Projectile, model.Entity);
 
 /**
- * @param {!dotprod.model.player.Player} player
+ * @param {!model.player.Player} player
  * @protected
  */
-dotprod.model.projectile.Projectile.prototype.checkPlayerCollision_ = goog.abstractMethod;
+model.projectile.Projectile.prototype.checkPlayerCollision_ = goog.abstractMethod;
 
 /**
- * @param {dotprod.model.player.Player} player The player who was directly hit or null if there was no direct hit.
+ * @param {model.player.Player} player The player who was directly hit or null if there was no direct hit.
  * @protected
  */
-dotprod.model.projectile.Projectile.prototype.explode_ = goog.abstractMethod;
+model.projectile.Projectile.prototype.explode_ = goog.abstractMethod;
 
-dotprod.model.projectile.Projectile.prototype.advanceTime = function() {
+model.projectile.Projectile.prototype.advanceTime = function() {
   if (--this.lifetime_ <= 0) {
     this.invalidate();
     return;
@@ -77,7 +77,7 @@ dotprod.model.projectile.Projectile.prototype.advanceTime = function() {
 /**
  * @override
  */
-dotprod.model.projectile.Projectile.prototype.bounce_ = function() {
+model.projectile.Projectile.prototype.bounce_ = function() {
   if (this.bounceCount_ == 0) {
     this.explode_(null);
   } else if (this.bounceCount_ > 0) {

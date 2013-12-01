@@ -3,24 +3,24 @@
  * @author sharvil.nanavati@gmail.com (Sharvil Nanavati)
  */
 
-goog.provide('dotprod.FlagIndex');
+goog.provide('FlagIndex');
 
 goog.require('goog.array');
-goog.require('dotprod.model.Flag');
+goog.require('model.Flag');
 
 /**
  * @constructor
- * @param {!dotprod.Game} game
+ * @param {!Game} game
  */
-dotprod.FlagIndex = function(game) {
+FlagIndex = function(game) {
   /**
-   * @type {!dotprod.Game}
+   * @type {!Game}
    * @private
    */
   this.game_ = game;
 
   /**
-   * @type {!Array.<!dotprod.model.Flag>}
+   * @type {!Array.<!model.Flag>}
    * @private
    */
   this.flags_ = [];
@@ -29,10 +29,10 @@ dotprod.FlagIndex = function(game) {
 /**
  * @param {number} xTile
  * @param {number} yTile
- * @return {dotprod.model.Flag}
+ * @return {model.Flag}
  */
-dotprod.FlagIndex.prototype.getFlag = function(xTile, yTile) {
-  return /** @type {dotprod.model.Flag} */ (goog.array.find(this.flags_, function(flag) {
+FlagIndex.prototype.getFlag = function(xTile, yTile) {
+  return /** @type {model.Flag} */ (goog.array.find(this.flags_, function(flag) {
     return flag.getX() == xTile && flag.getY() == yTile;
   }));
 };
@@ -43,10 +43,10 @@ dotprod.FlagIndex.prototype.getFlag = function(xTile, yTile) {
  * @param {number} xTile
  * @param {number} yTile
  */
-dotprod.FlagIndex.prototype.updateFlag = function(id, team, xTile, yTile) {
+FlagIndex.prototype.updateFlag = function(id, team, xTile, yTile) {
   var flag = this.getFlag(xTile, yTile);
   if (!flag) {
-    this.flags_.push(new dotprod.model.Flag(this.game_, this.game_.getMap(), id, team, xTile, yTile));
+    this.flags_.push(new model.Flag(this.game_, this.game_.getMap(), id, team, xTile, yTile));
   } else {
     flag.captureFlag(team);
   }

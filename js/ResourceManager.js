@@ -3,31 +3,31 @@
  * @author sharvil.nanavati@gmail.com (Sharvil Nanavati)
  */
 
-goog.provide('dotprod.ResourceManager');
+goog.provide('ResourceManager');
 
 goog.require('goog.asserts');
 goog.require('goog.debug.Logger');
-goog.require('dotprod.graphics.Image');
-goog.require('dotprod.graphics.SpriteSheet');
+goog.require('graphics.Image');
+goog.require('graphics.SpriteSheet');
 
 /**
  * @constructor
  */
-dotprod.ResourceManager = function() {
+ResourceManager = function() {
   /**
    * @type {!goog.debug.Logger}
    * @private
    */
-  this.logger_ = goog.debug.Logger.getLogger('dotprod.ResourceManager');
+  this.logger_ = goog.debug.Logger.getLogger('ResourceManager');
 
   /**
-   * @type {!Object.<string, !dotprod.graphics.Image>}
+   * @type {!Object.<string, !graphics.Image>}
    * @private
    */
   this.images_ = {};
 
   /**
-   * @type {!Object.<string, !dotprod.graphics.SpriteSheet>}
+   * @type {!Object.<string, !graphics.SpriteSheet>}
    * @private
    */
   this.spriteSheets_ = {};
@@ -46,7 +46,7 @@ dotprod.ResourceManager = function() {
  * @param {number} yTiles
  * @param {function()} loadCb
  */
-dotprod.ResourceManager.prototype.loadImage = function(name, url, xTiles, yTiles, loadCb) {
+ResourceManager.prototype.loadImage = function(name, url, xTiles, yTiles, loadCb) {
   var self = this;
   var callback = function() {
     self.logger_.info('Loaded image: "' + name + '"');
@@ -54,7 +54,7 @@ dotprod.ResourceManager.prototype.loadImage = function(name, url, xTiles, yTiles
   };
 
   this.logger_.info('Loading image: "' + name + '" using URL: ' + url);
-  this.images_[name] = new dotprod.graphics.Image(xTiles, yTiles);
+  this.images_[name] = new graphics.Image(xTiles, yTiles);
   this.images_[name].load(url, callback);
 };
 
@@ -67,7 +67,7 @@ dotprod.ResourceManager.prototype.loadImage = function(name, url, xTiles, yTiles
  * @param {number} period
  * @param {function()} loadCb
  */
-dotprod.ResourceManager.prototype.loadSpriteSheet = function(name, url, xTiles, yTiles, frames, period, loadCb) {
+ResourceManager.prototype.loadSpriteSheet = function(name, url, xTiles, yTiles, frames, period, loadCb) {
   var self = this;
   var callback = function() {
     self.logger_.info('Loaded video ensemble: "' + name + '"');
@@ -75,7 +75,7 @@ dotprod.ResourceManager.prototype.loadSpriteSheet = function(name, url, xTiles, 
   };
 
   this.logger_.info('Loading video ensemble: "' + name + '" using URL: ' + url);
-  this.spriteSheets_[name] = new dotprod.graphics.SpriteSheet(xTiles, yTiles, frames, period);
+  this.spriteSheets_[name] = new graphics.SpriteSheet(xTiles, yTiles, frames, period);
   this.spriteSheets_[name].load(url, callback)
 }
 
@@ -84,7 +84,7 @@ dotprod.ResourceManager.prototype.loadSpriteSheet = function(name, url, xTiles, 
  * @param {string} url
  * @param {function()} loadCb
  */
-dotprod.ResourceManager.prototype.loadSound = function(name, url, loadCb) {
+ResourceManager.prototype.loadSound = function(name, url, loadCb) {
   // TODO(sharvil): remove this once Chrome and Safari behave correctly when loading Audio.
   loadCb();
   return;
@@ -107,7 +107,7 @@ dotprod.ResourceManager.prototype.loadSound = function(name, url, loadCb) {
 /**
  * @param {string} name
  */
-dotprod.ResourceManager.prototype.playSound = function(name) {
+ResourceManager.prototype.playSound = function(name) {
   // TODO(sharvil): remove this check -- we should always have an Audio object
   // whenever we try to play it. We do this for now since Chrome and Safari's
   // audio loading code seems to be broken.
@@ -118,18 +118,18 @@ dotprod.ResourceManager.prototype.playSound = function(name) {
 
 /**
  * @param {string} name
- * @return {!dotprod.graphics.Image}
+ * @return {!graphics.Image}
  */
-dotprod.ResourceManager.prototype.getImage = function(name) {
+ResourceManager.prototype.getImage = function(name) {
   goog.asserts.assert(this.images_[name], 'Requesting missing image resource: ' + name);
   return this.images_[name];
 };
 
 /**
  * @param {string} name
- * @return {!dotprod.graphics.SpriteSheet}
+ * @return {!graphics.SpriteSheet}
  */
-dotprod.ResourceManager.prototype.getSpriteSheet = function(name) {
+ResourceManager.prototype.getSpriteSheet = function(name) {
   goog.asserts.assert(this.spriteSheets_[name], 'Requesting missing video ensemble: ' + name);
   return this.spriteSheets_[name];
 };

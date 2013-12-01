@@ -3,7 +3,7 @@
  * @author sharvil.nanavati@gmail.com (Sharvil Nanavati)
  */
 
-goog.provide('dotprod.Application');
+goog.provide('Application');
 
 goog.require('goog.debug.Console');
 goog.require('goog.dom');
@@ -12,33 +12,33 @@ goog.require('goog.events.EventType');
 
 goog.require('html5.Fullscreen');
 
-goog.require('dotprod.Game');
-goog.require('dotprod.net.Protocol');
-goog.require('dotprod.ResourceManager');
-goog.require('dotprod.Timestamp');
-goog.require('dotprod.views.LoadingView');
-goog.require('dotprod.views.LoginView');
+goog.require('Game');
+goog.require('net.Protocol');
+goog.require('ResourceManager');
+goog.require('Timestamp');
+goog.require('views.LoadingView');
+goog.require('views.LoginView');
 
 /**
  * @constructor
  * @param {!Object} settings
  * @param {string} url The WebSocket URL to connect to.
  */
-dotprod.Application = function(settings, url) {
+Application = function(settings, url) {
   // Make sure all logging output goes to console.
   new goog.debug.Console().setCapturing(true);
 
   /**
-   * @type {!dotprod.net.Protocol}
+   * @type {!net.Protocol}
    * @private
    */
-  this.protocol_ = new dotprod.net.Protocol(url);
+  this.protocol_ = new net.Protocol(url);
 
   /**
-   * @type {!dotprod.ResourceManager}
+   * @type {!ResourceManager}
    * @private
    */
-  this.resourceManager_ = new dotprod.ResourceManager();
+  this.resourceManager_ = new ResourceManager();
 
   /**
    * @type {!Object}
@@ -53,22 +53,22 @@ dotprod.Application = function(settings, url) {
   this.mapData_ = {};
 
   /**
-   * @type {dotprod.Game}
+   * @type {Game}
    * @private
    */
   this.game_;
 
   /**
-   * @type {!dotprod.views.LoginView}
+   * @type {!views.LoginView}
    * @private
    */
-  this.loginView_ = new dotprod.views.LoginView({ 'accessToken': settings.accessToken }, this.protocol_, goog.bind(this.startGame_, this));
+  this.loginView_ = new views.LoginView({ 'accessToken': settings.accessToken }, this.protocol_, goog.bind(this.startGame_, this));
 
   /**
-   * @type {!dotprod.views.LoadingView}
+   * @type {!views.LoadingView}
    * @private
    */
-  this.loadingView_ = new dotprod.views.LoadingView(this.resourceManager_, goog.bind(this.onLoadComplete_, this));
+  this.loadingView_ = new views.LoadingView(this.resourceManager_, goog.bind(this.onLoadComplete_, this));
   this.loadingView_.renderDom(/** @type {!HTMLDivElement} */ (goog.dom.getElement('loading')));
   this.loadingView_.hide();
 
@@ -90,7 +90,7 @@ dotprod.Application = function(settings, url) {
  * @param {!Object.<number, number>} mapData
  * @param {!Array.<!Object>} mapProperties
  */
-dotprod.Application.prototype.startGame_ = function(resources, settings, mapData, mapProperties) {
+Application.prototype.startGame_ = function(resources, settings, mapData, mapProperties) {
   this.settings_ = settings;
   this.mapData_ = mapData;
   this.mapProperties_ = mapProperties;
@@ -100,10 +100,10 @@ dotprod.Application.prototype.startGame_ = function(resources, settings, mapData
   this.loadingView_.load(resources);
 };
 
-dotprod.Application.prototype.onLoadComplete_ = function() {
+Application.prototype.onLoadComplete_ = function() {
   this.loadingView_.hide();
 
-  this.game_ = new dotprod.Game(this.protocol_, this.resourceManager_, this.settings_, this.mapData_, this.mapProperties_);
+  this.game_ = new Game(this.protocol_, this.resourceManager_, this.settings_, this.mapData_, this.mapProperties_);
   this.game_.renderDom(/** @type {!HTMLDivElement} */ (goog.dom.getElement('game')));
 };
 
@@ -111,7 +111,7 @@ dotprod.Application.prototype.onLoadComplete_ = function() {
  * @param {!goog.events.BrowserEvent} event
  * @private
  */
-dotprod.Application.prototype.onFullscreenToggleClicked_ = function(event) {
+Application.prototype.onFullscreenToggleClicked_ = function(event) {
   if (!html5.Fullscreen.isFullscreen()) {
     html5.Fullscreen.request(Element.ALLOW_KEYBOARD_INPUT);
   } else {
@@ -121,6 +121,6 @@ dotprod.Application.prototype.onFullscreenToggleClicked_ = function(event) {
 
 var _main = function() {
   var settings = window.toObject(window.location.hash.substr(1));
-  new dotprod.Application(settings, 'ws://' + window.location.host + '/dotproduct/v1/');
+  new Application(settings, 'ws://' + window.location.host + '/dotproduct/v1/');
   window.location.hash = '';
 };

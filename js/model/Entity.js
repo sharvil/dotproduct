@@ -3,40 +3,40 @@
  * @author sharvil.nanavati@gmail.com (Sharvil Nanavati)
  */
 
-goog.provide('dotprod.model.Entity');
+goog.provide('model.Entity');
 
 goog.require('goog.asserts');
-goog.require('dotprod.math.Rect');
-goog.require('dotprod.math.Vector');
-goog.require('dotprod.model.ModelObject');
-goog.require('dotprod.ObjectType');
-goog.require('dotprod.TileType');
+goog.require('math.Rect');
+goog.require('math.Vector');
+goog.require('model.ModelObject');
+goog.require('ObjectType');
+goog.require('TileType');
 
 /**
  * @constructor
- * @extends {dotprod.model.ModelObject}
- * @param {!dotprod.Game} game
+ * @extends {model.ModelObject}
+ * @param {!Game} game
  */
-dotprod.model.Entity = function(game) {
+model.Entity = function(game) {
   goog.base(this, game.getSimulation());
 
   /**
-   * @type {!dotprod.Game}
+   * @type {!Game}
    * @protected
    */
   this.game_ = game;
 
   /**
-   * @type {!dotprod.math.Vector}
+   * @type {!math.Vector}
    * @protected
    */
-  this.position_ = new dotprod.math.Vector(0, 0);
+  this.position_ = new math.Vector(0, 0);
 
   /**
-   * @type {!dotprod.math.Vector}
+   * @type {!math.Vector}
    * @protected
    */
-  this.velocity_ = new dotprod.math.Vector(0, 0);
+  this.velocity_ = new math.Vector(0, 0);
 
   /**
    * @type {number}
@@ -50,26 +50,26 @@ dotprod.model.Entity = function(game) {
    */
   this.yRadius_ = 0;
 };
-goog.inherits(dotprod.model.Entity, dotprod.model.ModelObject);
+goog.inherits(model.Entity, model.ModelObject);
 
 /**
- * @return {!dotprod.math.Vector}
+ * @return {!math.Vector}
  */
-dotprod.model.Entity.prototype.getPosition = function() {
+model.Entity.prototype.getPosition = function() {
   return this.position_;
 };
 
 /**
- * @return {!dotprod.math.Vector}
+ * @return {!math.Vector}
  */
-dotprod.model.Entity.prototype.getVelocity = function() {
+model.Entity.prototype.getVelocity = function() {
   return this.velocity_;
 };
 
 /**
  * return {!Object}
  */
-dotprod.model.Entity.prototype.getDimensions = function() {
+model.Entity.prototype.getDimensions = function() {
   var x = this.position_.getX();
   var y = this.position_.getY();
 
@@ -84,7 +84,7 @@ dotprod.model.Entity.prototype.getDimensions = function() {
     height: this.yRadius_ * 2,
     xRadius: this.xRadius_,
     yRadius: this.yRadius_,
-    boundingRect: new dotprod.math.Rect(x - this.xRadius_, y - this.yRadius_, this.xRadius_ * 2, this.yRadius_ * 2)
+    boundingRect: new math.Rect(x - this.xRadius_, y - this.yRadius_, this.xRadius_ * 2, this.yRadius_ * 2)
   };
 };
 
@@ -92,7 +92,7 @@ dotprod.model.Entity.prototype.getDimensions = function() {
  * @param {number=} opt_bounceFactor
  * @protected
  */
-dotprod.model.Entity.prototype.updatePosition_ = function(opt_bounceFactor) {
+model.Entity.prototype.updatePosition_ = function(opt_bounceFactor) {
   var bounceFactor = opt_bounceFactor || 1;
   var map = this.game_.getMap();
   var prizeIndex = this.game_.getPrizeIndex();
@@ -103,24 +103,24 @@ dotprod.model.Entity.prototype.updatePosition_ = function(opt_bounceFactor) {
   for (var i = 0; i < xSpeed; i += tileWidth) {
     var xVel = this.velocity_.getX();
     var dx = Math.min(xSpeed - i, tileWidth);
-    this.position_ = this.position_.add(new dotprod.math.Vector(xVel < 0 ? -dx : dx, 0));
+    this.position_ = this.position_.add(new math.Vector(xVel < 0 ? -dx : dx, 0));
 
     var collision = map.getCollision(this);
     if (collision) {
       switch (collision.object) {
-        case dotprod.ObjectType.NONE:
-          this.position_ = new dotprod.math.Vector(xVel >= 0 ? collision.left : collision.right, this.position_.getY());
-          this.velocity_ = new dotprod.math.Vector(-xVel * bounceFactor, this.velocity_.getY());
+        case ObjectType.NONE:
+          this.position_ = new math.Vector(xVel >= 0 ? collision.left : collision.right, this.position_.getY());
+          this.velocity_ = new math.Vector(-xVel * bounceFactor, this.velocity_.getY());
           xSpeed *= bounceFactor;
           this.bounce_();
           break;
-        case dotprod.ObjectType.PRIZE:
+        case ObjectType.PRIZE:
           var prize = prizeIndex.getPrize(collision.xTile, collision.yTile);
           if (prize && this.collectPrize_(prize)) {
             prizeIndex.removePrize(prize);
           }
           break;
-        case dotprod.ObjectType.FLAG:
+        case ObjectType.FLAG:
           var flag = flagIndex.getFlag(collision.xTile, collision.yTile);
           if (flag != null) {
             this.captureFlag_(flag);
@@ -139,24 +139,24 @@ dotprod.model.Entity.prototype.updatePosition_ = function(opt_bounceFactor) {
   for (var i = 0; i < ySpeed; i += tileHeight) {
     var yVel = this.velocity_.getY();
     var dy = Math.min(ySpeed - i, tileHeight);
-    this.position_ = this.position_.add(new dotprod.math.Vector(0, yVel < 0 ? -dy : dy));
+    this.position_ = this.position_.add(new math.Vector(0, yVel < 0 ? -dy : dy));
 
     var collision = this.game_.getMap().getCollision(this);
     if (collision) {
       switch (collision.object) {
-        case dotprod.ObjectType.NONE:
-          this.position_ = new dotprod.math.Vector(this.position_.getX(), yVel >= 0 ? collision.top : collision.bottom);
-          this.velocity_ = new dotprod.math.Vector(this.velocity_.getX(), -yVel * bounceFactor);
+        case ObjectType.NONE:
+          this.position_ = new math.Vector(this.position_.getX(), yVel >= 0 ? collision.top : collision.bottom);
+          this.velocity_ = new math.Vector(this.velocity_.getX(), -yVel * bounceFactor);
           ySpeed *= bounceFactor;
           this.bounce_();
           break;
-        case dotprod.ObjectType.PRIZE:
+        case ObjectType.PRIZE:
           var prize = prizeIndex.getPrize(collision.xTile, collision.yTile);
           if (prize && this.collectPrize_(prize)) {
             prizeIndex.removePrize(prize);
           }
           break;
-        case dotprod.ObjectType.FLAG:
+        case ObjectType.FLAG:
           var flag = flagIndex.getFlag(collision.xTile, collision.yTile);
           if (flag != null) {
             this.captureFlag_(flag);
@@ -174,19 +174,19 @@ dotprod.model.Entity.prototype.updatePosition_ = function(opt_bounceFactor) {
 /**
  * This function takes a prize and returns true if it should be taken or
  * false if it should not be taken.
- * @param {!dotprod.model.Prize} prize
+ * @param {!model.Prize} prize
  * @return {boolean}
  * @protected
  */
-dotprod.model.Entity.prototype.collectPrize_ = goog.nullFunction;
+model.Entity.prototype.collectPrize_ = goog.nullFunction;
 
 /**
- * @param {!dotprod.model.Flag} flag
+ * @param {!model.Flag} flag
  * @protected
  */
-dotprod.model.Entity.prototype.captureFlag_ = goog.nullFunction;
+model.Entity.prototype.captureFlag_ = goog.nullFunction;
 
 /**
  * @protected
  */
-dotprod.model.Entity.prototype.bounce_ = goog.nullFunction;
+model.Entity.prototype.bounce_ = goog.nullFunction;

@@ -3,28 +3,28 @@
  * @author sharvil.nanavati@gmail.com (Sharvil Nanavati)
  */
 
-goog.provide('dotprod.model.Flag');
+goog.provide('model.Flag');
 
-goog.require('dotprod.TileType');
+goog.require('TileType');
 
 /**
  * @constructor
- * @param {!dotprod.Game} game
- * @param {!dotprod.model.Map} map
+ * @param {!Game} game
+ * @param {!model.Map} map
  * @param {number} id
  * @param {number} team
  * @param {number} xTile
  * @param {number} yTile
  */
-dotprod.model.Flag = function(game, map, id, team, xTile, yTile) {
+model.Flag = function(game, map, id, team, xTile, yTile) {
   /**
-   * @type {!dotprod.model.player.LocalPlayer}
+   * @type {!model.player.LocalPlayer}
    * @private
    */
   this.localPlayer_ = game.getPlayerIndex().getLocalPlayer();
 
   /**
-   * @type {!dotprod.model.Map}
+   * @type {!model.Map}
    * @private
    */
   this.map_ = map;
@@ -59,21 +59,21 @@ dotprod.model.Flag = function(game, map, id, team, xTile, yTile) {
 /**
  * @return {number}
  */
-dotprod.model.Flag.prototype.getId = function() {
+model.Flag.prototype.getId = function() {
   return this.id_;
 };
 
 /**
  * @return {number}
  */
-dotprod.model.Flag.prototype.getX = function() {
+model.Flag.prototype.getX = function() {
   return this.xTile_;
 };
 
 /**
  * @return {number}
  */
-dotprod.model.Flag.prototype.getY = function() {
+model.Flag.prototype.getY = function() {
   return this.yTile_;
 };
 
@@ -81,7 +81,7 @@ dotprod.model.Flag.prototype.getY = function() {
  * @param {number} team
  * @return {boolean} true if flag ownership changed, false otherwise
  */
-dotprod.model.Flag.prototype.captureFlag = function(team) {
+model.Flag.prototype.captureFlag = function(team) {
   var changedOwnership = (this.team_ != team);
   this.team_ = team;
   this.map_.setTile(this.xTile_, this.yTile_, this.getTileType_());
@@ -89,9 +89,9 @@ dotprod.model.Flag.prototype.captureFlag = function(team) {
 };
 
 /**
- * @return {dotprod.TileType}
+ * @return {TileType}
  * @private
  */
-dotprod.model.Flag.prototype.getTileType_ = function() {
-  return (this.localPlayer_.getTeam() == this.team_) ? dotprod.TileType.FRIEND_FLAG : dotprod.TileType.FOE_FLAG;
+model.Flag.prototype.getTileType_ = function() {
+  return (this.localPlayer_.getTeam() == this.team_) ? TileType.FRIEND_FLAG : TileType.FOE_FLAG;
 };

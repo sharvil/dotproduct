@@ -3,20 +3,20 @@
  * @author sharvil.nanavati@gmail.com (Sharvil Nanavati)
  */
 
-goog.provide('dotprod.model.Burst');
+goog.provide('model.Burst');
 
 goog.require('goog.asserts');
-goog.require('dotprod.math.Vector');
+goog.require('math.Vector');
 
 /**
  * @constructor
- * @param {!dotprod.Game} game
+ * @param {!Game} game
  * @param {!Object} burstSettings
- * @param {!dotprod.model.player.Player} owner
+ * @param {!model.player.Player} owner
  */
-dotprod.model.Burst = function(game, burstSettings, owner) {
+model.Burst = function(game, burstSettings, owner) {
   /**
-   * @type {!dotprod.Game}
+   * @type {!Game}
    * @private
    */
   this.game_ = game;
@@ -28,7 +28,7 @@ dotprod.model.Burst = function(game, burstSettings, owner) {
   this.settings_ = burstSettings;
 
   /**
-   * @type {!dotprod.model.player.Player}
+   * @type {!model.player.Player}
    * @private
    */
   this.owner_ = owner;
@@ -43,23 +43,23 @@ dotprod.model.Burst = function(game, burstSettings, owner) {
 /**
  * @override
  */
-dotprod.model.Burst.prototype.getType = function() {
-  return dotprod.model.Weapon.BURST;
+model.Burst.prototype.getType = function() {
+  return model.Weapon.BURST;
 };
 
 /**
  * @return {number}
  */
-dotprod.model.Burst.prototype.getCount = function() {
+model.Burst.prototype.getCount = function() {
   return this.count_;
 };
 
 /**
- * @param {!dotprod.math.Vector} position
+ * @param {!math.Vector} position
  * @param {function(number, number, number): boolean} commitFireFn
  * @return {Object}
  */
-dotprod.model.Burst.prototype.fire = function(position, commitFireFn) {
+model.Burst.prototype.fire = function(position, commitFireFn) {
   if (this.count_ <= 0 || !commitFireFn(0 /* fireEnergy */, this.settings_['fireDelay'])) {
     return null;
   }
@@ -70,7 +70,7 @@ dotprod.model.Burst.prototype.fire = function(position, commitFireFn) {
   var damage = this.settings_['damage'];
 
   for (var i = 0; i < shrapnelCount; ++i) {
-    var velocity = dotprod.math.Vector.fromPolar(this.settings_['speed'], i * 2 * Math.PI / shrapnelCount).add(this.owner_.getVelocity());
+    var velocity = math.Vector.fromPolar(this.settings_['speed'], i * 2 * Math.PI / shrapnelCount).add(this.owner_.getVelocity());
     var projectile = this.game_.getModelObjectFactory().newBurst(this.game_, this.owner_, this.owner_.getPosition(), velocity, lifetime, damage);
     this.owner_.addProjectile(projectile);
   }
@@ -85,18 +85,18 @@ dotprod.model.Burst.prototype.fire = function(position, commitFireFn) {
 /**
  * @override
  */
-dotprod.model.Burst.prototype.onFired = function(timeDiff, weaponData) {
+model.Burst.prototype.onFired = function(timeDiff, weaponData) {
   goog.asserts.assert(weaponData['type'] == this.getType(), 'Cannot fire burst with incorrect weapon type: ' + weaponData['type']);
 
-  var position = dotprod.math.Vector.fromArray(weaponData['pos']);
-  var velocity = dotprod.math.Vector.fromArray(weaponData['vel']);
+  var position = math.Vector.fromArray(weaponData['pos']);
+  var velocity = math.Vector.fromArray(weaponData['vel']);
 
   var shrapnelCount = this.settings_['shrapnelCount'];
   var lifetime = this.settings_['lifetime'];
   var damage = this.settings_['damage'];
 
   for (var i = 0; i < shrapnelCount; ++i) {
-    var shrapVel = dotprod.math.Vector.fromPolar(this.settings_['speed'], i * 2 * Math.PI / shrapnelCount).add(velocity);
+    var shrapVel = math.Vector.fromPolar(this.settings_['speed'], i * 2 * Math.PI / shrapnelCount).add(velocity);
     var projectile = this.game_.getModelObjectFactory().newBurst(this.game_, this.owner_, position, shrapVel, lifetime, damage);
     for (var j = 0; j < timeDiff; ++j) {
       projectile.advanceTime();

@@ -3,7 +3,7 @@
  * @author sharvil.nanavati@gmail.com (Sharvil Nanavati)
  */
 
-goog.provide('dotprod.structs.Heap');
+goog.provide('structs.Heap');
 
 goog.require('goog.array');
 goog.require('goog.asserts');
@@ -12,7 +12,7 @@ goog.require('goog.asserts');
  * @constructor
  * @param {function(*, *) : number} comparator
  */
-dotprod.structs.Heap = function(comparator) {
+structs.Heap = function(comparator) {
   /**
    * @type {function(*, *) : number}
    * @private
@@ -29,10 +29,10 @@ dotprod.structs.Heap = function(comparator) {
 /**
  * @param {goog.array.ArrayLike} array
  * @param {function(*, *) : number} comparator
- * @return {!dotprod.structs.Heap}
+ * @return {!structs.Heap}
  */
-dotprod.structs.Heap.fromArray = function(array, comparator) {
-  var heap = new dotprod.structs.Heap(comparator);
+structs.Heap.fromArray = function(array, comparator) {
+  var heap = new structs.Heap(comparator);
   heap.heap_ = array;
   heap.heapify_();
   return heap;
@@ -41,7 +41,7 @@ dotprod.structs.Heap.fromArray = function(array, comparator) {
 /**
  * @return {*}
  */
-dotprod.structs.Heap.prototype.peek = function() {
+structs.Heap.prototype.peek = function() {
   goog.asserts.assert(!this.isEmpty(), 'Cannot peek at an empty heap.');
   return this.heap_[0];
 };
@@ -49,7 +49,7 @@ dotprod.structs.Heap.prototype.peek = function() {
 /**
  * @return {*}
  */
-dotprod.structs.Heap.prototype.pop = function() {
+structs.Heap.prototype.pop = function() {
   goog.asserts.assert(!this.isEmpty(), 'Cannot pop from an empty heap.');
   var ret = this.heap_[0];
   if (this.getCount() == 1) {
@@ -64,7 +64,7 @@ dotprod.structs.Heap.prototype.pop = function() {
 /**
  * @param {*} value
  */
-dotprod.structs.Heap.prototype.insert = function(value) {
+structs.Heap.prototype.insert = function(value) {
   this.heap_.push(value);
   this.bubbleUp_(this.getCount() - 1);
 };
@@ -72,7 +72,7 @@ dotprod.structs.Heap.prototype.insert = function(value) {
 /**
  * @param {*} value
  */
-dotprod.structs.Heap.prototype.remove = function(value) {
+structs.Heap.prototype.remove = function(value) {
   var nodes = this.heap_;
   var count = this.getCount();
   for (var i = 0; i < count; ++i) {
@@ -84,28 +84,28 @@ dotprod.structs.Heap.prototype.remove = function(value) {
   }
 };
 
-dotprod.structs.Heap.prototype.clear = function() {
+structs.Heap.prototype.clear = function() {
   goog.array.clear(this.heap_);
 };
 
 /**
  * @return {number}
  */
-dotprod.structs.Heap.prototype.getCount = function() {
+structs.Heap.prototype.getCount = function() {
   return this.heap_.length;
 };
 
 /**
  * @return {boolean}
  */
-dotprod.structs.Heap.prototype.isEmpty = function() {
+structs.Heap.prototype.isEmpty = function() {
   return goog.array.isEmpty(this.heap_);
 };
 
 /**
  * @private
  */
-dotprod.structs.Heap.prototype.heapify_ = function() {
+structs.Heap.prototype.heapify_ = function() {
   for (var index = (this.getCount() >> 1) - 1; index >= 0; --index) {
     this.floatDown_(index);
   }
@@ -115,7 +115,7 @@ dotprod.structs.Heap.prototype.heapify_ = function() {
  * @param {number} index
  * @private
  */
-dotprod.structs.Heap.prototype.floatDown_ = function(index) {
+structs.Heap.prototype.floatDown_ = function(index) {
   var nodes = this.heap_;
   var count = this.getCount();
   var node = nodes[index];
@@ -142,7 +142,7 @@ dotprod.structs.Heap.prototype.floatDown_ = function(index) {
  * @param {number} index
  * @private
  */
-dotprod.structs.Heap.prototype.bubbleUp_ = function(index) {
+structs.Heap.prototype.bubbleUp_ = function(index) {
   var nodes = this.heap_;
   var node = nodes[index];
   while (index > 0) {
@@ -161,7 +161,7 @@ dotprod.structs.Heap.prototype.bubbleUp_ = function(index) {
  * @return {number}
  * @private
  */
-dotprod.structs.Heap.prototype.leftChild_ = function(index) {
+structs.Heap.prototype.leftChild_ = function(index) {
   return 2 * index + 1;
 };
 
@@ -170,7 +170,7 @@ dotprod.structs.Heap.prototype.leftChild_ = function(index) {
  * @return {number}
  * @private
  */
-dotprod.structs.Heap.prototype.rightChild_ = function(index) {
+structs.Heap.prototype.rightChild_ = function(index) {
   return 2 * index + 2;
 };
 
@@ -179,7 +179,7 @@ dotprod.structs.Heap.prototype.rightChild_ = function(index) {
  * @return {number}
  * @private
  */
-dotprod.structs.Heap.prototype.parent_ = function(index) {
+structs.Heap.prototype.parent_ = function(index) {
   // Use >> opreator so we get an implicit floor().
   return (index - 1) >> 1;
 };

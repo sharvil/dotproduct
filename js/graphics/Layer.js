@@ -3,12 +3,12 @@
  * @author sharvil.nanavati@gmail.com (Sharvil Nanavati)
  */
 
-goog.provide('dotprod.graphics.Layer');
+goog.provide('graphics.Layer');
 
 /**
  * @enum {number}
  */
-dotprod.graphics.Layer = {
+graphics.Layer = {
   STARFIELD: 0,
   MAP: 1,
   TRAILS: 2,
@@ -23,4 +23,4 @@ dotprod.graphics.Layer = {
  * @type {number}
  * @const
  */
-dotprod.graphics.NUM_LAYERS = 8;
+graphics.NUM_LAYERS = 8;

@@ -3,7 +3,7 @@
  * @author sharvil.nanavati@gmail.com (Sharvil Nanavati)
  */
 
-goog.provide('dotprod.input.Keyboard');
+goog.provide('input.Keyboard');
 
 goog.require('goog.events');
 goog.require('goog.events.EventHandler');
@@ -14,7 +14,7 @@ goog.require('goog.events.KeyCodes');
 /**
  * @constructor
  */
-dotprod.input.Keyboard = function() {
+input.Keyboard = function() {
   /**
    * @type {!Object.<number, boolean>}
    * @private
@@ -30,7 +30,7 @@ dotprod.input.Keyboard = function() {
  * @param {!goog.events.KeyCodes} keyCode
  * @return {boolean}
  */
-dotprod.input.Keyboard.prototype.isKeyPressed = function(keyCode) {
+input.Keyboard.prototype.isKeyPressed = function(keyCode) {
   return !!this.keys_[keyCode];
 };
 
@@ -38,7 +38,7 @@ dotprod.input.Keyboard.prototype.isKeyPressed = function(keyCode) {
  * @param {!Event} e
  * @private
  */
-dotprod.input.Keyboard.prototype.keyPressed_ = function(e) {
+input.Keyboard.prototype.keyPressed_ = function(e) {
   if (e.keyCode == goog.events.KeyCodes.LEFT || e.keyCode == goog.events.KeyCodes.RIGHT ||
       e.keyCode == goog.events.KeyCodes.UP   || e.keyCode == goog.events.KeyCodes.DOWN ||
       e.keyCode == goog.events.KeyCodes.TAB  || e.keyCode == goog.events.KeyCodes.BACKSPACE) {
@@ -51,7 +51,7 @@ dotprod.input.Keyboard.prototype.keyPressed_ = function(e) {
  * @param {Event} e
  * @private
  */
-dotprod.input.Keyboard.prototype.keyReleased_ = function(e) {
+input.Keyboard.prototype.keyReleased_ = function(e) {
   this.keys_[e.keyCode] = false;
 };
 
@@ -59,7 +59,7 @@ dotprod.input.Keyboard.prototype.keyReleased_ = function(e) {
  * @param {!goog.events.BrowserEvent} event
  * @private
  */
-dotprod.input.Keyboard.prototype.documentVisibilityChanged_ = function(event) {
+input.Keyboard.prototype.documentVisibilityChanged_ = function(event) {
   if (document[this.getVisibilityProperty_()]) {
     for (var i in this.keys_) {
       this.keys_[i] = false;
@@ -71,7 +71,7 @@ dotprod.input.Keyboard.prototype.documentVisibilityChanged_ = function(event) {
  * @return {string}
  * @private
  */
-dotprod.input.Keyboard.prototype.getVisibilityProperty_ = function() {
+input.Keyboard.prototype.getVisibilityProperty_ = function() {
   if (typeof document.hidden !== 'undefined') {
     return 'hidden';
   }
@@ -91,7 +91,7 @@ dotprod.input.Keyboard.prototype.getVisibilityProperty_ = function() {
  * @return {string}
  * @private
  */
-dotprod.input.Keyboard.prototype.getVisibilityEvent_ = function() {
+input.Keyboard.prototype.getVisibilityEvent_ = function() {
   if (typeof document.hidden !== 'undefined') {
     return 'visibilitychange';
   }

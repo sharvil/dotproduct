@@ -3,15 +3,15 @@
  * @author sharvil.nanavati@gmail.com (Sharvil Nanavati)
  */
 
-goog.provide('dotprod.model.ModelObject');
+goog.provide('model.ModelObject');
 
 /**
  * @constructor
- * @param {!dotprod.model.Simulation} simulation
+ * @param {!model.Simulation} simulation
  */
-dotprod.model.ModelObject = function(simulation) {
+model.ModelObject = function(simulation) {
   /**
-   * @type {!dotprod.model.Simulation}
+   * @type {!model.Simulation}
    * @protected
    */
   this.simulation_ = simulation;
@@ -25,16 +25,16 @@ dotprod.model.ModelObject = function(simulation) {
   this.simulation_.registerObject(this);
 };
 
-dotprod.model.ModelObject.prototype.advanceTime = goog.abstractMethod;
+model.ModelObject.prototype.advanceTime = goog.abstractMethod;
 
 /**
  * @return {boolean} Returns true if the object is still valid, false otherwise.
  */
-dotprod.model.ModelObject.prototype.isValid = function() {
+model.ModelObject.prototype.isValid = function() {
   return this.isValid_;
 };
 
-dotprod.model.ModelObject.prototype.invalidate = function() {
+model.ModelObject.prototype.invalidate = function() {
   if (!this.isValid_) {
     return;
   }
@@ -46,4 +46,4 @@ dotprod.model.ModelObject.prototype.invalidate = function() {
 /**
  * @protected
  */
-dotprod.model.ModelObject.prototype.onInvalidate_ = goog.nullFunction;
+model.ModelObject.prototype.onInvalidate_ = goog.nullFunction;

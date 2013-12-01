@@ -3,18 +3,18 @@
  * @author sharvil.nanavati@gmail.com (Sharvil Nanavati)
  */
 
-goog.provide('dotprod.model.player.RemotePlayerSprite');
+goog.provide('model.player.RemotePlayerSprite');
 
-goog.require('dotprod.model.player.RemotePlayer');
-goog.require('dotprod.model.player.PlayerSprite');
-goog.require('dotprod.graphics.Drawable');
-goog.require('dotprod.graphics.Layer');
+goog.require('model.player.RemotePlayer');
+goog.require('model.player.PlayerSprite');
+goog.require('graphics.Drawable');
+goog.require('graphics.Layer');
 
 /**
  * @constructor
- * @extends {dotprod.model.player.RemotePlayer}
- * @implements {dotprod.graphics.Drawable}
- * @param {!dotprod.Game} game
+ * @extends {model.player.RemotePlayer}
+ * @implements {graphics.Drawable}
+ * @param {!Game} game
  * @param {string} id
  * @param {string} name
  * @param {number} team
@@ -22,33 +22,33 @@ goog.require('dotprod.graphics.Layer');
  * @param {number} ship
  * @param {number} bounty
  */
-dotprod.model.player.RemotePlayerSprite = function(game, id, name, team, isAlive, ship, bounty) {
+model.player.RemotePlayerSprite = function(game, id, name, team, isAlive, ship, bounty) {
   goog.base(this, game, id, name, team, isAlive, ship, bounty);
 
-  game.getPainter().registerDrawable(dotprod.graphics.Layer.PLAYERS, this);
+  game.getPainter().registerDrawable(graphics.Layer.PLAYERS, this);
 };
-goog.inherits(dotprod.model.player.RemotePlayerSprite, dotprod.model.player.RemotePlayer);
+goog.inherits(model.player.RemotePlayerSprite, model.player.RemotePlayer);
 
 /**
  * @override
  */
-dotprod.model.player.RemotePlayerSprite.prototype.respawn = dotprod.model.player.PlayerSprite.prototype.respawn;
+model.player.RemotePlayerSprite.prototype.respawn = model.player.PlayerSprite.prototype.respawn;
 
 /**
  * @override
  */
-dotprod.model.player.RemotePlayerSprite.prototype.onDeath = dotprod.model.player.PlayerSprite.prototype.onDeath;
+model.player.RemotePlayerSprite.prototype.onDeath = model.player.PlayerSprite.prototype.onDeath;
 
 /**
  * @override
  */
-dotprod.model.player.RemotePlayerSprite.prototype.render = dotprod.model.player.PlayerSprite.prototype.render;
+model.player.RemotePlayerSprite.prototype.render = model.player.PlayerSprite.prototype.render;
 
 /**
  * @override
  */
-dotprod.model.player.RemotePlayerSprite.prototype.onInvalidate_ = function() {
+model.player.RemotePlayerSprite.prototype.onInvalidate_ = function() {
   goog.base(this, 'onInvalidate_');
 
-  this.game_.getPainter().unregisterDrawable(dotprod.graphics.Layer.PLAYERS, this);
+  this.game_.getPainter().unregisterDrawable(graphics.Layer.PLAYERS, this);
 };

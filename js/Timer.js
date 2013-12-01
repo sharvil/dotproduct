@@ -3,28 +3,28 @@
  * @author sharvil.nanavati@gmail.com (Sharvil Nanavati)
  */
 
-goog.provide('dotprod.Timer');
+goog.provide('Timer');
 
 /**
  * @type {number}
  * @private
  * @const
  */
-dotprod.Timer.TICK_PERIOD_ = 10;
+Timer.TICK_PERIOD_ = 10;
 
 /**
  * @param {function()} cb
  * @param {number} timeout
  * @return {number}
  */
-dotprod.Timer.setInterval = function(cb, timeout) {
-  return window.setInterval(cb, timeout * dotprod.Timer.TICK_PERIOD_);
+Timer.setInterval = function(cb, timeout) {
+  return window.setInterval(cb, timeout * Timer.TICK_PERIOD_);
 };
 
 /**
  * @param {number} intervalTimer
  */
-dotprod.Timer.clearInterval = function(intervalTimer) {
+Timer.clearInterval = function(intervalTimer) {
   window.clearInterval(intervalTimer);
 };
 
@@ -32,14 +32,14 @@ dotprod.Timer.clearInterval = function(intervalTimer) {
  * @param {number} millis
  * @return {number}
  */
-dotprod.Timer.millisToTicks = function(millis) {
-  return Math.floor(millis / dotprod.Timer.TICK_PERIOD_);
+Timer.millisToTicks = function(millis) {
+  return Math.floor(millis / Timer.TICK_PERIOD_);
 };
 
 /**
  * @param {number} ticks
  * @return {number}
  */
-dotprod.Timer.ticksToMillis = function(ticks) {
-  return ticks * dotprod.Timer.TICK_PERIOD_;
+Timer.ticksToMillis = function(ticks) {
+  return ticks * Timer.TICK_PERIOD_;
 };

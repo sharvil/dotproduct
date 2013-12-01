@@ -3,7 +3,7 @@
  * @author sharvil.nanavati@gmail.com (Sharvil Nanavati)
  */
 
-goog.provide('dotprod.math.Range');
+goog.provide('math.Range');
 
 goog.require('goog.asserts');
 goog.require('goog.math');
@@ -14,7 +14,7 @@ goog.require('goog.math');
  * @param {number} high
  * @param {number} increment
  */
-dotprod.math.Range = function(low, high, increment) {
+math.Range = function(low, high, increment) {
   goog.asserts.assert(low <= high, 'Cannot construct a range where low > high.');
 
   /**
@@ -43,18 +43,18 @@ dotprod.math.Range = function(low, high, increment) {
 };
 
 /**
- * @return {!dotprod.math.Range}
+ * @return {!math.Range}
  */
-dotprod.math.Range.fromArray = function(array) {
+math.Range.fromArray = function(array) {
   goog.asserts.assert(array.length == 3, 'Range can only be constructed from ararys of length 3.');
 
-  return new dotprod.math.Range(array[0], array[1], array[2]);
+  return new math.Range(array[0], array[1], array[2]);
 };
 
 /**
  * @return {boolean}
  */
-dotprod.math.Range.prototype.increment = function() {
+math.Range.prototype.increment = function() {
   this.value_ = Math.min(this.value_ + this.increment_, this.high_);
   return this.isHigh();
 };
@@ -62,7 +62,7 @@ dotprod.math.Range.prototype.increment = function() {
 /**
  * @return {boolean}
  */
-dotprod.math.Range.prototype.decrement = function() {
+math.Range.prototype.decrement = function() {
   this.value_ = Math.max(this.value_ - this.increment_, this.low_);
   return this.isLow();
 };
@@ -70,35 +70,35 @@ dotprod.math.Range.prototype.decrement = function() {
 /**
  * @return {boolean}
  */
-dotprod.math.Range.prototype.isLow = function() {
+math.Range.prototype.isLow = function() {
   return this.value_ == this.low_;
 };
 
 /**
  * @return {boolean}
  */
-dotprod.math.Range.prototype.isHigh = function() {
+math.Range.prototype.isHigh = function() {
   return this.value_ == this.high_;
 };
 
-dotprod.math.Range.prototype.setLow = function() {
+math.Range.prototype.setLow = function() {
   this.value_ = this.low_;
 };
 
-dotprod.math.Range.prototype.setHigh = function() {
+math.Range.prototype.setHigh = function() {
   this.value_ = this.high_;
 };
 
 /**
  * @return {number}
  */
-dotprod.math.Range.prototype.getValue = function() {
+math.Range.prototype.getValue = function() {
   return this.value_;
 };
 
 /**
  * @param {number} value
  */
-dotprod.math.Range.prototype.setValue = function(value) {
+math.Range.prototype.setValue = function(value) {
   this.value_ = goog.math.clamp(value, this.low_, this.high_);
 };

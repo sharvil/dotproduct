@@ -3,48 +3,48 @@
  * @author sharvil.nanavati@gmail.com (Sharvil Nanavati)
  */
 
-goog.provide('dotprod.model.player.PlayerSprite');
+goog.provide('model.player.PlayerSprite');
 
-goog.require('dotprod.model.Effect');
-goog.require('dotprod.math.Vector');
+goog.require('model.Effect');
+goog.require('math.Vector');
 
 /**
  * @constructor
  */
-dotprod.model.player.PlayerSprite = goog.abstractMethod;
+model.player.PlayerSprite = goog.abstractMethod;
 
 /**
  * @param {number} angle
- * @param {!dotprod.math.Vector} position
- * @param {!dotprod.math.Vector} velocity
+ * @param {!math.Vector} position
+ * @param {!math.Vector} velocity
  */
-dotprod.model.player.PlayerSprite.prototype.respawn = function(angle, position, velocity) {
+model.player.PlayerSprite.prototype.respawn = function(angle, position, velocity) {
   goog.base(this, 'respawn', angle, position, velocity);
 
   var resourceManager = this.game_.getResourceManager();
   var animation = resourceManager.getSpriteSheet('warp').getAnimation(0);
-  var effect = new dotprod.model.Effect(this.game_, animation, this.position_, new dotprod.math.Vector(0, 0));
+  var effect = new model.Effect(this.game_, animation, this.position_, new math.Vector(0, 0));
 };
 
-dotprod.model.player.PlayerSprite.prototype.onDeath = function() {
+model.player.PlayerSprite.prototype.onDeath = function() {
   goog.base(this, 'onDeath');
 
   var resourceManager = this.game_.getResourceManager();
   var ensemble = resourceManager.getSpriteSheet('explode1');
-  var effect = new dotprod.model.Effect(this.game_, ensemble.getAnimation(0), this.position_, this.velocity_);
+  var effect = new model.Effect(this.game_, ensemble.getAnimation(0), this.position_, this.velocity_);
 
   ensemble = resourceManager.getSpriteSheet('ship' + this.ship_ + '_junk');
   for (var i = 0; i < ensemble.getNumAnimations(); ++i) {
     var animation = ensemble.getAnimation(i);
-    var deltaVelocity = dotprod.math.Vector.fromPolar(Math.random() * 2, Math.random() * 2 * Math.PI);
-    var piece = new dotprod.model.Effect(this.game_, animation, this.position_, this.velocity_.add(deltaVelocity));
+    var deltaVelocity = math.Vector.fromPolar(Math.random() * 2, Math.random() * 2 * Math.PI);
+    var piece = new model.Effect(this.game_, animation, this.position_, this.velocity_.add(deltaVelocity));
   }
 };
 
 /**
- * @param {!dotprod.Viewport} viewport
+ * @param {!Viewport} viewport
  */
-dotprod.model.player.PlayerSprite.prototype.render = function(viewport) {
+model.player.PlayerSprite.prototype.render = function(viewport) {
   if (!this.isAlive()) {
     return;
   }
@@ -65,9 +65,9 @@ dotprod.model.player.PlayerSprite.prototype.render = function(viewport) {
   shipImage.render(context, x, y, tileNum);
 
   var presenceImage = null;
-  if (this.hasPresence(dotprod.model.player.Player.Presence.AWAY)) {
+  if (this.hasPresence(model.player.Player.Presence.AWAY)) {
     presenceImage = awayImage;
-  } else if (this.hasPresence(dotprod.model.player.Player.Presence.TYPING)) {
+  } else if (this.hasPresence(model.player.Player.Presence.TYPING)) {
     presenceImage = typingImage;
   }
 
@@ -78,8 +78,8 @@ dotprod.model.player.PlayerSprite.prototype.render = function(viewport) {
   }
 
   context.save();
-    context.font = dotprod.Font.playerFont();
-    context.fillStyle = this.isFriend(localPlayer) ? dotprod.Palette.friendColor() : dotprod.Palette.foeColor();
+    context.font = Font.playerFont();
+    context.fillStyle = this.isFriend(localPlayer) ? Palette.friendColor() : Palette.foeColor();
     context.textAlign = 'center';
     context.textBaseline = 'top';
     context.fillText(this.name_ + '(' + this.bounty_ + ')', x + shipImage.getTileWidth() / 2, y + shipImage.getTileHeight());

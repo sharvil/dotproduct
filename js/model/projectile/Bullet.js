@@ -3,36 +3,36 @@
  * @author sharvil.nanavati@gmail.com (Sharvil Nanavati)
  */
 
-goog.provide('dotprod.model.projectile.Bullet');
+goog.provide('model.projectile.Bullet');
 
-goog.require('dotprod.model.projectile.Projectile');
-goog.require('dotprod.model.Weapon.Type');
-goog.require('dotprod.math.Vector');
+goog.require('model.projectile.Projectile');
+goog.require('model.Weapon.Type');
+goog.require('math.Vector');
 
 /**
  * @constructor
- * @extends {dotprod.model.projectile.Projectile}
- * @param {!dotprod.Game} game
- * @param {!dotprod.model.player.Player} owner
+ * @extends {model.projectile.Projectile}
+ * @param {!Game} game
+ * @param {!model.player.Player} owner
  * @param {number} level
- * @param {!dotprod.math.Vector} position
- * @param {!dotprod.math.Vector} velocity
+ * @param {!math.Vector} position
+ * @param {!math.Vector} velocity
  * @param {number} lifetime
  * @param {number} damage
  * @param {number} bounceCount
  */
-dotprod.model.projectile.Bullet = function(game, owner, level, position, velocity, lifetime, damage, bounceCount) {
+model.projectile.Bullet = function(game, owner, level, position, velocity, lifetime, damage, bounceCount) {
   goog.base(this, game, owner, level, lifetime, damage, bounceCount);
 
   this.position_ = position;
   this.velocity_ = velocity;
 };
-goog.inherits(dotprod.model.projectile.Bullet, dotprod.model.projectile.Projectile);
+goog.inherits(model.projectile.Bullet, model.projectile.Projectile);
 
 /**
  * @override
  */
-dotprod.model.projectile.Bullet.prototype.checkPlayerCollision_ = function(player) {
+model.projectile.Bullet.prototype.checkPlayerCollision_ = function(player) {
   if (!player.isAlive() || this.owner_.isFriend(player)) {
     return false;
   }
@@ -47,8 +47,8 @@ dotprod.model.projectile.Bullet.prototype.checkPlayerCollision_ = function(playe
 /**
  * @override
  */
-dotprod.model.projectile.Bullet.prototype.explode_ = function(hitPlayer) {
-  this.velocity_ = new dotprod.math.Vector(0, 0);
+model.projectile.Bullet.prototype.explode_ = function(hitPlayer) {
+  this.velocity_ = new math.Vector(0, 0);
   this.lifetime_ = 0;
   if (hitPlayer) {
     hitPlayer.onDamage(this.owner_, this, this.damage_);

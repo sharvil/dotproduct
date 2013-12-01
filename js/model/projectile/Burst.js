@@ -3,23 +3,23 @@
  * @author sharvil.nanavati@gmail.com (Sharvil Nanavati)
  */
 
-goog.provide('dotprod.model.projectile.Burst');
+goog.provide('model.projectile.Burst');
 
-goog.require('dotprod.model.projectile.Projectile');
-goog.require('dotprod.model.Weapon.Type');
-goog.require('dotprod.math.Vector');
+goog.require('model.projectile.Projectile');
+goog.require('model.Weapon.Type');
+goog.require('math.Vector');
 
 /**
  * @constructor
- * @extends {dotprod.model.projectile.Projectile}
- * @param {!dotprod.Game} game
- * @param {!dotprod.model.player.Player} owner
- * @param {!dotprod.math.Vector} position
- * @param {!dotprod.math.Vector} velocity
+ * @extends {model.projectile.Projectile}
+ * @param {!Game} game
+ * @param {!model.player.Player} owner
+ * @param {!math.Vector} position
+ * @param {!math.Vector} velocity
  * @param {number} lifetime
  * @param {number} damage
  */
-dotprod.model.projectile.Burst = function(game, owner, position, velocity, lifetime, damage) {
+model.projectile.Burst = function(game, owner, position, velocity, lifetime, damage) {
   goog.base(this, game, owner, 4 /* level */, lifetime, damage, -1 /* bounceCount */);
 
   /**
@@ -31,12 +31,12 @@ dotprod.model.projectile.Burst = function(game, owner, position, velocity, lifet
   this.position_ = position;
   this.velocity_ = velocity;
 };
-goog.inherits(dotprod.model.projectile.Burst, dotprod.model.projectile.Projectile);
+goog.inherits(model.projectile.Burst, model.projectile.Projectile);
 
 /**
  * @override
  */
-dotprod.model.projectile.Burst.prototype.bounce_ = function() {
+model.projectile.Burst.prototype.bounce_ = function() {
   goog.base(this, 'bounce_');
 
   this.isActive_ = true;
@@ -45,7 +45,7 @@ dotprod.model.projectile.Burst.prototype.bounce_ = function() {
 /**
  * @override
  */
-dotprod.model.projectile.Burst.prototype.checkPlayerCollision_ = function(player) {
+model.projectile.Burst.prototype.checkPlayerCollision_ = function(player) {
   if (!player.isAlive() || this.owner_.isFriend(player) || !this.isActive_) {
     return false;
   }
@@ -60,7 +60,7 @@ dotprod.model.projectile.Burst.prototype.checkPlayerCollision_ = function(player
 /**
  * @override
  */
-dotprod.model.projectile.Burst.prototype.explode_ = function(hitPlayer) {
+model.projectile.Burst.prototype.explode_ = function(hitPlayer) {
   this.lifetime_ = 0;
 
   if (hitPlayer) {

@@ -3,62 +3,62 @@
  * @author sharvil.nanavati@gmail.com (Sharvil Nanavati)
  */
 
-goog.provide('dotprod.layers.NotificationLayer');
+goog.provide('layers.NotificationLayer');
 
 goog.require('goog.asserts');
 
-goog.require('dotprod.Font');
-goog.require('dotprod.graphics.Drawable');
-goog.require('dotprod.graphics.Layer');
-goog.require('dotprod.model.ModelObject');
-goog.require('dotprod.Palette');
-goog.require('dotprod.Notifications');
-goog.require('dotprod.Viewport');
+goog.require('Font');
+goog.require('graphics.Drawable');
+goog.require('graphics.Layer');
+goog.require('model.ModelObject');
+goog.require('Palette');
+goog.require('Notifications');
+goog.require('Viewport');
 
 /**
  * @constructor
- * @extends {dotprod.model.ModelObject}
- * @implements {dotprod.graphics.Drawable}
- * @param {!dotprod.Game} game
- * @param {!dotprod.Notifications} notifications
+ * @extends {model.ModelObject}
+ * @implements {graphics.Drawable}
+ * @param {!Game} game
+ * @param {!Notifications} notifications
  */
-dotprod.layers.NotificationLayer = function(game, notifications) {
+layers.NotificationLayer = function(game, notifications) {
   goog.base(this, game.getSimulation());
 
   /**
-   * @type {!dotprod.Game}
+   * @type {!Game}
    * @private
    */
   this.game_ = game;
 
   /**
-   * @type {!dotprod.Notifications}
+   * @type {!Notifications}
    * @private
    */
   this.notifications_ = notifications;
 
-  game.getPainter().registerDrawable(dotprod.graphics.Layer.HUD, this);
+  game.getPainter().registerDrawable(graphics.Layer.HUD, this);
 };
-goog.inherits(dotprod.layers.NotificationLayer, dotprod.model.ModelObject);
+goog.inherits(layers.NotificationLayer, model.ModelObject);
 
 /**
  * @type {number}
  * @private
  * @const
  */
-dotprod.layers.NotificationLayer.MESSAGE_PERIOD_ = 150;
+layers.NotificationLayer.MESSAGE_PERIOD_ = 150;
 
 /**
  * @type {number}
  * @private
  * @const
  */
-dotprod.layers.NotificationLayer.FADE_PERIOD_ = 50;
+layers.NotificationLayer.FADE_PERIOD_ = 50;
 
 /**
  * @override
  */
-dotprod.layers.NotificationLayer.prototype.advanceTime = function() {
+layers.NotificationLayer.prototype.advanceTime = function() {
   this.notifications_.forEach(function(message, index) {
     ++message.ticks;
   });
@@ -67,33 +67,33 @@ dotprod.layers.NotificationLayer.prototype.advanceTime = function() {
 /**
  * @override
  */
-dotprod.layers.NotificationLayer.prototype.render = function(viewport) {
+layers.NotificationLayer.prototype.render = function(viewport) {
   var context = viewport.getContext();
-  var font = dotprod.Font.notificationsFont();
+  var font = Font.notificationsFont();
 
   context.save();
     context.font = font;
 
     this.notifications_.forEach(function(message, index) {
-      if (message.ticks >= dotprod.layers.NotificationLayer.MESSAGE_PERIOD_ + dotprod.layers.NotificationLayer.FADE_PERIOD_) {
+      if (message.ticks >= layers.NotificationLayer.MESSAGE_PERIOD_ + layers.NotificationLayer.FADE_PERIOD_) {
         return;
       }
 
       var opacity = 1;
-      if (message.ticks > dotprod.layers.NotificationLayer.MESSAGE_PERIOD_) {
-        opacity -= (message.ticks - dotprod.layers.NotificationLayer.MESSAGE_PERIOD_) / dotprod.layers.NotificationLayer.FADE_PERIOD_;
+      if (message.ticks > layers.NotificationLayer.MESSAGE_PERIOD_) {
+        opacity -= (message.ticks - layers.NotificationLayer.MESSAGE_PERIOD_) / layers.NotificationLayer.FADE_PERIOD_;
       }
 
       // TODO(sharvil): don't hard-code text position.
       switch (message.type) {
-        case dotprod.Notifications.Type.PERSONAL:
-          context.fillStyle = dotprod.Palette.personalNotificationsColor(opacity);
+        case Notifications.Type.PERSONAL:
+          context.fillStyle = Palette.personalNotificationsColor(opacity);
           break;
-        case dotprod.Notifications.Type.ENTER:
-          context.fillStyle = dotprod.Palette.enterNotificationsColor(opacity);
+        case Notifications.Type.ENTER:
+          context.fillStyle = Palette.enterNotificationsColor(opacity);
           break;
         default:
-          context.fillStyle = dotprod.Palette.notificationsColor(opacity);
+          context.fillStyle = Palette.notificationsColor(opacity);
           break;
       }
       context.textAlign = 'center';
@@ -106,6 +106,6 @@ dotprod.layers.NotificationLayer.prototype.render = function(viewport) {
 /**
  * @override
  */
-dotprod.layers.NotificationLayer.prototype.onInvalidate_ = function() {
+layers.NotificationLayer.prototype.onInvalidate_ = function() {
   goog.asserts.assert(false, 'Notification layer should never be invalidated.');
 };

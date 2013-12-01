@@ -3,52 +3,52 @@
  * @author sharvil.nanavati@gmail.com (Sharvil Nanavati)
  */
 
-goog.provide('dotprod.model.projectile.BulletSprite');
+goog.provide('model.projectile.BulletSprite');
 
-goog.require('dotprod.model.projectile.Bullet');
-goog.require('dotprod.model.Effect');
-goog.require('dotprod.math.Vector');
-goog.require('dotprod.graphics.Drawable');
-goog.require('dotprod.graphics.Layer');
+goog.require('model.projectile.Bullet');
+goog.require('model.Effect');
+goog.require('math.Vector');
+goog.require('graphics.Drawable');
+goog.require('graphics.Layer');
 
 /**
  * @constructor
- * @extends {dotprod.model.projectile.Bullet}
- * @implements {dotprod.graphics.Drawable}
- * @param {!dotprod.Game} game
- * @param {!dotprod.model.player.Player} owner
+ * @extends {model.projectile.Bullet}
+ * @implements {graphics.Drawable}
+ * @param {!Game} game
+ * @param {!model.player.Player} owner
  * @param {number} level
- * @param {!dotprod.math.Vector} position
- * @param {!dotprod.math.Vector} velocity
+ * @param {!math.Vector} position
+ * @param {!math.Vector} velocity
  * @param {number} lifetime
  * @param {number} damage
  * @param {number} bounceCount
  */
-dotprod.model.projectile.BulletSprite = function(game, owner, level, position, velocity, lifetime, damage, bounceCount) {
+model.projectile.BulletSprite = function(game, owner, level, position, velocity, lifetime, damage, bounceCount) {
   goog.base(this, game, owner, level, position, velocity, lifetime, damage, bounceCount);
 
   /**
-   * @type {!dotprod.graphics.Animation}
+   * @type {!graphics.Animation}
    * @private
    */
   this.animation_ = game.getResourceManager().getSpriteSheet('bullets').getAnimation(level);
   this.animation_.setRepeatCount(-1);
 
   /**
-   * @type {!dotprod.graphics.Animation}
+   * @type {!graphics.Animation}
    * @private
    */
   this.bouncingAnimation_ = game.getResourceManager().getSpriteSheet('bullets').getAnimation(5 + level);
   this.bouncingAnimation_.setRepeatCount(-1);
 
-  game.getPainter().registerDrawable(dotprod.graphics.Layer.PROJECTILES, this);
+  game.getPainter().registerDrawable(graphics.Layer.PROJECTILES, this);
 };
-goog.inherits(dotprod.model.projectile.BulletSprite, dotprod.model.projectile.Bullet);
+goog.inherits(model.projectile.BulletSprite, model.projectile.Bullet);
 
 /**
  * @override
  */
-dotprod.model.projectile.BulletSprite.prototype.advanceTime = function() {
+model.projectile.BulletSprite.prototype.advanceTime = function() {
   goog.base(this, 'advanceTime');
   this.animation_.update();
   this.bouncingAnimation_.update();
@@ -57,7 +57,7 @@ dotprod.model.projectile.BulletSprite.prototype.advanceTime = function() {
 /**
  * @override
  */
-dotprod.model.projectile.BulletSprite.prototype.render = function(viewport) {
+model.projectile.BulletSprite.prototype.render = function(viewport) {
   var dimensions = viewport.getDimensions();
   var x = Math.floor(this.position_.getX() - dimensions.left - this.animation_.getWidth() / 2);
   var y = Math.floor(this.position_.getY() - dimensions.top - this.animation_.getHeight() / 2);
@@ -69,18 +69,18 @@ dotprod.model.projectile.BulletSprite.prototype.render = function(viewport) {
 /**
  * @override
  */
-dotprod.model.projectile.BulletSprite.prototype.explode_ = function(hitPlayer) {
+model.projectile.BulletSprite.prototype.explode_ = function(hitPlayer) {
   goog.base(this, 'explode_', hitPlayer);
 
   var animation = this.game_.getResourceManager().getSpriteSheet('explode0').getAnimation(0);
-  var explosion = new dotprod.model.Effect(this.game_, animation, this.position_, new dotprod.math.Vector(0, 0));
+  var explosion = new model.Effect(this.game_, animation, this.position_, new math.Vector(0, 0));
 };
 
 /**
  * @override
  */
-dotprod.model.projectile.BulletSprite.prototype.onInvalidate_ = function() {
+model.projectile.BulletSprite.prototype.onInvalidate_ = function() {
   goog.base(this, 'onInvalidate_');
 
-  this.game_.getPainter().unregisterDrawable(dotprod.graphics.Layer.PROJECTILES, this);
+  this.game_.getPainter().unregisterDrawable(graphics.Layer.PROJECTILES, this);
 };

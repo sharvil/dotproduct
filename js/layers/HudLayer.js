@@ -2,61 +2,61 @@
  * @fileoverview Heads-up display layer
  */
 
-goog.provide('dotprod.layers.HudLayer');
+goog.provide('layers.HudLayer');
 
-goog.require('dotprod.graphics.Drawable');
-goog.require('dotprod.model.player.LocalPlayer');
-goog.require('dotprod.model.player.Player');
+goog.require('graphics.Drawable');
+goog.require('model.player.LocalPlayer');
+goog.require('model.player.Player');
 
 /**
  * @constructor
- * @implements {dotprod.graphics.Drawable}
- * @param {!dotprod.Game} game
+ * @implements {graphics.Drawable}
+ * @param {!Game} game
  */
-dotprod.layers.HudLayer = function(game) {
+layers.HudLayer = function(game) {
   /**
-   * @type {!dotprod.Game}
+   * @type {!Game}
    * @private
    */
   this.game_ = game;
 
   /**
-   * @type {!dotprod.ResourceManager}
+   * @type {!ResourceManager}
    * @private
    */
   this.resourceManager_ = game.getResourceManager();
 
   /**
-   * @type {!dotprod.model.player.Player}
+   * @type {!model.player.Player}
    * @private
    */
   this.player_ = game.getPlayerIndex().getLocalPlayer();
 
   /**
-   * @type {!dotprod.graphics.Image}
+   * @type {!graphics.Image}
    * @private
    */
   this.statusHudImage_ = this.resourceManager_.getImage('statusHud');
 
   /**
-   * @type {!dotprod.graphics.Image}
+   * @type {!graphics.Image}
    * @private
    */
   this.energyFontImage_ = this.resourceManager_.getImage('energyFont');
 
   /**
-   * @type {!dotprod.graphics.Image}
+   * @type {!graphics.Image}
    * @private
    */
   this.ledFontImage_ = this.resourceManager_.getImage('ledFont');
 
-  game.getPainter().registerDrawable(dotprod.graphics.Layer.HUD, this);
+  game.getPainter().registerDrawable(graphics.Layer.HUD, this);
 };
 
 /**
  * @override
  */
-dotprod.layers.HudLayer.prototype.render = function(viewport) {
+layers.HudLayer.prototype.render = function(viewport) {
   var context = viewport.getContext();
   var dimensions = viewport.getDimensions();
 
@@ -69,7 +69,7 @@ dotprod.layers.HudLayer.prototype.render = function(viewport) {
  * @param {!CanvasRenderingContext2D} context
  * @param {!Object} dimensions
  */
-dotprod.layers.HudLayer.prototype.renderEnergyBar_ = function(context, dimensions) {
+layers.HudLayer.prototype.renderEnergyBar_ = function(context, dimensions) {
   var percentEnergy = this.player_.getEnergy() / this.player_.getMaxEnergy();
   var energyBarMaxWidth = 300;
   var energyBarWidth = percentEnergy * energyBarMaxWidth;
@@ -116,7 +116,7 @@ dotprod.layers.HudLayer.prototype.renderEnergyBar_ = function(context, dimension
  * @param {!CanvasRenderingContext2D} context
  * @param {!Object} dimensions
  */
-dotprod.layers.HudLayer.prototype.renderNearShipEnergyDisplay_ = function(context, dimensions) {
+layers.HudLayer.prototype.renderNearShipEnergyDisplay_ = function(context, dimensions) {
   if (!this.player_.isAlive()) {
     return;
   }
@@ -134,7 +134,7 @@ dotprod.layers.HudLayer.prototype.renderNearShipEnergyDisplay_ = function(contex
                           percentEnergy < 0.5 ? 'rgba(200, 200, 0, 0.5)' :
                           percentEnergy < 0.75 ? 'rgba(0, 200, 0, 0.5)' :
                           'rgba(0, 200, 200, 0.5)';
-      context.font = dotprod.Font.playerFont();
+      context.font = Font.playerFont();
       context.textAlign = 'right';
       context.textBaseline = 'bottom';
       context.fillText(energy.toString(), x, y);
@@ -146,7 +146,7 @@ dotprod.layers.HudLayer.prototype.renderNearShipEnergyDisplay_ = function(contex
  * @param {!CanvasRenderingContext2D} context
  * @param {!Object} dimensions
  */
-dotprod.layers.HudLayer.prototype.renderShipInfoDisplay_ = function(context, dimensions) {
+layers.HudLayer.prototype.renderShipInfoDisplay_ = function(context, dimensions) {
   var statusHudLeft = dimensions.width - this.statusHudImage_.getTileWidth();
   var statusHudRight = statusHudLeft + this.statusHudImage_.getTileWidth();
   var statusHudTop = 50;
@@ -183,7 +183,7 @@ dotprod.layers.HudLayer.prototype.renderShipInfoDisplay_ = function(context, dim
  * @param {number} num
  * @param {function(number)} callback
  */
-dotprod.layers.HudLayer.prototype.forEachDigitInReverse_ = function(num, callback) {
+layers.HudLayer.prototype.forEachDigitInReverse_ = function(num, callback) {
   num = Math.floor(num);
   do {
     callback(num % 10);

@@ -3,14 +3,14 @@
  * @author sharvil.nanavati@gmail.com (Sharvil Nanavati)
  */
 
-goog.provide('dotprod.Viewport');
+goog.provide('Viewport');
 
 /**
  * @constructor
- * @param {!dotprod.Game} game
+ * @param {!Game} game
  * @param {!CanvasRenderingContext2D} context
  */
-dotprod.Viewport = function(game, context) {
+Viewport = function(game, context) {
   /**
    * @type {number}
    * @private
@@ -30,20 +30,20 @@ dotprod.Viewport = function(game, context) {
   this.context_ = context;
 
   /**
-   * @type {dotprod.model.player.Player}
+   * @type {model.player.Player}
    * @private
    */
   this.followingPlayer_;
 };
 
 /**
- * @param {!dotprod.model.player.Player} player
+ * @param {!model.player.Player} player
  */
-dotprod.Viewport.prototype.followPlayer = function(player) {
+Viewport.prototype.followPlayer = function(player) {
   this.followingPlayer_ = player;
 };
 
-dotprod.Viewport.prototype.update = function() {
+Viewport.prototype.update = function() {
   if (!this.followingPlayer_) {
     return;
   }
@@ -56,7 +56,7 @@ dotprod.Viewport.prototype.update = function() {
 /**
  * @return {!Object}
  */
-dotprod.Viewport.prototype.getDimensions = function() {
+Viewport.prototype.getDimensions = function() {
   return {
     x: this.x_,
     y: this.y_,
@@ -72,6 +72,6 @@ dotprod.Viewport.prototype.getDimensions = function() {
 /**
  * @return {!CanvasRenderingContext2D}
  */
-dotprod.Viewport.prototype.getContext = function() {
+Viewport.prototype.getContext = function() {
   return this.context_;
 };

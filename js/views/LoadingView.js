@@ -3,22 +3,22 @@
  * @author sharvil.nanavati@gmail.com (Sharvil Nanavati)
  */
 
-goog.provide('dotprod.views.LoadingView');
+goog.provide('views.LoadingView');
 
 goog.require('goog.events');
 goog.require('goog.events.EventType');
-goog.require('dotprod.ResourceManager');
-goog.require('dotprod.views.View');
+goog.require('ResourceManager');
+goog.require('views.View');
 
 /**
  * @constructor
- * @extends {dotprod.views.View}
- * @param {!dotprod.ResourceManager} resourceManager
+ * @extends {views.View}
+ * @param {!ResourceManager} resourceManager
  * @param {function()} onLoadCompleteCb
  */
-dotprod.views.LoadingView = function(resourceManager, onLoadCompleteCb) {
+views.LoadingView = function(resourceManager, onLoadCompleteCb) {
   /**
-   * @type {!dotprod.ResourceManager}
+   * @type {!ResourceManager}
    * @private
    */
   this.resourceManager_ = resourceManager;
@@ -34,7 +34,7 @@ dotprod.views.LoadingView = function(resourceManager, onLoadCompleteCb) {
    * @private
    */
   this.progressBar_ = /** @type {!HTMLDivElement} */ (goog.dom.createElement('div'));
-  this.progressBar_.className = dotprod.views.LoadingView.CSS_PROGRESS_BAR_;
+  this.progressBar_.className = views.LoadingView.CSS_PROGRESS_BAR_;
 
   /**
    * @type {!HTMLDivElement}
@@ -42,36 +42,36 @@ dotprod.views.LoadingView = function(resourceManager, onLoadCompleteCb) {
    */
   this.progressBarValue_ = /** @type {!HTMLDivElement} */ (goog.dom.createElement('div'));
   this.progressBarValue_.innerHTML = '&nbsp;';
-  this.progressBarValue_.className = dotprod.views.LoadingView.CSS_PROGRESS_BAR_VALUE_;
+  this.progressBarValue_.className = views.LoadingView.CSS_PROGRESS_BAR_VALUE_;
 };
-goog.inherits(dotprod.views.LoadingView, dotprod.views.View);
+goog.inherits(views.LoadingView, views.View);
 
 /**
  * @type {string}
  * @const
  * @private
  */
-dotprod.views.LoadingView.CSS_PROGRESS_BAR_ = 'ldv-progress';
+views.LoadingView.CSS_PROGRESS_BAR_ = 'ldv-progress';
 
 /**
  * @type {string}
  * @const
  * @private
  */
-dotprod.views.LoadingView.CSS_PROGRESS_BAR_VALUE_ = 'ldv-progress-value';
+views.LoadingView.CSS_PROGRESS_BAR_VALUE_ = 'ldv-progress-value';
 
 /**
  * @param {!HTMLDivElement} rootNode
  * @override
  */
-dotprod.views.LoadingView.prototype.renderDom = function(rootNode) {
+views.LoadingView.prototype.renderDom = function(rootNode) {
   goog.base(this, 'renderDom', rootNode);
 
   this.progressBar_.appendChild(this.progressBarValue_);
   rootNode.appendChild(this.progressBar_);
 };
 
-dotprod.views.LoadingView.prototype.load = function(resources) {
+views.LoadingView.prototype.load = function(resources) {
   this.setLoadPercent(0);
 
   var self = this;
@@ -106,6 +106,6 @@ dotprod.views.LoadingView.prototype.load = function(resources) {
 /**
  * @param {number} percent
  */
-dotprod.views.LoadingView.prototype.setLoadPercent = function(percent) {
+views.LoadingView.prototype.setLoadPercent = function(percent) {
   this.progressBarValue_.style.width = percent + '%';
 };

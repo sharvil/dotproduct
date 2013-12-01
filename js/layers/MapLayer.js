@@ -3,59 +3,59 @@
  * @author sharvil.nanavati@gmail.com (Sharvil Nanavati)
  */
 
-goog.provide('dotprod.layers.MapLayer');
+goog.provide('layers.MapLayer');
 
 goog.require('goog.asserts');
 
-goog.require('dotprod.Viewport');
-goog.require('dotprod.graphics.Drawable');
-goog.require('dotprod.graphics.Image');
-goog.require('dotprod.graphics.Layer');
-goog.require('dotprod.model.Map');
-goog.require('dotprod.model.ModelObject');
-goog.require('dotprod.ResourceManager');
+goog.require('Viewport');
+goog.require('graphics.Drawable');
+goog.require('graphics.Image');
+goog.require('graphics.Layer');
+goog.require('model.Map');
+goog.require('model.ModelObject');
+goog.require('ResourceManager');
 
 /**
  * @constructor
- * @extends {dotprod.model.ModelObject}
- * @implements {dotprod.graphics.Drawable}
- * @param {!dotprod.Game} game
+ * @extends {model.ModelObject}
+ * @implements {graphics.Drawable}
+ * @param {!Game} game
  */
-dotprod.layers.MapLayer = function(game) {
+layers.MapLayer = function(game) {
   goog.base(this, game.getSimulation());
 
   /**
-   * @type {!dotprod.ResourceManager}
+   * @type {!ResourceManager}
    * @private
    */
   this.resourceManager_ = game.getResourceManager();
 
   /**
-   * @type {!dotprod.model.Map}
+   * @type {!model.Map}
    * @private
    */
   this.map_ = game.getMap();
 
   /**
-   * @type {!Array.<dotprod.graphics.Animation>}
+   * @type {!Array.<graphics.Animation>}
    * @private
    */
   this.animations_ = [];
 
   /**
-   * @type {!dotprod.graphics.Image}
+   * @type {!graphics.Image}
    * @private
    */
   this.tileset_ = this.resourceManager_.getImage('tileset');
 
-  game.getPainter().registerDrawable(dotprod.graphics.Layer.MAP, this);
+  game.getPainter().registerDrawable(graphics.Layer.MAP, this);
 };
-goog.inherits(dotprod.layers.MapLayer, dotprod.model.ModelObject);
+goog.inherits(layers.MapLayer, model.ModelObject);
 
 /**
  * @override
  */
-dotprod.layers.MapLayer.prototype.advanceTime = function() {
+layers.MapLayer.prototype.advanceTime = function() {
   for (var i = 0; i < this.animations_.length; ++i) {
     if (this.animations_[i]) {
       this.animations_[i].update();
@@ -66,14 +66,14 @@ dotprod.layers.MapLayer.prototype.advanceTime = function() {
 /**
  * @override
  */
-dotprod.layers.MapLayer.prototype.onInvalidate_ = function() {
+layers.MapLayer.prototype.onInvalidate_ = function() {
   goog.asserts.assert(false, 'Map should never be invalidated.');
 };
 
 /**
  * @override
  */
-dotprod.layers.MapLayer.prototype.render = function(viewport) {
+layers.MapLayer.prototype.render = function(viewport) {
   var map = this.map_;
   var dimensions = viewport.getDimensions();
   var context = viewport.getContext();
@@ -108,7 +108,7 @@ dotprod.layers.MapLayer.prototype.render = function(viewport) {
     for (var y = topTile; y <= topTile + numVertTiles; ++y) {
       for (var x = leftTile; x <= leftTile + numHorizTiles; ++x) {
         var tileNum = map.getTile(x, y);
-        if (tileNum == dotprod.TileType.NONE) {
+        if (tileNum == TileType.NONE) {
           continue;
         }
 

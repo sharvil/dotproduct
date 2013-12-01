@@ -3,25 +3,25 @@
  * @author sharvil.nanavati@gmail.com (Sharvil Nanavati)
  */
 
-goog.provide('dotprod.model.Map');
+goog.provide('model.Map');
 
 goog.require('goog.asserts');
 
-goog.require('dotprod.math.Rect');
-goog.require('dotprod.math.Vector');
-goog.require('dotprod.model.Entity');
-goog.require('dotprod.graphics.Image');
-goog.require('dotprod.ObjectType');
-goog.require('dotprod.structs.Quadtree');
-goog.require('dotprod.TileType');
+goog.require('math.Rect');
+goog.require('math.Vector');
+goog.require('model.Entity');
+goog.require('graphics.Image');
+goog.require('ObjectType');
+goog.require('structs.Quadtree');
+goog.require('TileType');
 
 /**
  * @constructor
- * @param {!dotprod.Game} game
+ * @param {!Game} game
  * @param {!Object.<number, number>} mapData
  * @param {!Array.<!Object>} tileProperties
  */
-dotprod.model.Map = function(game, mapData, tileProperties) {
+model.Map = function(game, mapData, tileProperties) {
   var settings = game.getSettings();
   var tileset = game.getResourceManager().getImage('tileset');
 
@@ -68,10 +68,10 @@ dotprod.model.Map = function(game, mapData, tileProperties) {
   this.tileHeight_ = tileset.getTileHeight();
 
   /**
-   * @type {!dotprod.structs.Quadtree}
+   * @type {!structs.Quadtree}
    * @private
    */
-  this.quadtree_ = new dotprod.structs.Quadtree(mapData, this.width_, this.height_);
+  this.quadtree_ = new structs.Quadtree(mapData, this.width_, this.height_);
 };
 
 /**
@@ -79,55 +79,55 @@ dotprod.model.Map = function(game, mapData, tileProperties) {
  * @private
  * @const
  */
-dotprod.model.Map.COLLISION_EPSILON_ = 0.0001;
+model.Map.COLLISION_EPSILON_ = 0.0001;
 
 /**
  * @type {number}
  * @private
  * @const
  */
-dotprod.model.Map.MAX_SPAWN_LOCATION_ATTEMPTS_ = 10;
+model.Map.MAX_SPAWN_LOCATION_ATTEMPTS_ = 10;
 
 /**
  * @return {number}
  */
-dotprod.model.Map.prototype.getWidth = function() {
+model.Map.prototype.getWidth = function() {
   return this.width_;
 };
 
 /**
  * @return {number}
  */
-dotprod.model.Map.prototype.getHeight = function() {
+model.Map.prototype.getHeight = function() {
   return this.height_;
 };
 
 /**
  * @return {number}
  */
-dotprod.model.Map.prototype.getTileWidth = function() {
+model.Map.prototype.getTileWidth = function() {
   return this.tileWidth_;
 };
 
 /**
  * @return {number}
  */
-dotprod.model.Map.prototype.getTileHeight = function() {
+model.Map.prototype.getTileHeight = function() {
   return this.tileHeight_;
 };
 
 /**
- * @param {!dotprod.math.Vector} vector A vector in pixel coordinates.
- * @return {!dotprod.math.Vector} A vector in map tile coordinates.
+ * @param {!math.Vector} vector A vector in pixel coordinates.
+ * @return {!math.Vector} A vector in map tile coordinates.
  */
-dotprod.model.Map.prototype.toTileCoordinates = function(vector) {
+model.Map.prototype.toTileCoordinates = function(vector) {
   var xTile = Math.floor(vector.getX() / this.tileWidth_);
   var yTile = Math.floor(vector.getY() / this.tileHeight_);
 
   goog.asserts.assert(xTile >= 0 && xTile < this.width_, 'Invalid x coordinate.');
   goog.asserts.assert(yTile >= 0 && yTile < this.height_, 'Invalid y coordinate.');
 
-  return new dotprod.math.Vector(xTile, yTile);
+  return new math.Vector(xTile, yTile);
 };
 
 /**
@@ -135,9 +135,9 @@ dotprod.model.Map.prototype.toTileCoordinates = function(vector) {
  * @param {number} y Y-coordinate in tile units.
  * @return {number}
  */
-dotprod.model.Map.prototype.getTile = function(x, y) {
+model.Map.prototype.getTile = function(x, y) {
   var index = x + y * this.width_;
-  return this.mapData_[index] ? this.mapData_[index] : dotprod.TileType.NONE;
+  return this.mapData_[index] ? this.mapData_[index] : TileType.NONE;
 };
 
 /**
@@ -145,12 +145,12 @@ dotprod.model.Map.prototype.getTile = function(x, y) {
  * @param {number} y Y-coordinate in tile units.
  * @param {number} value New tile value.
  */
-dotprod.model.Map.prototype.setTile = function(x, y, value) {
+model.Map.prototype.setTile = function(x, y, value) {
   goog.asserts.assert(x >= 0 && x < this.width_, 'Invalid x coordinate.');
   goog.asserts.assert(y >= 0 && y < this.height_, 'Invalid y coordinate.');
 
   var index = x + y * this.width_;
-  if (value == dotprod.TileType.NONE) {
+  if (value == TileType.NONE) {
     delete this.mapData_[index];
   } else {
     this.mapData_[index] = value;
@@ -160,24 +160,24 @@ dotprod.model.Map.prototype.setTile = function(x, y, value) {
 /**
  * @return {!Object}
  */
-dotprod.model.Map.prototype.getTileProperties = function(tileValue) {
+model.Map.prototype.getTileProperties = function(tileValue) {
   goog.asserts.assert(tileValue >= 0 && tileValue < this.tileProperties_.length, 'Tile value out of bounds: ' + tileValue);
   return this.tileProperties_[tileValue];
 };
 
 /**
- * @param {!dotprod.math.Rect} rect
+ * @param {!math.Rect} rect
  * @return {!Array.<!Object>}
  */
-dotprod.model.Map.prototype.getTiles = function(rect) {
+model.Map.prototype.getTiles = function(rect) {
   return this.quadtree_.tilesForViewport(rect);
 };
 
 /**
- * @param {!dotprod.model.Entity} entity
- * @return {!dotprod.math.Vector}
+ * @param {!model.Entity} entity
+ * @return {!math.Vector}
  */
-dotprod.model.Map.prototype.getSpawnLocation = function(entity) {
+model.Map.prototype.getSpawnLocation = function(entity) {
   var cX = this.width_ * this.tileWidth_ / 2;
   var cY = this.height_ * this.tileHeight_ / 2;
   var dimensions = entity.getDimensions();
@@ -198,16 +198,16 @@ dotprod.model.Map.prototype.getSpawnLocation = function(entity) {
     dimensions.top = y - dimensions.yRadius;
     dimensions.bottom = y + dimensions.yRadius;
 
-  } while (this.getCollision_(dimensions) && attempts++ < dotprod.model.Map.MAX_SPAWN_LOCATION_ATTEMPTS_);
+  } while (this.getCollision_(dimensions) && attempts++ < model.Map.MAX_SPAWN_LOCATION_ATTEMPTS_);
 
-  return new dotprod.math.Vector(x, y);
+  return new math.Vector(x, y);
 };
 
 /**
- * @param {!dotprod.model.Entity} entity
+ * @param {!model.Entity} entity
  * @return {Object}
  */
-dotprod.model.Map.prototype.getCollision = function(entity) {
+model.Map.prototype.getCollision = function(entity) {
   return this.getCollision_(entity.getDimensions());
 };
 
@@ -215,7 +215,7 @@ dotprod.model.Map.prototype.getCollision = function(entity) {
  * @param {!Object} dimensions
  * @return {Object}
  */
-dotprod.model.Map.prototype.getCollision_ = function(dimensions) {
+model.Map.prototype.getCollision_ = function(dimensions) {
   var left = dimensions.left;
   var right = dimensions.right;
   var top = dimensions.top;
@@ -229,28 +229,28 @@ dotprod.model.Map.prototype.getCollision_ = function(dimensions) {
   // Trivial case 1: left/top of map.
   if (left < 0 || top < 0) {
     return {
-      left: -dotprod.model.Map.COLLISION_EPSILON_ - xRadius,
+      left: -model.Map.COLLISION_EPSILON_ - xRadius,
       right: this.tileWidth_ + xRadius,
-      top: -dotprod.model.Map.COLLISION_EPSILON_ - yRadius,
+      top: -model.Map.COLLISION_EPSILON_ - yRadius,
       bottom: this.tileHeight_ + yRadius,
       xTile: 0,
       yTile: 0,
-      tileValue: dotprod.TileType.COLLISION,
-      object: dotprod.ObjectType.NONE
+      tileValue: TileType.COLLISION,
+      object: ObjectType.NONE
     };
   }
 
   // Trivial case 2: right/bottom of map.
   if (right >= totalWidth || bottom >= totalHeight) {
     return {
-      left: totalWidth - this.tileWidth_ - dotprod.model.Map.COLLISION_EPSILON_ - xRadius,
+      left: totalWidth - this.tileWidth_ - model.Map.COLLISION_EPSILON_ - xRadius,
       right: totalWidth + xRadius,
-      top: totalHeight - this.tileHeight_ - dotprod.model.Map.COLLISION_EPSILON_ - yRadius,
+      top: totalHeight - this.tileHeight_ - model.Map.COLLISION_EPSILON_ - yRadius,
       bottom: totalHeight + yRadius,
       xTile: this.width_,
       yTile: this.height_,
-      tileValue: dotprod.TileType.COLLISION,
-      object: dotprod.ObjectType.NONE
+      tileValue: TileType.COLLISION,
+      object: ObjectType.NONE
     };
   }
 
@@ -263,16 +263,16 @@ dotprod.model.Map.prototype.getCollision_ = function(dimensions) {
   for (var yTile = topTile; yTile <= bottomTile; ++yTile) {
     for (var xTile = leftTile; xTile <= rightTile; ++xTile) {
       var tileValue = this.getTile(xTile, yTile);
-      if (tileValue == dotprod.TileType.NONE) {
+      if (tileValue == TileType.NONE) {
         continue;
       }
 
       var tileProperties = this.getTileProperties(tileValue);
       if (tileProperties['collision']) {
         ret = {
-          left: xTile * this.tileWidth_ - dotprod.model.Map.COLLISION_EPSILON_ - xRadius,
+          left: xTile * this.tileWidth_ - model.Map.COLLISION_EPSILON_ - xRadius,
           right: (xTile + 1) * this.tileWidth_ + xRadius,
-          top: yTile * this.tileHeight_ - dotprod.model.Map.COLLISION_EPSILON_ - yRadius,
+          top: yTile * this.tileHeight_ - model.Map.COLLISION_EPSILON_ - yRadius,
           bottom: (yTile + 1) * this.tileHeight_ + yRadius,
           xTile: xTile,
           yTile: yTile,

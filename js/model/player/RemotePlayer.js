@@ -3,16 +3,16 @@
  * @author sharvil.nanavati@gmail.com (Sharvil Nanavati)
  */
 
-goog.provide('dotprod.model.player.RemotePlayer');
+goog.provide('model.player.RemotePlayer');
 
-goog.require('dotprod.model.player.Player');
-goog.require('dotprod.Timer');
-goog.require('dotprod.math.Vector');
+goog.require('model.player.Player');
+goog.require('Timer');
+goog.require('math.Vector');
 
 /**
  * @constructor
- * @extends {dotprod.model.player.Player}
- * @param {!dotprod.Game} game
+ * @extends {model.player.Player}
+ * @param {!Game} game
  * @param {string} id
  * @param {string} name
  * @param {number} team
@@ -20,7 +20,7 @@ goog.require('dotprod.math.Vector');
  * @param {number} ship
  * @param {number} bounty
  */
-dotprod.model.player.RemotePlayer = function(game, id, name, team, isAlive, ship, bounty) {
+model.player.RemotePlayer = function(game, id, name, team, isAlive, ship, bounty) {
   goog.base(this, game, id, name, team, ship, bounty);
 
   /**
@@ -39,10 +39,10 @@ dotprod.model.player.RemotePlayer = function(game, id, name, team, isAlive, ship
    * to interpolate to the correct location. It's defined here because we need to
    * bounce the velocity vector during collision detection.
    *
-   * @type {!dotprod.math.Vector}
+   * @type {!math.Vector}
    * @protected
    */
-  this.originalVelocity_ = new dotprod.math.Vector(0, 0);
+  this.originalVelocity_ = new math.Vector(0, 0);
 
   /**
    * @type {number}
@@ -52,26 +52,26 @@ dotprod.model.player.RemotePlayer = function(game, id, name, team, isAlive, ship
 
   this.energy_ = isAlive ? 1 : 0;
 };
-goog.inherits(dotprod.model.player.RemotePlayer, dotprod.model.player.Player);
+goog.inherits(model.player.RemotePlayer, model.player.Player);
 
 /**
  * @type {number}
  * @private
  * @const
  */
-dotprod.model.player.RemotePlayer.MAX_DRIFT_PIXELS_ = 64;
+model.player.RemotePlayer.MAX_DRIFT_PIXELS_ = 64;
 
 /**
  * @type {number}
  * @private
  * @const
  */
-dotprod.model.player.RemotePlayer.VELOCITY_ADJUST_PERIOD_ = 20;
+model.player.RemotePlayer.VELOCITY_ADJUST_PERIOD_ = 20;
 
 /**
  * @override
  */
-dotprod.model.player.RemotePlayer.prototype.respawn = function(angle, position, velocity) {
+model.player.RemotePlayer.prototype.respawn = function(angle, position, velocity) {
   this.energy_ = 1;
   this.bounty_ = 0;
   this.angleInRadians_ = angle;
@@ -83,11 +83,11 @@ dotprod.model.player.RemotePlayer.prototype.respawn = function(angle, position, 
 /**
  * @param {number} timeDiff
  * @param {number} angle
- * @param {!dotprod.math.Vector} position
- * @param {!dotprod.math.Vector} velocity
+ * @param {!math.Vector} position
+ * @param {!math.Vector} velocity
  * @param {boolean} isSafe
  */
-dotprod.model.player.RemotePlayer.prototype.onPositionUpdate = function(timeDiff, angle, position, velocity, isSafe) {
+model.player.RemotePlayer.prototype.onPositionUpdate = function(timeDiff, angle, position, velocity, isSafe) {
   if (isSafe) {
     this.clearProjectiles_();
   }
@@ -98,7 +98,7 @@ dotprod.model.player.RemotePlayer.prototype.onPositionUpdate = function(timeDiff
   }
 
   // Ignore position updates from before the last wall bounce.
-  if(goog.now() - dotprod.Timer.ticksToMillis(timeDiff) < this.bounceTimestamp_) {
+  if(goog.now() - Timer.ticksToMillis(timeDiff) < this.bounceTimestamp_) {
     return;
   }
 
@@ -108,25 +108,25 @@ dotprod.model.player.RemotePlayer.prototype.onPositionUpdate = function(timeDiff
   this.angleInRadians_ = angle;
   this.velocity_ = velocity;
   this.originalVelocity_ = velocity;
-  this.velocityAdjustTimer_ = dotprod.model.player.RemotePlayer.VELOCITY_ADJUST_PERIOD_;
+  this.velocityAdjustTimer_ = model.player.RemotePlayer.VELOCITY_ADJUST_PERIOD_;
 
-  if (Math.abs(distance.getX()) >= dotprod.model.player.RemotePlayer.MAX_DRIFT_PIXELS_) {
-    this.position_ = new dotprod.math.Vector(finalPosition.getX(), this.position_.getY());
+  if (Math.abs(distance.getX()) >= model.player.RemotePlayer.MAX_DRIFT_PIXELS_) {
+    this.position_ = new math.Vector(finalPosition.getX(), this.position_.getY());
   } else {
-    this.velocity_ = this.velocity_.add(new dotprod.math.Vector(distance.getX(), 0).scale(1 / dotprod.model.player.RemotePlayer.VELOCITY_ADJUST_PERIOD_));
+    this.velocity_ = this.velocity_.add(new math.Vector(distance.getX(), 0).scale(1 / model.player.RemotePlayer.VELOCITY_ADJUST_PERIOD_));
   }
 
-  if (Math.abs(distance.getY()) >= dotprod.model.player.RemotePlayer.MAX_DRIFT_PIXELS_) {
-    this.position_ = new dotprod.math.Vector(this.position_.getX(), finalPosition.getY());
+  if (Math.abs(distance.getY()) >= model.player.RemotePlayer.MAX_DRIFT_PIXELS_) {
+    this.position_ = new math.Vector(this.position_.getX(), finalPosition.getY());
   } else {
-    this.velocity_ = this.velocity_.add(new dotprod.math.Vector(0, distance.getY()).scale(1 / dotprod.model.player.RemotePlayer.VELOCITY_ADJUST_PERIOD_));
+    this.velocity_ = this.velocity_.add(new math.Vector(0, distance.getY()).scale(1 / model.player.RemotePlayer.VELOCITY_ADJUST_PERIOD_));
   }
 };
 
 /**
  * @override
  */
-dotprod.model.player.RemotePlayer.prototype.advanceTime = function() {
+model.player.RemotePlayer.prototype.advanceTime = function() {
   var bounceFactor = this.game_.getSettings()['ships'][this.ship_]['bounceFactor'];
   --this.velocityAdjustTimer_;
   if (this.velocityAdjustTimer_ == 0) {
@@ -138,12 +138,12 @@ dotprod.model.player.RemotePlayer.prototype.advanceTime = function() {
 
 /**
  * @param {number} timeDiff
- * @param {!dotprod.math.Vector} startPosition
- * @param {!dotprod.math.Vector} startVelocity
- * @return {!dotprod.math.Vector}
+ * @param {!math.Vector} startPosition
+ * @param {!math.Vector} startVelocity
+ * @return {!math.Vector}
  * @private
  */
-dotprod.model.player.RemotePlayer.prototype.extrapolatePosition_ = function(timeDiff, startPosition, startVelocity) {
+model.player.RemotePlayer.prototype.extrapolatePosition_ = function(timeDiff, startPosition, startVelocity) {
   var bounceFactor = this.game_.getSettings()['ships'][this.ship_]['bounceFactor'];
   var savedPosition = this.position_;
   var savedVelocity = this.velocity_;
@@ -165,7 +165,7 @@ dotprod.model.player.RemotePlayer.prototype.extrapolatePosition_ = function(time
 /**
  * @override
  */
-dotprod.model.player.RemotePlayer.prototype.collectPrize_ = function(prize) {
+model.player.RemotePlayer.prototype.collectPrize_ = function(prize) {
   goog.base(this, 'collectPrize_', prize);
   return false;
 };
@@ -173,7 +173,7 @@ dotprod.model.player.RemotePlayer.prototype.collectPrize_ = function(prize) {
 /**
  * @override
  */
-dotprod.model.player.RemotePlayer.prototype.bounce_ = function() {
+model.player.RemotePlayer.prototype.bounce_ = function() {
   this.velocityAdjustTimer_ = 0;
   this.bounceTimestamp_ = goog.now();
 };

@@ -3,27 +3,27 @@
  * @author sharvil.nanavati@gmail.com (Sharvil Nanavati)
  */
 
-goog.provide('dotprod.model.projectile.Bomb');
+goog.provide('model.projectile.Bomb');
 
-goog.require('dotprod.model.projectile.Projectile');
-goog.require('dotprod.model.Weapon.Type');
-goog.require('dotprod.math.Vector');
+goog.require('model.projectile.Projectile');
+goog.require('model.Weapon.Type');
+goog.require('math.Vector');
 
 /**
  * @constructor
- * @extends {dotprod.model.projectile.Projectile}
- * @param {!dotprod.Game} game
- * @param {!dotprod.model.player.Player} owner
+ * @extends {model.projectile.Projectile}
+ * @param {!Game} game
+ * @param {!model.player.Player} owner
  * @param {number} level
- * @param {!dotprod.math.Vector} position
- * @param {!dotprod.math.Vector} velocity
+ * @param {!math.Vector} position
+ * @param {!math.Vector} velocity
  * @param {number} lifetime
  * @param {number} damage
  * @param {number} bounceCount
  * @param {number} blastRadius
  * @param {number} proxRadius
  */
-dotprod.model.projectile.Bomb = function(game, owner, level, position, velocity, lifetime, damage, bounceCount, blastRadius, proxRadius) {
+model.projectile.Bomb = function(game, owner, level, position, velocity, lifetime, damage, bounceCount, blastRadius, proxRadius) {
   goog.base(this, game, owner, level, lifetime, damage, bounceCount);
 
   this.position_ = position;
@@ -42,7 +42,7 @@ dotprod.model.projectile.Bomb = function(game, owner, level, position, velocity,
   this.proxRadius_ = proxRadius;
 
   /**
-   * @type {dotprod.model.player.Player}
+   * @type {model.player.Player}
    * @private
    */
    this.proxActivator_;
@@ -53,12 +53,12 @@ dotprod.model.projectile.Bomb = function(game, owner, level, position, velocity,
    */
   this.lastDistanceToProxActivator_;
 };
-goog.inherits(dotprod.model.projectile.Bomb, dotprod.model.projectile.Projectile);
+goog.inherits(model.projectile.Bomb, model.projectile.Projectile);
 
 /**
  * @override
  */
-dotprod.model.projectile.Bomb.prototype.checkPlayerCollision_ = function(player) {
+model.projectile.Bomb.prototype.checkPlayerCollision_ = function(player) {
   if (!player.isAlive() || this.owner_.isFriend(player)) {
     return false;
   }
@@ -85,9 +85,9 @@ dotprod.model.projectile.Bomb.prototype.checkPlayerCollision_ = function(player)
 /**
  * @override
  */
-dotprod.model.projectile.Bomb.prototype.explode_ = function(hitPlayer) {
+model.projectile.Bomb.prototype.explode_ = function(hitPlayer) {
   // Reset bomb state.
-  this.velocity_ = new dotprod.math.Vector(0, 0);
+  this.velocity_ = new math.Vector(0, 0);
   this.lifetime_ = 0;
 
   // Figure out how much damage the local player is going to take from this bomb explosion.

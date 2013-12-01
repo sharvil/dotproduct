@@ -3,23 +3,23 @@
  * @author sharvil.nanavati@gmail.com (Sharvil Nanavati)
  */
 
-goog.provide('dotprod.model.Prize');
+goog.provide('model.Prize');
 
-goog.require('dotprod.model.ModelObject');
-goog.require('dotprod.PrizeType');
-goog.require('dotprod.TileType');
+goog.require('model.ModelObject');
+goog.require('PrizeType');
+goog.require('TileType');
 
 /**
  * @constructor
- * @extends {dotprod.model.ModelObject}
- * @param {!dotprod.model.Simulation} simulation
- * @param {!dotprod.model.Map} map
- * @param {!dotprod.PrizeType} type
+ * @extends {model.ModelObject}
+ * @param {!model.Simulation} simulation
+ * @param {!model.Map} map
+ * @param {!PrizeType} type
  * @param {number} xTile
  * @param {number} yTile
  * @param {number} ttl
  */
-dotprod.model.Prize = function(simulation, map, type, xTile, yTile, ttl) {
+model.Prize = function(simulation, map, type, xTile, yTile, ttl) {
   goog.base(this, simulation);
 
   this.map_ = map;
@@ -28,28 +28,28 @@ dotprod.model.Prize = function(simulation, map, type, xTile, yTile, ttl) {
   this.yTile_ = yTile;
   this.ttl_ = ttl;
 
-  this.map_.setTile(xTile, yTile, dotprod.TileType.PRIZE);
+  this.map_.setTile(xTile, yTile, TileType.PRIZE);
 };
-goog.inherits(dotprod.model.Prize, dotprod.model.ModelObject);
+goog.inherits(model.Prize, model.ModelObject);
 
 /**
- * @return {dotprod.PrizeType}
+ * @return {PrizeType}
  */
-dotprod.model.Prize.prototype.getType = function() {
+model.Prize.prototype.getType = function() {
   return this.type_;
 };
 
 /**
  * @return {number}
  */
-dotprod.model.Prize.prototype.getX = function() {
+model.Prize.prototype.getX = function() {
   return this.xTile_;
 };
 
 /**
  * @return {number}
  */
-dotprod.model.Prize.prototype.getY = function() {
+model.Prize.prototype.getY = function() {
   return this.yTile_;
 };
 
@@ -57,7 +57,7 @@ dotprod.model.Prize.prototype.getY = function() {
  * @param {number=} opt_fastForwardTicks
  * @override
  */
-dotprod.model.Prize.prototype.advanceTime = function(opt_fastForwardTicks) {
+model.Prize.prototype.advanceTime = function(opt_fastForwardTicks) {
   var ticks = (opt_fastForwardTicks === undefined) ? 1 : opt_fastForwardTicks;
   this.ttl_ = Math.max(0, this.ttl_ - ticks);
   if (this.ttl_ == 0) {
@@ -68,6 +68,6 @@ dotprod.model.Prize.prototype.advanceTime = function(opt_fastForwardTicks) {
 /**
  * @override
  */
-dotprod.model.Prize.prototype.onInvalidate_ = function() {
+model.Prize.prototype.onInvalidate_ = function() {
   this.map_.setTile(this.xTile_, this.yTile_, 0);
 };

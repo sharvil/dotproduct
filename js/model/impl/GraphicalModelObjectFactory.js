@@ -3,60 +3,60 @@
  * @author sharvil.nanavati@gmail.com (Sharvil Nanavati)
  */
 
-goog.provide('dotprod.model.impl.GraphicalModelObjectFactory');
+goog.provide('model.impl.GraphicalModelObjectFactory');
 
-goog.require('dotprod.model.ModelObjectFactory');
-goog.require('dotprod.model.player.LocalPlayerSprite');
-goog.require('dotprod.model.player.RemotePlayerSprite');
-goog.require('dotprod.model.projectile.BombSprite');
-goog.require('dotprod.model.projectile.BulletSprite');
-goog.require('dotprod.model.projectile.BurstSprite');
-goog.require('dotprod.model.projectile.MineSprite');
+goog.require('model.ModelObjectFactory');
+goog.require('model.player.LocalPlayerSprite');
+goog.require('model.player.RemotePlayerSprite');
+goog.require('model.projectile.BombSprite');
+goog.require('model.projectile.BulletSprite');
+goog.require('model.projectile.BurstSprite');
+goog.require('model.projectile.MineSprite');
 
 /**
  * @constructor
- * @implements {dotprod.model.ModelObjectFactory}
+ * @implements {model.ModelObjectFactory}
  */
-dotprod.model.impl.GraphicalModelObjectFactory = function() {};
+model.impl.GraphicalModelObjectFactory = function() {};
 
 /**
  * @override
  */
-dotprod.model.impl.GraphicalModelObjectFactory.prototype.newLocalPlayer = function(game, id, name, team, ship) {
-  return new dotprod.model.player.LocalPlayerSprite(game, id, name, team, ship);
+model.impl.GraphicalModelObjectFactory.prototype.newLocalPlayer = function(game, id, name, team, ship) {
+  return new model.player.LocalPlayerSprite(game, id, name, team, ship);
 };
 
 /**
  * @override
  */
-dotprod.model.impl.GraphicalModelObjectFactory.prototype.newRemotePlayer = function(game, id, name, team, isAlive, ship, bounty) {
-  return new dotprod.model.player.RemotePlayerSprite(game, id, name, team, isAlive, ship, bounty);
+model.impl.GraphicalModelObjectFactory.prototype.newRemotePlayer = function(game, id, name, team, isAlive, ship, bounty) {
+  return new model.player.RemotePlayerSprite(game, id, name, team, isAlive, ship, bounty);
 };
 
 /**
  * @override
  */
-dotprod.model.impl.GraphicalModelObjectFactory.prototype.newBullet = function(game, owner, level, position, velocity, lifetime, damage, bounceCount) {
-  return new dotprod.model.projectile.BulletSprite(game, owner, level, position, velocity, lifetime, damage, bounceCount);
+model.impl.GraphicalModelObjectFactory.prototype.newBullet = function(game, owner, level, position, velocity, lifetime, damage, bounceCount) {
+  return new model.projectile.BulletSprite(game, owner, level, position, velocity, lifetime, damage, bounceCount);
 };
 
 /**
  * @override
  */
-dotprod.model.impl.GraphicalModelObjectFactory.prototype.newBomb = function(game, owner, level, position, velocity, lifetime, damage, bounceCount, blastRadius, proxRadius) {
-  return new dotprod.model.projectile.BombSprite(game, owner, level, position, velocity, lifetime, damage, bounceCount, blastRadius, proxRadius);
+model.impl.GraphicalModelObjectFactory.prototype.newBomb = function(game, owner, level, position, velocity, lifetime, damage, bounceCount, blastRadius, proxRadius) {
+  return new model.projectile.BombSprite(game, owner, level, position, velocity, lifetime, damage, bounceCount, blastRadius, proxRadius);
 };
 
 /**
  * @override
  */
-dotprod.model.impl.GraphicalModelObjectFactory.prototype.newMine = function(game, owner, level, position, lifetime, damage) {
-  return new dotprod.model.projectile.MineSprite(game, owner, level, position, lifetime, damage);
+model.impl.GraphicalModelObjectFactory.prototype.newMine = function(game, owner, level, position, lifetime, damage) {
+  return new model.projectile.MineSprite(game, owner, level, position, lifetime, damage);
 };
 
 /**
  * @override
  */
-dotprod.model.impl.GraphicalModelObjectFactory.prototype.newBurst = function(game, owner, shrapnelCount, position, lifetime, damage) {
-  return new dotprod.model.projectile.BurstSprite(game, owner, shrapnelCount, position, lifetime, damage);
+model.impl.GraphicalModelObjectFactory.prototype.newBurst = function(game, owner, shrapnelCount, position, lifetime, damage) {
+  return new model.projectile.BurstSprite(game, owner, shrapnelCount, position, lifetime, damage);
 };

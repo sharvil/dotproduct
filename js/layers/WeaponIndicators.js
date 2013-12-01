@@ -2,35 +2,35 @@
  * @fileoverview Heads-up display layer
  */
 
-goog.provide('dotprod.layers.WeaponIndicators');
+goog.provide('layers.WeaponIndicators');
 
-goog.require('dotprod.graphics.Drawable');
+goog.require('graphics.Drawable');
 
 /**
  * @constructor
- * @param {!dotprod.Game} game
- * @implements {dotprod.graphics.Drawable}
+ * @param {!Game} game
+ * @implements {graphics.Drawable}
  */
-dotprod.layers.WeaponIndicators = function(game) {
+layers.WeaponIndicators = function(game) {
   /**
-   * @type {!dotprod.model.player.LocalPlayer}
+   * @type {!model.player.LocalPlayer}
    * @private
    */
   this.localPlayer_ = game.getPlayerIndex().getLocalPlayer();
 
   /**
-   * @type {!dotprod.graphics.Image}
+   * @type {!graphics.Image}
    * @private
    */
   this.icons_ = game.getResourceManager().getImage('icons');
 
-  game.getPainter().registerDrawable(dotprod.graphics.Layer.HUD, this);
+  game.getPainter().registerDrawable(graphics.Layer.HUD, this);
 };
 
 /**
  * @override
  */
-dotprod.layers.WeaponIndicators.prototype.render = function(viewport) {
+layers.WeaponIndicators.prototype.render = function(viewport) {
   var context = viewport.getContext();
   var dimensions = viewport.getDimensions();
 
@@ -58,7 +58,7 @@ dotprod.layers.WeaponIndicators.prototype.render = function(viewport) {
  * @param {number} level
  * @param {number} tileNum
  */
-dotprod.layers.WeaponIndicators.prototype.renderLeveledWeapon_ = function(context, left, top, level, tileNum) {
+layers.WeaponIndicators.prototype.renderLeveledWeapon_ = function(context, left, top, level, tileNum) {
   if (level >= 0) {
     tileNum += level;
   } else {

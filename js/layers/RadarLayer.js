@@ -3,29 +3,29 @@
  * @author sharvil.nanavati@gmail.com (Sharvil Nanavati)
  */
 
-goog.provide('dotprod.layers.RadarLayer');
+goog.provide('layers.RadarLayer');
 
 goog.require('goog.dom');
 
-goog.require('dotprod.graphics.Drawable');
-goog.require('dotprod.graphics.Layer');
-goog.require('dotprod.math.Rect');
-goog.require('dotprod.model.ModelObject');
-goog.require('dotprod.model.player.LocalPlayer');
-goog.require('dotprod.model.player.Player');
-goog.require('dotprod.Palette');
+goog.require('graphics.Drawable');
+goog.require('graphics.Layer');
+goog.require('math.Rect');
+goog.require('model.ModelObject');
+goog.require('model.player.LocalPlayer');
+goog.require('model.player.Player');
+goog.require('Palette');
 
 /**
  * @constructor
- * @extends {dotprod.model.ModelObject}
- * @implements {dotprod.graphics.Drawable}
- * @param {!dotprod.Game} game
+ * @extends {model.ModelObject}
+ * @implements {graphics.Drawable}
+ * @param {!Game} game
  */
-dotprod.layers.RadarLayer = function(game) {
+layers.RadarLayer = function(game) {
   goog.base(this, game.getSimulation());
 
   /**
-   * @type {!dotprod.Game}
+   * @type {!Game}
    * @private
    */
   this.game_ = game;
@@ -60,36 +60,36 @@ dotprod.layers.RadarLayer = function(game) {
    */
   this.blinkAlpha_ = 1;
 
-  game.getPainter().registerDrawable(dotprod.graphics.Layer.HUD, this);
+  game.getPainter().registerDrawable(graphics.Layer.HUD, this);
 };
-goog.inherits(dotprod.layers.RadarLayer, dotprod.model.ModelObject);
+goog.inherits(layers.RadarLayer, model.ModelObject);
 
 /**
  * @const
  * @type {number}
  * @private
  */
-dotprod.layers.RadarLayer.SCALE_FACTOR_ = 0.12;
+layers.RadarLayer.SCALE_FACTOR_ = 0.12;
 
 /**
  * @const
  * @type {number}
  * @private
  */
-dotprod.layers.RadarLayer.RADAR_SIZE_PERCENT_ = 0.3;
+layers.RadarLayer.RADAR_SIZE_PERCENT_ = 0.3;
 
 /**
  * @const
  * @type {number}
  * @private
  */
-dotprod.layers.RadarLayer.BLINK_DELTA_ = 0.03;
+layers.RadarLayer.BLINK_DELTA_ = 0.03;
 
 /**
  * @override
  */
-dotprod.layers.RadarLayer.prototype.advanceTime = function() {
-  this.blinkAlpha_ += this.blinkDirection_ * dotprod.layers.RadarLayer.BLINK_DELTA_;
+layers.RadarLayer.prototype.advanceTime = function() {
+  this.blinkAlpha_ += this.blinkDirection_ * layers.RadarLayer.BLINK_DELTA_;
   if (this.blinkAlpha_ >= 1) {
     this.blinkDirection_ = -1;
     this.blinkAlpha_ = 1;
@@ -102,11 +102,11 @@ dotprod.layers.RadarLayer.prototype.advanceTime = function() {
 /**
  * @override
  */
-dotprod.layers.RadarLayer.prototype.render = function(viewport) {
+layers.RadarLayer.prototype.render = function(viewport) {
   var context = viewport.getContext();
   var dimensions = viewport.getDimensions();
 
-  var radarHeight = Math.floor(dimensions.height * dotprod.layers.RadarLayer.RADAR_SIZE_PERCENT_);
+  var radarHeight = Math.floor(dimensions.height * layers.RadarLayer.RADAR_SIZE_PERCENT_);
   var radarWidth = radarHeight;
 
   context.save();
@@ -116,7 +116,7 @@ dotprod.layers.RadarLayer.prototype.render = function(viewport) {
 
     // Render border. The Canvas API is retarded with strokes -- apparently it draws
     // half a pixel *around* the stroke path so we have to offset coordinates by 0.5px.
-    context.strokeStyle = dotprod.Palette.borderColor();
+    context.strokeStyle = Palette.borderColor();
     context.strokeRect(-0.5, -0.5, radarWidth, radarHeight);
 
     // Set clipping region
@@ -125,7 +125,7 @@ dotprod.layers.RadarLayer.prototype.render = function(viewport) {
     context.clip();
 
     // Draw radar background
-    context.fillStyle = dotprod.Palette.radarBgColor();
+    context.fillStyle = Palette.radarBgColor();
     context.fillRect(0, 0, radarWidth, radarHeight);
 
     this.renderMap_(context, dimensions, radarWidth, radarHeight);
@@ -140,12 +140,12 @@ dotprod.layers.RadarLayer.prototype.render = function(viewport) {
  * @param {number} radarWidth
  * @param {number} radarHeight
  */
-dotprod.layers.RadarLayer.prototype.renderMap_ = function(context, dimensions, radarWidth, radarHeight) {
+layers.RadarLayer.prototype.renderMap_ = function(context, dimensions, radarWidth, radarHeight) {
   if (!this.mapCanvas_) {
     this.prerenderMapOnCanvas_();
   }
 
-  var SCALE_FACTOR = dotprod.layers.RadarLayer.SCALE_FACTOR_;
+  var SCALE_FACTOR = layers.RadarLayer.SCALE_FACTOR_;
 
   var tileWidth = this.tileWidth_;
   var tileHeight = this.tileHeight_;
@@ -182,15 +182,15 @@ dotprod.layers.RadarLayer.prototype.renderMap_ = function(context, dimensions, r
  * @param {number} radarWidth
  * @param {number} radarHeight
  */
-dotprod.layers.RadarLayer.prototype.renderPrizes_ = function(context, dimensions, radarWidth, radarHeight) {
-  var SCALE_FACTOR = dotprod.layers.RadarLayer.SCALE_FACTOR_;
+layers.RadarLayer.prototype.renderPrizes_ = function(context, dimensions, radarWidth, radarHeight) {
+  var SCALE_FACTOR = layers.RadarLayer.SCALE_FACTOR_;
 
   var tileWidth = this.tileWidth_;
   var tileHeight = this.tileHeight_;
   var scaledTileWidth = Math.floor(tileWidth * SCALE_FACTOR) || 1;
   var scaledTileHeight = Math.floor(tileHeight * SCALE_FACTOR) || 1;
 
-  context.fillStyle = dotprod.Palette.radarPrizeColor();
+  context.fillStyle = Palette.radarPrizeColor();
   this.game_.getPrizeIndex().forEach(function(prize) {
     var xPixels = (prize.getX() - dimensions.x / tileWidth) * scaledTileWidth;
     var yPixels = (prize.getY() - dimensions.y / tileHeight) * scaledTileHeight;
@@ -207,11 +207,11 @@ dotprod.layers.RadarLayer.prototype.renderPrizes_ = function(context, dimensions
  * @param {number} radarWidth
  * @param {number} radarHeight
  */
-dotprod.layers.RadarLayer.prototype.renderPlayers_ = function(context, dimensions, radarWidth, radarHeight) {
+layers.RadarLayer.prototype.renderPlayers_ = function(context, dimensions, radarWidth, radarHeight) {
   var self = this;
   var localPlayer = this.game_.getPlayerIndex().getLocalPlayer();
 
-  var SCALE_FACTOR = dotprod.layers.RadarLayer.SCALE_FACTOR_;
+  var SCALE_FACTOR = layers.RadarLayer.SCALE_FACTOR_;
   var actualXScale = (Math.floor(this.tileWidth_ * SCALE_FACTOR) || 1) / this.tileWidth_;
   var actualYScale = (Math.floor(this.tileHeight_ * SCALE_FACTOR) || 1) / this.tileHeight_;
 
@@ -227,13 +227,13 @@ dotprod.layers.RadarLayer.prototype.renderPlayers_ = function(context, dimension
     var y = Math.floor(yPixels + radarHeight / 2);
     var alpha = (player == localPlayer) ? self.blinkAlpha_ : 1;
 
-    context.fillStyle = player.isFriend(localPlayer) ? dotprod.Palette.friendColor(alpha) : dotprod.Palette.foeColor();
+    context.fillStyle = player.isFriend(localPlayer) ? Palette.friendColor(alpha) : Palette.foeColor();
     context.fillRect(x - 1, y - 1, 3, 3);
   });
 };
 
-dotprod.layers.RadarLayer.prototype.prerenderMapOnCanvas_ = function() {
-  var SCALE_FACTOR = dotprod.layers.RadarLayer.SCALE_FACTOR_;
+layers.RadarLayer.prototype.prerenderMapOnCanvas_ = function() {
+  var SCALE_FACTOR = layers.RadarLayer.SCALE_FACTOR_;
   var map = this.game_.getMap();
   var tileWidth = this.tileWidth_;
   var tileHeight = this.tileHeight_;
@@ -245,9 +245,9 @@ dotprod.layers.RadarLayer.prototype.prerenderMapOnCanvas_ = function() {
   this.mapCanvas_.height = Math.ceil(map.getHeight() * scaledTileHeight);
 
   var context = this.mapCanvas_.getContext('2d');
-  var tiles = map.getTiles(dotprod.math.Rect.fromBox(0, 0, map.getWidth() - 1, map.getHeight() - 1));
+  var tiles = map.getTiles(math.Rect.fromBox(0, 0, map.getWidth() - 1, map.getHeight() - 1));
 
-  context.fillStyle = dotprod.Palette.radarTileColor();
+  context.fillStyle = Palette.radarTileColor();
   for (var i = 0; i < tiles.length; ++i) {
     var tile = tiles[i];
     var x = tile.x * scaledTileWidth;
@@ -260,6 +260,6 @@ dotprod.layers.RadarLayer.prototype.prerenderMapOnCanvas_ = function() {
 /**
  * @override
  */
-dotprod.layers.RadarLayer.prototype.onInvalidate_ = function() {
+layers.RadarLayer.prototype.onInvalidate_ = function() {
   goog.asserts.assert(false, 'Radar layer should never be invalidated.');
 };

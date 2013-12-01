@@ -3,22 +3,22 @@
  * @author sharvil.nanavati@gmail.com (Sharvil Nanavati)
  */
  
-goog.provide('dotprod.Notifications');
-goog.provide('dotprod.Notifications.Type');
+goog.provide('Notifications');
+goog.provide('Notifications.Type');
 
 goog.require('goog.array');
 
 goog.require('html5.Notifications');
 
-goog.require('dotprod.model.player.Player.Presence');
+goog.require('model.player.Player.Presence');
 
 /**
  * @constructor
- * @param {!dotprod.model.player.LocalPlayer} localPlayer
+ * @param {!model.player.LocalPlayer} localPlayer
  */
-dotprod.Notifications = function(localPlayer) {
+Notifications = function(localPlayer) {
   /**
-   * @type {!dotprod.model.player.LocalPlayer}
+   * @type {!model.player.LocalPlayer}
    * @private
    */
   this.localPlayer_ = localPlayer;
@@ -39,7 +39,7 @@ dotprod.Notifications = function(localPlayer) {
 /**
  * @enum {number}
  */
-dotprod.Notifications.Type = {
+Notifications.Type = {
   DEFAULT: 1,
   PERSONAL: 2,
   ENTER: 3
@@ -50,45 +50,45 @@ dotprod.Notifications.Type = {
  * @private
  * @const
  */
-dotprod.Notifications.MAX_MESSAGES_ = 5;
+Notifications.MAX_MESSAGES_ = 5;
 
 /**
  * @param {string} message
  */
-dotprod.Notifications.prototype.addMessage = function(message) {
-  this.addMessage_(dotprod.Notifications.Type.DEFAULT, message);
+Notifications.prototype.addMessage = function(message) {
+  this.addMessage_(Notifications.Type.DEFAULT, message);
 };
 
 /**
  * @param {string} message
  */
-dotprod.Notifications.prototype.addPersonalMessage = function(message) {
-  this.addMessage_(dotprod.Notifications.Type.PERSONAL, message);
+Notifications.prototype.addPersonalMessage = function(message) {
+  this.addMessage_(Notifications.Type.PERSONAL, message);
 };
 
 /**
  * @param {string} message
  */
-dotprod.Notifications.prototype.addEnterMessage = function(message) {
-  this.addMessage_(dotprod.Notifications.Type.ENTER, message);
+Notifications.prototype.addEnterMessage = function(message) {
+  this.addMessage_(Notifications.Type.ENTER, message);
 };
 
 /**
- * @param {dotprod.Notifications.Type} type
+ * @param {Notifications.Type} type
  * @param {string} message
  * @private
  */
-dotprod.Notifications.prototype.addMessage_ = function(type, message) {
+Notifications.prototype.addMessage_ = function(type, message) {
   this.messages_[this.insertIndex_] = {
     type: type,
     text: message,
     ticks: 0
   };
 
-  this.insertIndex_ = (this.insertIndex_ + 1) % dotprod.Notifications.MAX_MESSAGES_;
+  this.insertIndex_ = (this.insertIndex_ + 1) % Notifications.MAX_MESSAGES_;
 
   // Only show desktop notifications if the user isn't focused on the game.
-  if (this.localPlayer_.hasPresence(dotprod.model.player.Player.Presence.AWAY)) {
+  if (this.localPlayer_.hasPresence(model.player.Player.Presence.AWAY)) {
     var notification = html5.Notifications.createNotification('img/dotproduct_logo_128.png', 'dotproduct', message);
     setTimeout(function() { notification.close(); }, 5000);
     notification.show();
@@ -98,6 +98,6 @@ dotprod.Notifications.prototype.addMessage_ = function(type, message) {
 /**
  * @param {function(!Object, number)} callback
  */
-dotprod.Notifications.prototype.forEach = function(callback) {
+Notifications.prototype.forEach = function(callback) {
   goog.array.forEach(this.messages_, callback);
 };

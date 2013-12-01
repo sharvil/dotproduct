@@ -2,7 +2,7 @@
  * @fileoverview Heads-up display layer
  */
 
-goog.provide('dotprod.graphics.Tween');
+goog.provide('graphics.Tween');
 
 goog.require('goog.array');
 goog.require('goog.asserts');
@@ -11,7 +11,7 @@ goog.require('goog.asserts');
  * @constructor
  * @param {!Object} target
  */
-dotprod.graphics.Tween = function(target) {
+graphics.Tween = function(target) {
   /**
    * @type {!Object}
    * @private
@@ -58,22 +58,22 @@ dotprod.graphics.Tween = function(target) {
 /**
  * @enum {number}
  */
-dotprod.graphics.Tween.Ease = {
+graphics.Tween.Ease = {
   LINEAR: 0
 };
 
 /**
- * @type {!Array.<!dotprod.graphics.Tween>}
+ * @type {!Array.<!graphics.Tween>}
  * @private
  */
-dotprod.graphics.Tween.instances_ = [];
+graphics.Tween.instances_ = [];
 
-dotprod.graphics.Tween.advanceAll = function() {
-  goog.array.forEach(dotprod.graphics.Tween.instances_, function(tween) {
+graphics.Tween.advanceAll = function() {
+  goog.array.forEach(graphics.Tween.instances_, function(tween) {
     tween.advance_();
   });
 
-  dotprod.graphics.Tween.instances_ = goog.array.filter(dotprod.graphics.Tween.instances_, function(tween) {
+  graphics.Tween.instances_ = goog.array.filter(graphics.Tween.instances_, function(tween) {
     if (!tween.isActive_()) {
       tween.didUnregister_();
       return false;
@@ -85,9 +85,9 @@ dotprod.graphics.Tween.advanceAll = function() {
 /**
  * @param {!Object} properties
  * @param {number} duration
- * @param {dotprod.graphics.Tween.Ease} ease
+ * @param {graphics.Tween.Ease} ease
  */
-dotprod.graphics.Tween.prototype.to = function(properties, duration, ease) {
+graphics.Tween.prototype.to = function(properties, duration, ease) {
   goog.asserts.assert(duration > 0, 'Duration must be positive.');
 
   this.duration_ = duration;
@@ -99,8 +99,8 @@ dotprod.graphics.Tween.prototype.to = function(properties, duration, ease) {
   }
 
   switch (ease) {
-    case dotprod.graphics.Tween.Ease.LINEAR:
-      this.easeFunction_ = dotprod.graphics.Tween.linearEase_;
+    case graphics.Tween.Ease.LINEAR:
+      this.easeFunction_ = graphics.Tween.linearEase_;
       break;
 
     default:
@@ -109,7 +109,7 @@ dotprod.graphics.Tween.prototype.to = function(properties, duration, ease) {
   this.register_();
 };
 
-dotprod.graphics.Tween.prototype.advance_ = function() {
+graphics.Tween.prototype.advance_ = function() {
   ++this.elapsed_;
   if (this.elapsed_ > this.duration_) {
     return;
@@ -122,14 +122,14 @@ dotprod.graphics.Tween.prototype.advance_ = function() {
   }
 };
 
-dotprod.graphics.Tween.prototype.register_ = function() {
+graphics.Tween.prototype.register_ = function() {
   if (!this.isRegistered_) {
-    dotprod.graphics.Tween.instances_.push(this);
+    graphics.Tween.instances_.push(this);
   }
   this.isRegistered_ = true;
 };
 
-dotprod.graphics.Tween.prototype.didUnregister_ = function() {
+graphics.Tween.prototype.didUnregister_ = function() {
   this.isRegistered_ = false;
 };
 
@@ -137,7 +137,7 @@ dotprod.graphics.Tween.prototype.didUnregister_ = function() {
  * @return {boolean}
  * @private
  */
-dotprod.graphics.Tween.prototype.isActive_ = function() {
+graphics.Tween.prototype.isActive_ = function() {
   return this.elapsed_ <= this.duration_;
 };
 
@@ -146,7 +146,7 @@ dotprod.graphics.Tween.prototype.isActive_ = function() {
  * @param {number} duration
  * @return {number}
  */
-dotprod.graphics.Tween.linearEase_ = function(elapsed, duration) {
+graphics.Tween.linearEase_ = function(elapsed, duration) {
   goog.asserts.assert(elapsed >= 0, 'Elapsed time cannot be negative.');
   goog.asserts.assert(duration > 0, 'Duration must be positive.');
 

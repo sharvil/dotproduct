@@ -3,26 +3,26 @@
  * @author sharvil.nanavati@gmail.com (Sharvil Nanavati)
  */
 
-goog.provide('dotprod.views.ChatView');
+goog.provide('views.ChatView');
 
 goog.require('goog.dom');
 goog.require('goog.events.BrowserEvent');
 goog.require('goog.events.Event');
 goog.require('goog.events.EventType');
-goog.require('dotprod.net.Protocol');
-goog.require('dotprod.Timestamp');
-goog.require('dotprod.views.View');
+goog.require('net.Protocol');
+goog.require('Timestamp');
+goog.require('views.View');
 
 /**
  * @constructor
- * @extends {dotprod.views.View}
- * @param {!dotprod.Game} game
+ * @extends {views.View}
+ * @param {!Game} game
  */
-dotprod.views.ChatView = function(game) {
+views.ChatView = function(game) {
   goog.base(this);
 
   /**
-   * @type {!dotprod.model.player.LocalPlayer}
+   * @type {!model.player.LocalPlayer}
    * @private
    */
   this.localPlayer_ = game.getPlayerIndex().getLocalPlayer();
@@ -34,7 +34,7 @@ dotprod.views.ChatView = function(game) {
   this.settings_ = game.getSettings();
 
   /**
-   * @type {!dotprod.net.Protocol}
+   * @type {!net.Protocol}
    * @private
    */
   this.protocol_ = game.getProtocol();
@@ -50,14 +50,14 @@ dotprod.views.ChatView = function(game) {
    * @private
    */
   this.view_ = /** @type {!HTMLDivElement} */ (goog.dom.createElement('div'));
-  this.view_.classList.add(dotprod.views.ChatView.CHAT_VIEW_CLASS_NAME_);
+  this.view_.classList.add(views.ChatView.CHAT_VIEW_CLASS_NAME_);
 
   /**
    * @type {!HTMLDivElement}
    * @private
    */
   this.text_ = /** @type {!HTMLDivElement} */ (goog.dom.createElement('div'));
-  this.text_.classList.add(dotprod.views.ChatView.TEXT_CLASS_NAME_);
+  this.text_.classList.add(views.ChatView.TEXT_CLASS_NAME_);
 
   /**
    * @type {!HTMLInputElement}
@@ -66,7 +66,7 @@ dotprod.views.ChatView = function(game) {
   this.chatBox_ = /** @type {!HTMLInputElement} */ (goog.dom.createElement('input'));
   this.chatBox_.type = 'text';
   this.chatBox_.maxLength = 140;
-  this.chatBox_.classList.add(dotprod.views.ChatView.CHAT_BOX_CLASS_NAME_);
+  this.chatBox_.classList.add(views.ChatView.CHAT_BOX_CLASS_NAME_);
 
   goog.events.listen(window, goog.events.EventType.KEYPRESS, goog.bind(this.onGlobalKeyPress_, this));
   goog.events.listen(this.chatBox_, goog.events.EventType.KEYPRESS, goog.bind(this.onChatKeyPress_, this));
@@ -74,61 +74,61 @@ dotprod.views.ChatView = function(game) {
   goog.events.listen(this.chatBox_, goog.events.EventType.KEYUP, goog.bind(this.keyFilter_, this));
 
   var self = this;
-  goog.events.listen(this.chatBox_, goog.events.EventType.BLUR, function() { self.localPlayer_.clearPresence(dotprod.model.player.Player.Presence.TYPING); });
-  goog.events.listen(this.chatBox_, goog.events.EventType.FOCUS, function() { self.localPlayer_.setPresence(dotprod.model.player.Player.Presence.TYPING); });
+  goog.events.listen(this.chatBox_, goog.events.EventType.BLUR, function() { self.localPlayer_.clearPresence(model.player.Player.Presence.TYPING); });
+  goog.events.listen(this.chatBox_, goog.events.EventType.FOCUS, function() { self.localPlayer_.setPresence(model.player.Player.Presence.TYPING); });
 };
-goog.inherits(dotprod.views.ChatView, dotprod.views.View);
+goog.inherits(views.ChatView, views.View);
 
 /**
  * @type {string}
  * @private
  * @const
  */
-dotprod.views.ChatView.CHAT_VIEW_CLASS_NAME_ = 'cv';
+views.ChatView.CHAT_VIEW_CLASS_NAME_ = 'cv';
 
 /**
  * @type {string}
  * @private
  * @const
  */
-dotprod.views.ChatView.TEXT_CLASS_NAME_ = 'cv-text';
+views.ChatView.TEXT_CLASS_NAME_ = 'cv-text';
 
 /**
  * @type {string}
  * @private
  * @const
  */
-dotprod.views.ChatView.TEXT_NAME_CLASS_NAME_ = 'cv-text-name';
+views.ChatView.TEXT_NAME_CLASS_NAME_ = 'cv-text-name';
 
 /**
  * @type {string}
  * @private
  * @const
  */
-dotprod.views.ChatView.TEXT_MESSAGE_CLASS_NAME_ = 'cv-text-message';
+views.ChatView.TEXT_MESSAGE_CLASS_NAME_ = 'cv-text-message';
 
 /**
  * @type {string}
  * @private
  * @const
  */
-dotprod.views.ChatView.SYSTEM_MESSAGE_CLASS_NAME_ = 'cv-system-message';
+views.ChatView.SYSTEM_MESSAGE_CLASS_NAME_ = 'cv-system-message';
 
 /**
  * @type {string}
  * @private
  * @const
  */
-dotprod.views.ChatView.CHAT_BOX_CLASS_NAME_ = 'cv-input';
+views.ChatView.CHAT_BOX_CLASS_NAME_ = 'cv-input';
 
 /**
  * @type {string}
  * @private
  * @const
  */
-dotprod.views.ChatView.CHAT_BOX_VISIBLE_CLASS_NAME_ = 'cv-visible';
+views.ChatView.CHAT_BOX_VISIBLE_CLASS_NAME_ = 'cv-visible';
 
-dotprod.views.ChatView.prototype.renderDom = function(rootNode) {
+views.ChatView.prototype.renderDom = function(rootNode) {
   goog.base(this, 'renderDom', rootNode);
 
   this.view_.appendChild(this.text_);
@@ -137,21 +137,21 @@ dotprod.views.ChatView.prototype.renderDom = function(rootNode) {
 };
 
 /**
- * @param {!dotprod.model.player.Player} player
+ * @param {!model.player.Player} player
  * @param {string} message
  */
-dotprod.views.ChatView.prototype.addMessage = function(player, message) {
+views.ChatView.prototype.addMessage = function(player, message) {
   var isAtBottom = this.view_.scrollTop + this.view_.offsetHeight >= this.view_.scrollHeight;
 
   var messageNode = goog.dom.createElement('div');
 
   var nameNode = goog.dom.createElement('span');
-  nameNode.classList.add(dotprod.views.ChatView.TEXT_NAME_CLASS_NAME_);
+  nameNode.classList.add(views.ChatView.TEXT_NAME_CLASS_NAME_);
   nameNode.textContent = player.getName() + ': ';
   goog.events.listen(nameNode, goog.events.EventType.CLICK, goog.bind(this.onNameClicked_, this, player));
 
   var textNode = goog.dom.createElement('span');
-  textNode.classList.add(dotprod.views.ChatView.TEXT_MESSAGE_CLASS_NAME_);
+  textNode.classList.add(views.ChatView.TEXT_MESSAGE_CLASS_NAME_);
   textNode.textContent = message;
   textNode.innerHTML = window.linkify(textNode.innerHTML);
 
@@ -167,11 +167,11 @@ dotprod.views.ChatView.prototype.addMessage = function(player, message) {
 /**
  * @param {string} message
  */
-dotprod.views.ChatView.prototype.addSystemMessage = function(message) {
+views.ChatView.prototype.addSystemMessage = function(message) {
   var isAtBottom = this.view_.scrollTop + this.view_.offsetHeight >= this.view_.scrollHeight;
 
   var messageNode = goog.dom.createElement('div');
-  messageNode.classList.add(dotprod.views.ChatView.SYSTEM_MESSAGE_CLASS_NAME_);
+  messageNode.classList.add(views.ChatView.SYSTEM_MESSAGE_CLASS_NAME_);
   messageNode.textContent = message;
   messageNode.innerHTML = window.linkify(messageNode.innerHTML);
 
@@ -181,7 +181,7 @@ dotprod.views.ChatView.prototype.addSystemMessage = function(message) {
   }
 };
 
-dotprod.views.ChatView.prototype.onGlobalKeyPress_ = function(event) {
+views.ChatView.prototype.onGlobalKeyPress_ = function(event) {
   if (event.keyCode == goog.events.KeyCodes.NUM_ZERO) {
     this.view_.classList.toggle('cv-expanded');
   }
@@ -190,11 +190,11 @@ dotprod.views.ChatView.prototype.onGlobalKeyPress_ = function(event) {
     return;
   }
 
-  this.chatBox_.classList.add(dotprod.views.ChatView.CHAT_BOX_VISIBLE_CLASS_NAME_);
+  this.chatBox_.classList.add(views.ChatView.CHAT_BOX_VISIBLE_CLASS_NAME_);
   this.chatBox_.focus();
 };
 
-dotprod.views.ChatView.prototype.onChatKeyPress_ = function(event) {
+views.ChatView.prototype.onChatKeyPress_ = function(event) {
   if (event.keyCode != goog.events.KeyCodes.ENTER) {
     return;
   }
@@ -214,7 +214,7 @@ dotprod.views.ChatView.prototype.onChatKeyPress_ = function(event) {
 
   this.chatBox_.value = '';
   this.chatBox_.blur();
-  this.chatBox_.classList.remove(dotprod.views.ChatView.CHAT_BOX_VISIBLE_CLASS_NAME_);
+  this.chatBox_.classList.remove(views.ChatView.CHAT_BOX_VISIBLE_CLASS_NAME_);
   event.stopPropagation();
 };
 
@@ -222,12 +222,12 @@ dotprod.views.ChatView.prototype.onChatKeyPress_ = function(event) {
  * @param {!goog.events.BrowserEvent} event
  * @private
  */
-dotprod.views.ChatView.prototype.keyFilter_ = function(event) {
+views.ChatView.prototype.keyFilter_ = function(event) {
   // Chrome doesn't fire keypress events for the escape key so we have to handle it here instead.
   if (event.keyCode == goog.events.KeyCodes.ESC) {
     this.chatBox_.value = '';
     this.chatBox_.blur();
-    this.chatBox_.classList.remove(dotprod.views.ChatView.CHAT_BOX_VISIBLE_CLASS_NAME_);
+    this.chatBox_.classList.remove(views.ChatView.CHAT_BOX_VISIBLE_CLASS_NAME_);
     return;
   }
 
@@ -237,11 +237,11 @@ dotprod.views.ChatView.prototype.keyFilter_ = function(event) {
 };
 
 /**
- * @param {!dotprod.model.player.Player} player
+ * @param {!model.player.Player} player
  * @private
  */
-dotprod.views.ChatView.prototype.onNameClicked_ = function(player) {
-  this.chatBox_.classList.add(dotprod.views.ChatView.CHAT_BOX_VISIBLE_CLASS_NAME_);
+views.ChatView.prototype.onNameClicked_ = function(player) {
+  this.chatBox_.classList.add(views.ChatView.CHAT_BOX_VISIBLE_CLASS_NAME_);
   this.chatBox_.focus();
 
   if (this.chatBox_.value.length > 0 && this.chatBox_.value[this.chatBox_.value.length - 1] != ' ') {
@@ -254,6 +254,6 @@ dotprod.views.ChatView.prototype.onNameClicked_ = function(player) {
  * @return {boolean}
  * @private
  */
-dotprod.views.ChatView.prototype.isChatBoxVisible_ = function() {
-  return this.chatBox_.classList.contains(dotprod.views.ChatView.CHAT_BOX_VISIBLE_CLASS_NAME_);
+views.ChatView.prototype.isChatBoxVisible_ = function() {
+  return this.chatBox_.classList.contains(views.ChatView.CHAT_BOX_VISIBLE_CLASS_NAME_);
 };

@@ -3,22 +3,22 @@
  * @author sharvil.nanavati@gmail.com (Sharvil Nanavati)
  */
 
-goog.provide('dotprod.model.BombBay');
+goog.provide('model.BombBay');
 
 goog.require('goog.asserts');
-goog.require('dotprod.math.Range');
-goog.require('dotprod.model.Weapon.Type');
+goog.require('math.Range');
+goog.require('model.Weapon.Type');
 
 /**
  * @constructor
- * @implements {dotprod.model.Weapon}
- * @param {!dotprod.Game} game
+ * @implements {model.Weapon}
+ * @param {!Game} game
  * @param {!Object} bombBaySettings
- * @param {!dotprod.model.player.Player} owner
+ * @param {!model.player.Player} owner
  */
-dotprod.model.BombBay = function(game, bombBaySettings, owner) {
+model.BombBay = function(game, bombBaySettings, owner) {
   /**
-   * @type {!dotprod.Game}
+   * @type {!Game}
    * @private
    */
   this.game_ = game;
@@ -30,45 +30,45 @@ dotprod.model.BombBay = function(game, bombBaySettings, owner) {
   this.bombBaySettings_ = bombBaySettings;
 
   /**
-   * @type {!dotprod.model.player.Player}
+   * @type {!model.player.Player}
    * @private
    */
   this.owner_ = owner;
 
   /**
-   * @type {!dotprod.math.Range}
+   * @type {!math.Range}
    * @private
    */
-  this.level_ = new dotprod.math.Range(Math.min(0, bombBaySettings['maxLevel']), bombBaySettings['maxLevel'], 1);
+  this.level_ = new math.Range(Math.min(0, bombBaySettings['maxLevel']), bombBaySettings['maxLevel'], 1);
   this.level_.setValue(bombBaySettings['initialLevel']);
 };
 
 /**
  * @override
  */
-dotprod.model.BombBay.prototype.getType = function() {
-  return dotprod.model.Weapon.Type.BOMB;
+model.BombBay.prototype.getType = function() {
+  return model.Weapon.Type.BOMB;
 };
 
 /**
  * @return {number}
  */
-dotprod.model.BombBay.prototype.getLevel = function() {
+model.BombBay.prototype.getLevel = function() {
   return this.level_.getValue();
 };
 
-dotprod.model.BombBay.prototype.upgrade = function() {
+model.BombBay.prototype.upgrade = function() {
   this.level_.increment();
 };
 
 /**
  * @param {number} angle
- * @param {!dotprod.math.Vector} position
- * @param {!dotprod.math.Vector} velocity
+ * @param {!math.Vector} position
+ * @param {!math.Vector} velocity
  * @param {function(number, number, number): boolean} commitFireFn
  * @return {Object}
  */
-dotprod.model.BombBay.prototype.fire = function(angle, position, velocity, commitFireFn) {
+model.BombBay.prototype.fire = function(angle, position, velocity, commitFireFn) {
   var level = this.level_.getValue();
   if(level < 0) {
     return null;
@@ -87,7 +87,7 @@ dotprod.model.BombBay.prototype.fire = function(angle, position, velocity, commi
   var bounceCount = this.getBounceCount_();
   var blastRadius = this.getBlastRadius_();
   var proxRadius = this.getProxRadius_();
-  var newVelocity = velocity.add(dotprod.math.Vector.fromPolar(this.getBombSpeed_(), angle));
+  var newVelocity = velocity.add(math.Vector.fromPolar(this.getBombSpeed_(), angle));
   var projectile = this.game_.getModelObjectFactory().newBomb(this.game_, this.owner_, level, position, newVelocity, lifetime, damage, bounceCount, blastRadius, proxRadius);
 
   this.owner_.addProjectile(projectile);
@@ -105,12 +105,12 @@ dotprod.model.BombBay.prototype.fire = function(angle, position, velocity, commi
 /**
  * @override
  */
-dotprod.model.BombBay.prototype.onFired = function(timeDiff, weaponData) {
+model.BombBay.prototype.onFired = function(timeDiff, weaponData) {
   goog.asserts.assert(weaponData['type'] == this.getType(), 'Cannot fire bomb with incorrect weapon type: ' + weaponData['type']);
 
   var level = weaponData['level'];
-  var position = dotprod.math.Vector.fromArray(weaponData['pos']);
-  var velocity = dotprod.math.Vector.fromArray(weaponData['vel']);
+  var position = math.Vector.fromArray(weaponData['pos']);
+  var velocity = math.Vector.fromArray(weaponData['vel']);
   var bounceCount = weaponData['bounceCount'];
 
   // Make sure the level is correct so the following getters use the right value for their calculations.
@@ -127,7 +127,7 @@ dotprod.model.BombBay.prototype.onFired = function(timeDiff, weaponData) {
  * @return {number}
  * @private
  */
-dotprod.model.BombBay.prototype.getFireDelay_ = function() {
+model.BombBay.prototype.getFireDelay_ = function() {
   return this.bombBaySettings_['fireDelay'];
 };
 
@@ -135,7 +135,7 @@ dotprod.model.BombBay.prototype.getFireDelay_ = function() {
  * @return {number}
  * @private
  */
-dotprod.model.BombBay.prototype.getFireEnergy_ = function() {
+model.BombBay.prototype.getFireEnergy_ = function() {
   return this.bombBaySettings_['fireEnergy'];
 };
 
@@ -143,7 +143,7 @@ dotprod.model.BombBay.prototype.getFireEnergy_ = function() {
  * @return {number}
  * @private
  */
-dotprod.model.BombBay.prototype.getBombSpeed_ = function() {
+model.BombBay.prototype.getBombSpeed_ = function() {
   return this.bombBaySettings_['speed'];
 };
 
@@ -151,7 +151,7 @@ dotprod.model.BombBay.prototype.getBombSpeed_ = function() {
  * @return {number}
  * @private
  */
-dotprod.model.BombBay.prototype.getBounceCount_ = function() {
+model.BombBay.prototype.getBounceCount_ = function() {
   return this.bombBaySettings_['bounceCount'];
 };
 
@@ -159,7 +159,7 @@ dotprod.model.BombBay.prototype.getBounceCount_ = function() {
  * @return {number}
  * @private
  */
-dotprod.model.BombBay.prototype.getLifetime_ = function() {
+model.BombBay.prototype.getLifetime_ = function() {
   return this.bombBaySettings_['lifetime'];
 };
 
@@ -167,7 +167,7 @@ dotprod.model.BombBay.prototype.getLifetime_ = function() {
  * @return {number}
  * @private
  */
-dotprod.model.BombBay.prototype.getDamage_ = function() {
+model.BombBay.prototype.getDamage_ = function() {
   return this.bombBaySettings_['damage'] + this.level_.getValue() * this.bombBaySettings_['damageUpgrade'];
 };
 
@@ -175,7 +175,7 @@ dotprod.model.BombBay.prototype.getDamage_ = function() {
  * @return {number}
  * @private
  */
-dotprod.model.BombBay.prototype.getBlastRadius_ = function() {
+model.BombBay.prototype.getBlastRadius_ = function() {
   return this.bombBaySettings_['blastRadius'] + this.level_.getValue() * this.bombBaySettings_['blastRadiusUpgrade'];
 };
 
@@ -183,7 +183,7 @@ dotprod.model.BombBay.prototype.getBlastRadius_ = function() {
  * @return {number}
  * @private
  */
-dotprod.model.BombBay.prototype.getProxRadius_ = function() {
+model.BombBay.prototype.getProxRadius_ = function() {
   return this.bombBaySettings_['proxRadius'] + this.level_.getValue() * this.bombBaySettings_['proxRadiusUpgrade'];
 };
 
@@ -191,6 +191,6 @@ dotprod.model.BombBay.prototype.getProxRadius_ = function() {
  * @return {number}
  * @private
  */
-dotprod.model.BombBay.prototype.getRecoilAcceleration_ = function() {
+model.BombBay.prototype.getRecoilAcceleration_ = function() {
   return this.bombBaySettings_['recoilAcceleration'];
 };

@@ -2,9 +2,9 @@
  * @fileoverview Provides a timestamp printing function
  */
 
-goog.provide('dotprod.Timestamp');
+goog.provide('Timestamp');
 
-dotprod.Timestamp.print = function() {
+Timestamp.print = function() {
   var currentTime = new Date();
   var hours = currentTime.getHours();
   var minutes = currentTime.getMinutes();

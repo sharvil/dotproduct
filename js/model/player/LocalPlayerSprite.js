@@ -3,57 +3,57 @@
  * @author sharvil.nanavati@gmail.com (Sharvil Nanavati)
  */
 
-goog.provide('dotprod.model.player.LocalPlayerSprite');
+goog.provide('model.player.LocalPlayerSprite');
 
 goog.require('goog.array');
-goog.require('dotprod.Labs');
-goog.require('dotprod.model.player.LocalPlayer');
-goog.require('dotprod.model.player.PlayerSprite');
-goog.require('dotprod.graphics.Drawable');
-goog.require('dotprod.graphics.Layer');
+goog.require('Labs');
+goog.require('model.player.LocalPlayer');
+goog.require('model.player.PlayerSprite');
+goog.require('graphics.Drawable');
+goog.require('graphics.Layer');
 
 /**
  * @constructor
- * @extends {dotprod.model.player.LocalPlayer}
- * @implements {dotprod.graphics.Drawable}
- * @param {!dotprod.Game} game
+ * @extends {model.player.LocalPlayer}
+ * @implements {graphics.Drawable}
+ * @param {!Game} game
  * @param {string} id
  * @param {string} name
  * @param {number} team
  * @param {number} ship
  */
-dotprod.model.player.LocalPlayerSprite = function(game, id, name, team, ship) {
+model.player.LocalPlayerSprite = function(game, id, name, team, ship) {
   goog.base(this, game, id, name, team, ship);
 
-  game.getPainter().registerDrawable(dotprod.graphics.Layer.LOCAL_PLAYER, this);
+  game.getPainter().registerDrawable(graphics.Layer.LOCAL_PLAYER, this);
 };
-goog.inherits(dotprod.model.player.LocalPlayerSprite, dotprod.model.player.LocalPlayer);
+goog.inherits(model.player.LocalPlayerSprite, model.player.LocalPlayer);
 
 /**
  * @override
  */
-dotprod.model.player.LocalPlayerSprite.prototype.respawn = dotprod.model.player.PlayerSprite.prototype.respawn;
+model.player.LocalPlayerSprite.prototype.respawn = model.player.PlayerSprite.prototype.respawn;
 
 /**
  * @override
  */
-dotprod.model.player.LocalPlayerSprite.prototype.onDeath = dotprod.model.player.PlayerSprite.prototype.onDeath;
+model.player.LocalPlayerSprite.prototype.onDeath = model.player.PlayerSprite.prototype.onDeath;
 
 /**
  * @override
  */
-dotprod.model.player.LocalPlayerSprite.prototype.render = function(viewport) {
+model.player.LocalPlayerSprite.prototype.render = function(viewport) {
   var context = viewport.getContext();
   var dimensions = viewport.getDimensions();
 
   if (!this.isAlive()) {
-    var millis = dotprod.Timer.ticksToMillis(this.respawnTimer_);
+    var millis = Timer.ticksToMillis(this.respawnTimer_);
     var seconds = Math.floor(millis / 1000);
     var tenths = Math.floor((millis % 1000) / 100);
     var time = seconds + '.' + tenths;
     context.save();
-      context.font = dotprod.Font.playerFont();
-      context.fillStyle = dotprod.Palette.friendColor();
+      context.font = Font.playerFont();
+      context.fillStyle = Palette.friendColor();
       context.fillText(time, dimensions.width / 2, dimensions.height / 2);
     context.restore();
     return;
@@ -63,14 +63,14 @@ dotprod.model.player.LocalPlayerSprite.prototype.render = function(viewport) {
     e.render(viewport);
   });
 
-  dotprod.model.player.PlayerSprite.prototype.render.call(this, viewport);
+  model.player.PlayerSprite.prototype.render.call(this, viewport);
 
   var damageOverlay = this.game_.getResourceManager().getImage('ship' + this.ship_ + 'Red');
   var x = Math.floor((dimensions.width - damageOverlay.getTileWidth()) / 2);
   var y = Math.floor((dimensions.height - damageOverlay.getTileHeight()) / 2);
   var tileNum = Math.floor(this.angleInRadians_ / (2 * Math.PI) * damageOverlay.getNumTiles());
 
-  if (dotprod.Labs.DAMAGE_OVERLAY) {
+  if (Labs.DAMAGE_OVERLAY) {
     context.save();
       context.globalAlpha = 0.7 * (1 - (this.energy_ / this.maxEnergy_));
       context.globalCompositeOperation = 'lighter';
@@ -80,8 +80,8 @@ dotprod.model.player.LocalPlayerSprite.prototype.render = function(viewport) {
 
   if (this.isSafe_()) {
     context.save();
-      context.font = dotprod.Font.playerFont();
-      context.fillStyle = dotprod.Palette.friendColor();
+      context.font = Font.playerFont();
+      context.fillStyle = Palette.friendColor();
       context.textAlign = 'center';
       context.textBaseline = 'top';
       context.fillText('Safety - weapons disabled.', x, y - 40);
@@ -92,8 +92,8 @@ dotprod.model.player.LocalPlayerSprite.prototype.render = function(viewport) {
 /**
  * @override
  */
-dotprod.model.player.LocalPlayerSprite.prototype.onInvalidate_ = function() {
+model.player.LocalPlayerSprite.prototype.onInvalidate_ = function() {
   goog.base(this, 'onInvalidate_');
 
-  this.game_.getPainter().unregisterDrawable(dotprod.graphics.Layer.LOCAL_PLAYER, this);
+  this.game_.getPainter().unregisterDrawable(graphics.Layer.LOCAL_PLAYER, this);
 };

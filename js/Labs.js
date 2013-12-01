@@ -3,7 +3,7 @@
  * @author sharvil.nanavati@gmail.com (Sharvil Nanavati)
  */
 
-goog.provide('dotprod.Labs');
+goog.provide('Labs');
 
 /**
  * True if a red overlay should be applied to the player's ship
@@ -11,11 +11,11 @@ goog.provide('dotprod.Labs');
  *
  * @define {boolean}
  */
-dotprod.Labs.DAMAGE_OVERLAY = false;
+Labs.DAMAGE_OVERLAY = false;
 
 /**
  * True if trails should follow bombs when they're fired.
  *
  * @define {boolean}
  */
-dotprod.Labs.BOMB_TRAILS = false;
+Labs.BOMB_TRAILS = false;
