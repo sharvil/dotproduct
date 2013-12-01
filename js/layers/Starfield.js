@@ -95,8 +95,14 @@ dotprod.layers.Starfield.prototype.render = function(viewport) {
     for (var yTile = topTile; yTile <= bottomTile; ++yTile) {
       for (var xTile = leftTile; xTile <= rightTile; ++xTile) {
         for (var i = 0; i < this.stars_.length; ++i) {
-          var dx = Math.floor((xTile * dotprod.layers.Starfield.STAR_TILE_SIZE_ + this.stars_[i].x - x + w) / 2);
-          var dy = Math.floor((yTile * dotprod.layers.Starfield.STAR_TILE_SIZE_ + this.stars_[i].y - y + h) / 2);
+          // Instead of simply stamping each tile onto the screen, make it look a little
+          // more random by multiplying (modulo tile size) by the tile number. This way
+          // each tile will have a unique pattern and won't look repetitive.
+          var tiledX = (xTile * this.stars_[i].x) % dotprod.layers.Starfield.STAR_TILE_SIZE_;
+          var tiledY = (yTile * this.stars_[i].y) % dotprod.layers.Starfield.STAR_TILE_SIZE_;
+
+          var dx = Math.floor((xTile * dotprod.layers.Starfield.STAR_TILE_SIZE_ + tiledX - x + w) / 2);
+          var dy = Math.floor((yTile * dotprod.layers.Starfield.STAR_TILE_SIZE_ + tiledY - y + h) / 2);
           context.fillRect(dx, dy, 1, 1);
         }
       }
@@ -111,8 +117,14 @@ dotprod.layers.Starfield.prototype.render = function(viewport) {
     for (var yTile = topTile; yTile <= bottomTile; ++yTile) {
       for (var xTile = leftTile; xTile <= rightTile; ++xTile) {
         for (var i = 0; i < this.stars2_.length; ++i) {
-          var dx = Math.floor((xTile * dotprod.layers.Starfield.STAR_TILE_SIZE_ + this.stars2_[i].x - x) / 3 + w / 2);
-          var dy = Math.floor((yTile * dotprod.layers.Starfield.STAR_TILE_SIZE_ + this.stars2_[i].y - y) / 3 + h / 2);
+          // Instead of simply stamping each tile onto the screen, make it look a little
+          // more random by multiplying (modulo tile size) by the tile number. This way
+          // each tile will have a unique pattern and won't look repetitive.
+          var tiledX = (xTile * this.stars2_[i].x) % dotprod.layers.Starfield.STAR_TILE_SIZE_;
+          var tiledY = (yTile * this.stars2_[i].y) % dotprod.layers.Starfield.STAR_TILE_SIZE_;
+
+          var dx = Math.floor((xTile * dotprod.layers.Starfield.STAR_TILE_SIZE_ + tiledX - x) / 3 + w / 2);
+          var dy = Math.floor((yTile * dotprod.layers.Starfield.STAR_TILE_SIZE_ + tiledY - y) / 3 + h / 2);
           context.fillRect(dx, dy, 1, 1);
         }
       }
