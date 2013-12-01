@@ -12,3 +12,10 @@ goog.provide('dotprod.Labs');
  * @define {boolean}
  */
 dotprod.Labs.DAMAGE_OVERLAY = false;
+
+/**
+ * True if trails should follow bombs when they're fired.
+ *
+ * @define {boolean}
+ */
+dotprod.Labs.BOMB_TRAILS = false;

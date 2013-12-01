@@ -5,6 +5,7 @@
 
 goog.provide('dotprod.model.projectile.BombSprite');
 
+goog.require('dotprod.Labs');
 goog.require('dotprod.model.projectile.Bomb');
 goog.require('dotprod.model.Effect');
 goog.require('dotprod.math.Vector');
@@ -43,6 +44,12 @@ dotprod.model.projectile.BombSprite = function(game, owner, level, position, vel
   this.bouncingAnimation_ = game.getResourceManager().getSpriteSheet('bombs').getAnimation(level + 8);
   this.bouncingAnimation_.setRepeatCount(-1);
 
+  /**
+   * @type {number}
+   * @private
+   */
+  this.trailTimer_ = 0;
+
   game.getPainter().registerDrawable(dotprod.graphics.Layer.PROJECTILES, this);
 };
 goog.inherits(dotprod.model.projectile.BombSprite, dotprod.model.projectile.Bomb);
@@ -51,6 +58,14 @@ goog.inherits(dotprod.model.projectile.BombSprite, dotprod.model.projectile.Bomb
  * @override
  */
 dotprod.model.projectile.BombSprite.prototype.advanceTime = function() {
+  // First advance and drop the trail.
+  if (dotprod.Labs.BOMB_TRAILS && ++this.trailTimer_ == 2) {
+    var animation = this.game_.getResourceManager().getSpriteSheet('bombTrails').getAnimation(this.level_);
+    var trail = new dotprod.model.Effect(this.game_, animation, this.position_, new dotprod.math.Vector(0, 0), dotprod.graphics.Layer.TRAILS);
+    this.trailTimer_ = 0;
+  }
+
+  // Then advance the bomb itself.
   goog.base(this, 'advanceTime');
   this.animation_.update();
   this.bouncingAnimation_.update();

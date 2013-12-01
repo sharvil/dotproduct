@@ -19,8 +19,9 @@ goog.require('dotprod.graphics.Layer');
  * @param {!dotprod.graphics.Animation} animation
  * @param {!dotprod.math.Vector} position
  * @param {!dotprod.math.Vector} velocity
+ * @param {dotprod.graphics.Layer=} opt_layer
  */
-dotprod.model.Effect = function(game, animation, position, velocity) {
+dotprod.model.Effect = function(game, animation, position, velocity, opt_layer) {
   goog.base(this, game.getSimulation());
 
   /**
@@ -47,7 +48,12 @@ dotprod.model.Effect = function(game, animation, position, velocity) {
    */
   this.velocity_ = velocity;
 
-  game.getPainter().registerDrawable(dotprod.graphics.Layer.EFFECTS, this);
+  var layer = dotprod.graphics.Layer.EFFECTS;
+  if (arguments.length >= 5) {
+    layer = opt_layer;
+  }
+
+  game.getPainter().registerDrawable(layer, this);
 };
 goog.inherits(dotprod.model.Effect, dotprod.model.ModelObject);
 

@@ -11,15 +11,16 @@ goog.provide('dotprod.graphics.Layer');
 dotprod.graphics.Layer = {
   STARFIELD: 0,
   MAP: 1,
-  PROJECTILES: 2,
-  PLAYERS: 3,
-  LOCAL_PLAYER: 4,
-  EFFECTS: 5,
-  HUD: 6
+  TRAILS: 2,
+  PROJECTILES: 3,
+  PLAYERS: 4,
+  LOCAL_PLAYER: 5,
+  EFFECTS: 6,
+  HUD: 7
 };
 
 /**
  * @type {number}
  * @const
  */
-dotprod.graphics.NUM_LAYERS = 7;
+dotprod.graphics.NUM_LAYERS = 8;

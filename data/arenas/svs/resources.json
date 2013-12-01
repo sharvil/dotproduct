@@ -172,6 +172,14 @@
       "period": 10
     },
 
+    "bombTrails": {
+      "url": "data/shared/graphics/bomb_trails.png",
+      "xTiles": "10",
+      "yTiles": "5",
+      "frames": 10,
+      "period": 2
+    },
+
     "warp": {
       "url": "data/shared/graphics/warp.png",
       "xTiles": 6,
