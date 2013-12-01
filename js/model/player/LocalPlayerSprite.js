@@ -6,6 +6,7 @@
 goog.provide('dotprod.model.player.LocalPlayerSprite');
 
 goog.require('goog.array');
+goog.require('dotprod.Labs');
 goog.require('dotprod.model.player.LocalPlayer');
 goog.require('dotprod.model.player.PlayerSprite');
 goog.require('dotprod.graphics.Drawable');
@@ -69,11 +70,13 @@ dotprod.model.player.LocalPlayerSprite.prototype.render = function(viewport) {
   var y = Math.floor((dimensions.height - damageOverlay.getTileHeight()) / 2);
   var tileNum = Math.floor(this.angleInRadians_ / (2 * Math.PI) * damageOverlay.getNumTiles());
 
-  context.save();
-    context.globalAlpha = 0.7 * (1 - (this.energy_ / this.maxEnergy_));
-    context.globalCompositeOperation = 'lighter';
-    damageOverlay.render(context, x, y, tileNum);
-  context.restore();
+  if (dotprod.Labs.DAMAGE_OVERLAY) {
+    context.save();
+      context.globalAlpha = 0.7 * (1 - (this.energy_ / this.maxEnergy_));
+      context.globalCompositeOperation = 'lighter';
+      damageOverlay.render(context, x, y, tileNum);
+    context.restore();
+  }
 
   if (this.isSafe_()) {
     context.save();
