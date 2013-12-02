@@ -1,8 +1,3 @@
-/**
- * @fileoverview Description of this file.
- * @author sharvil.nanavati@gmail.com (Sharvil Nanavati)
- */
-
 goog.provide('layers.MapLayer');
 
 goog.require('goog.asserts');

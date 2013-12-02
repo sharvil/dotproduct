@@ -1,7 +1,3 @@
-/**
- * @fileoverview Heads-up display layer
- */
-
 goog.provide('graphics.Tween');
 
 goog.require('goog.array');

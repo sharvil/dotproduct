@@ -1,8 +1,3 @@
-/**
- * @fileoverview Description of this file.
- * @author sharvil.nanavati@gmail.com (Sharvil Nanavati)
- */
-
 goog.provide('input.Keyboard');
 
 goog.require('goog.events');

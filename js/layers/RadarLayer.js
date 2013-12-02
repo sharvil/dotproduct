@@ -1,8 +1,3 @@
-/**
- * @fileoverview Description of this file.
- * @author sharvil.nanavati@gmail.com (Sharvil Nanavati)
- */
-
 goog.provide('layers.RadarLayer');
 
 goog.require('goog.dom');

@@ -1,7 +1,3 @@
-/**
- * @fileoverview Provides a timestamp printing function
- */
-
 goog.provide('Timestamp');
 
 Timestamp.print = function() {

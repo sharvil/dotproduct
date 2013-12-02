@@ -1,8 +1,3 @@
-/**
- * @fileoverview Description of this file.
- * @author sharvil.nanavati@gmail.com (Sharvil Nanavati)
- */
-
 goog.provide('model.projectile.Projectile');
 
 goog.require('model.Entity');

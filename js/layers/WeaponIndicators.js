@@ -1,7 +1,3 @@
-/**
- * @fileoverview Heads-up display layer
- */
-
 goog.provide('layers.WeaponIndicators');
 
 goog.require('graphics.Drawable');

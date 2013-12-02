@@ -1,8 +1,3 @@
-/**
- * @fileoverview Description of this file.
- * @author sharvil.nanavati@gmail.com (Sharvil Nanavati)
- */
-
 goog.provide('math.Range');
 
 goog.require('goog.asserts');
@@ -43,6 +38,7 @@ math.Range = function(low, high, increment) {
 };
 
 /**
+ * @param {!Array.<number>} array
  * @return {!math.Range}
  */
 math.Range.fromArray = function(array) {

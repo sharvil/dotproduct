@@ -1,8 +1,3 @@
-/**
- * @fileoverview Description of this file.
- * @author sharvil.nanavati@gmail.com (Sharvil Nanavati)
- */
-
 // this program is a JavaScript version of Mersenne Twister,
 // a straight conversion from the original program, mt19937ar.c,
 // translated by y. okada on july 17, 2006.

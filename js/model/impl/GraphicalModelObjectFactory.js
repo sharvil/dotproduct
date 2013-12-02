@@ -1,8 +1,3 @@
-/**
- * @fileoverview Description of this file.
- * @author sharvil.nanavati@gmail.com (Sharvil Nanavati)
- */
-
 goog.provide('model.impl.GraphicalModelObjectFactory');
 
 goog.require('model.ModelObjectFactory');

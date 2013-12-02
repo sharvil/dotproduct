@@ -1,8 +1,3 @@
-/**
- * @fileoverview Description of this file.
- * @author sharvil.nanavati@gmail.com (Sharvil Nanavati)
- */
-
 goog.provide('math.Rect');
 
 /**
@@ -24,6 +19,7 @@ math.Rect = function(x, y, width, height) {
  * @param {number} top
  * @param {number} right
  * @param {number} bottom
+ * @return {!math.Rect}
  */
 math.Rect.fromBox = function(left, top, right, bottom) {
   return new math.Rect(left, top, right - left, bottom - top);
