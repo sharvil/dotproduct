@@ -269,8 +269,8 @@ model.player.Player.prototype.setShip = function(ship) {
   this.mineLayer_ = new model.MineLayer(this.game_, this.shipSettings_['bomb'], this);
   this.burst_ = new model.Burst(this.game_, this.shipSettings_['burst'], this);
 
-  this.position_ = new math.Vector(0, 0);
-  this.velocity_ = new math.Vector(0, 0);
+  this.position_ = math.Vector.ZERO;
+  this.velocity_ = math.Vector.ZERO;
   this.energy_ = 0;
   this.bounty_ = 0;
   this.xRadius_ = this.shipSettings_['xRadius'];

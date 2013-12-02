@@ -23,7 +23,7 @@ model.player.PlayerSprite.prototype.respawn = function(angle, position, velocity
 
   var resourceManager = this.game_.getResourceManager();
   var animation = resourceManager.getSpriteSheet('warp').getAnimation(0);
-  var effect = new model.Effect(this.game_, animation, this.position_, new math.Vector(0, 0));
+  var effect = new model.Effect(this.game_, animation, this.position_, math.Vector.ZERO);
 };
 
 model.player.PlayerSprite.prototype.onDeath = function() {

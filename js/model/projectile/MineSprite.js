@@ -63,7 +63,7 @@ model.projectile.MineSprite.prototype.explode_ = function(hitPlayer) {
 
   // Add an explosion animation.
   var animation = this.game_.getResourceManager().getSpriteSheet('explode2').getAnimation(0);
-  var explosion = new model.Effect(this.game_, animation, this.position_, new math.Vector(0, 0));
+  var explosion = new model.Effect(this.game_, animation, this.position_, math.Vector.ZERO);
 };
 
 /**

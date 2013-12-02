@@ -87,7 +87,7 @@ model.projectile.Bomb.prototype.checkPlayerCollision_ = function(player) {
  */
 model.projectile.Bomb.prototype.explode_ = function(hitPlayer) {
   // Reset bomb state.
-  this.velocity_ = new math.Vector(0, 0);
+  this.velocity_ = math.Vector.ZERO;
   this.lifetime_ = 0;
 
   // Figure out how much damage the local player is going to take from this bomb explosion.

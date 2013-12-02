@@ -73,7 +73,7 @@ model.projectile.BulletSprite.prototype.explode_ = function(hitPlayer) {
   goog.base(this, 'explode_', hitPlayer);
 
   var animation = this.game_.getResourceManager().getSpriteSheet('explode0').getAnimation(0);
-  var explosion = new model.Effect(this.game_, animation, this.position_, new math.Vector(0, 0));
+  var explosion = new model.Effect(this.game_, animation, this.position_, math.Vector.ZERO);
 };
 
 /**

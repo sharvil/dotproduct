@@ -48,7 +48,7 @@ model.projectile.Bullet.prototype.checkPlayerCollision_ = function(player) {
  * @override
  */
 model.projectile.Bullet.prototype.explode_ = function(hitPlayer) {
-  this.velocity_ = new math.Vector(0, 0);
+  this.velocity_ = math.Vector.ZERO;
   this.lifetime_ = 0;
   if (hitPlayer) {
     hitPlayer.onDamage(this.owner_, this, this.damage_);

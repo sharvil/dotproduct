@@ -30,13 +30,13 @@ model.Entity = function(game) {
    * @type {!math.Vector}
    * @protected
    */
-  this.position_ = new math.Vector(0, 0);
+  this.position_ = math.Vector.ZERO;
 
   /**
    * @type {!math.Vector}
    * @protected
    */
-  this.velocity_ = new math.Vector(0, 0);
+  this.velocity_ = math.Vector.ZERO;
 
   /**
    * @type {number}

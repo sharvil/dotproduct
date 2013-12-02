@@ -42,7 +42,7 @@ model.player.RemotePlayer = function(game, id, name, team, isAlive, ship, bounty
    * @type {!math.Vector}
    * @protected
    */
-  this.originalVelocity_ = new math.Vector(0, 0);
+  this.originalVelocity_ = math.Vector.ZERO;
 
   /**
    * @type {number}

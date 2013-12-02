@@ -29,6 +29,12 @@ math.Vector = function(x, y) {
 };
 
 /**
+ * @type {!math.Vector}
+ * @const
+ */
+math.Vector.ZERO = new math.Vector(0, 0);
+
+/**
  * @param {!Array.<number>} array An array of 2 elements containing the x and y values.
  * @return {!math.Vector}
  */

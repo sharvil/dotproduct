@@ -169,7 +169,7 @@ model.player.LocalPlayer.prototype.setShip = function(ship) {
 
   var angle = Math.random() * 2 * Math.PI;
   var position = this.game_.getMap().getSpawnLocation(this);
-  var velocity = new math.Vector(0, 0);
+  var velocity = math.Vector.ZERO;
   this.respawn(angle, position, velocity);
 };
 
@@ -240,7 +240,7 @@ model.player.LocalPlayer.prototype.advanceTime = function() {
   if (this.projectileFireDelay_.isLow()) {
     if (keyboard.isKeyPressed(input.Keymap.FIRE_GUN)) {
       if (isSafe) {
-        this.velocity_ = new math.Vector(0, 0);
+        this.velocity_ = math.Vector.ZERO;
       } else {
         var angle = this.getAngle_();
         var position = new math.Vector(0, -this.yRadius_).rotate(angle).add(this.position_);
@@ -257,7 +257,7 @@ model.player.LocalPlayer.prototype.advanceTime = function() {
       }
     } else if (keyboard.isKeyPressed(input.Keymap.FIRE_BOMB)) {
       if (isSafe) {
-        this.velocity_ = new math.Vector(0, 0);
+        this.velocity_ = math.Vector.ZERO;
       } else {
         var angle = this.getAngle_();
         var position = new math.Vector(0, -this.yRadius_).rotate(angle).add(this.position_);
