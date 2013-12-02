@@ -8,7 +8,7 @@ goog.require('graphics.Layer');
 
 /**
  * @constructor
- * @extends {model.projectile.Mine}
+ * @extends {model.projectile.Burst}
  * @implements {graphics.Drawable}
  * @param {!Game} game
  * @param {!model.player.Player} owner

@@ -369,7 +369,7 @@ Game.prototype.renderingLoop_ = function() {
 };
 
 /**
- * @param {!Object} packet
+ * @param {!Array} packet
  * @private
  */
 Game.prototype.onPlayerEntered_ = function(packet) {
@@ -389,7 +389,7 @@ Game.prototype.onPlayerEntered_ = function(packet) {
 };
 
 /**
- * @param {!Object} packet
+ * @param {!Array} packet
  * @private
  */
 Game.prototype.onPlayerLeft_ = function(packet) {
@@ -402,7 +402,7 @@ Game.prototype.onPlayerLeft_ = function(packet) {
 };
 
 /**
- * @param {!Object} packet
+ * @param {!Array} packet
  * @private
  */
 Game.prototype.onPlayerPosition_ = function(packet) {
@@ -425,7 +425,7 @@ Game.prototype.onPlayerPosition_ = function(packet) {
 };
 
 /**
- * @param {!Object} packet
+ * @param {!Array} packet
  * @private
  */
 Game.prototype.onPlayerDied_ = function(packet) {
@@ -453,7 +453,7 @@ Game.prototype.onPlayerDied_ = function(packet) {
 };
 
 /**
- * @param {!Object} packet
+ * @param {!Array} packet
  * @private
  */
 Game.prototype.onShipChanged_ = function(packet) {
@@ -466,7 +466,7 @@ Game.prototype.onShipChanged_ = function(packet) {
 };
 
 /**
- * @param {!Object} packet
+ * @param {!Array} packet
  * @private
  */
 Game.prototype.onChatMessage_ = function(packet) {
@@ -484,7 +484,7 @@ Game.prototype.onChatMessage_ = function(packet) {
 };
 
 /**
- * @param {!Object} packet
+ * @param {!Array} packet
  * @private
  */
 Game.prototype.onScoreUpdated_ = function(packet) {
@@ -499,7 +499,7 @@ Game.prototype.onScoreUpdated_ = function(packet) {
 };
 
 /**
- * @param {!Object} packet
+ * @param {!Array} packet
  * @private
  */
 Game.prototype.onPrizeSeedUpdated_ = function(packet) {
@@ -511,7 +511,7 @@ Game.prototype.onPrizeSeedUpdated_ = function(packet) {
 };
 
 /**
- * @param {!Object} packet
+ * @param {!Array} packet
  * @private
  */
 Game.prototype.onPrizeCollected_ = function(packet) {
@@ -528,7 +528,7 @@ Game.prototype.onPrizeCollected_ = function(packet) {
 };
 
 /**
- * @param {!Object} packet
+ * @param {!Array} packet
  * @private
  */
 Game.prototype.onSetPresence_ = function(packet) {
@@ -539,7 +539,7 @@ Game.prototype.onSetPresence_ = function(packet) {
 };
 
 /**
- * @param {!Object} packet
+ * @param {!Array} packet
  * @private
  */
 Game.prototype.onFlagUpdate_ = function(packet) {

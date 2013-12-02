@@ -145,7 +145,7 @@ net.Protocol.prototype.getRoundTripTime = function() {
 
 /**
  * @param {net.Protocol.S2CPacketType} packetType
- * @param {function(!Object)} cb
+ * @param {function(!Array)} cb
  */
 net.Protocol.prototype.registerHandler = function(packetType, cb) {
   this.handlers_[packetType].push(cb);

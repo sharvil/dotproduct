@@ -2,6 +2,7 @@ goog.provide('model.Burst');
 
 goog.require('goog.asserts');
 goog.require('math.Vector');
+goog.require('model.Weapon.Type');
 
 /**
  * @constructor
@@ -39,7 +40,7 @@ model.Burst = function(game, burstSettings, owner) {
  * @override
  */
 model.Burst.prototype.getType = function() {
-  return model.Weapon.BURST;
+  return model.Weapon.Type.BURST;
 };
 
 /**
