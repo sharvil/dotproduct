@@ -1,5 +1,6 @@
 goog.provide('views.DebugView');
 
+goog.require('Labs');
 goog.require('Viewport');
 goog.require('views.View');
 
@@ -104,7 +105,7 @@ views.DebugView.prototype.update = function() {
     return;
   }
 
-  var html = this.getEventTimeString_();
+  var html = Labs.NEXT_GAME_VIEW ? this.getEventTimeString_() : '';
   if (html) {
     html += '<br><br>';
   }

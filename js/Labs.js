@@ -14,3 +14,10 @@ Labs.DAMAGE_OVERLAY = false;
  * @define {boolean}
  */
 Labs.BOMB_TRAILS = false;
+
+/**
+ * True if we should display when the next game is taking place.
+ *
+ * @define {boolean}
+ */
+Labs.NEXT_GAME_VIEW = false;
