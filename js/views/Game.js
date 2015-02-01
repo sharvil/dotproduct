@@ -199,10 +199,8 @@ Game = function(protocol, resourceManager, settings, mapData, tileProperties) {
   goog.events.listen(window, goog.events.EventType.FOCUS, function() { localPlayer.clearPresence(model.player.Player.Presence.AWAY); });
   goog.events.listen(window, goog.events.EventType.BLUR, function() { localPlayer.setPresence(model.player.Player.Presence.AWAY); });
 
-  // TODO(sharvil): hack, come up with a better interface.
-  goog.events.listen(window, goog.events.EventType.MOUSEDOWN, function() { html5.Notifications.requestPermission(); });
-
   Timer.setInterval(goog.bind(this.heartbeat_, this), 100);
+  html5.Notifications.requestPermission();
 };
 goog.inherits(Game, views.View);
 

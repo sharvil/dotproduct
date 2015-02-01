@@ -85,8 +85,11 @@ Notifications.prototype.addMessage_ = function(type, message) {
   // Only show desktop notifications if the user isn't focused on the game.
   if (this.localPlayer_.hasPresence(model.player.Player.Presence.AWAY)) {
     var notification = html5.Notifications.createNotification('img/dotproduct_logo_128.png', 'dotproduct', message);
+    notification.onclick = function(event) {
+      window.focus();
+      this.cancel();
+    };
     setTimeout(function() { notification.close(); }, 5000);
-    notification.show();
   }
 };
 
