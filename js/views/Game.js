@@ -324,6 +324,14 @@ Game.prototype.getModelObjectFactory = function() {
 };
 
 /**
+ * @return {!Viewport}
+ */
+Game.prototype.getViewport = function() {
+  goog.asserts.assert(!!this.viewport_, 'Viewport is null');
+  return this.viewport_;
+};
+
+/**
  * @private
  */
 Game.prototype.heartbeat_ = function() {

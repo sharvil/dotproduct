@@ -96,4 +96,8 @@ model.projectile.Bomb.prototype.explode_ = function(hitPlayer) {
   }
 
   localPlayer.onDamage(this.owner_, this, this.damage_ * damageRatio);
+
+  if (this.game_.getViewport().contains(this.position_)) {
+    this.game_.getResourceManager().playSound('explodeBomb');
+  }
 };

@@ -350,6 +350,18 @@
       "url": "data/shared/sounds/burst.wav"
     },
 
+    "explodeBullet": {
+      "url": "data/shared/sounds/explode0.wav"
+    },
+
+    "explodeShip": {
+      "url": "data/shared/sounds/explode1.wav"
+    },
+
+    "explodeBomb": {
+      "url": "data/shared/sounds/explode2.wav"
+    },
+
     "gun0": {
       "url": "data/shared/sounds/gun0.wav"
     },

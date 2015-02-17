@@ -34,6 +34,10 @@ model.player.PlayerSprite.prototype.onDeath = function() {
     var deltaVelocity = math.Vector.fromPolar(Math.random() * 2, Math.random() * 2 * Math.PI);
     var piece = new model.Effect(this.game_, animation, this.position_, this.velocity_.add(deltaVelocity));
   }
+
+  if (this.game_.getViewport().contains(this.position_)) {
+    resourceManager.playSound('explodeShip');
+  }
 };
 
 /**

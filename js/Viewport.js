@@ -65,6 +65,18 @@ Viewport.prototype.getDimensions = function() {
 };
 
 /**
+ * @param {!math.Vector} vector The vector to test.
+ * @return {boolean} True if the vector is contained in the viewport false otherwise.
+ */
+Viewport.prototype.contains = function(vector) {
+	var x = vector.getX();
+	var y = vector.getY();
+	var dimensions = this.getDimensions();
+  return x >= dimensions.left && x <= dimensions.right &&
+         y >= dimensions.top && y <= dimensions.bottom;
+};
+
+/**
  * @return {!CanvasRenderingContext2D}
  */
 Viewport.prototype.getContext = function() {

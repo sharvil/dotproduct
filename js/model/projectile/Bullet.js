@@ -48,4 +48,8 @@ model.projectile.Bullet.prototype.explode_ = function(hitPlayer) {
   if (hitPlayer) {
     hitPlayer.onDamage(this.owner_, this, this.damage_);
   }
+
+  if (this.game_.getViewport().contains(this.position_)) {
+    this.game_.getResourceManager().playSound('explodeBullet');
+  }
 };
