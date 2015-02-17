@@ -105,7 +105,7 @@ model.Entity.prototype.updatePosition_ = function(opt_bounceFactor) {
       switch (collision.object) {
         case ObjectType.NONE:
           this.position_ = new math.Vector(xVel >= 0 ? collision.left : collision.right, this.position_.getY());
-          this.velocity_ = new math.Vector(-xVel * bounceFactor, this.velocity_.getY());
+          this.velocity_ = new math.Vector(-xVel * bounceFactor, this.velocity_.getY() * bounceFactor);
           xSpeed *= bounceFactor;
           this.bounce_();
           break;
@@ -141,7 +141,7 @@ model.Entity.prototype.updatePosition_ = function(opt_bounceFactor) {
       switch (collision.object) {
         case ObjectType.NONE:
           this.position_ = new math.Vector(this.position_.getX(), yVel >= 0 ? collision.top : collision.bottom);
-          this.velocity_ = new math.Vector(this.velocity_.getX(), -yVel * bounceFactor);
+          this.velocity_ = new math.Vector(this.velocity_.getX() * bounceFactor, -yVel * bounceFactor);
           ySpeed *= bounceFactor;
           this.bounce_();
           break;
