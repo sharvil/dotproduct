@@ -86,7 +86,7 @@ model.BombBay.prototype.fire = function(angle, position, velocity, commitFireFn)
   var projectile = this.game_.getModelObjectFactory().newBomb(this.game_, this.owner_, level, position, newVelocity, lifetime, damage, bounceCount, blastRadius, proxRadius);
 
   this.owner_.addProjectile(projectile);
-  this.game_.getResourceManager().playSound('bomb');
+  this.game_.getResourceManager().playSound('bomb' + level);
 
   return {
     'type': this.getType(),

@@ -92,7 +92,7 @@ model.Gun.prototype.fire = function(angle, position, velocity, commitFireFn) {
   var projectile = this.game_.getModelObjectFactory().newBullet(this.game_, this.owner_, level, position, newVelocity, lifetime, damage, bounceCount);
 
   this.owner_.addProjectile(projectile);
-  this.game_.getResourceManager().playSound('bullet');
+  this.game_.getResourceManager().playSound('gun' + level);
 
   return {
     'type': this.getType(),

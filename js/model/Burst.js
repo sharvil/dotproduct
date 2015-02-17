@@ -71,6 +71,8 @@ model.Burst.prototype.fire = function(position, commitFireFn) {
     this.owner_.addProjectile(projectile);
   }
 
+  this.game_.getResourceManager().playSound('burst');
+
   return {
     'type': this.getType(),
     'pos': this.owner_.getPosition().toArray(),

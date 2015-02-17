@@ -78,8 +78,8 @@ model.MineLayer.prototype.fire = function(position, commitFireFn) {
   var damage = this.getDamage_();
   var projectile = this.game_.getModelObjectFactory().newMine(this.game_, this.owner_, level, position, lifetime, damage);
 
-  this.onwer_.addProjectile(projectile);
-  this.game_.getResourceManager().playSound('mine');
+  this.owner_.addProjectile(projectile);
+  this.game_.getResourceManager().playSound('mine' + level);
 
   return {
     'type': this.getType(),

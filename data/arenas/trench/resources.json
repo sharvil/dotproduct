@@ -326,12 +326,64 @@
   },
 
   "sounds": {
+    "bomb0": {
+      "url": "data/shared/sounds/bomb0.wav"
+    },
+
+    "bomb1": {
+		  "url": "data/shared/sounds/bomb1.wav"
+	  },
+
+    "bomb2": {
+      "url": "data/shared/sounds/bomb2.wav"
+    },
+
+    "bomb3": {
+      "url": "data/shared/sounds/bomb3.wav"
+    },
+
     "bounce": {
       "url": "data/shared/sounds/bounce.wav"
     },
 
-    "bullet": {
+    "burst": {
+      "url": "data/shared/sounds/burst.wav"
+    },
+
+    "gun0": {
+      "url": "data/shared/sounds/gun0.wav"
+    },
+
+    "gun1": {
       "url": "data/shared/sounds/gun1.wav"
-    }
+    },
+
+    "gun2": {
+      "url": "data/shared/sounds/gun2.wav"
+    },
+
+    "gun3": {
+      "url": "data/shared/sounds/gun3.wav"
+    },
+
+    "mine0": {
+      "url": "data/shared/sounds/mine0.wav"
+    },
+
+    "mine1": {
+      "url": "data/shared/sounds/mine1.wav"
+    },
+
+    "mine2": {
+      "url": "data/shared/sounds/mine2.wav"
+    },
+
+    "mine3": {
+      "url": "data/shared/sounds/mine3.wav"
+    },
+
+    "prize": {
+		  "url": "data/shared/sounds/prize.wav"
+	  }
   }
 }

@@ -2,8 +2,10 @@ goog.provide('ResourceManager');
 
 goog.require('goog.asserts');
 goog.require('goog.debug.Logger');
+
 goog.require('graphics.Image');
 goog.require('graphics.SpriteSheet');
+goog.require('Sound');
 
 /**
  * @constructor
@@ -80,35 +82,17 @@ ResourceManager.prototype.loadSpriteSheet = function(name, url, xTiles, yTiles, 
  * @param {function()} loadCb
  */
 ResourceManager.prototype.loadSound = function(name, url, loadCb) {
-  // TODO(sharvil): remove this once Chrome and Safari behave correctly when loading Audio.
-  loadCb();
-  return;
-/*
-  var self = this;
-  var callback = function() {
-    self.logger_.info('Loaded sound: "' + name + '"');
-    loadCb();
-  };
-
   this.logger_.info('Loading sound: "' + name + '" using URL: ' + url);
-  this.sounds_[name] = new Audio();
-  this.sounds_[name].src = url;
-  this.sounds_[name].addEventListener('error', callback);
-  this.sounds_[name].addEventListener('progress', callback);
-  this.sounds_[name].load();
-*/
+  this.sounds_[name] = new Sound();
+  this.sounds_[name].load(url, loadCb);
 };
 
 /**
  * @param {string} name
  */
 ResourceManager.prototype.playSound = function(name) {
-  // TODO(sharvil): remove this check -- we should always have an Audio object
-  // whenever we try to play it. We do this for now since Chrome and Safari's
-  // audio loading code seems to be broken.
-  if (name in this.sounds_) {
-    this.sounds_[name].play();
-  }
+  goog.asserts.assert(name in this.sounds_, 'Unable to find sound: ' + name);
+  this.sounds_[name].play();
 };
 
 /**

@@ -21,6 +21,12 @@ model.player.LocalPlayerSprite = function(game, id, name, team, ship) {
   goog.base(this, game, id, name, team, ship);
 
   game.getPainter().registerDrawable(graphics.Layer.LOCAL_PLAYER, this);
+
+  /**
+   * @type {!ResourceManager}
+   * @private
+   */
+  this.resourceManager_ = game.getResourceManager();
 };
 goog.inherits(model.player.LocalPlayerSprite, model.player.LocalPlayer);
 
@@ -91,4 +97,12 @@ model.player.LocalPlayerSprite.prototype.onInvalidate_ = function() {
   goog.base(this, 'onInvalidate_');
 
   this.game_.getPainter().unregisterDrawable(graphics.Layer.LOCAL_PLAYER, this);
+};
+
+/**
+ * @override
+ */
+model.player.LocalPlayerSprite.prototype.collectPrize_ = function(prize) {
+  this.resourceManager_.playSound('prize');
+  return goog.base(this, 'collectPrize_', prize);
 };
