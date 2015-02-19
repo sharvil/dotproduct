@@ -37,6 +37,12 @@ net.Protocol = function(url) {
   this.packetQueue_ = [];
 
   /**
+   * @type {function()}
+   * @private
+   */
+  this.eventHandler_ = goog.nullFunction;
+
+  /**
    * @type {!Object.<net.Protocol.S2CPacketType, !Array.<function(!Array)>>}
    * @private
    */
@@ -63,7 +69,7 @@ net.Protocol = function(url) {
    */
   this.roundTripTime_ = 0;
 
-  this.registerHandler(net.Protocol.S2CPacketType.CLOCK_SYNC_REPLY, goog.bind(this.onClockSyncReply_, this));
+  this.registerPacketHandler(net.Protocol.S2CPacketType.CLOCK_SYNC_REPLY, goog.bind(this.onClockSyncReply_, this));
 };
 
 /**
@@ -144,10 +150,17 @@ net.Protocol.prototype.getRoundTripTime = function() {
 };
 
 /**
+ * @param {function()} cb
+ */
+net.Protocol.prototype.registerEventHandler = function(cb) {
+  this.eventHandler_ = cb;
+};
+
+/**
  * @param {net.Protocol.S2CPacketType} packetType
  * @param {function(!Array)} cb
  */
-net.Protocol.prototype.registerHandler = function(packetType, cb) {
+net.Protocol.prototype.registerPacketHandler = function(packetType, cb) {
   this.handlers_[packetType].push(cb);
 };
 
@@ -277,19 +290,13 @@ net.Protocol.prototype.onOpen_ = function() {
   this.packetQueue_ = [];
 };
 
-net.Protocol.prototype.onError_ = function() {
-  // TODO(sharvil): drop connection, retry w/ binary exponential backoff
-  this.logger_.warning('Error communicating with server.');
-};
-
 net.Protocol.prototype.onClose_ = function() {
   Timer.clearInterval(this.syncTimer_);
   this.syncTimer_ = 0;
   this.packetQueue_ = [];
   this.socket_ = null;
 
-  // TODO(sharvil): retry connection w/ binary exponential backoff
-  this.logger_.warning('Connection to server terminated.');
+  this.eventHandler_();
 };
 
 /**
@@ -341,7 +348,7 @@ net.Protocol.prototype.createSocket_ = function() {
   this.socket_ = new WebSocket(this.url_, net.Protocol.PROTOCOL_VERSION_);
 
   goog.events.listen(this.socket_, 'open', goog.bind(this.onOpen_, this));
-  goog.events.listen(this.socket_, 'error', goog.bind(this.onError_, this));
+  goog.events.listen(this.socket_, 'error', goog.bind(this.onClose_, this));
   goog.events.listen(this.socket_, 'close', goog.bind(this.onClose_, this));
   goog.events.listen(this.socket_, 'message', goog.bind(this.onMessage_, this));
 };

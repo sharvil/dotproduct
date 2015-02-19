@@ -50,9 +50,9 @@ views.LoginView = function(loginData, protocol, successCb) {
    * @private
    */
   this.protocol_ = protocol;
-  this.protocol_.registerHandler(net.Protocol.S2CPacketType.LOGIN_REPLY, goog.bind(this.onLoginReply_, this));
-  this.protocol_.registerHandler(net.Protocol.S2CPacketType.QUERY_NAME_REPLY, goog.bind(this.onQueryNameReply_, this));
-  this.protocol_.registerHandler(net.Protocol.S2CPacketType.REGISTER_NAME_REPLY, goog.bind(this.onRegisterNameReply_, this));
+  this.protocol_.registerPacketHandler(net.Protocol.S2CPacketType.LOGIN_REPLY, goog.bind(this.onLoginReply_, this));
+  this.protocol_.registerPacketHandler(net.Protocol.S2CPacketType.QUERY_NAME_REPLY, goog.bind(this.onQueryNameReply_, this));
+  this.protocol_.registerPacketHandler(net.Protocol.S2CPacketType.REGISTER_NAME_REPLY, goog.bind(this.onRegisterNameReply_, this));
   this.protocol_.login(loginData);
 
   /**

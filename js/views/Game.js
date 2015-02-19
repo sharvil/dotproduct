@@ -34,6 +34,7 @@ goog.require('Timestamp');
 goog.require('Viewport');
 goog.require('views.ChatView');
 goog.require('views.DebugView');
+goog.require('views.DisconnectedView');
 goog.require('views.ScoreboardView');
 goog.require('views.View');
 
@@ -154,6 +155,12 @@ Game = function(protocol, resourceManager, settings, mapData, tileProperties) {
   this.debugView_ = new views.DebugView(this, this.viewport_);
 
   /**
+   * @type {!views.DisconnectedView}
+   * @private
+   */
+  this.disconnectedView_ = new views.DisconnectedView();
+
+  /**
    * @type {number}
    * @private
    */
@@ -178,17 +185,18 @@ Game = function(protocol, resourceManager, settings, mapData, tileProperties) {
   new layers.HudLayer(this);
   new layers.WeaponIndicators(this);
 
-  this.protocol_.registerHandler(net.Protocol.S2CPacketType.PLAYER_ENTERED, goog.bind(this.onPlayerEntered_, this));
-  this.protocol_.registerHandler(net.Protocol.S2CPacketType.PLAYER_LEFT, goog.bind(this.onPlayerLeft_, this));
-  this.protocol_.registerHandler(net.Protocol.S2CPacketType.PLAYER_POSITION, goog.bind(this.onPlayerPosition_, this));
-  this.protocol_.registerHandler(net.Protocol.S2CPacketType.PLAYER_DIED, goog.bind(this.onPlayerDied_, this));
-  this.protocol_.registerHandler(net.Protocol.S2CPacketType.CHAT_MESSAGE, goog.bind(this.onChatMessage_, this));
-  this.protocol_.registerHandler(net.Protocol.S2CPacketType.SHIP_CHANGE, goog.bind(this.onShipChanged_, this));
-  this.protocol_.registerHandler(net.Protocol.S2CPacketType.SCORE_UPDATE, goog.bind(this.onScoreUpdated_, this));
-  this.protocol_.registerHandler(net.Protocol.S2CPacketType.PRIZE_SEED_UPDATE, goog.bind(this.onPrizeSeedUpdated_, this));
-  this.protocol_.registerHandler(net.Protocol.S2CPacketType.PRIZE_COLLECTED, goog.bind(this.onPrizeCollected_, this));
-  this.protocol_.registerHandler(net.Protocol.S2CPacketType.SET_PRESENCE, goog.bind(this.onSetPresence_, this));
-  this.protocol_.registerHandler(net.Protocol.S2CPacketType.FLAG_UPDATE, goog.bind(this.onFlagUpdate_, this));
+  this.protocol_.registerEventHandler(goog.bind(this.onConnectionLost_, this));
+  this.protocol_.registerPacketHandler(net.Protocol.S2CPacketType.PLAYER_ENTERED, goog.bind(this.onPlayerEntered_, this));
+  this.protocol_.registerPacketHandler(net.Protocol.S2CPacketType.PLAYER_LEFT, goog.bind(this.onPlayerLeft_, this));
+  this.protocol_.registerPacketHandler(net.Protocol.S2CPacketType.PLAYER_POSITION, goog.bind(this.onPlayerPosition_, this));
+  this.protocol_.registerPacketHandler(net.Protocol.S2CPacketType.PLAYER_DIED, goog.bind(this.onPlayerDied_, this));
+  this.protocol_.registerPacketHandler(net.Protocol.S2CPacketType.CHAT_MESSAGE, goog.bind(this.onChatMessage_, this));
+  this.protocol_.registerPacketHandler(net.Protocol.S2CPacketType.SHIP_CHANGE, goog.bind(this.onShipChanged_, this));
+  this.protocol_.registerPacketHandler(net.Protocol.S2CPacketType.SCORE_UPDATE, goog.bind(this.onScoreUpdated_, this));
+  this.protocol_.registerPacketHandler(net.Protocol.S2CPacketType.PRIZE_SEED_UPDATE, goog.bind(this.onPrizeSeedUpdated_, this));
+  this.protocol_.registerPacketHandler(net.Protocol.S2CPacketType.PRIZE_COLLECTED, goog.bind(this.onPrizeCollected_, this));
+  this.protocol_.registerPacketHandler(net.Protocol.S2CPacketType.SET_PRESENCE, goog.bind(this.onSetPresence_, this));
+  this.protocol_.registerPacketHandler(net.Protocol.S2CPacketType.FLAG_UPDATE, goog.bind(this.onFlagUpdate_, this));
   this.protocol_.startGame(startingShip);
 
   this.viewport_.followPlayer(localPlayer);
@@ -228,6 +236,7 @@ Game.prototype.renderDom = function(rootNode) {
   rootNode.appendChild(this.canvas_);
   this.chatView_.renderDom(rootNode);
   this.debugView_.renderDom(rootNode);
+  this.disconnectedView_.renderDom(rootNode);
   this.scoreboardView_.renderDom(rootNode);
 
   // This starts the rendering loop once the canvas has been added to the DOM.
@@ -372,6 +381,15 @@ Game.prototype.renderingLoop_ = function() {
   this.tickResidue_ += curTime - this.lastTime_;
   this.tickResidue_ -= Timer.ticksToMillis(timeDiff);
   this.lastTime_ = curTime;
+};
+
+/**
+ * @private
+ */
+Game.prototype.onConnectionLost_ = function() {
+  var self = this;
+  this.renderingLoop_ = function() { self.lastTime_ = goog.now(); };
+  this.disconnectedView_.show();
 };
 
 /**
