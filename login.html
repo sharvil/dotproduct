@@ -1,45 +1,50 @@
 <!doctype html>
 <html>
   <head>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
+    <script src="//code.jquery.com/jquery-1.11.2.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+
     <link rel="stylesheet" href="css/main.css" type="text/css" />
     <script>
-    (function(d){
+      function anonymousLogin() {
+        window.location.href = './#strategy=anonymous&accessToken=.';
+      }
+
+      function facebookLogin() {
+        FB.login(onFacebookResponse);
+      }
+
+      (function(d) {
         var js, id = 'facebook-jssdk', ref = d.getElementsByTagName('script')[0];
         if (d.getElementById(id)) {return;}
         js = d.createElement('script'); js.id = id; js.async = true;
         js.src = "//connect.facebook.net/en_US/all.js";
         ref.parentNode.insertBefore(js, ref);
-      }(document));
+      } (document));
 
-     // Init the SDK upon load
-     window.fbAsyncInit = function() {
-       FB.init({
-         appId      : '409286079118102',
-         channelUrl : '//'+window.location.hostname+window.location.port+'/channel',
-         status     : true,
-         cookie     : true,
-         xfbml      : true
-       });
+      // Init the SDK upon load
+      window.fbAsyncInit = function() {
+        FB.init({
+          appId      : '409286079118102',
+          channelUrl : '//'+window.location.hostname+window.location.port+'/channel',
+          status     : true,
+          cookie     : true,
+          xfbml      : true
+        });
 
-       FB.getLoginStatus(function(response) {
-         if (response.status === 'connected') {
-           window.location.href = './#strategy=facebook&accessToken=' + response.authResponse.accessToken;
-         } else if (response.status === 'not_authorized') {
-           document.getElementById('content').style.display = 'block';
-         } else {
-           document.getElementById('content').style.display = 'block';
-         }
-       });
-
-       // listen for and handle auth.statusChange events
-       FB.Event.subscribe('auth.statusChange', function(response) {
-         if (response.authResponse) {
-           window.location.href = './#accessToken=' + response.authResponse.accessToken;
-         } else {
-           document.getElementById('content').style.display = 'block';
-         }
-       });
+        FB.getLoginStatus(onFacebookResponse);
+        FB.Event.subscribe('auth.statusChange', onFacebookResponse);
       };
+
+      function onFacebookResponse(response) {
+        if (response.status === 'connected' && response.authResponse) {
+          window.location.href = './#strategy=facebook&accessToken=' + response.authResponse.accessToken;
+        } else {
+          document.getElementById('content').style.display = 'block';
+        }
+      }
     </script>
   </head>
   <body>
@@ -49,8 +54,8 @@
         dotproduct is a game where you power up your spaceship and shoot other players. It's designed for quick action and casual play.
       </div>
       <br>
-      <div class="signin">Sign in with Facebook</div>
-      <div class="fb-login-button"></div>
+      <button type="button" id="anonymous" class="btn btn-primary" onclick="anonymousLogin()">Play now</button>
+      <button type="button" id="facebook" class="btn btn-default" onclick="facebookLogin()">Log in</button>
     </div>
   </body>
 </html>
