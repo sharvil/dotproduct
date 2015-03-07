@@ -53,11 +53,16 @@ Application = function(settings, url) {
    */
   this.game_;
 
+  var loginData = {
+    'strategy': settings.strategy,
+    'accessToken': settings.accessToken
+  };
+
   /**
    * @type {!views.LoginView}
    * @private
    */
-  this.loginView_ = new views.LoginView({ 'accessToken': settings.accessToken }, this.protocol_, goog.bind(this.startGame_, this));
+  this.loginView_ = new views.LoginView(loginData, this.protocol_, goog.bind(this.startGame_, this));
 
   /**
    * @type {!views.LoadingView}
