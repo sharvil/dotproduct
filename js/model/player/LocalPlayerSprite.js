@@ -106,3 +106,14 @@ model.player.LocalPlayerSprite.prototype.collectPrize_ = function(prize) {
   this.resourceManager_.playSound('prize');
   return goog.base(this, 'collectPrize_', prize);
 };
+
+/**
+ * @override
+ */
+model.player.LocalPlayerSprite.prototype.bounce_ = function() {
+  if (this.velocity_.magnitude() > 1) {
+    this.resourceManager_.playSound('bounce');
+  }
+
+  goog.base(this, 'bounce_');
+};
