@@ -114,31 +114,6 @@ body {
 }
 
 /**************************************
-              LOGIN VIEW
- **************************************/
-
-#lv {
-    display: none;
-}
-
-.lv-name {
-  color: #a0a0a0;
-  background: #2d2d2d;
-  border: 1px solid #3c3c3c;
-  padding: 5px 9px;
-  margin: 0;
-}
-
-.lv-login-button {
-  border: none;
-  background: #00AA78;
-/*  background: #80d850;*/
-  color: #fff;
-  padding: 5px 9px;
-  margin: 0 0 0 5px;
-}
-
-/**************************************
               GAME VIEW
  **************************************/
 

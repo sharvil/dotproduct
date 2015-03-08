@@ -90,12 +90,10 @@ net.Protocol.C2SPacketType_ = {
   PLAYER_DIED: 5,
   CHAT_MESSAGE: 6,
   SHIP_CHANGE: 7,
-  QUERY_NAME: 8,
-  REGISTER_NAME: 9,
-  PRIZE_COLLECTED: 10,
-  SET_PRESENCE: 11,
-  TUTORIAL_COMPLETED: 12,
-  FLAG_CAPTURED: 13
+  PRIZE_COLLECTED: 8,
+  SET_PRESENCE: 9,
+  TUTORIAL_COMPLETED: 10,
+  FLAG_CAPTURED: 11
 };
 
 /**
@@ -111,12 +109,10 @@ net.Protocol.S2CPacketType = {
   CHAT_MESSAGE: 7,
   SHIP_CHANGE: 8,
   SCORE_UPDATE: 9,
-  QUERY_NAME_REPLY: 10,
-  REGISTER_NAME_REPLY: 11,
-  PRIZE_SEED_UPDATE: 12,
-  PRIZE_COLLECTED: 13,
-  SET_PRESENCE: 14,
-  FLAG_UPDATE: 15
+  PRIZE_SEED_UPDATE: 10,
+  PRIZE_COLLECTED: 11,
+  SET_PRESENCE: 12,
+  FLAG_UPDATE: 13
 };
 
 /**
@@ -243,20 +239,6 @@ net.Protocol.prototype.sendChat = function(message) {
  */
 net.Protocol.prototype.sendShipChange = function(ship) {
   this.send_([net.Protocol.C2SPacketType_.SHIP_CHANGE, ship]);
-};
-
-/**
- * @param {string} name
- */
-net.Protocol.prototype.queryName = function(name) {
-  this.send_([net.Protocol.C2SPacketType_.QUERY_NAME, name]);
-};
-
-/**
- * @param {string} name
- */
-net.Protocol.prototype.registerName = function(name) {
-  this.send_([net.Protocol.C2SPacketType_.REGISTER_NAME, name]);
 };
 
 /**
