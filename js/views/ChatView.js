@@ -5,7 +5,6 @@ goog.require('goog.events.BrowserEvent');
 goog.require('goog.events.Event');
 goog.require('goog.events.EventType');
 goog.require('net.Protocol');
-goog.require('Timestamp');
 goog.require('views.View');
 
 /**

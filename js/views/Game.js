@@ -30,7 +30,6 @@ goog.require('PlayerIndex');
 goog.require('PrizeIndex');
 goog.require('net.Protocol');
 goog.require('Timer');
-goog.require('Timestamp');
 goog.require('Viewport');
 goog.require('views.ChatView');
 goog.require('views.DebugView');

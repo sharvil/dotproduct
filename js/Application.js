@@ -10,7 +10,6 @@ goog.require('html5.Fullscreen');
 goog.require('Game');
 goog.require('net.Protocol');
 goog.require('ResourceManager');
-goog.require('Timestamp');
 goog.require('views.LoadingView');
 goog.require('views.LoginView');
 
