@@ -1,7 +1,7 @@
 goog.provide('model.player.RemotePlayer');
 
 goog.require('model.player.Player');
-goog.require('Timer');
+goog.require('time.Timer');
 goog.require('math.Vector');
 
 /**

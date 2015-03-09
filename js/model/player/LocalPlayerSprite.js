@@ -6,6 +6,7 @@ goog.require('model.player.LocalPlayer');
 goog.require('model.player.PlayerSprite');
 goog.require('graphics.Drawable');
 goog.require('graphics.Layer');
+goog.require('time.Timer');
 
 /**
  * @constructor
@@ -48,7 +49,7 @@ model.player.LocalPlayerSprite.prototype.render = function(viewport) {
   var dimensions = viewport.getDimensions();
 
   if (!this.isAlive()) {
-    var millis = Timer.ticksToMillis(this.respawnTimer_);
+    var millis = time.Timer.ticksToMillis(this.respawnTimer_);
     var seconds = Math.floor(millis / 1000);
     var tenths = Math.floor((millis % 1000) / 100);
     var time = seconds + '.' + tenths;

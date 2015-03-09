@@ -5,7 +5,7 @@ goog.require('goog.debug.Logger');
 
 goog.require('math.Vector');
 goog.require('model.projectile.Projectile');
-goog.require('Timer');
+goog.require('time.Timer');
 
 /**
  * @constructor
@@ -173,7 +173,7 @@ net.Protocol.prototype.login = function(loginData) {
 net.Protocol.prototype.startGame = function(ship) {
   this.send_([net.Protocol.C2SPacketType_.START_GAME, ship]);
   this.syncClocks_();
-  this.syncTimer_ = Timer.setInterval(goog.bind(this.syncClocks_, this), net.Protocol.CLOCK_SYNC_PERIOD_);
+  this.syncTimer_ = time.Timer.setInterval(goog.bind(this.syncClocks_, this), net.Protocol.CLOCK_SYNC_PERIOD_);
 };
 
 /**
@@ -273,7 +273,7 @@ net.Protocol.prototype.onOpen_ = function() {
 };
 
 net.Protocol.prototype.onClose_ = function() {
-  Timer.clearInterval(this.syncTimer_);
+  time.Timer.clearInterval(this.syncTimer_);
   this.syncTimer_ = 0;
   this.packetQueue_ = [];
   this.socket_ = null;

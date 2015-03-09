@@ -29,7 +29,7 @@ goog.require('Notifications');
 goog.require('PlayerIndex');
 goog.require('PrizeIndex');
 goog.require('net.Protocol');
-goog.require('Timer');
+goog.require('time.Timer');
 goog.require('Viewport');
 goog.require('views.ChatView');
 goog.require('views.DebugView');
@@ -206,7 +206,7 @@ Game = function(protocol, resourceManager, settings, mapData, tileProperties) {
   goog.events.listen(window, goog.events.EventType.FOCUS, function() { localPlayer.clearPresence(model.player.Player.Presence.AWAY); });
   goog.events.listen(window, goog.events.EventType.BLUR, function() { localPlayer.setPresence(model.player.Player.Presence.AWAY); });
 
-  Timer.setInterval(goog.bind(this.heartbeat_, this), 100);
+  time.Timer.setInterval(goog.bind(this.heartbeat_, this), 100);
   html5.Notifications.requestPermission();
 };
 goog.inherits(Game, views.View);
@@ -358,7 +358,7 @@ Game.prototype.renderingLoop_ = function() {
   this.animationId_ = html5.AnimationFrame.request(goog.bind(this.renderingLoop_, this));
 
   var curTime = goog.now();
-  var timeDiff = Timer.millisToTicks(curTime - this.lastTime_ + this.tickResidue_);
+  var timeDiff = time.Timer.millisToTicks(curTime - this.lastTime_ + this.tickResidue_);
 
   timeDiff = Math.min(timeDiff, Game.MAX_TICKS_PER_FRAME_);
 
@@ -378,7 +378,7 @@ Game.prototype.renderingLoop_ = function() {
   this.debugView_.update();
 
   this.tickResidue_ += curTime - this.lastTime_;
-  this.tickResidue_ -= Timer.ticksToMillis(timeDiff);
+  this.tickResidue_ -= time.Timer.ticksToMillis(timeDiff);
   this.lastTime_ = curTime;
 };
 
@@ -429,7 +429,7 @@ Game.prototype.onPlayerLeft_ = function(packet) {
  * @private
  */
 Game.prototype.onPlayerPosition_ = function(packet) {
-  var timeDiff = Timer.millisToTicks(this.protocol_.getMillisSinceServerTime(packet[0]));
+  var timeDiff = time.Timer.millisToTicks(this.protocol_.getMillisSinceServerTime(packet[0]));
   var id = packet[1];
   var angle = packet[2];
   var position = new math.Vector(packet[3], packet[4]);
@@ -529,7 +529,7 @@ Game.prototype.onPrizeSeedUpdated_ = function(packet) {
   var seed = packet[0];
   var timeDeltaMillis = this.protocol_.getMillisSinceServerTime(packet[1]);
 
-  var ticks = Timer.millisToTicks(timeDeltaMillis);
+  var ticks = time.Timer.millisToTicks(timeDeltaMillis);
   this.prizeIndex_.onSeedUpdate(seed, ticks);
 };
 
