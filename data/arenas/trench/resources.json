@@ -6,6 +6,42 @@
       "yTiles": 10
     },
 
+    "star0": {
+      "url": "data/shared/graphics/star0.png",
+      "xTiles": 1,
+      "yTiles": 1
+    },
+
+    "star1": {
+      "url": "data/shared/graphics/star1.png",
+      "xTiles": 1,
+      "yTiles": 1
+    },
+
+    "star2": {
+      "url": "data/shared/graphics/star2.png",
+      "xTiles": 1,
+      "yTiles": 1
+    },
+
+    "star3": {
+      "url": "data/shared/graphics/star3.png",
+      "xTiles": 1,
+      "yTiles": 1
+    },
+
+    "star4": {
+      "url": "data/shared/graphics/star4.png",
+      "xTiles": 1,
+      "yTiles": 1
+    },
+
+    "star5": {
+      "url": "data/shared/graphics/star5.png",
+      "xTiles": 1,
+      "yTiles": 1
+    },
+
     "ship0": {
       "url": "data/shared/graphics/ship0.png",
       "xTiles": 10,
