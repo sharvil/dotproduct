@@ -53,6 +53,10 @@ body {
   color: #ccc;
 }
 
+::selection {
+  background: rgba(50, 50, 50, 0.75);
+}
+
 .title {
   padding: 40px 0 40px 80px;
   font-size: 55px;
@@ -271,4 +275,18 @@ body {
 
 .dcv:hover {
   background: rgba(50, 50, 50, 0.75);
+}
+
+.tt {
+  position: absolute;
+  border: 1px solid #222;
+  background: rgba(30, 30, 30, 0.75);
+  padding: 5px;
+  opacity: 1;
+  transition: opacity 0.5s, left 0.1s, top 0.1s;
+}
+
+.tt-hide {
+  opacity: 0;
+  transition: opacity 0.5s;
 }

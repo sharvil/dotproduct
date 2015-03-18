@@ -1,6 +1,10 @@
 goog.provide('layers.WeaponIndicators');
 
+goog.require('goog.dom');
+goog.require('goog.events.KeyNames');
 goog.require('graphics.Drawable');
+goog.require('input.Keymap');
+goog.require('math.Rect');
 
 /**
  * @constructor
@@ -15,13 +19,32 @@ layers.WeaponIndicators = function(game) {
   this.localPlayer_ = game.getPlayerIndex().getLocalPlayer();
 
   /**
+   * @type {!input.Mouse}
+   * @private
+   */
+  this.mouse_ = game.getMouse();
+
+  /**
    * @type {!graphics.Image}
    * @private
    */
   this.icons_ = game.getResourceManager().getImage('icons');
 
+  /**
+   * @type {!HTMLDivElement}
+   * @private
+   */
+  this.tooltip_ = /** @type {!HTMLDivElement} */ (goog.dom.getElement('tt'));
+
   game.getPainter().registerDrawable(graphics.Layer.HUD, this);
 };
+
+/**
+ * @type {string}
+ * @private
+ * @const
+ */
+layers.WeaponIndicators.TOOLTIP_HIDE_CLASS_NAME_ = 'tt-hide';
 
 /**
  * @override
@@ -37,28 +60,66 @@ layers.WeaponIndicators.prototype.render = function(viewport) {
   var numIndicators = 2;
   var padding = 1;
 
-  var top = Math.floor((dimensions.height - (numIndicators * this.icons_.getTileHeight() + (numIndicators - 1) * padding)) / 2);
-  var left = dimensions.width - this.icons_.getTileWidth();
+  var width = this.icons_.getTileWidth();
+  var height = this.icons_.getTileHeight();
+  var top = Math.floor((dimensions.height - (numIndicators * height + (numIndicators - 1) * padding)) / 2);
+  var left = dimensions.width - width;
 
-  this.renderLeveledWeapon_(context, left, top, gunLevel, 0);
-  top += padding + this.icons_.getTileHeight();
-  this.renderLeveledWeapon_(context, left, top, bombLevel, 18);
+  this.tooltip_.classList.add(layers.WeaponIndicators.TOOLTIP_HIDE_CLASS_NAME_);
 
-  this.icons_.render(context, (bursts > 0) ? 0 : 4 - this.icons_.getTileWidth(), top, 30);
+  var label = 'Guns: ' + goog.events.KeyNames[input.Keymap.FIRE_GUN];
+  this.renderLeveledWeapon_(context, new math.Rect(left, top, width, height), gunLevel, 0, label);
+
+  top += padding + height;
+
+  label = 'Bombs: ' + goog.events.KeyNames[input.Keymap.FIRE_BOMB] + '\n';
+  label += 'Mines: ' + goog.events.KeyNames[input.Keymap.FIRE_MINE];
+  this.renderLeveledWeapon_(context, new math.Rect(left, top, width, height), bombLevel, 18, label);
+
+  label = 'Burst: ' + goog.events.KeyNames[input.Keymap.FIRE_BURST];
+  this.renderConsumableWeapon_(context, new math.Rect(0, top, width, height), bursts, 30, label);
 };
 
 /**
  * @param {!CanvasRenderingContext2D} context
- * @param {number} left
- * @param {number} top
+ * @param {!math.Rect} rect
  * @param {number} level
  * @param {number} tileNum
+ * @param {string} label
  */
-layers.WeaponIndicators.prototype.renderLeveledWeapon_ = function(context, left, top, level, tileNum) {
+layers.WeaponIndicators.prototype.renderLeveledWeapon_ = function(context, rect, level, tileNum, label) {
+  var x = rect.x();
+  var y = rect.y();
+
   if (level >= 0) {
     tileNum += level;
+    if (this.mouse_.isHovering(rect)) {
+      this.tooltip_.classList.remove(layers.WeaponIndicators.TOOLTIP_HIDE_CLASS_NAME_);
+      this.tooltip_.style.top = rect.y() + 'px';
+      this.tooltip_.style.right = rect.width() + 'px';
+      this.tooltip_.style.left = '';
+      this.tooltip_.innerText = label;
+    }
   } else {
-    left += this.icons_.getTileWidth() - 4;
+    x += rect.width() - 4;
   }
-  this.icons_.render(context, left, top, tileNum);
+
+  this.icons_.render(context, x, y, tileNum);
+};
+
+layers.WeaponIndicators.prototype.renderConsumableWeapon_ = function(context, rect, count, tileNum, label) {
+  var x = rect.x();
+  var y = rect.y();
+
+  if (count <= 0) {
+    x -= rect.width() - 4;
+  } else if (this.mouse_.isHovering(rect)) {
+    this.tooltip_.classList.remove(layers.WeaponIndicators.TOOLTIP_HIDE_CLASS_NAME_);
+    this.tooltip_.style.top = rect.y() + 'px';
+    this.tooltip_.style.left = rect.width() + 'px';
+    this.tooltip_.style.right = '';
+    this.tooltip_.innerText = label;
+  }
+
+  this.icons_.render(context, x, y, tileNum);
 };

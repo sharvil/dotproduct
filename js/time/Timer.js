@@ -1,11 +1,58 @@
 goog.provide('time.Timer');
 
 /**
+ * @constructor
+ */
+time.Timer = function() {
+  /**
+   * @type {number}
+   * @private
+   */
+  this.timeoutId_ = null;
+
+  /**
+   * @type {number}
+   * @private
+   */
+  this.intervalId_ = null;
+};
+
+/**
  * @type {number}
  * @private
  * @const
  */
 time.Timer.TICK_PERIOD_ = 10;
+
+/**
+ * @param {function()} callback
+ * @param {number} timeout_ticks
+ */
+time.Timer.prototype.setTimeout = function(callback, timeout_ticks) {
+  this.clear();
+  this.timeoutId_ = setTimeout(callback, timeout_ticks * time.Timer.TICK_PERIOD_);
+};
+
+/**
+ * @param {function()} callback
+ * @param {number} timeout_ticks
+ */
+time.Timer.prototype.setInterval = function(callback, interval_ticks) {
+  this.clear();
+  this.intervalId_ = setInterval(callback, interval_ticks * time.Timer.TICK_PERIOD_);
+};
+
+time.Timer.prototype.clear = function() {
+  if (this.timeoutId_ != null) {
+    clearTimeout(this.timeoutId_);
+    this.timeoutId_ = null;
+  }
+
+  if (this.intervalId_ != null) {
+    clearInterval(this.intervalId_);
+    this.intervalId_ = null;
+  }
+};
 
 /**
  * @param {function()} cb

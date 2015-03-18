@@ -22,22 +22,10 @@ views.ChatView = function(game) {
   this.localPlayer_ = game.getPlayerIndex().getLocalPlayer();
 
   /**
-   * @type {!Object}
-   * @private
-   */
-  this.settings_ = game.getSettings();
-
-  /**
    * @type {!net.Protocol}
    * @private
    */
   this.protocol_ = game.getProtocol();
-
-  /**
-   * @type {!Object.<string, !Array.<function(string)>>}
-   * @private
-   */
-  this.handlers_ = {};
 
   /**
    * @type {!HTMLDivElement}
@@ -196,14 +184,8 @@ views.ChatView.prototype.onChatKeyPress_ = function(event) {
   var message = this.chatBox_.value.trim();
   if (message != '') {
     var command = message.split(' ')[0];
-    if (this.handlers_[command]) {
-      for (var i in this.handlers_[command]) {
-        this.handlers_[command][i](message);
-      }
-    } else {
-      this.protocol_.sendChat(message);
-      this.addMessage(this.localPlayer_, message);
-    }
+    this.protocol_.sendChat(message);
+    this.addMessage(this.localPlayer_, message);
   }
 
   this.chatBox_.value = '';

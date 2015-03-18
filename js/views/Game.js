@@ -14,6 +14,7 @@ goog.require('FlagIndex');
 goog.require('graphics.Painter');
 goog.require('graphics.Tween');
 goog.require('input.Keyboard');
+goog.require('input.Mouse');
 goog.require('layers.HudLayer');
 goog.require('layers.NotificationLayer');
 goog.require('layers.MapLayer');
@@ -90,6 +91,12 @@ Game = function(protocol, resourceManager, settings, mapData, tileProperties) {
   this.keyboard_ = new input.Keyboard();
 
   /**
+   * @type {!input.Mouse}
+   * @private
+   */
+  this.mouse_ = new input.Mouse();
+
+  /**
    * @type {!HTMLCanvasElement}
    * @private
    */
@@ -140,6 +147,7 @@ Game = function(protocol, resourceManager, settings, mapData, tileProperties) {
    * @private
    */
   this.chatView_ = new views.ChatView(this);
+  this.chatView_.addSystemMessage('Welcome to dotproduct! Select one of 8 ships with the 1-8 keys.');
 
   /**
    * @type {!views.ScoreboardView}
@@ -206,7 +214,7 @@ Game = function(protocol, resourceManager, settings, mapData, tileProperties) {
   goog.events.listen(window, goog.events.EventType.FOCUS, function() { localPlayer.clearPresence(model.player.Player.Presence.AWAY); });
   goog.events.listen(window, goog.events.EventType.BLUR, function() { localPlayer.setPresence(model.player.Player.Presence.AWAY); });
 
-  time.Timer.setInterval(goog.bind(this.heartbeat_, this), 100);
+  new time.Timer().setInterval(goog.bind(this.heartbeat_, this), 100);
   html5.Notifications.requestPermission();
 };
 goog.inherits(Game, views.View);
@@ -273,6 +281,14 @@ Game.prototype.getProtocol = function() {
 Game.prototype.getKeyboard = function() {
   goog.asserts.assert(!!this.keyboard_, 'Keyboard is null');
   return this.keyboard_;
+};
+
+/**
+ * @return {!input.Mouse}
+ */
+Game.prototype.getMouse = function() {
+  goog.asserts.assert(!!this.mouse_, 'Mouse is null');
+  return this.mouse_;
 };
 
 /**
