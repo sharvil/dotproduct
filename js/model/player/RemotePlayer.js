@@ -93,7 +93,7 @@ model.player.RemotePlayer.prototype.onPositionUpdate = function(timeDiff, angle,
   }
 
   // Ignore position updates from before the last wall bounce.
-  if(goog.now() - Timer.ticksToMillis(timeDiff) < this.bounceTimestamp_) {
+  if(goog.now() - time.Timer.ticksToMillis(timeDiff) < this.bounceTimestamp_) {
     return;
   }
 
