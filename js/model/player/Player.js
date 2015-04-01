@@ -3,6 +3,8 @@ goog.provide('model.player.Player.Presence');
 
 goog.require('goog.array');
 
+goog.require('Listener');
+
 goog.require('model.Entity');
 goog.require('model.BombBay');
 goog.require('model.Burst');
@@ -141,6 +143,7 @@ model.player.Player = function(game, id, name, team, ship, bounty) {
   this.bounty_ = bounty;
 };
 goog.inherits(model.player.Player, model.Entity);
+goog.mixin(model.player.Player.prototype, Listener.prototype);
 
 /**
  * @enum {number}
@@ -150,6 +153,13 @@ model.player.Player.Presence = {
   TYPING: 1,
   AWAY: 2,
   ALL: 0x7FFFFFFF
+};
+
+/**
+ * @enum {string}
+ */
+model.player.Player.Event = {
+  DEATH: 'death'
 };
 
 /**
@@ -314,11 +324,14 @@ model.player.Player.prototype.onDamage = goog.nullFunction;
 
 /**
  * Called when this player is killed by someone.
+ *
+ * @param {!model.player.Player} killer The player who killed this player.
  */
-model.player.Player.prototype.onDeath = function() {
+model.player.Player.prototype.onDeath = function(killer) {
   ++this.losses_;
   this.bounty_ = 0;
   this.energy_ = 0;
+  this.fireEvent_(model.player.Player.Event.DEATH, killer);
 };
 
 /**

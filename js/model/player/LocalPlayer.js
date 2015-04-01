@@ -127,21 +127,18 @@ model.player.LocalPlayer.prototype.onDamage = function(shooter, projectile, ener
   this.energy_ = Math.max(this.energy_ - energy, (shooter == this) ? 1 : 0);
   if (this.energy_ <= 0) {
     var bountyGained = this.bounty_;
-    this.onDeath();
+    this.onDeath(shooter);
     shooter.onKill(this, bountyGained);
 
     this.game_.getProtocol().sendDeath(this.position_, shooter);
-
-    // TODO(sharvil): we shouldn't reach into game's private member...
-    this.game_.notifications_.addPersonalMessage('You were killed by ' + shooter.getName() + '!');
   }
 };
 
 /**
  * @override
  */
-model.player.LocalPlayer.prototype.onDeath = function() {
-  goog.base(this, 'onDeath');
+model.player.LocalPlayer.prototype.onDeath = function(killer) {
+  goog.base(this, 'onDeath', killer);
   this.respawnTimer_ = this.shipSettings_['respawnDelay'];
 };
 

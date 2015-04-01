@@ -21,8 +21,8 @@ model.player.PlayerSprite.prototype.respawn = function(angle, position, velocity
   var effect = new model.Effect(this.game_, animation, this.position_, math.Vector.ZERO);
 };
 
-model.player.PlayerSprite.prototype.onDeath = function() {
-  goog.base(this, 'onDeath');
+model.player.PlayerSprite.prototype.onDeath = function(killer) {
+  goog.base(this, 'onDeath', killer);
 
   var resourceManager = this.game_.getResourceManager();
   var ensemble = resourceManager.getSpriteSheet('explode1');

@@ -208,6 +208,8 @@ Game = function(protocol, resourceManager, settings, mapData, tileProperties) {
 
   this.viewport_.followPlayer(localPlayer);
 
+  localPlayer.addListener(model.player.Player.Event.DEATH, goog.bind(this.onLocalPlayerDied_, this));
+
   goog.events.listen(window, goog.events.EventType.RESIZE, goog.bind(this.onResize_, this));
   goog.events.listen(this.canvas_, goog.events.EventType.MOUSEMOVE, goog.bind(this.onMouseMoved_, this));
 
@@ -479,7 +481,7 @@ Game.prototype.onPlayerDied_ = function(packet) {
     return;
   }
 
-  killee.onDeath();
+  killee.onDeath(killer);
   killer.onKill(killee, bountyGained);
   this.prizeIndex_.addKillPrize(x, y);
 
@@ -588,6 +590,15 @@ Game.prototype.onFlagUpdate_ = function(packet) {
   var yTile = packet[3];
 
   this.flagIndex_.updateFlag(id, team, xTile, yTile);
+};
+
+/**
+ * @param {!model.player.Player} player
+ * @param {!model.player.Player} killer
+ * @private
+ */
+Game.prototype.onLocalPlayerDied_ = function(player, killer) {
+  this.notifications_.addPersonalMessage('You were killed by ' + killer.getName() + '!');
 };
 
 /**
