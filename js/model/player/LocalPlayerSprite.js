@@ -49,7 +49,7 @@ model.player.LocalPlayerSprite.prototype.render = function(viewport) {
   var dimensions = viewport.getDimensions();
 
   if (!this.isAlive()) {
-    var millis = time.Timer.ticksToMillis(this.respawnTimer_);
+    var millis = window.time.Timer.ticksToMillis(this.respawnTimer_);
     var seconds = Math.floor(millis / 1000);
     var tenths = Math.floor((millis % 1000) / 100);
     var time = seconds + '.' + tenths;
