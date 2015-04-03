@@ -9,6 +9,7 @@ goog.require('model.Weapon.Type');
  * @param {!Game} game
  * @param {!Object} burstSettings
  * @param {!model.player.Player} owner
+ * @implements {model.Weapon}
  */
 model.Burst = function(game, burstSettings, owner) {
   /**
@@ -52,7 +53,7 @@ model.Burst.prototype.getCount = function() {
 
 /**
  * @param {!math.Vector} position
- * @param {function(number, number, number): boolean} commitFireFn
+ * @param {function(number, number): boolean} commitFireFn
  * @return {Object}
  */
 model.Burst.prototype.fire = function(position, commitFireFn) {
