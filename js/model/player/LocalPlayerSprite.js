@@ -103,18 +103,19 @@ model.player.LocalPlayerSprite.prototype.onInvalidate_ = function() {
 /**
  * @override
  */
-model.player.LocalPlayerSprite.prototype.collectPrize_ = function(prize) {
+model.player.LocalPlayerSprite.prototype.onPrizeCollected = function(prize) {
+  goog.base(this, 'onPrizeCollected', prize);
+
   this.resourceManager_.playSound('prize');
-  return goog.base(this, 'collectPrize_', prize);
 };
 
 /**
  * @override
  */
 model.player.LocalPlayerSprite.prototype.bounce_ = function() {
+  goog.base(this, 'bounce_');
+
   if (this.velocity_.magnitude() > 1) {
     this.resourceManager_.playSound('bounce');
   }
-
-  goog.base(this, 'bounce_');
 };

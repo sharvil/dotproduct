@@ -74,35 +74,29 @@ model.player.LocalPlayer.ANGLE_STEPS_ = 40;
 /**
  * @override
  */
-model.player.LocalPlayer.prototype.collectPrize_ = function(prize) {
-  goog.base(this, 'collectPrize_', prize);
+model.player.LocalPlayer.prototype.shouldCollectPrize_ = function(prize) { return true; };
 
-  // TODO(sharvil): we shouldn't reach into game's private member...
+/**
+ * @override
+ */
+model.player.LocalPlayer.prototype.onPrizeCollected = function(prize) {
+  goog.base(this, 'onPrizeCollected', prize);
+
   switch (prize.getType()) {
-    case PrizeType.NONE:
-      this.game_.notifications_.addMessage('No prize for you. Sadface.');
-      break;
     case PrizeType.GUN_UPGRADE:
       this.gun_.upgrade();
-      this.game_.notifications_.addMessage('Guns upgraded!');
       break;
     case PrizeType.BOMB_UPGRADE:
       this.bombBay_.upgrade();
       this.mineLayer_.upgrade();
-      this.game_.notifications_.addMessage('Bombs upgraded!');
       break;
     case PrizeType.FULL_ENERGY:
-      this.game_.notifications_.addMessage('Full charge!');
       this.energy_ = this.maxEnergy_;
       break;
     case PrizeType.BOUNCING_BULLETS:
-      this.game_.notifications_.addMessage('Bouncing bullets!');
       this.gun_.setBounces(true);
       break;
   }
-  this.game_.getProtocol().sendPrizeCollected(prize.getType(), prize.getX(), prize.getY());
-  ++this.bounty_;
-  return true;
 };
 
 /**

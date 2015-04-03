@@ -111,7 +111,8 @@ model.Entity.prototype.updatePosition_ = function(opt_bounceFactor) {
           break;
         case ObjectType.PRIZE:
           var prize = prizeIndex.getPrize(collision.xTile, collision.yTile);
-          if (prize && this.collectPrize_(prize)) {
+          if (prize && this.shouldCollectPrize_(prize)) {
+            this.onPrizeCollected(prize);
             prizeIndex.removePrize(prize);
           }
           break;
@@ -147,7 +148,8 @@ model.Entity.prototype.updatePosition_ = function(opt_bounceFactor) {
           break;
         case ObjectType.PRIZE:
           var prize = prizeIndex.getPrize(collision.xTile, collision.yTile);
-          if (prize && this.collectPrize_(prize)) {
+          if (prize && this.shouldCollectPrize_(prize)) {
+            this.onPrizeCollected(prize);
             prizeIndex.removePrize(prize);
           }
           break;
@@ -167,13 +169,23 @@ model.Entity.prototype.updatePosition_ = function(opt_bounceFactor) {
 };
 
 /**
- * This function takes a prize and returns true if it should be taken or
- * false if it should not be taken.
+ * This function should return true if the prize should be taken, false if not.
+ * When the prize is actually taken, onPrizeCollected will be called.
+ *
  * @param {!model.Prize} prize
  * @return {boolean}
  * @protected
  */
-model.Entity.prototype.collectPrize_ = goog.nullFunction;
+model.Entity.prototype.shouldCollectPrize_ = function(prize) { return false; };
+
+/**
+ * Called when this entity takes a prize. The prize may be granted by the server
+ * or by the local simulation. If the prize was granted by the server and it
+ * wasn't found in our model, |prize| will be null.
+ *
+ * @param {model.Prize} prize
+ */
+ model.Entity.prototype.onPrizeCollected = goog.abstractMethod;
 
 /**
  * @param {!model.Flag} flag

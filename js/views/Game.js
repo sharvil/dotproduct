@@ -208,6 +208,7 @@ Game = function(protocol, resourceManager, settings, mapData, tileProperties) {
 
   this.viewport_.followPlayer(localPlayer);
 
+  localPlayer.addListener(model.player.Player.Event.COLLECT_PRIZE, goog.bind(this.onLocalPlayerCollectedPrize_, this));
   localPlayer.addListener(model.player.Player.Event.DEATH, goog.bind(this.onLocalPlayerDied_, this));
 
   goog.events.listen(window, goog.events.EventType.RESIZE, goog.bind(this.onResize_, this));
@@ -561,11 +562,16 @@ Game.prototype.onPrizeCollected_ = function(packet) {
   var xTile = packet[2];
   var yTile = packet[3];
 
+  // Remove the prize from the map if we have it in our model.
   var prize = this.prizeIndex_.getPrize(xTile, yTile);
   if (prize) {
-    player.onPrizeCollected();
     this.prizeIndex_.removePrize(prize);
   }
+
+  // Let the player collect the prize, even if it wasn't on the map (this makes
+  // sure the bounty gets updated correctly for remote players even if our model
+  // doesn't have a prize at that location).
+  player.onPrizeCollected(prize);
 };
 
 /**
@@ -599,6 +605,43 @@ Game.prototype.onFlagUpdate_ = function(packet) {
  */
 Game.prototype.onLocalPlayerDied_ = function(player, killer) {
   this.notifications_.addPersonalMessage('You were killed by ' + killer.getName() + '!');
+};
+
+/**
+ * Event handler for when the local player picks up a prize. Notify the server
+ * if the prize was granted by the local simulation (i.e. prize is not null).
+ *
+ * @param {model.Prize} prize
+ */
+Game.prototype.onLocalPlayerCollectedPrize_ = function(player, prize) {
+  if (prize) {
+    this.protocol_.sendPrizeCollected(prize.getType(), prize.getX(), prize.getY());
+  }
+
+  var message;
+  switch (prize.getType()) {
+    case PrizeType.NONE:
+      message = 'No prize for you. Sadface.';
+      break;
+    case PrizeType.GUN_UPGRADE:
+      message = 'Guns upgraded!';
+      break;
+    case PrizeType.BOMB_UPGRADE:
+      message = 'Bombs upgraded!';
+      break;
+    case PrizeType.FULL_ENERGY:
+      message = 'Full charge!';
+      break;
+    case PrizeType.BOUNCING_BULLETS:
+      message = 'Bouncing bullets!';
+      break;
+    default:
+      goog.asserts.assert(false, 'Unhandled prize type: ' + prize.getType());
+  }
+
+  if (message) {
+    this.notifications_.addMessage(message);
+  }
 };
 
 /**

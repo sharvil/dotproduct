@@ -160,14 +160,6 @@ model.player.RemotePlayer.prototype.extrapolatePosition_ = function(timeDiff, st
 /**
  * @override
  */
-model.player.RemotePlayer.prototype.collectPrize_ = function(prize) {
-  goog.base(this, 'collectPrize_', prize);
-  return false;
-};
-
-/**
- * @override
- */
 model.player.RemotePlayer.prototype.bounce_ = function() {
   this.velocityAdjustTimer_ = 0;
   this.bounceTimestamp_ = goog.now();

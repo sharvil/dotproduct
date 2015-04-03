@@ -159,6 +159,7 @@ model.player.Player.Presence = {
  * @enum {string}
  */
 model.player.Player.Event = {
+  COLLECT_PRIZE: 'prize',
   DEATH: 'death'
 };
 
@@ -359,10 +360,11 @@ model.player.Player.prototype.onScoreUpdate = function(points, wins, losses) {
 };
 
 /**
- * Called when the server tells us that this player collected a prize.
+ * @override
  */
-model.player.Player.prototype.onPrizeCollected = function() {
+model.player.Player.prototype.onPrizeCollected = function(prize) {
   ++this.bounty_;
+  this.fireEvent_(model.player.Player.Event.COLLECT_PRIZE, prize);
 };
 
 /**
