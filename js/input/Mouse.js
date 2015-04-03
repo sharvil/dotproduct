@@ -5,6 +5,9 @@ goog.require('goog.events.EventType');
 goog.require('math.Vector');
 goog.require('time.Timer');
 
+/**
+ * @constructor
+ */
 input.Mouse = function() {
   /**
    * @type {!math.Vector}
