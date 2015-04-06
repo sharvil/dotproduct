@@ -66,13 +66,11 @@ model.player.RemotePlayer.VELOCITY_ADJUST_PERIOD_ = 20;
 /**
  * @override
  */
-model.player.RemotePlayer.prototype.respawn = function(angle, position, velocity) {
+model.player.RemotePlayer.prototype.respawn = function() {
   this.energy_ = 1;
   this.bounty_ = 0;
-  this.angleInRadians_ = angle;
-  this.position_ = position;
-  this.velocity_ = velocity;
-  this.originalVelocity_ = velocity;
+  this.velocity_ = math.Vector.ZERO;
+  this.originalVelocity_ = math.Vector.ZERO;
 };
 
 /**
@@ -88,7 +86,11 @@ model.player.RemotePlayer.prototype.onPositionUpdate = function(timeDiff, angle,
   }
 
   if (!this.isAlive()) {
-    this.respawn(angle, position, velocity);
+    this.respawn();
+    this.angleInRadians_ = angle;
+    this.position_ = position;
+    this.velocity_ = velocity;
+    this.originalVelocity_ = velocity;
     return;
   }
 

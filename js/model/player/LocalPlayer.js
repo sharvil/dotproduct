@@ -137,10 +137,10 @@ model.player.LocalPlayer.prototype.onDeath = function(killer) {
 /**
  * @override
  */
-model.player.LocalPlayer.prototype.respawn = function(angle, position, velocity) {
-  this.angleInRadians_ = angle;
-  this.position_ = position;
-  this.velocity_ = velocity;
+model.player.LocalPlayer.prototype.respawn = function() {
+  this.angleInRadians_ = Math.random() * 2 * Math.PI;
+  this.position_ = this.game_.getMap().getSpawnLocation(this);
+  this.velocity_ = math.Vector.ZERO;
   this.energy_ = this.shipSettings_['maxEnergy'];
   this.maxEnergy_ = this.shipSettings_['maxEnergy'];
 };
@@ -150,11 +150,7 @@ model.player.LocalPlayer.prototype.respawn = function(angle, position, velocity)
  */
 model.player.LocalPlayer.prototype.setShip = function(ship) {
   goog.base(this, 'setShip', ship);
-
-  var angle = Math.random() * 2 * Math.PI;
-  var position = this.game_.getMap().getSpawnLocation(this);
-  var velocity = math.Vector.ZERO;
-  this.respawn(angle, position, velocity);
+  this.respawn();
 };
 
 /**
@@ -204,7 +200,6 @@ model.player.LocalPlayer.prototype.advanceTime = function() {
         if (i != this.ship_) {
           if (this.energy_ >= this.maxEnergy_) {
             this.setShip(i);
-            this.game_.getProtocol().sendShipChange(this.ship_);
             forceSendUpdate = true;
           } else {
             // TODO(sharvil): we shouldn't reach into game's private member...

@@ -159,6 +159,7 @@ model.player.Player.Presence = {
  * @enum {string}
  */
 model.player.Player.Event = {
+  SHIP_CHANGE: 'shipchange',
   COLLECT_PRIZE: 'prize',
   DEATH: 'death'
 };
@@ -268,6 +269,8 @@ model.player.Player.prototype.hasPresence = function(presence) {
  * @param {number} ship
  */
 model.player.Player.prototype.setShip = function(ship) {
+  var oldShip = this.ship_;
+
   this.ship_ = ship;
   this.shipSettings_ = this.settings_['ships'][this.ship_];
   this.gun_ = new model.Gun(this.game_, this.shipSettings_['bullet'], this);
@@ -282,6 +285,12 @@ model.player.Player.prototype.setShip = function(ship) {
   this.xRadius_ = this.shipSettings_['xRadius'];
   this.yRadius_ = this.shipSettings_['yRadius'];
   this.clearProjectiles_();
+
+  // If we changed ship type, fire an event. Otherwise, we're simply resetting
+  // the ship state so we don't need to fire a ship change event.
+  if (this.ship_ != oldShip) {
+    this.fireEvent_(model.player.Player.Event.SHIP_CHANGE, ship);
+  }
 };
 
 /**
@@ -307,11 +316,6 @@ model.player.Player.prototype.onWeaponFired = function(timeDiff, weaponData) {
   }
 };
 
-/**
- * @param {number} angle
- * @param {!math.Vector} position
- * @param {!math.Vector} velocity
- */
 model.player.Player.prototype.respawn = goog.abstractMethod;
 
 /**

@@ -208,6 +208,7 @@ Game = function(protocol, resourceManager, settings, mapData, tileProperties) {
 
   this.viewport_.followPlayer(localPlayer);
 
+  localPlayer.addListener(model.player.Player.Event.SHIP_CHANGE, goog.bind(this.onLocalPlayerShipChanged_, this));
   localPlayer.addListener(model.player.Player.Event.COLLECT_PRIZE, goog.bind(this.onLocalPlayerCollectedPrize_, this));
   localPlayer.addListener(model.player.Player.Event.DEATH, goog.bind(this.onLocalPlayerDied_, this));
 
@@ -600,6 +601,14 @@ Game.prototype.onFlagUpdate_ = function(packet) {
 
 /**
  * @param {!model.player.Player} player
+ * @param {number} shipType
+ */
+Game.prototype.onLocalPlayerShipChanged_ = function(player, shipType) {
+  this.protocol_.sendShipChange(shipType);
+};
+
+/**
+ * @param {!model.player.Player} player
  * @param {!model.player.Player} killer
  * @private
  */
@@ -612,6 +621,7 @@ Game.prototype.onLocalPlayerDied_ = function(player, killer) {
  * Event handler for when the local player picks up a prize. Notify the server
  * if the prize was granted by the local simulation (i.e. prize is not null).
  *
+ * @param {!model.player.Player} player
  * @param {model.Prize} prize
  */
 Game.prototype.onLocalPlayerCollectedPrize_ = function(player, prize) {
