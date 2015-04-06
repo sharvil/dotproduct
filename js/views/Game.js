@@ -605,6 +605,7 @@ Game.prototype.onFlagUpdate_ = function(packet) {
  */
 Game.prototype.onLocalPlayerDied_ = function(player, killer) {
   this.notifications_.addPersonalMessage('You were killed by ' + killer.getName() + '!');
+  this.protocol_.sendDeath(player.getPosition(), killer);
 };
 
 /**

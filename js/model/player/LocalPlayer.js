@@ -123,8 +123,6 @@ model.player.LocalPlayer.prototype.onDamage = function(shooter, projectile, ener
     var bountyGained = this.bounty_;
     this.onDeath(shooter);
     shooter.onKill(this, bountyGained);
-
-    this.game_.getProtocol().sendDeath(this.position_, shooter);
   }
 };
 
