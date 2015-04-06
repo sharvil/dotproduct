@@ -67,7 +67,7 @@ layers.NotificationLayer.prototype.render = function(viewport) {
   var font = Font.notificationsFont();
 
   context.save();
-    context.font = font;
+    context.font = font.toString();
 
     this.notifications_.forEach(function(message, index) {
       if (message.ticks >= layers.NotificationLayer.MESSAGE_PERIOD_ + layers.NotificationLayer.FADE_PERIOD_) {

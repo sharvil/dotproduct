@@ -1,7 +1,7 @@
 goog.provide('ResourceManager');
 
 goog.require('goog.asserts');
-goog.require('goog.debug.Logger');
+goog.require('goog.log.Logger');
 
 goog.require('graphics.Image');
 goog.require('graphics.SpriteSheet');
@@ -12,10 +12,10 @@ goog.require('Sound');
  */
 ResourceManager = function() {
   /**
-   * @type {!goog.debug.Logger}
+   * @type {goog.log.Logger}
    * @private
    */
-  this.logger_ = goog.debug.Logger.getLogger('ResourceManager');
+  this.logger_ = goog.log.getLogger('ResourceManager');
 
   /**
    * @type {!Object.<string, !graphics.Image>}
@@ -30,7 +30,7 @@ ResourceManager = function() {
   this.spriteSheets_ = {};
 
   /**
-   * @type {!Object.<string, HTMLAudioElement>}
+   * @type {!Object.<string, !Sound>}
    * @private
    */
   this.sounds_ = {};
@@ -46,11 +46,11 @@ ResourceManager = function() {
 ResourceManager.prototype.loadImage = function(name, url, xTiles, yTiles, loadCb) {
   var self = this;
   var callback = function() {
-    self.logger_.info('Loaded image: "' + name + '"');
+    goog.log.info(self.logger_, 'Loaded image: "' + name + '"');
     loadCb();
   };
 
-  this.logger_.info('Loading image: "' + name + '" using URL: ' + url);
+  goog.log.info(this.logger_, 'Loading image: "' + name + '" using URL: ' + url);
   this.images_[name] = new graphics.Image(xTiles, yTiles);
   this.images_[name].load(url, callback);
 };
@@ -67,11 +67,11 @@ ResourceManager.prototype.loadImage = function(name, url, xTiles, yTiles, loadCb
 ResourceManager.prototype.loadSpriteSheet = function(name, url, xTiles, yTiles, frames, period, loadCb) {
   var self = this;
   var callback = function() {
-    self.logger_.info('Loaded video ensemble: "' + name + '"');
+    goog.log.info(self.logger_, 'Loaded video ensemble: "' + name + '"');
     loadCb();
   };
 
-  this.logger_.info('Loading video ensemble: "' + name + '" using URL: ' + url);
+  goog.log.info(this.logger_, 'Loading video ensemble: "' + name + '" using URL: ' + url);
   this.spriteSheets_[name] = new graphics.SpriteSheet(xTiles, yTiles, frames, period);
   this.spriteSheets_[name].load(url, callback)
 }
@@ -82,7 +82,7 @@ ResourceManager.prototype.loadSpriteSheet = function(name, url, xTiles, yTiles, 
  * @param {function()} loadCb
  */
 ResourceManager.prototype.loadSound = function(name, url, loadCb) {
-  this.logger_.info('Loading sound: "' + name + '" using URL: ' + url);
+  goog.log.info(this.logger_, 'Loading sound: "' + name + '" using URL: ' + url);
   this.sounds_[name] = new Sound();
   this.sounds_[name].load(url, loadCb);
 };

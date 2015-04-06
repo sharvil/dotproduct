@@ -130,6 +130,7 @@ PrizeIndex.prototype.advanceTime_ = function(opt_fastForwardTicks) {
 PrizeIndex.prototype.forEach = function(cb) {
   this.prizes_ = goog.array.filter(this.prizes_, function(prize) { return prize.isValid(); });
   goog.array.forEach(this.prizes_, function(prize) {
+    goog.asserts.assert(!!prize, 'Null prize found in prize index.');
     cb(prize);
   });
 };

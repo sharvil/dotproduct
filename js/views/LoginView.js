@@ -12,7 +12,7 @@ goog.require('views.View');
  * @extends {views.View}
  * @param {!Object} loginData
  * @param {!net.Protocol} protocol
- * @param {function(!Object.<string, !Object>, !Object, !Object.<number, number>)} successCb
+ * @param {function(!Object.<string, !Object>, !Object, !Object.<number, number>, !Array.<!Object>)} successCb
  */
 views.LoginView = function(loginData, protocol, successCb) {
   goog.base(this);
@@ -26,7 +26,7 @@ views.LoginView = function(loginData, protocol, successCb) {
   this.protocol_.login(loginData);
 
   /**
-   * @type {function(!Object.<string, !Object>, !Object, !Object.<number, number>)}
+   * @type {function(!Object.<string, !Object>, !Object, !Object.<number, number>, !Array.<!Object>)}
    * @private
    */
   this.successCb_ = successCb;

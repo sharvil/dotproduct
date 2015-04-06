@@ -5,8 +5,6 @@ goog.require('goog.dom');
 goog.require('goog.events');
 goog.require('goog.events.EventType');
 
-goog.require('html5.Fullscreen');
-
 goog.require('Game');
 goog.require('net.Protocol');
 goog.require('ResourceManager');

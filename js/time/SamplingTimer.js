@@ -1,7 +1,7 @@
 goog.provide('time.SamplingTimer');
 
 goog.require('goog.asserts');
-goog.require('goog.debug.Logger');
+goog.require('goog.log.Logger');
 
 /**
  * @constructor
@@ -12,10 +12,10 @@ time.SamplingTimer = function(rate) {
   goog.asserts.assert(rate > 0, 'Sampling rate must be > 0.');
 
   /**
-   * @type {!goog.debug.Logger}
+   * @type {goog.log.Logger}
    * @private
    */
-  this.logger_ = goog.debug.Logger.getLogger('time.SamplingTimer');
+  this.logger_ = goog.log.getLogger('time.SamplingTimer');
 
   /**
    * @type {number}
@@ -55,7 +55,7 @@ time.SamplingTimer.prototype.end = function(name) {
   goog.asserts.assert(timer, 'No timer found matching name: ' + name);
 
   if (timer.start) {
-    this.logger_.info('{' + name + '}: ' + (goog.now() - timer.start) + 'ms');
+    goog.log.info(this.logger_, '{' + name + '}: ' + (goog.now() - timer.start) + 'ms');
     delete this.timers_[name];
   }
 };

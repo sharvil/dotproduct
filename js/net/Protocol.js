@@ -1,7 +1,7 @@
 goog.provide('net.Protocol');
 goog.provide('net.Protocol.S2CPacketType');
 
-goog.require('goog.debug.Logger');
+goog.require('goog.log.Logger');
 
 goog.require('math.Vector');
 goog.require('model.projectile.Projectile');
@@ -13,10 +13,10 @@ goog.require('time.Timer');
  */
 net.Protocol = function(url) {
   /**
-   * @type {!goog.debug.Logger}
+   * @type {goog.log.Logger}
    * @private
    */
-  this.logger_ = goog.debug.Logger.getLogger('net.Protocol');
+  this.logger_ = goog.log.getLogger('net.Protocol');
 
   /**
    * @type {string}
@@ -291,7 +291,7 @@ net.Protocol.prototype.onMessage_ = function(event) {
     var msg = /** @type {string} */ (event.getBrowserEvent().data);
     obj = window.JSON.parse(msg);
   } catch (e) {
-    this.logger_.severe('Error parsing JSON: ' + event.getBrowserEvent().data + '\n' + e);
+    goog.log.error(this.logger_, 'Error parsing JSON: ' + event.getBrowserEvent().data + '\n' + e);
     return;
   }
 
@@ -302,7 +302,7 @@ net.Protocol.prototype.onMessage_ = function(event) {
       packetHandlers[i](slicedObj);
     }
   } else {
-    this.logger_.warning('Invalid packet from server: ' + obj);
+    goog.log.warning(this.logger_, 'Invalid packet from server: ' + obj);
   }
 };
 

@@ -5,13 +5,13 @@ goog.provide('time.Timer');
  */
 time.Timer = function() {
   /**
-   * @type {number}
+   * @type {number|null}
    * @private
    */
   this.timeoutId_ = null;
 
   /**
-   * @type {number}
+   * @type {number|null}
    * @private
    */
   this.intervalId_ = null;
@@ -35,7 +35,7 @@ time.Timer.prototype.setTimeout = function(callback, timeout_ticks) {
 
 /**
  * @param {function()} callback
- * @param {number} timeout_ticks
+ * @param {number} interval_ticks
  */
 time.Timer.prototype.setInterval = function(callback, interval_ticks) {
   this.clear();

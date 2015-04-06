@@ -77,7 +77,7 @@ model.player.PlayerSprite.prototype.render = function(viewport) {
   }
 
   context.save();
-    context.font = Font.playerFont();
+    context.font = Font.playerFont().toString();
     context.fillStyle = this.isFriend(localPlayer) ? Palette.friendColor() : Palette.foeColor();
     context.textAlign = 'center';
     context.textBaseline = 'top';

@@ -44,7 +44,7 @@ model.Effect = function(game, animation, position, velocity, opt_layer) {
   this.velocity_ = velocity;
 
   var layer = graphics.Layer.EFFECTS;
-  if (arguments.length >= 5) {
+  if (opt_layer !== undefined) {
     layer = opt_layer;
   }
 

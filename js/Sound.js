@@ -44,7 +44,7 @@ Sound.prototype.play = function() {
 
 /**
  * @param {function()} loadCb
- * @param {!goog.events.BrowserEvent} event
+ * @param {!Object} event
  * @private
  */
 Sound.prototype.onLoad_ = function(loadCb, event) {

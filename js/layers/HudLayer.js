@@ -130,7 +130,7 @@ layers.HudLayer.prototype.renderNearShipEnergyDisplay_ = function(context, dimen
                           percentEnergy < 0.5 ? 'rgba(200, 200, 0, 0.5)' :
                           percentEnergy < 0.75 ? 'rgba(0, 200, 0, 0.5)' :
                           'rgba(0, 200, 200, 0.5)';
-      context.font = Font.playerFont();
+      context.font = Font.playerFont().toString();
       context.textAlign = 'right';
       context.textBaseline = 'bottom';
       context.fillText(energy.toString(), x, y);

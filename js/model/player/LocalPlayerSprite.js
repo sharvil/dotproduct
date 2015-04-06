@@ -54,7 +54,7 @@ model.player.LocalPlayerSprite.prototype.render = function(viewport) {
     var tenths = Math.floor((millis % 1000) / 100);
     var time = seconds + '.' + tenths;
     context.save();
-      context.font = Font.playerFont();
+      context.font = Font.playerFont().toString();
       context.fillStyle = Palette.friendColor();
       context.fillText(time, dimensions.width / 2, dimensions.height / 2);
     context.restore();
@@ -82,7 +82,7 @@ model.player.LocalPlayerSprite.prototype.render = function(viewport) {
 
   if (this.isSafe_()) {
     context.save();
-      context.font = Font.playerFont();
+      context.font = Font.playerFont().toString();
       context.fillStyle = Palette.friendColor();
       context.textAlign = 'center';
       context.textBaseline = 'top';

@@ -42,7 +42,7 @@ graphics.Tween = function(target) {
    * @type {function(number, number) : number}
    * @private
    */
-  this.easeFunction_ = goog.nullFunction;
+  this.easeFunction_;
 
   /**
    * @type {boolean}
@@ -110,6 +110,8 @@ graphics.Tween.prototype.advance_ = function() {
   if (this.elapsed_ > this.duration_) {
     return;
   }
+
+  goog.asserts.assert(!!this.easeFunction_, 'Ease function not specified.');
 
   var curvePosition = this.easeFunction_(this.elapsed_, this.duration_);
   for (var name in this.originalProperties_) {
