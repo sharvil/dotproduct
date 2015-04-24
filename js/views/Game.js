@@ -101,7 +101,6 @@ Game = function(protocol, resourceManager, settings, mapData, tileProperties) {
    * @private
    */
   this.canvas_ = /** @type {!HTMLCanvasElement} */ (goog.dom.createElement('canvas'));
-  this.canvas_.className = Game.CANVAS_CLASS_NAME_;
 
   /**
    * @type {!Viewport}
@@ -229,13 +228,6 @@ goog.inherits(Game, views.View);
  * @private
  */
 Game.MAX_TICKS_PER_FRAME_ = 150;
-
-/**
- * @const
- * @type {string}
- * @private
- */
-Game.CANVAS_CLASS_NAME_ = 'gv-map-canvas';
 
 /**
  * @param {!HTMLDivElement} rootNode
