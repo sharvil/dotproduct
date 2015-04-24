@@ -3,6 +3,7 @@ goog.provide('model.player.LocalPlayerSprite');
 goog.require('goog.array');
 goog.require('Labs');
 goog.require('model.player.LocalPlayer');
+goog.require('model.player.Player.Event');
 goog.require('model.player.PlayerSprite');
 goog.require('graphics.Drawable');
 goog.require('graphics.Layer');
@@ -21,13 +22,24 @@ goog.require('time.Timer');
 model.player.LocalPlayerSprite = function(game, id, name, team, ship) {
   goog.base(this, game, id, name, team, ship);
 
-  game.getPainter().registerDrawable(graphics.Layer.LOCAL_PLAYER, this);
-
   /**
    * @type {!ResourceManager}
    * @private
    */
   this.resourceManager_ = game.getResourceManager();
+
+  var self = this;
+  this.addListener(model.player.Player.Event.COLLECT_PRIZE, function() {
+    self.resourceManager_.playSound('prize');
+  });
+
+  this.addListener(model.player.Player.Event.BOUNCE, function(player) {
+    if (player.getVelocity().magnitude() > 1) {
+      self.resourceManager_.playSound('bounce');
+    }
+  });
+
+  game.getPainter().registerDrawable(graphics.Layer.LOCAL_PLAYER, this);
 };
 goog.inherits(model.player.LocalPlayerSprite, model.player.LocalPlayer);
 
@@ -45,6 +57,10 @@ model.player.LocalPlayerSprite.prototype.onDeath = model.player.PlayerSprite.pro
  * @override
  */
 model.player.LocalPlayerSprite.prototype.render = function(viewport) {
+  if (!this.isValid()) {
+    this.game_.getPainter().unregisterDrawable(graphics.Layer.LOCAL_PLAYER, this);
+  }
+
   var context = viewport.getContext();
   var dimensions = viewport.getDimensions();
 
@@ -67,7 +83,7 @@ model.player.LocalPlayerSprite.prototype.render = function(viewport) {
 
   model.player.PlayerSprite.prototype.render.call(this, viewport);
 
-  var damageOverlay = this.game_.getResourceManager().getImage('ship' + this.ship_ + 'Red');
+  var damageOverlay = this.resourceManager_.getImage('ship' + this.ship_ + 'Red');
   var x = Math.floor((dimensions.width - damageOverlay.getTileWidth()) / 2);
   var y = Math.floor((dimensions.height - damageOverlay.getTileHeight()) / 2);
   var tileNum = Math.floor(this.angleInRadians_ / (2 * Math.PI) * damageOverlay.getNumTiles());
@@ -88,34 +104,5 @@ model.player.LocalPlayerSprite.prototype.render = function(viewport) {
       context.textBaseline = 'top';
       context.fillText('Safety - weapons disabled.', x, y - 40);
     context.restore();
-  }
-};
-
-/**
- * @override
- */
-model.player.LocalPlayerSprite.prototype.onInvalidate_ = function() {
-  goog.base(this, 'onInvalidate_');
-
-  this.game_.getPainter().unregisterDrawable(graphics.Layer.LOCAL_PLAYER, this);
-};
-
-/**
- * @override
- */
-model.player.LocalPlayerSprite.prototype.onPrizeCollected = function(prize) {
-  goog.base(this, 'onPrizeCollected', prize);
-
-  this.resourceManager_.playSound('prize');
-};
-
-/**
- * @override
- */
-model.player.LocalPlayerSprite.prototype.bounce_ = function() {
-  goog.base(this, 'bounce_');
-
-  if (this.velocity_.magnitude() > 1) {
-    this.resourceManager_.playSound('bounce');
   }
 };

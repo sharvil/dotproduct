@@ -1,4 +1,5 @@
 goog.provide('model.player.Player');
+goog.provide('model.player.Player.Event');
 goog.provide('model.player.Player.Presence');
 
 goog.require('goog.array');
@@ -146,6 +147,16 @@ goog.inherits(model.player.Player, model.Entity);
 goog.mixin(model.player.Player.prototype, Listener.prototype);
 
 /**
+ * @enum {string}
+ */
+model.player.Player.Event = {
+  SHIP_CHANGE: 'shipchange',
+  COLLECT_PRIZE: 'prize',
+  BOUNCE: 'bounce',
+  DEATH: 'death'
+};
+
+/**
  * @enum {number}
  */
 model.player.Player.Presence = {
@@ -153,15 +164,6 @@ model.player.Player.Presence = {
   TYPING: 1,
   AWAY: 2,
   ALL: 0x7FFFFFFF
-};
-
-/**
- * @enum {string}
- */
-model.player.Player.Event = {
-  SHIP_CHANGE: 'shipchange',
-  COLLECT_PRIZE: 'prize',
-  DEATH: 'death'
 };
 
 /**
@@ -396,4 +398,13 @@ model.player.Player.prototype.onInvalidate_ = function() {
   goog.base(this, 'onInvalidate_');
 
   this.clearProjectiles_();
+};
+
+/**
+ * This function is called when the player bounces off a wall.
+ *
+ * @override
+ */
+model.player.Player.prototype.bounce_ = function() {
+  this.fireEvent_(model.player.Player.Event.BOUNCE);
 };

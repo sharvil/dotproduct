@@ -24,6 +24,7 @@ goog.require('layers.WeaponIndicators');
 goog.require('model.Map');
 goog.require('model.impl.GraphicalModelObjectFactory');
 goog.require('model.impl.HeadlessModelObjectFactory');
+goog.require('model.player.Player.Event');
 goog.require('model.Prize');
 goog.require('model.Simulation');
 goog.require('Notifications');
