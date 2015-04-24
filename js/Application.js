@@ -7,9 +7,9 @@ goog.require('goog.events.EventType');
 
 goog.require('Game');
 goog.require('net.Protocol');
+goog.require('net.Protocol.S2CPacketType');
 goog.require('ResourceManager');
 goog.require('views.LoadingView');
-goog.require('views.LoginView');
 
 /**
  * @constructor
@@ -63,29 +63,29 @@ Application = function(settings, url) {
     'accessToken': settings.accessToken
   };
 
-  /**
-   * @type {!views.LoginView}
-   * @private
-   */
-  this.loginView_ = new views.LoginView(loginData, this.protocol_, goog.bind(this.startGame_, this));
-  this.loginView_.renderDom(/** @type {!HTMLDivElement} */ (goog.dom.getElement('login')));
-  this.loginView_.show();
+  this.protocol_.registerPacketHandler(net.Protocol.S2CPacketType.LOGIN_REPLY, goog.bind(this.startGame_, this));
+  this.protocol_.login(loginData);
 };
 
 /**
- * @param {!Object.<string, !Object>} resources
- * @param {!Object} settings
- * @param {!Object.<number, number>} mapData
- * @param {!Array.<!Object>} mapProperties
+ * @param {!Array} packet
  */
-Application.prototype.startGame_ = function(resources, settings, mapData, mapProperties) {
-  this.settings_ = settings;
-  this.mapData_ = mapData;
-  this.mapProperties_ = mapProperties;
+Application.prototype.startGame_ = function(packet) {
+  if (packet[0] == 1) {
+    var resources = packet[1];
+    var settings = packet[2];
+    var mapData = packet[3];
+    var mapProperties = packet[4];
 
-  this.loginView_.hide();
-  this.loadingView_.show();
-  this.loadingView_.load(resources);
+    this.settings_ = settings;
+    this.mapData_ = mapData;
+    this.mapProperties_ = mapProperties;
+
+    this.loadingView_.show();
+    this.loadingView_.load(resources);
+  } else {
+    alert('Login failure: ' + packet[1]);
+  }
 };
 
 Application.prototype.onLoadComplete_ = function() {
