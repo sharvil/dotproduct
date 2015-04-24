@@ -71,6 +71,9 @@ model.player.RemotePlayer.prototype.respawn = function() {
   this.bounty_ = 0;
   this.velocity_ = math.Vector.ZERO;
   this.originalVelocity_ = math.Vector.ZERO;
+
+  // Notify listeners that we've respawned after updating internal state.
+  goog.base(this, 'respawn');
 };
 
 /**

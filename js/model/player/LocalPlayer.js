@@ -143,6 +143,9 @@ model.player.LocalPlayer.prototype.respawn = function() {
   this.velocity_ = math.Vector.ZERO;
   this.energy_ = this.shipSettings_['maxEnergy'];
   this.maxEnergy_ = this.shipSettings_['maxEnergy'];
+
+  // Notify listeners that we've respawned after updating internal state.
+  goog.base(this, 'respawn');
 };
 
 /**

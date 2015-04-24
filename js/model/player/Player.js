@@ -150,10 +150,11 @@ goog.mixin(model.player.Player.prototype, Listener.prototype);
  * @enum {string}
  */
 model.player.Player.Event = {
-  SHIP_CHANGE: 'shipchange',
-  COLLECT_PRIZE: 'prize',
   BOUNCE: 'bounce',
-  DEATH: 'death'
+  COLLECT_PRIZE: 'collect_prize',
+  DEATH: 'death',
+  RESPAWN: 'respawn',
+  SHIP_CHANGE: 'shipchange'
 };
 
 /**
@@ -318,7 +319,9 @@ model.player.Player.prototype.onWeaponFired = function(timeDiff, weaponData) {
   }
 };
 
-model.player.Player.prototype.respawn = goog.abstractMethod;
+model.player.Player.prototype.respawn = function() {
+  this.fireEvent_(model.player.Player.Event.RESPAWN);
+};
 
 /**
  * Called when the player takes damage from a projectile fired by some other player.

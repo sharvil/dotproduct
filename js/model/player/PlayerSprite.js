@@ -8,31 +8,16 @@ goog.require('math.Vector');
  */
 model.player.PlayerSprite = goog.abstractMethod;
 
-/**
- * @param {number} angle
- * @param {!math.Vector} position
- * @param {!math.Vector} velocity
- */
-model.player.PlayerSprite.prototype.respawn = function(angle, position, velocity) {
-  goog.base(this, 'respawn', angle, position, velocity);
-
-  var resourceManager = this.game_.getResourceManager();
-  var animation = resourceManager.getSpriteSheet('warp').getAnimation(0);
-  var effect = new model.Effect(this.game_, animation, this.position_, math.Vector.ZERO);
-};
-
-model.player.PlayerSprite.prototype.onDeath = function(killer) {
-  goog.base(this, 'onDeath', killer);
-
+model.player.PlayerSprite.prototype.death_ = function(killer) {
   var resourceManager = this.game_.getResourceManager();
   var ensemble = resourceManager.getSpriteSheet('explode1');
-  var effect = new model.Effect(this.game_, ensemble.getAnimation(0), this.position_, this.velocity_);
+  new model.Effect(this.game_, ensemble.getAnimation(0), this.position_, this.velocity_);
 
   ensemble = resourceManager.getSpriteSheet('ship' + this.ship_ + '_junk');
   for (var i = 0; i < ensemble.getNumAnimations(); ++i) {
     var animation = ensemble.getAnimation(i);
     var deltaVelocity = math.Vector.fromPolar(Math.random() * 2, Math.random() * 2 * Math.PI);
-    var piece = new model.Effect(this.game_, animation, this.position_, this.velocity_.add(deltaVelocity));
+    new model.Effect(this.game_, animation, this.position_, this.velocity_.add(deltaVelocity));
   }
 
   if (this.game_.getViewport().contains(this.position_)) {
@@ -40,10 +25,21 @@ model.player.PlayerSprite.prototype.onDeath = function(killer) {
   }
 };
 
+model.player.PlayerSprite.prototype.respawn_ = function() {
+  var resourceManager = this.game_.getResourceManager();
+  var animation = resourceManager.getSpriteSheet('warp').getAnimation(0);
+  new model.Effect(this.game_, animation, this.position_, math.Vector.ZERO);
+};
+
 /**
  * @param {!Viewport} viewport
  */
 model.player.PlayerSprite.prototype.render = function(viewport) {
+  if (!this.isValid()) {
+    this.game_.getPainter().unregisterDrawable(graphics.Layer.PLAYERS, this);
+    return;
+  }
+
   if (!this.isAlive()) {
     return;
   }

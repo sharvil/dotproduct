@@ -39,6 +39,14 @@ model.player.LocalPlayerSprite = function(game, id, name, team, ship) {
     }
   });
 
+  this.addListener(model.player.Player.Event.DEATH, function(player, killer) {
+    model.player.PlayerSprite.prototype.death_.call(player, killer);
+  });
+
+  this.addListener(model.player.Player.Event.RESPAWN, function(player) {
+    model.player.PlayerSprite.prototype.respawn_.call(player);
+  });
+
   game.getPainter().registerDrawable(graphics.Layer.LOCAL_PLAYER, this);
 };
 goog.inherits(model.player.LocalPlayerSprite, model.player.LocalPlayer);
@@ -46,19 +54,10 @@ goog.inherits(model.player.LocalPlayerSprite, model.player.LocalPlayer);
 /**
  * @override
  */
-model.player.LocalPlayerSprite.prototype.respawn = model.player.PlayerSprite.prototype.respawn;
-
-/**
- * @override
- */
-model.player.LocalPlayerSprite.prototype.onDeath = model.player.PlayerSprite.prototype.onDeath;
-
-/**
- * @override
- */
 model.player.LocalPlayerSprite.prototype.render = function(viewport) {
   if (!this.isValid()) {
     this.game_.getPainter().unregisterDrawable(graphics.Layer.LOCAL_PLAYER, this);
+    return;
   }
 
   var context = viewport.getContext();

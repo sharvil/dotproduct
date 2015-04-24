@@ -20,6 +20,15 @@ goog.require('graphics.Layer');
 model.player.RemotePlayerSprite = function(game, id, name, team, isAlive, ship, bounty) {
   goog.base(this, game, id, name, team, isAlive, ship, bounty);
 
+  var self = this;
+  this.addListener(model.player.Player.Event.DEATH, function(player, killer) {
+    model.player.PlayerSprite.prototype.death_.call(player, killer);
+  });
+
+  this.addListener(model.player.Player.Event.RESPAWN, function(player) {
+    model.player.PlayerSprite.prototype.respawn_.call(player);
+  });
+
   game.getPainter().registerDrawable(graphics.Layer.PLAYERS, this);
 };
 goog.inherits(model.player.RemotePlayerSprite, model.player.RemotePlayer);
@@ -27,23 +36,4 @@ goog.inherits(model.player.RemotePlayerSprite, model.player.RemotePlayer);
 /**
  * @override
  */
-model.player.RemotePlayerSprite.prototype.respawn = model.player.PlayerSprite.prototype.respawn;
-
-/**
- * @override
- */
-model.player.RemotePlayerSprite.prototype.onDeath = model.player.PlayerSprite.prototype.onDeath;
-
-/**
- * @override
- */
 model.player.RemotePlayerSprite.prototype.render = model.player.PlayerSprite.prototype.render;
-
-/**
- * @override
- */
-model.player.RemotePlayerSprite.prototype.onInvalidate_ = function() {
-  goog.base(this, 'onInvalidate_');
-
-  this.game_.getPainter().unregisterDrawable(graphics.Layer.PLAYERS, this);
-};
