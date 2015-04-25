@@ -30,30 +30,6 @@
       "yTiles": 4
     },
 
-    "ship0Red": {
-      "url": "data/shared/graphics/ship0_red.png",
-      "xTiles": 10,
-      "yTiles": 4
-    },
-
-    "ship1Red": {
-      "url": "data/shared/graphics/ship1_red.png",
-      "xTiles": 10,
-      "yTiles": 4
-    },
-
-    "ship2Red": {
-      "url": "data/shared/graphics/ship3_red.png",
-      "xTiles": 10,
-      "yTiles": 4
-    },
-
-    "ship3Red": {
-      "url": "data/shared/graphics/ship7_red.png",
-      "xTiles": 10,
-      "yTiles": 4
-    },
-
     "presenceTyping": {
       "url": "data/shared/graphics/presence_typing.png",
       "xTiles": 1,
@@ -65,7 +41,7 @@
       "xTiles": 1,
       "yTiles": 1
     },
-    
+
     "statusHud": {
       "url": "data/shared/graphics/status_hud.png",
       "xTiles": 1,

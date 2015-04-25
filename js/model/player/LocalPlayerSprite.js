@@ -88,19 +88,6 @@ model.player.LocalPlayerSprite.prototype.render = function(viewport) {
 
   model.player.PlayerSprite.prototype.render.call(this, viewport);
 
-  var damageOverlay = this.resourceManager_.getImage('ship' + this.player_.getShip() + 'Red');
-  var x = Math.floor((dimensions.width - damageOverlay.getTileWidth()) / 2);
-  var y = Math.floor((dimensions.height - damageOverlay.getTileHeight()) / 2);
-  var tileNum = this.player_.getDirection();
-
-  if (Labs.DAMAGE_OVERLAY) {
-    context.save();
-      context.globalAlpha = 0.7 * (1 - (this.energy_ / this.maxEnergy_));
-      context.globalCompositeOperation = 'lighter';
-      damageOverlay.render(context, x, y, tileNum);
-    context.restore();
-  }
-
   if (this.player_.isSafe()) {
     context.save();
       context.font = Font.playerFont().toString();
