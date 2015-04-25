@@ -174,6 +174,14 @@ model.player.Player.Presence = {
 model.player.Player.SYSTEM_PLAYER_ID = '0';
 
 /**
+ * The total number of directions a player can be facing.
+ *
+ * @type {number}
+ * @const
+ */
+model.player.Player.DIRECTION_STEPS = 40;
+
+/**
  * @return {string}
  */
 model.player.Player.prototype.getId = function() {
@@ -227,6 +235,17 @@ model.player.Player.prototype.getPoints = function() {
  */
 model.player.Player.prototype.getBounty = function () {
   return this.bounty_;
+};
+
+/**
+ * Returns an integer that represents the direction the player is facing. The
+ * direction is distinct from the angle: an angle is represented in radians
+ * whereas the direction is an integer in the range [0, DIRECTION_STEPS).
+ *
+ * @return {number}
+ */
+model.player.Player.prototype.getDirection = function() {
+  return Math.floor(this.angleInRadians_ / (2 * Math.PI) * model.player.Player.DIRECTION_STEPS);
 };
 
 /**

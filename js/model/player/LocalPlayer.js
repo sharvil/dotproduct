@@ -65,11 +65,14 @@ model.player.LocalPlayer = function(game, id, name, team, ship) {
 goog.inherits(model.player.LocalPlayer, model.player.Player);
 
 /**
- * @type {number}
- * @const
- * @private
+ * TODO: split exhaust into the standard model/view classes and don't expose
+ * the array from here.
+ *
+ * @return {!Array.<!model.Exhaust>}
  */
-model.player.LocalPlayer.ANGLE_STEPS_ = 40;
+model.player.Player.prototype.getExhaust = function() {
+  return this.exhaust_;
+};
 
 /**
  * @override
@@ -114,7 +117,7 @@ model.player.LocalPlayer.prototype.captureFlag_ = function(flag) {
  * @override
  */
 model.player.LocalPlayer.prototype.onDamage = function(shooter, projectile, energy) {
-  if (!this.isAlive() || this.isSafe_()) {
+  if (!this.isAlive() || this.isSafe()) {
     return;
   }
 
@@ -178,7 +181,7 @@ model.player.LocalPlayer.prototype.clearPresence = function(presence) {
 model.player.LocalPlayer.prototype.advanceTime = function() {
   var forceSendUpdate = false;
   var keyboard = this.game_.getKeyboard();
-  var isSafe = this.isSafe_();
+  var isSafe = this.isSafe();
 
   --this.respawnTimer_;
   if (this.respawnTimer_ > 0) {
@@ -318,7 +321,7 @@ model.player.LocalPlayer.prototype.advanceTime = function() {
   this.updatePosition_(this.shipSettings_['bounceFactor']);
 
   // If, after the position update, we moved into / out of a safe zone, send a force update.
-  if (this.isSafe_() != isSafe) {
+  if (this.isSafe() != isSafe) {
     // This convoluted bit of logic says that if we transitioned from !safe -> safe, we should
     // remove all projectiles.
     if (!isSafe) {
@@ -369,26 +372,37 @@ model.player.LocalPlayer.prototype.sendPositionUpdate_ = function(forceSendUpdat
     }
   }
 
-  this.game_.getProtocol().sendPosition(this.angleInRadians_, this.position_, this.velocity_, this.isSafe_(), opt_weaponData);
+  this.game_.getProtocol().sendPosition(this.angleInRadians_, this.position_, this.velocity_, this.isSafe(), opt_weaponData);
   this.ticksSincePositionUpdate_ = 0;
 };
 
 /**
+ * Returns the angle, in radians, of the ship's current direction.
+ *
  * @return {number}
  * @private
  */
 model.player.LocalPlayer.prototype.getAngle_ = function() {
-  return 2 * Math.PI * Math.floor(this.angleInRadians_ / (2 * Math.PI) * model.player.LocalPlayer.ANGLE_STEPS_) / model.player.LocalPlayer.ANGLE_STEPS_;
+  return 2 * Math.PI * this.getDirection() / model.player.Player.DIRECTION_STEPS;
 };
 
 /**
  * @return {boolean}
- * @protected
  */
-model.player.LocalPlayer.prototype.isSafe_ = function() {
+model.player.LocalPlayer.prototype.isSafe = function() {
   var map = this.game_.getMap();
   var pos = map.toTileCoordinates(this.position_);
   var tile = map.getTile(pos.getX(), pos.getY());
   var tileProperties = map.getTileProperties(tile);
   return !!tileProperties['safe'];
+};
+
+/**
+ * Returns the amount of time left for the local player to respawn.
+ * 0 if the player is alive, >0 if the player is dead.
+ *
+ * @return {number}
+ */
+model.player.LocalPlayer.prototype.getRespawnTimer = function() {
+  return this.respawnTimer_;
 };

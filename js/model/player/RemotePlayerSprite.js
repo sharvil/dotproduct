@@ -20,6 +20,12 @@ goog.require('graphics.Layer');
 model.player.RemotePlayerSprite = function(game, id, name, team, isAlive, ship, bounty) {
   goog.base(this, game, id, name, team, isAlive, ship, bounty);
 
+  /**
+   * @type {!model.player.Player}
+   * @protected
+   */
+  this.player_ = this;
+
   var self = this;
   this.addListener(model.player.Player.Event.DEATH, function(player, killer) {
     model.player.PlayerSprite.prototype.death_.call(player, killer);

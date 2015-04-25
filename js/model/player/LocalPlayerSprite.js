@@ -23,6 +23,12 @@ model.player.LocalPlayerSprite = function(game, id, name, team, ship) {
   goog.base(this, game, id, name, team, ship);
 
   /**
+   * @type {!model.player.LocalPlayer}
+   * @protected
+   */
+  this.player_ = this;
+
+  /**
    * @type {!ResourceManager}
    * @private
    */
@@ -55,7 +61,7 @@ goog.inherits(model.player.LocalPlayerSprite, model.player.LocalPlayer);
  * @override
  */
 model.player.LocalPlayerSprite.prototype.render = function(viewport) {
-  if (!this.isValid()) {
+  if (!this.player_.isValid()) {
     this.game_.getPainter().unregisterDrawable(graphics.Layer.LOCAL_PLAYER, this);
     return;
   }
@@ -63,8 +69,8 @@ model.player.LocalPlayerSprite.prototype.render = function(viewport) {
   var context = viewport.getContext();
   var dimensions = viewport.getDimensions();
 
-  if (!this.isAlive()) {
-    var millis = window.time.Timer.ticksToMillis(this.respawnTimer_);
+  if (!this.player_.isAlive()) {
+    var millis = window.time.Timer.ticksToMillis(this.player_.getRespawnTimer());
     var seconds = Math.floor(millis / 1000);
     var tenths = Math.floor((millis % 1000) / 100);
     var time = seconds + '.' + tenths;
@@ -76,16 +82,16 @@ model.player.LocalPlayerSprite.prototype.render = function(viewport) {
     return;
   }
 
-  goog.array.forEach(this.exhaust_, function(e) {
+  goog.array.forEach(this.player_.getExhaust(), function(e) {
     e.render(viewport);
   });
 
   model.player.PlayerSprite.prototype.render.call(this, viewport);
 
-  var damageOverlay = this.resourceManager_.getImage('ship' + this.ship_ + 'Red');
+  var damageOverlay = this.resourceManager_.getImage('ship' + this.player_.getShip() + 'Red');
   var x = Math.floor((dimensions.width - damageOverlay.getTileWidth()) / 2);
   var y = Math.floor((dimensions.height - damageOverlay.getTileHeight()) / 2);
-  var tileNum = Math.floor(this.angleInRadians_ / (2 * Math.PI) * damageOverlay.getNumTiles());
+  var tileNum = this.player_.getDirection();
 
   if (Labs.DAMAGE_OVERLAY) {
     context.save();
@@ -95,7 +101,7 @@ model.player.LocalPlayerSprite.prototype.render = function(viewport) {
     context.restore();
   }
 
-  if (this.isSafe_()) {
+  if (this.player_.isSafe()) {
     context.save();
       context.font = Font.playerFont().toString();
       context.fillStyle = Palette.friendColor();
