@@ -5,37 +5,29 @@ goog.require('goog.dom');
 goog.require('goog.events.BrowserEvent');
 goog.require('goog.events.Event');
 goog.require('goog.events.EventType');
-goog.require('views.View');
 
 /**
  * @constructor
- * @extends {views.View}
  * @param {!Game} game
  */
 views.ScoreboardView = function(game) {
-  goog.base(this);
-
   /**
    * @type {!HTMLDivElement}
    * @private
    */
-  this.view_ = /** @type {!HTMLDivElement} */ (goog.dom.createElement('div'));
-  this.view_.classList.add(views.ScoreboardView.SCOREBOARD_VIEW_CLASS_NAME_);
+  this.view_ = /** @type {!HTMLDivElement} */ (goog.dom.getElement('sv'));
 
   /**
    * @type {!PlayerIndex}
    * @private
    */
   this.playerIndex_ = game.getPlayerIndex();
-};
-goog.inherits(views.ScoreboardView, views.View);
 
-/**
- * @type {string}
- * @private
- * @const
- */
-views.ScoreboardView.SCOREBOARD_VIEW_CLASS_NAME_ = 'sv';
+  var self = this;
+  setTimeout(function() {
+    self.hide();
+  }, 2000);
+};
 
 /**
  * @type {string}
@@ -71,20 +63,6 @@ views.ScoreboardView.FRIEND_CLASS_NAME_ = 'sv-row-friend';
  * @const
  */
 views.ScoreboardView.FOE_CLASS_NAME_ = 'sv-row-foe';
-
-/**
- * @override
- */
-views.ScoreboardView.prototype.renderDom = function(rootNode) {
-  goog.base(this, 'renderDom', rootNode);
-
-  rootNode.appendChild(this.view_);
-
-  var self = this;
-  setTimeout(function() {
-    self.hide();
-  }, 2000);
-};
 
 /**
  * @override

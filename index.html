@@ -13,9 +13,47 @@
   </head>
   <body style="overflow: hidden">
     <div class="content">
-      <div id="loading"></div>
+
+      <div id="loading" class="loading">
+        <div id="ldv-progress" class="ldv-progress">
+          <div id="ldv-progress-value" class="ldv-progress-value">&nbsp;</div>
+        </div>
+      </div>
+
       <div id="login"></div>
-      <div id="game"><div id="tt" class="tt tt-hide"></div></div>
+
+      <div id="game">
+        <!-- Game canvas -->
+        <canvas id="gv-canvas" class="gv-canvas"></canvas>
+
+        <!-- Scoreboard view -->
+        <div id="sv" class="sv"></div>
+
+        <!-- Chat view -->
+        <div id="cv" class="cv">
+          <div id="cv-text" class="cv-text"></div>
+          <input id="cv-input" class="cv-input" type="text" maxlength="140"></input>
+        </div>
+
+        <!-- Debug view -->
+        <div id="dv" class="dv"></div>
+
+        <!-- Disconnected view -->
+        <div id="dcv" class="dcv">
+          <center>
+            <p>
+              Oops, you got disconnected...
+            </p>
+            <p>
+              Click here to get back in the game.
+            </p>
+          </center>
+        </div>
+
+        <!-- Tooltip -->
+        <div id="tt" class="tt tt-hide"></div>
+      </div>
+
     </div>
   </body>
 

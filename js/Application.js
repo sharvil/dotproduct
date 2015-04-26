@@ -55,8 +55,6 @@ Application = function(settings, url) {
    * @private
    */
   this.loadingView_ = new views.LoadingView(this.resourceManager_, this.onLoadComplete_.bind(this));
-  this.loadingView_.renderDom(/** @type {!HTMLDivElement} */ (goog.dom.getElement('loading')));
-  this.loadingView_.hide();
 
   var loginData = {
     'strategy': settings.strategy,
@@ -81,7 +79,6 @@ Application.prototype.startGame_ = function(packet) {
     this.mapData_ = mapData;
     this.mapProperties_ = mapProperties;
 
-    this.loadingView_.show();
     this.loadingView_.load(resources);
   } else {
     alert('Login failure: ' + packet[1]);
@@ -89,10 +86,7 @@ Application.prototype.startGame_ = function(packet) {
 };
 
 Application.prototype.onLoadComplete_ = function() {
-  this.loadingView_.hide();
-
   this.game_ = new Game(this.protocol_, this.resourceManager_, this.settings_, this.mapData_, this.mapProperties_);
-  this.game_.renderDom(/** @type {!HTMLDivElement} */ (goog.dom.getElement('game')));
 };
 
 var _main = function() {

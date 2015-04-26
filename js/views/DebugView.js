@@ -2,17 +2,13 @@ goog.provide('views.DebugView');
 
 goog.require('Labs');
 goog.require('Viewport');
-goog.require('views.View');
 
 /**
  * @constructor
- * @extends {views.View}
  * @param {!Game} game
  * @param {!Viewport} viewport
  */
 views.DebugView = function(game, viewport) {
-  goog.base(this);
-
   /**
    * @type {!Game}
    * @private
@@ -29,8 +25,7 @@ views.DebugView = function(game, viewport) {
    * @type {!HTMLDivElement}
    * @private
    */
-  this.view_ = /** @type {!HTMLDivElement} */ (goog.dom.createElement('div'));
-  this.view_.classList.add(views.DebugView.VIEW_CLASS_NAME_);
+  this.view_ = /** @type {!HTMLDivElement} */ (goog.dom.getElement('dv'));
 
   /**
    * @type {number}
@@ -43,23 +38,6 @@ views.DebugView = function(game, viewport) {
    * @private
    */
   this.frames_ = 0;
-};
-goog.inherits(views.DebugView, views.View);
-
-/**
- * @type {string}
- * @private
- * @const
- */
-views.DebugView.VIEW_CLASS_NAME_ = 'dv';
-
-/**
- * @override
- */
-views.DebugView.prototype.renderDom = function(rootNode) {
-  goog.base(this, 'renderDom', rootNode);
-
-  rootNode.appendChild(this.view_);
 };
 
 views.DebugView.prototype.getEventTimeString_ = function() {

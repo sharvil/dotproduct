@@ -37,11 +37,9 @@ goog.require('views.ChatView');
 goog.require('views.DebugView');
 goog.require('views.DisconnectedView');
 goog.require('views.ScoreboardView');
-goog.require('views.View');
 
 /**
  * @constructor
- * @extends {views.View}
  * @param {!net.Protocol} protocol
  * @param {!ResourceManager} resourceManager
  * @param {!Object} settings
@@ -101,7 +99,7 @@ Game = function(protocol, resourceManager, settings, mapData, tileProperties) {
    * @type {!HTMLCanvasElement}
    * @private
    */
-  this.canvas_ = /** @type {!HTMLCanvasElement} */ (goog.dom.createElement('canvas'));
+  this.canvas_ = /** @type {!HTMLCanvasElement} */ (goog.dom.getElement('gv-canvas'));
 
   /**
    * @type {!Viewport}
@@ -220,8 +218,12 @@ Game = function(protocol, resourceManager, settings, mapData, tileProperties) {
 
   new time.Timer().setInterval(this.heartbeat_.bind(this), 100);
   html5.Notifications.requestPermission();
+
+  // Make sure the game canvas is the right size and start rendering loop.
+  goog.dom.getElement('game').style.display = 'block';
+  this.onResize_();
+  this.renderingLoop_();
 };
-goog.inherits(Game, views.View);
 
 /**
  * @const
@@ -229,24 +231,6 @@ goog.inherits(Game, views.View);
  * @private
  */
 Game.MAX_TICKS_PER_FRAME_ = 150;
-
-/**
- * @param {!HTMLDivElement} rootNode
- * @override
- */
-Game.prototype.renderDom = function(rootNode) {
-  goog.base(this, 'renderDom', rootNode);
-
-  rootNode.appendChild(this.canvas_);
-  this.chatView_.renderDom(rootNode);
-  this.debugView_.renderDom(rootNode);
-  this.disconnectedView_.renderDom(rootNode);
-  this.scoreboardView_.renderDom(rootNode);
-
-  // This starts the rendering loop once the canvas has been added to the DOM.
-  this.onResize_();
-  this.renderingLoop_();
-};
 
 /**
  * @return {!model.Simulation}

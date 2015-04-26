@@ -5,16 +5,12 @@ goog.require('goog.events.BrowserEvent');
 goog.require('goog.events.Event');
 goog.require('goog.events.EventType');
 goog.require('net.Protocol');
-goog.require('views.View');
 
 /**
  * @constructor
- * @extends {views.View}
  * @param {!Game} game
  */
 views.ChatView = function(game) {
-  goog.base(this);
-
   /**
    * @type {!model.player.LocalPlayer}
    * @private
@@ -31,24 +27,19 @@ views.ChatView = function(game) {
    * @type {!HTMLDivElement}
    * @private
    */
-  this.view_ = /** @type {!HTMLDivElement} */ (goog.dom.createElement('div'));
-  this.view_.classList.add(views.ChatView.CHAT_VIEW_CLASS_NAME_);
+  this.view_ = /** @type {!HTMLDivElement} */ (goog.dom.getElement('cv'));
 
   /**
    * @type {!HTMLDivElement}
    * @private
    */
-  this.text_ = /** @type {!HTMLDivElement} */ (goog.dom.createElement('div'));
-  this.text_.classList.add(views.ChatView.TEXT_CLASS_NAME_);
+  this.text_ = /** @type {!HTMLDivElement} */ (goog.dom.getElement('cv-text'));
 
   /**
    * @type {!HTMLInputElement}
    * @private
    */
-  this.chatBox_ = /** @type {!HTMLInputElement} */ (goog.dom.createElement('input'));
-  this.chatBox_.type = 'text';
-  this.chatBox_.maxLength = 140;
-  this.chatBox_.classList.add(views.ChatView.CHAT_BOX_CLASS_NAME_);
+  this.chatBox_ = /** @type {!HTMLInputElement} */ (goog.dom.getElement('cv-input'));
 
   goog.events.listen(window, goog.events.EventType.KEYPRESS, this.onGlobalKeyPress_.bind(this));
   goog.events.listen(this.chatBox_, goog.events.EventType.KEYPRESS, this.onChatKeyPress_.bind(this));
@@ -59,21 +50,6 @@ views.ChatView = function(game) {
   goog.events.listen(this.chatBox_, goog.events.EventType.BLUR, function() { self.localPlayer_.clearPresence(model.player.Player.Presence.TYPING); });
   goog.events.listen(this.chatBox_, goog.events.EventType.FOCUS, function() { self.localPlayer_.setPresence(model.player.Player.Presence.TYPING); });
 };
-goog.inherits(views.ChatView, views.View);
-
-/**
- * @type {string}
- * @private
- * @const
- */
-views.ChatView.CHAT_VIEW_CLASS_NAME_ = 'cv';
-
-/**
- * @type {string}
- * @private
- * @const
- */
-views.ChatView.TEXT_CLASS_NAME_ = 'cv-text';
 
 /**
  * @type {string}
@@ -101,22 +77,7 @@ views.ChatView.SYSTEM_MESSAGE_CLASS_NAME_ = 'cv-system-message';
  * @private
  * @const
  */
-views.ChatView.CHAT_BOX_CLASS_NAME_ = 'cv-input';
-
-/**
- * @type {string}
- * @private
- * @const
- */
 views.ChatView.CHAT_BOX_VISIBLE_CLASS_NAME_ = 'cv-visible';
-
-views.ChatView.prototype.renderDom = function(rootNode) {
-  goog.base(this, 'renderDom', rootNode);
-
-  this.view_.appendChild(this.text_);
-  this.view_.appendChild(this.chatBox_);
-  rootNode.appendChild(this.view_);
-};
 
 /**
  * @param {!model.player.Player} player

@@ -127,6 +127,7 @@ body {
   font-size: 12px;
   font-smooth: never;
   -webkit-font-smoothing: none;
+  display: none;
 }
 
 /**************************************
@@ -233,6 +234,10 @@ body {
             LOADING VIEW
  **************************************/
 
+.loading {
+  display: none;
+}
+
 .ldv-progress {
   margin: 40px 80px 0 80px;
   border: 3px solid #222;
@@ -260,6 +265,7 @@ body {
  **************************************/
 
 .dcv {
+  display: none;
   position: fixed;
   top: 50%;
   left: 50%;

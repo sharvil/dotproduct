@@ -3,11 +3,9 @@ goog.provide('views.LoadingView');
 goog.require('goog.events');
 goog.require('goog.events.EventType');
 goog.require('ResourceManager');
-goog.require('views.View');
 
 /**
  * @constructor
- * @extends {views.View}
  * @param {!ResourceManager} resourceManager
  * @param {function()} onLoadCompleteCb
  */
@@ -28,46 +26,24 @@ views.LoadingView = function(resourceManager, onLoadCompleteCb) {
    * @type {!HTMLDivElement}
    * @private
    */
-  this.progressBar_ = /** @type {!HTMLDivElement} */ (goog.dom.createElement('div'));
-  this.progressBar_.className = views.LoadingView.CSS_PROGRESS_BAR_;
+  this.container_ = /** @type {!HTMLDivElement} */ (goog.dom.getElement('loading'));
 
   /**
    * @type {!HTMLDivElement}
    * @private
    */
-  this.progressBarValue_ = /** @type {!HTMLDivElement} */ (goog.dom.createElement('div'));
-  this.progressBarValue_.innerHTML = '&nbsp;';
-  this.progressBarValue_.className = views.LoadingView.CSS_PROGRESS_BAR_VALUE_;
-};
-goog.inherits(views.LoadingView, views.View);
+  this.progressBar_ = /** @type {!HTMLDivElement} */ (goog.dom.getElement('ldv-progress'));
 
-/**
- * @type {string}
- * @const
- * @private
- */
-views.LoadingView.CSS_PROGRESS_BAR_ = 'ldv-progress';
-
-/**
- * @type {string}
- * @const
- * @private
- */
-views.LoadingView.CSS_PROGRESS_BAR_VALUE_ = 'ldv-progress-value';
-
-/**
- * @param {!HTMLDivElement} rootNode
- * @override
- */
-views.LoadingView.prototype.renderDom = function(rootNode) {
-  goog.base(this, 'renderDom', rootNode);
-
-  this.progressBar_.appendChild(this.progressBarValue_);
-  rootNode.appendChild(this.progressBar_);
+  /**
+   * @type {!HTMLDivElement}
+   * @private
+   */
+  this.progressBarValue_ = /** @type {!HTMLDivElement} */ (goog.dom.getElement('ldv-progress-value'));
 };
 
 views.LoadingView.prototype.load = function(resources) {
   this.setLoadPercent(0);
+  this.container_.style.display = 'block';
 
   var self = this;
   var totalResources = 0;
@@ -75,6 +51,7 @@ views.LoadingView.prototype.load = function(resources) {
   var completionCb = function() {
     self.setLoadPercent(++loadedResources / totalResources * 100);
     if (loadedResources == totalResources) {
+      self.container_.style.display = 'none';
       self.onLoadCompleteCb_();
     }
   };
