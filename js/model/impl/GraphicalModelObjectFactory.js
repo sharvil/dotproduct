@@ -18,14 +18,20 @@ model.impl.GraphicalModelObjectFactory = function() {};
  * @override
  */
 model.impl.GraphicalModelObjectFactory.prototype.newLocalPlayer = function(game, id, name, team, ship) {
-  return new model.player.LocalPlayerSprite(game, id, name, team, ship);
+  var player = new model.player.LocalPlayer(game, id, name, team, ship);
+  var sprite = new model.player.LocalPlayerSprite(game, player);
+
+  return player;
 };
 
 /**
  * @override
  */
 model.impl.GraphicalModelObjectFactory.prototype.newRemotePlayer = function(game, id, name, team, isAlive, ship, bounty) {
-  return new model.player.RemotePlayerSprite(game, id, name, team, isAlive, ship, bounty);
+  var player = new model.player.RemotePlayer(game, id, name, team, isAlive, ship, bounty);
+  var sprite = new model.player.RemotePlayerSprite(game, player);
+
+  return player;
 };
 
 /**

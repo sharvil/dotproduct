@@ -2,36 +2,37 @@ goog.provide('model.player.PlayerSprite');
 
 goog.require('model.Effect');
 goog.require('math.Vector');
+goog.require('model.player.Player.Event');
 
 /**
  * @constructor
+ * @implements {graphics.Drawable}
+ * @param {!Game} game
+ * @param {!model.player.Player} player
  */
-model.player.PlayerSprite = goog.abstractMethod;
+model.player.PlayerSprite = function(game, player, layer) {
+  /**
+   * @type {!Game}
+   * @protected
+   */
+  this.game_ = game;
 
-model.player.PlayerSprite.prototype.death_ = function(killer) {
-  var position = this.player_.getPosition();
-  var velocity = this.player_.getVelocity();
+  /**
+   * @type {!model.player.Player}
+   * @protected
+   */
+  this.player_ = player;
 
-  var resourceManager = this.game_.getResourceManager();
-  var ensemble = resourceManager.getSpriteSheet('explode1');
-  new model.Effect(this.game_, ensemble.getAnimation(0), position, velocity);
+  /**
+   * @type {!graphics.Layer}
+   * @protected
+   */
+  this.layer_ = layer;
 
-  ensemble = resourceManager.getSpriteSheet('ship' + this.player_.getShip() + '_junk');
-  for (var i = 0; i < ensemble.getNumAnimations(); ++i) {
-    var animation = ensemble.getAnimation(i);
-    var deltaVelocity = math.Vector.fromPolar(Math.random() * 2, Math.random() * 2 * Math.PI);
-    new model.Effect(this.game_, animation, position, velocity.add(deltaVelocity));
-  }
+  player.addListener(model.player.Player.Event.DEATH, goog.bind(this.death_, this));
+  player.addListener(model.player.Player.Event.RESPAWN, goog.bind(this.respawn_, this));
 
-  if (this.game_.getViewport().contains(position)) {
-    resourceManager.playSound('explodeShip');
-  }
-};
-
-model.player.PlayerSprite.prototype.respawn_ = function() {
-  var resourceManager = this.game_.getResourceManager();
-  var animation = resourceManager.getSpriteSheet('warp').getAnimation(0);
-  new model.Effect(this.game_, animation, this.player_.getPosition(), math.Vector.ZERO);
+  game.getPainter().registerDrawable(layer, this);
 };
 
 /**
@@ -39,7 +40,7 @@ model.player.PlayerSprite.prototype.respawn_ = function() {
  */
 model.player.PlayerSprite.prototype.render = function(viewport) {
   if (!this.player_.isValid()) {
-    this.game_.getPainter().unregisterDrawable(graphics.Layer.PLAYERS, this);
+    this.game_.getPainter().unregisterDrawable(this.layer_, this);
     return;
   }
 
@@ -86,4 +87,43 @@ model.player.PlayerSprite.prototype.render = function(viewport) {
     context.textBaseline = 'top';
     context.fillText(name + '(' + bounty + ')', x + shipImage.getTileWidth() / 2, y + shipImage.getTileHeight());
   context.restore();
+};
+
+/**
+ * Called when the player this sprite represents gets killed.
+ *
+ * @param {!model.player.Player} killee
+ * @param {!model.player.Player} killer
+ * @private
+ */
+model.player.PlayerSprite.prototype.death_ = function(killee, killer) {
+  var position = killee.getPosition();
+  var velocity = killee.getVelocity();
+
+  var resourceManager = this.game_.getResourceManager();
+  var ensemble = resourceManager.getSpriteSheet('explode1');
+  new model.Effect(this.game_, ensemble.getAnimation(0), position, velocity);
+
+  ensemble = resourceManager.getSpriteSheet('ship' + killee.getShip() + '_junk');
+  for (var i = 0; i < ensemble.getNumAnimations(); ++i) {
+    var animation = ensemble.getAnimation(i);
+    var deltaVelocity = math.Vector.fromPolar(Math.random() * 2, Math.random() * 2 * Math.PI);
+    new model.Effect(this.game_, animation, position, velocity.add(deltaVelocity));
+  }
+
+  if (this.game_.getViewport().contains(position)) {
+    resourceManager.playSound('explodeShip');
+  }
+};
+
+/**
+ * Called when the player this sprite represents respawns.
+ *
+ * @param {!model.player.Player} player
+ * @private
+ */
+model.player.PlayerSprite.prototype.respawn_ = function(player) {
+  var resourceManager = this.game_.getResourceManager();
+  var animation = resourceManager.getSpriteSheet('warp').getAnimation(0);
+  new model.Effect(this.game_, animation, player.getPosition(), math.Vector.ZERO);
 };
