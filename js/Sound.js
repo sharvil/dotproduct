@@ -29,7 +29,7 @@ Sound.prototype.load = function(url, loadCb) {
   var xhr = new XMLHttpRequest();
   xhr.open('GET', url, true);
   xhr.responseType = 'arraybuffer';
-  goog.events.listen(xhr, goog.events.EventType.LOAD, goog.bind(this.onLoad_, this, loadCb));
+  goog.events.listen(xhr, goog.events.EventType.LOAD, this.onLoad_.bind(this, loadCb));
   xhr.send();
 };
 

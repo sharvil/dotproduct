@@ -16,9 +16,9 @@ input.Keyboard = function() {
    */
   this.keys_ = {};
 
-  goog.events.listen(document, this.getVisibilityEvent_(), goog.bind(this.documentVisibilityChanged_, this));
-  goog.events.listen(window, goog.events.EventType.KEYDOWN, goog.bind(this.keyPressed_, this));
-  goog.events.listen(window, goog.events.EventType.KEYUP, goog.bind(this.keyReleased_, this));
+  goog.events.listen(document, this.getVisibilityEvent_(), this.documentVisibilityChanged_.bind(this));
+  goog.events.listen(window, goog.events.EventType.KEYDOWN, this.keyPressed_.bind(this));
+  goog.events.listen(window, goog.events.EventType.KEYUP, this.keyReleased_.bind(this));
 };
 
 /**

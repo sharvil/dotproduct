@@ -66,7 +66,7 @@ model.projectile.Projectile.prototype.advanceTime = function() {
   }
 
   this.updatePosition_();
-  this.game_.getPlayerIndex().some(goog.bind(this.checkPlayerCollision_, this));
+  this.game_.getPlayerIndex().some(this.checkPlayerCollision_.bind(this));
 };
 
 /**

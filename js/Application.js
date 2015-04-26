@@ -54,7 +54,7 @@ Application = function(settings, url) {
    * @type {!views.LoadingView}
    * @private
    */
-  this.loadingView_ = new views.LoadingView(this.resourceManager_, goog.bind(this.onLoadComplete_, this));
+  this.loadingView_ = new views.LoadingView(this.resourceManager_, this.onLoadComplete_.bind(this));
   this.loadingView_.renderDom(/** @type {!HTMLDivElement} */ (goog.dom.getElement('loading')));
   this.loadingView_.hide();
 
@@ -63,7 +63,7 @@ Application = function(settings, url) {
     'accessToken': settings.accessToken
   };
 
-  this.protocol_.registerPacketHandler(net.Protocol.S2CPacketType.LOGIN_REPLY, goog.bind(this.startGame_, this));
+  this.protocol_.registerPacketHandler(net.Protocol.S2CPacketType.LOGIN_REPLY, this.startGame_.bind(this));
   this.protocol_.login(loginData);
 };
 

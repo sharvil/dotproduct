@@ -192,33 +192,33 @@ Game = function(protocol, resourceManager, settings, mapData, tileProperties) {
   new layers.HudLayer(this);
   new layers.WeaponIndicators(this);
 
-  this.protocol_.registerEventHandler(goog.bind(this.onConnectionLost_, this));
-  this.protocol_.registerPacketHandler(net.Protocol.S2CPacketType.PLAYER_ENTERED, goog.bind(this.onPlayerEntered_, this));
-  this.protocol_.registerPacketHandler(net.Protocol.S2CPacketType.PLAYER_LEFT, goog.bind(this.onPlayerLeft_, this));
-  this.protocol_.registerPacketHandler(net.Protocol.S2CPacketType.PLAYER_POSITION, goog.bind(this.onPlayerPosition_, this));
-  this.protocol_.registerPacketHandler(net.Protocol.S2CPacketType.PLAYER_DIED, goog.bind(this.onPlayerDied_, this));
-  this.protocol_.registerPacketHandler(net.Protocol.S2CPacketType.CHAT_MESSAGE, goog.bind(this.onChatMessage_, this));
-  this.protocol_.registerPacketHandler(net.Protocol.S2CPacketType.SHIP_CHANGE, goog.bind(this.onShipChanged_, this));
-  this.protocol_.registerPacketHandler(net.Protocol.S2CPacketType.SCORE_UPDATE, goog.bind(this.onScoreUpdated_, this));
-  this.protocol_.registerPacketHandler(net.Protocol.S2CPacketType.PRIZE_SEED_UPDATE, goog.bind(this.onPrizeSeedUpdated_, this));
-  this.protocol_.registerPacketHandler(net.Protocol.S2CPacketType.PRIZE_COLLECTED, goog.bind(this.onPrizeCollected_, this));
-  this.protocol_.registerPacketHandler(net.Protocol.S2CPacketType.SET_PRESENCE, goog.bind(this.onSetPresence_, this));
-  this.protocol_.registerPacketHandler(net.Protocol.S2CPacketType.FLAG_UPDATE, goog.bind(this.onFlagUpdate_, this));
+  this.protocol_.registerEventHandler(this.onConnectionLost_.bind(this));
+  this.protocol_.registerPacketHandler(net.Protocol.S2CPacketType.PLAYER_ENTERED, this.onPlayerEntered_.bind(this));
+  this.protocol_.registerPacketHandler(net.Protocol.S2CPacketType.PLAYER_LEFT, this.onPlayerLeft_.bind(this));
+  this.protocol_.registerPacketHandler(net.Protocol.S2CPacketType.PLAYER_POSITION, this.onPlayerPosition_.bind(this));
+  this.protocol_.registerPacketHandler(net.Protocol.S2CPacketType.PLAYER_DIED, this.onPlayerDied_.bind(this));
+  this.protocol_.registerPacketHandler(net.Protocol.S2CPacketType.CHAT_MESSAGE, this.onChatMessage_.bind(this));
+  this.protocol_.registerPacketHandler(net.Protocol.S2CPacketType.SHIP_CHANGE, this.onShipChanged_.bind(this));
+  this.protocol_.registerPacketHandler(net.Protocol.S2CPacketType.SCORE_UPDATE, this.onScoreUpdated_.bind(this));
+  this.protocol_.registerPacketHandler(net.Protocol.S2CPacketType.PRIZE_SEED_UPDATE, this.onPrizeSeedUpdated_.bind(this));
+  this.protocol_.registerPacketHandler(net.Protocol.S2CPacketType.PRIZE_COLLECTED, this.onPrizeCollected_.bind(this));
+  this.protocol_.registerPacketHandler(net.Protocol.S2CPacketType.SET_PRESENCE, this.onSetPresence_.bind(this));
+  this.protocol_.registerPacketHandler(net.Protocol.S2CPacketType.FLAG_UPDATE, this.onFlagUpdate_.bind(this));
   this.protocol_.startGame(startingShip);
 
   this.viewport_.followPlayer(localPlayer);
 
-  localPlayer.addListener(model.player.Player.Event.SHIP_CHANGE, goog.bind(this.onLocalPlayerShipChanged_, this));
-  localPlayer.addListener(model.player.Player.Event.COLLECT_PRIZE, goog.bind(this.onLocalPlayerCollectedPrize_, this));
-  localPlayer.addListener(model.player.Player.Event.DEATH, goog.bind(this.onLocalPlayerDied_, this));
+  localPlayer.addListener(model.player.Player.Event.SHIP_CHANGE, this.onLocalPlayerShipChanged_.bind(this));
+  localPlayer.addListener(model.player.Player.Event.COLLECT_PRIZE, this.onLocalPlayerCollectedPrize_.bind(this));
+  localPlayer.addListener(model.player.Player.Event.DEATH, this.onLocalPlayerDied_.bind(this));
 
-  goog.events.listen(window, goog.events.EventType.RESIZE, goog.bind(this.onResize_, this));
-  goog.events.listen(this.canvas_, goog.events.EventType.MOUSEMOVE, goog.bind(this.onMouseMoved_, this));
+  goog.events.listen(window, goog.events.EventType.RESIZE, this.onResize_.bind(this));
+  goog.events.listen(this.canvas_, goog.events.EventType.MOUSEMOVE, this.onMouseMoved_.bind(this));
 
   goog.events.listen(window, goog.events.EventType.FOCUS, function() { localPlayer.clearPresence(model.player.Player.Presence.AWAY); });
   goog.events.listen(window, goog.events.EventType.BLUR, function() { localPlayer.setPresence(model.player.Player.Presence.AWAY); });
 
-  new time.Timer().setInterval(goog.bind(this.heartbeat_, this), 100);
+  new time.Timer().setInterval(this.heartbeat_.bind(this), 100);
   html5.Notifications.requestPermission();
 };
 goog.inherits(Game, views.View);
@@ -368,7 +368,7 @@ Game.prototype.heartbeat_ = function() {
  * @private
  */
 Game.prototype.renderingLoop_ = function() {
-  this.animationId_ = html5.AnimationFrame.request(goog.bind(this.renderingLoop_, this));
+  this.animationId_ = html5.AnimationFrame.request(this.renderingLoop_.bind(this));
 
   var curTime = goog.now();
   var timeDiff = time.Timer.millisToTicks(curTime - this.lastTime_ + this.tickResidue_);

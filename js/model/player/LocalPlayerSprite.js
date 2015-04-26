@@ -21,8 +21,8 @@ model.player.LocalPlayerSprite = function(game, localPlayer) {
    */
   this.resourceManager_ = game.getResourceManager();
 
-  localPlayer.addListener(model.player.Player.Event.COLLECT_PRIZE, goog.bind(this.collectPrize_, this));
-  localPlayer.addListener(model.player.Player.Event.BOUNCE, goog.bind(this.bounce_, this));
+  localPlayer.addListener(model.player.Player.Event.COLLECT_PRIZE, this.collectPrize_.bind(this));
+  localPlayer.addListener(model.player.Player.Event.BOUNCE, this.bounce_.bind(this));
 };
 goog.inherits(model.player.LocalPlayerSprite, model.player.PlayerSprite);
 
@@ -90,6 +90,6 @@ model.player.LocalPlayerSprite.prototype.collectPrize_ = function(player, prize)
 model.player.LocalPlayerSprite.prototype.bounce_ = function(player) {
   // If the player was speeding, play a sound on the bounce.
   if (player.getVelocity().magnitude() > 1) {
-    self.resourceManager_.playSound('bounce');
+    this.resourceManager_.playSound('bounce');
   }
 };

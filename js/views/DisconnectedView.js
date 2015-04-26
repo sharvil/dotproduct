@@ -19,7 +19,7 @@ views.DisconnectedView = function() {
   this.view_.classList.add(views.DisconnectedView.DISCONNECTED_VIEW_CLASS_NAME_);
   this.hide();
 
-  goog.events.listen(this.view_, goog.events.EventType.CLICK, goog.bind(this.onClick_, this));
+  goog.events.listen(this.view_, goog.events.EventType.CLICK, this.onClick_.bind(this));
 };
 goog.inherits(views.DisconnectedView, views.View);
 

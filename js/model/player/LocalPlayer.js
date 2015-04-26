@@ -231,14 +231,14 @@ model.player.LocalPlayer.prototype.advanceTime = function() {
         var position = new math.Vector(0, -this.yRadius_).rotate(angle).add(this.position_);
         var velocity = this.velocity_;
 
-        weaponData = this.gun_.fire(angle, position, velocity, goog.bind(function(fireEnergy, fireDelay) {
+        weaponData = this.gun_.fire(angle, position, velocity, (function(fireEnergy, fireDelay) {
           if (this.energy_ > fireEnergy) {
             this.energy_ -= fireEnergy;
             this.projectileFireDelay_.setValue(fireDelay);
             return true;
           }
           return false;
-        }, this));
+        }).bind(this));
       }
     } else if (keyboard.isKeyPressed(input.Keymap.FIRE_BOMB)) {
       if (isSafe) {
@@ -248,7 +248,7 @@ model.player.LocalPlayer.prototype.advanceTime = function() {
         var position = new math.Vector(0, -this.yRadius_).rotate(angle).add(this.position_);
         var velocity = this.velocity_;
 
-        weaponData = this.bombBay_.fire(angle, position, velocity, goog.bind(function(fireEnergy, fireDelay, recoil) {
+        weaponData = this.bombBay_.fire(angle, position, velocity, (function(fireEnergy, fireDelay, recoil) {
           if (this.energy_ > fireEnergy) {
             this.energy_ -= fireEnergy;
             this.projectileFireDelay_.setValue(fireDelay);
@@ -256,7 +256,7 @@ model.player.LocalPlayer.prototype.advanceTime = function() {
             return true;
           }
           return false;
-        }, this));
+        }).bind(this));
       }
     } else if (keyboard.isKeyPressed(input.Keymap.FIRE_MINE)) {
       var self = this;

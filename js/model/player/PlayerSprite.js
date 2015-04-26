@@ -29,8 +29,8 @@ model.player.PlayerSprite = function(game, player, layer) {
    */
   this.layer_ = layer;
 
-  player.addListener(model.player.Player.Event.DEATH, goog.bind(this.death_, this));
-  player.addListener(model.player.Player.Event.RESPAWN, goog.bind(this.respawn_, this));
+  player.addListener(model.player.Player.Event.DEATH, this.death_.bind(this));
+  player.addListener(model.player.Player.Event.RESPAWN, this.respawn_.bind(this));
 
   game.getPainter().registerDrawable(layer, this);
 };

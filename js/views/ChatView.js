@@ -50,10 +50,10 @@ views.ChatView = function(game) {
   this.chatBox_.maxLength = 140;
   this.chatBox_.classList.add(views.ChatView.CHAT_BOX_CLASS_NAME_);
 
-  goog.events.listen(window, goog.events.EventType.KEYPRESS, goog.bind(this.onGlobalKeyPress_, this));
-  goog.events.listen(this.chatBox_, goog.events.EventType.KEYPRESS, goog.bind(this.onChatKeyPress_, this));
-  goog.events.listen(this.chatBox_, goog.events.EventType.KEYDOWN, goog.bind(this.keyFilter_, this));
-  goog.events.listen(this.chatBox_, goog.events.EventType.KEYUP, goog.bind(this.keyFilter_, this));
+  goog.events.listen(window, goog.events.EventType.KEYPRESS, this.onGlobalKeyPress_.bind(this));
+  goog.events.listen(this.chatBox_, goog.events.EventType.KEYPRESS, this.onChatKeyPress_.bind(this));
+  goog.events.listen(this.chatBox_, goog.events.EventType.KEYDOWN, this.keyFilter_.bind(this));
+  goog.events.listen(this.chatBox_, goog.events.EventType.KEYUP, this.keyFilter_.bind(this));
 
   var self = this;
   goog.events.listen(this.chatBox_, goog.events.EventType.BLUR, function() { self.localPlayer_.clearPresence(model.player.Player.Presence.TYPING); });
@@ -130,7 +130,7 @@ views.ChatView.prototype.addMessage = function(player, message) {
   var nameNode = goog.dom.createElement('span');
   nameNode.classList.add(views.ChatView.TEXT_NAME_CLASS_NAME_);
   nameNode.textContent = player.getName() + ': ';
-  goog.events.listen(nameNode, goog.events.EventType.CLICK, goog.bind(this.onNameClicked_, this, player));
+  goog.events.listen(nameNode, goog.events.EventType.CLICK, this.onNameClicked_.bind(this, player));
 
   var textNode = goog.dom.createElement('span');
   textNode.classList.add(views.ChatView.TEXT_MESSAGE_CLASS_NAME_);

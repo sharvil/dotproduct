@@ -20,9 +20,9 @@ input.Mouse = function() {
    * @private
    */
   this.timeout_ = new time.Timer();
-  this.timeout_.setTimeout(goog.bind(this.onIdle_, this), input.Mouse.IDLE_TIMEOUT_TICKS_);
+  this.timeout_.setTimeout(this.onIdle_.bind(this), input.Mouse.IDLE_TIMEOUT_TICKS_);
 
-  goog.events.listen(window, goog.events.EventType.MOUSEMOVE, goog.bind(this.onMotion_, this));
+  goog.events.listen(window, goog.events.EventType.MOUSEMOVE, this.onMotion_.bind(this));
 };
 
 /**
@@ -47,7 +47,7 @@ input.Mouse.prototype.isHovering = function(rect) {
 input.Mouse.prototype.onMotion_ = function(event) {
   document.body.style.cursor = '';
   this.position_ = new math.Vector(event.offsetX, event.offsetY);
-  this.timeout_.setTimeout(goog.bind(this.onIdle_, this), input.Mouse.IDLE_TIMEOUT_TICKS_);
+  this.timeout_.setTimeout(this.onIdle_.bind(this), input.Mouse.IDLE_TIMEOUT_TICKS_);
 };
 
 /**

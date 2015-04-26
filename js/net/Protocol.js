@@ -69,7 +69,7 @@ net.Protocol = function(url) {
    */
   this.roundTripTime_ = 0;
 
-  this.registerPacketHandler(net.Protocol.S2CPacketType.CLOCK_SYNC_REPLY, goog.bind(this.onClockSyncReply_, this));
+  this.registerPacketHandler(net.Protocol.S2CPacketType.CLOCK_SYNC_REPLY, this.onClockSyncReply_.bind(this));
 };
 
 /**
@@ -173,7 +173,7 @@ net.Protocol.prototype.login = function(loginData) {
 net.Protocol.prototype.startGame = function(ship) {
   this.send_([net.Protocol.C2SPacketType_.START_GAME, ship]);
   this.syncClocks_();
-  this.syncTimer_ = time.Timer.setInterval(goog.bind(this.syncClocks_, this), net.Protocol.CLOCK_SYNC_PERIOD_);
+  this.syncTimer_ = time.Timer.setInterval(this.syncClocks_.bind(this), net.Protocol.CLOCK_SYNC_PERIOD_);
 };
 
 /**
@@ -329,10 +329,10 @@ net.Protocol.prototype.createSocket_ = function() {
 
   this.socket_ = new WebSocket(this.url_, net.Protocol.PROTOCOL_VERSION_);
 
-  goog.events.listen(this.socket_, 'open', goog.bind(this.onOpen_, this));
-  goog.events.listen(this.socket_, 'error', goog.bind(this.onClose_, this));
-  goog.events.listen(this.socket_, 'close', goog.bind(this.onClose_, this));
-  goog.events.listen(this.socket_, 'message', goog.bind(this.onMessage_, this));
+  goog.events.listen(this.socket_, 'open', this.onOpen_.bind(this));
+  goog.events.listen(this.socket_, 'error', this.onClose_.bind(this));
+  goog.events.listen(this.socket_, 'close', this.onClose_.bind(this));
+  goog.events.listen(this.socket_, 'message', this.onMessage_.bind(this));
 };
 
 /**
