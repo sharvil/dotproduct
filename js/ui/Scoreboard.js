@@ -64,16 +64,10 @@ ui.Scoreboard.FRIEND_CLASS_NAME_ = 'sv-row-friend';
  */
 ui.Scoreboard.FOE_CLASS_NAME_ = 'sv-row-foe';
 
-/**
- * @override
- */
 ui.Scoreboard.prototype.show = function() {
   this.view_.classList.remove(ui.Scoreboard.HIDE_CLASS_NAME_);
 };
 
-/**
- * @override
- */
 ui.Scoreboard.prototype.hide = function() {
   this.view_.classList.add(ui.Scoreboard.HIDE_CLASS_NAME_);
 };
@@ -94,7 +88,7 @@ ui.Scoreboard.prototype.update = function() {
 
     var scoreNode = goog.dom.createElement('span');
     scoreNode.classList.add(ui.Scoreboard.SCORE_CLASS_NAME_);
-    scoreNode.textContent = player.points_;
+    scoreNode.textContent = player.getPoints();
 
     var container = goog.dom.createElement('div');
     container.classList.add(player.isFriend(localPlayer) ? ui.Scoreboard.FRIEND_CLASS_NAME_ : ui.Scoreboard.FOE_CLASS_NAME_);
