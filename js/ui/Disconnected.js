@@ -1,4 +1,4 @@
-goog.provide('views.DisconnectedView');
+goog.provide('ui.Disconnected');
 
 goog.require('goog.dom');
 goog.require('goog.events');
@@ -6,7 +6,7 @@ goog.require('goog.events');
 /**
  * @constructor
  */
-views.DisconnectedView = function() {
+ui.Disconnected = function() {
   /**
    * @type {!HTMLDivElement}
    * @private
@@ -16,14 +16,14 @@ views.DisconnectedView = function() {
   goog.events.listen(this.view_, goog.events.EventType.CLICK, this.onClick_.bind(this));
 };
 
-views.DisconnectedView.prototype.show = function() {
+ui.Disconnected.prototype.show = function() {
   this.view_.style.display = 'block';
 };
 
-views.DisconnectedView.prototype.hide = function() {
+ui.Disconnected.prototype.hide = function() {
   this.view_.style.display = 'none';
 };
 
-views.DisconnectedView.prototype.onClick_ = function() {
+ui.Disconnected.prototype.onClick_ = function() {
   window.location.reload();
 };

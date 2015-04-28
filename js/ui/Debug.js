@@ -1,4 +1,4 @@
-goog.provide('views.DebugView');
+goog.provide('ui.Debug');
 
 goog.require('Labs');
 goog.require('Viewport');
@@ -8,7 +8,7 @@ goog.require('Viewport');
  * @param {!Game} game
  * @param {!Viewport} viewport
  */
-views.DebugView = function(game, viewport) {
+ui.Debug = function(game, viewport) {
   /**
    * @type {!Game}
    * @private
@@ -40,7 +40,7 @@ views.DebugView = function(game, viewport) {
   this.frames_ = 0;
 };
 
-views.DebugView.prototype.getEventTimeString_ = function() {
+ui.Debug.prototype.getEventTimeString_ = function() {
   var daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
   var monthName = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
   var today = new Date();
@@ -75,7 +75,7 @@ views.DebugView.prototype.getEventTimeString_ = function() {
   return str;
 };
 
-views.DebugView.prototype.update = function() {
+ui.Debug.prototype.update = function() {
   ++this.frames_;
 
   var now = goog.now();

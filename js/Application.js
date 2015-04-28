@@ -9,7 +9,7 @@ goog.require('Game');
 goog.require('net.Protocol');
 goog.require('net.Protocol.S2CPacketType');
 goog.require('ResourceManager');
-goog.require('views.LoadingView');
+goog.require('ui.Loading');
 
 /**
  * @constructor
@@ -51,10 +51,10 @@ Application = function(settings, url) {
   this.game_;
 
   /**
-   * @type {!views.LoadingView}
+   * @type {!ui.Loading}
    * @private
    */
-  this.loadingView_ = new views.LoadingView(this.resourceManager_, this.onLoadComplete_.bind(this));
+  this.loadingView_ = new ui.Loading(this.resourceManager_, this.onLoadComplete_.bind(this));
 
   var loginData = {
     'strategy': settings.strategy,

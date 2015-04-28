@@ -1,4 +1,4 @@
-goog.provide('views.ScoreboardView');
+goog.provide('ui.Scoreboard');
 
 goog.require('goog.array');
 goog.require('goog.dom');
@@ -10,7 +10,7 @@ goog.require('goog.events.EventType');
  * @constructor
  * @param {!Game} game
  */
-views.ScoreboardView = function(game) {
+ui.Scoreboard = function(game) {
   /**
    * @type {!HTMLDivElement}
    * @private
@@ -34,51 +34,51 @@ views.ScoreboardView = function(game) {
  * @private
  * @const
  */
-views.ScoreboardView.HIDE_CLASS_NAME_ = 'sv-hidden';
+ui.Scoreboard.HIDE_CLASS_NAME_ = 'sv-hidden';
 
 /**
  * @type {string}
  * @private
  * @const
  */
-views.ScoreboardView.NAME_CLASS_NAME_ = 'sv-name';
+ui.Scoreboard.NAME_CLASS_NAME_ = 'sv-name';
 
 /**
  * @type {string}
  * @private
  * @const
  */
-views.ScoreboardView.SCORE_CLASS_NAME_ = 'sv-score';
+ui.Scoreboard.SCORE_CLASS_NAME_ = 'sv-score';
 
 /**
  * @type {string}
  * @private
  * @const
  */
-views.ScoreboardView.FRIEND_CLASS_NAME_ = 'sv-row-friend';
+ui.Scoreboard.FRIEND_CLASS_NAME_ = 'sv-row-friend';
 
 /**
  * @type {string}
  * @private
  * @const
  */
-views.ScoreboardView.FOE_CLASS_NAME_ = 'sv-row-foe';
+ui.Scoreboard.FOE_CLASS_NAME_ = 'sv-row-foe';
 
 /**
  * @override
  */
-views.ScoreboardView.prototype.show = function() {
-  this.view_.classList.remove(views.ScoreboardView.HIDE_CLASS_NAME_);
+ui.Scoreboard.prototype.show = function() {
+  this.view_.classList.remove(ui.Scoreboard.HIDE_CLASS_NAME_);
 };
 
 /**
  * @override
  */
-views.ScoreboardView.prototype.hide = function() {
-  this.view_.classList.add(views.ScoreboardView.HIDE_CLASS_NAME_);
+ui.Scoreboard.prototype.hide = function() {
+  this.view_.classList.add(ui.Scoreboard.HIDE_CLASS_NAME_);
 };
 
-views.ScoreboardView.prototype.update = function() {
+ui.Scoreboard.prototype.update = function() {
   this.view_.innerHTML = '';
 
   var self = this;
@@ -89,15 +89,15 @@ views.ScoreboardView.prototype.update = function() {
 
   this.playerIndex_.forEach(function(player) {
     var nameNode = goog.dom.createElement('span');
-    nameNode.classList.add(views.ScoreboardView.NAME_CLASS_NAME_);
+    nameNode.classList.add(ui.Scoreboard.NAME_CLASS_NAME_);
     nameNode.textContent = player.getName();
 
     var scoreNode = goog.dom.createElement('span');
-    scoreNode.classList.add(views.ScoreboardView.SCORE_CLASS_NAME_);
+    scoreNode.classList.add(ui.Scoreboard.SCORE_CLASS_NAME_);
     scoreNode.textContent = player.points_;
 
     var container = goog.dom.createElement('div');
-    container.classList.add(player.isFriend(localPlayer) ? views.ScoreboardView.FRIEND_CLASS_NAME_ : views.ScoreboardView.FOE_CLASS_NAME_);
+    container.classList.add(player.isFriend(localPlayer) ? ui.Scoreboard.FRIEND_CLASS_NAME_ : ui.Scoreboard.FOE_CLASS_NAME_);
     container.appendChild(nameNode);
     container.appendChild(scoreNode);
 

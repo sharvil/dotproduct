@@ -33,10 +33,10 @@ goog.require('PrizeIndex');
 goog.require('net.Protocol');
 goog.require('time.Timer');
 goog.require('Viewport');
-goog.require('views.ChatView');
-goog.require('views.DebugView');
-goog.require('views.DisconnectedView');
-goog.require('views.ScoreboardView');
+goog.require('ui.Chat');
+goog.require('ui.Debug');
+goog.require('ui.Disconnected');
+goog.require('ui.Scoreboard');
 
 /**
  * @constructor
@@ -141,29 +141,29 @@ Game = function(protocol, resourceManager, settings, mapData, tileProperties) {
   this.notifications_ = new Notifications(localPlayer);
 
   /**
-   * @type {!views.ChatView}
+   * @type {!ui.Chat}
    * @private
    */
-  this.chatView_ = new views.ChatView(this);
+  this.chatView_ = new ui.Chat(this);
   this.chatView_.addSystemMessage('Welcome to dotproduct! Select one of 8 ships with the 1-8 keys.');
 
   /**
-   * @type {!views.ScoreboardView}
+   * @type {!ui.Scoreboard}
    * @private
    */
-  this.scoreboardView_ = new views.ScoreboardView(this);
+  this.scoreboardView_ = new ui.Scoreboard(this);
 
   /**
-   * @type {!views.DebugView}
+   * @type {!ui.Debug}
    * @private
    */
-  this.debugView_ = new views.DebugView(this, this.viewport_);
+  this.debugView_ = new ui.Debug(this, this.viewport_);
 
   /**
-   * @type {!views.DisconnectedView}
+   * @type {!ui.Disconnected}
    * @private
    */
-  this.disconnectedView_ = new views.DisconnectedView();
+  this.disconnectedView_ = new ui.Disconnected();
 
   /**
    * @type {number}

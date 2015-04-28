@@ -1,4 +1,4 @@
-goog.provide('views.LoadingView');
+goog.provide('ui.Loading');
 
 goog.require('goog.events');
 goog.require('goog.events.EventType');
@@ -9,7 +9,7 @@ goog.require('ResourceManager');
  * @param {!ResourceManager} resourceManager
  * @param {function()} onLoadCompleteCb
  */
-views.LoadingView = function(resourceManager, onLoadCompleteCb) {
+ui.Loading = function(resourceManager, onLoadCompleteCb) {
   /**
    * @type {!ResourceManager}
    * @private
@@ -41,7 +41,7 @@ views.LoadingView = function(resourceManager, onLoadCompleteCb) {
   this.progressBarValue_ = /** @type {!HTMLDivElement} */ (goog.dom.getElement('ldv-progress-value'));
 };
 
-views.LoadingView.prototype.load = function(resources) {
+ui.Loading.prototype.load = function(resources) {
   this.setLoadPercent(0);
   this.container_.style.display = 'block';
 
@@ -78,6 +78,6 @@ views.LoadingView.prototype.load = function(resources) {
 /**
  * @param {number} percent
  */
-views.LoadingView.prototype.setLoadPercent = function(percent) {
+ui.Loading.prototype.setLoadPercent = function(percent) {
   this.progressBarValue_.style.width = percent + '%';
 };

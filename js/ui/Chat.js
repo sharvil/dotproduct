@@ -1,4 +1,4 @@
-goog.provide('views.ChatView');
+goog.provide('ui.Chat');
 
 goog.require('goog.dom');
 goog.require('goog.events.BrowserEvent');
@@ -10,7 +10,7 @@ goog.require('net.Protocol');
  * @constructor
  * @param {!Game} game
  */
-views.ChatView = function(game) {
+ui.Chat = function(game) {
   /**
    * @type {!model.player.LocalPlayer}
    * @private
@@ -56,45 +56,45 @@ views.ChatView = function(game) {
  * @private
  * @const
  */
-views.ChatView.TEXT_NAME_CLASS_NAME_ = 'cv-text-name';
+ui.Chat.TEXT_NAME_CLASS_NAME_ = 'cv-text-name';
 
 /**
  * @type {string}
  * @private
  * @const
  */
-views.ChatView.TEXT_MESSAGE_CLASS_NAME_ = 'cv-text-message';
+ui.Chat.TEXT_MESSAGE_CLASS_NAME_ = 'cv-text-message';
 
 /**
  * @type {string}
  * @private
  * @const
  */
-views.ChatView.SYSTEM_MESSAGE_CLASS_NAME_ = 'cv-system-message';
+ui.Chat.SYSTEM_MESSAGE_CLASS_NAME_ = 'cv-system-message';
 
 /**
  * @type {string}
  * @private
  * @const
  */
-views.ChatView.CHAT_BOX_VISIBLE_CLASS_NAME_ = 'cv-visible';
+ui.Chat.CHAT_BOX_VISIBLE_CLASS_NAME_ = 'cv-visible';
 
 /**
  * @param {!model.player.Player} player
  * @param {string} message
  */
-views.ChatView.prototype.addMessage = function(player, message) {
+ui.Chat.prototype.addMessage = function(player, message) {
   var isAtBottom = this.view_.scrollTop + this.view_.offsetHeight >= this.view_.scrollHeight;
 
   var messageNode = goog.dom.createElement('div');
 
   var nameNode = goog.dom.createElement('span');
-  nameNode.classList.add(views.ChatView.TEXT_NAME_CLASS_NAME_);
+  nameNode.classList.add(ui.Chat.TEXT_NAME_CLASS_NAME_);
   nameNode.textContent = player.getName() + ': ';
   goog.events.listen(nameNode, goog.events.EventType.CLICK, this.onNameClicked_.bind(this, player));
 
   var textNode = goog.dom.createElement('span');
-  textNode.classList.add(views.ChatView.TEXT_MESSAGE_CLASS_NAME_);
+  textNode.classList.add(ui.Chat.TEXT_MESSAGE_CLASS_NAME_);
   textNode.textContent = message;
   textNode.innerHTML = window.linkify(textNode.innerHTML);
 
@@ -110,11 +110,11 @@ views.ChatView.prototype.addMessage = function(player, message) {
 /**
  * @param {string} message
  */
-views.ChatView.prototype.addSystemMessage = function(message) {
+ui.Chat.prototype.addSystemMessage = function(message) {
   var isAtBottom = this.view_.scrollTop + this.view_.offsetHeight >= this.view_.scrollHeight;
 
   var messageNode = goog.dom.createElement('div');
-  messageNode.classList.add(views.ChatView.SYSTEM_MESSAGE_CLASS_NAME_);
+  messageNode.classList.add(ui.Chat.SYSTEM_MESSAGE_CLASS_NAME_);
   messageNode.textContent = message;
   messageNode.innerHTML = window.linkify(messageNode.innerHTML);
 
@@ -124,7 +124,7 @@ views.ChatView.prototype.addSystemMessage = function(message) {
   }
 };
 
-views.ChatView.prototype.onGlobalKeyPress_ = function(event) {
+ui.Chat.prototype.onGlobalKeyPress_ = function(event) {
   if (event.keyCode == goog.events.KeyCodes.NUM_ZERO) {
     this.view_.classList.toggle('cv-expanded');
   }
@@ -133,11 +133,11 @@ views.ChatView.prototype.onGlobalKeyPress_ = function(event) {
     return;
   }
 
-  this.chatBox_.classList.add(views.ChatView.CHAT_BOX_VISIBLE_CLASS_NAME_);
+  this.chatBox_.classList.add(ui.Chat.CHAT_BOX_VISIBLE_CLASS_NAME_);
   this.chatBox_.focus();
 };
 
-views.ChatView.prototype.onChatKeyPress_ = function(event) {
+ui.Chat.prototype.onChatKeyPress_ = function(event) {
   if (event.keyCode != goog.events.KeyCodes.ENTER) {
     return;
   }
@@ -151,7 +151,7 @@ views.ChatView.prototype.onChatKeyPress_ = function(event) {
 
   this.chatBox_.value = '';
   this.chatBox_.blur();
-  this.chatBox_.classList.remove(views.ChatView.CHAT_BOX_VISIBLE_CLASS_NAME_);
+  this.chatBox_.classList.remove(ui.Chat.CHAT_BOX_VISIBLE_CLASS_NAME_);
   event.stopPropagation();
 };
 
@@ -159,12 +159,12 @@ views.ChatView.prototype.onChatKeyPress_ = function(event) {
  * @param {!goog.events.BrowserEvent} event
  * @private
  */
-views.ChatView.prototype.keyFilter_ = function(event) {
+ui.Chat.prototype.keyFilter_ = function(event) {
   // Chrome doesn't fire keypress events for the escape key so we have to handle it here instead.
   if (event.keyCode == goog.events.KeyCodes.ESC) {
     this.chatBox_.value = '';
     this.chatBox_.blur();
-    this.chatBox_.classList.remove(views.ChatView.CHAT_BOX_VISIBLE_CLASS_NAME_);
+    this.chatBox_.classList.remove(ui.Chat.CHAT_BOX_VISIBLE_CLASS_NAME_);
     return;
   }
 
@@ -177,8 +177,8 @@ views.ChatView.prototype.keyFilter_ = function(event) {
  * @param {!model.player.Player} player
  * @private
  */
-views.ChatView.prototype.onNameClicked_ = function(player) {
-  this.chatBox_.classList.add(views.ChatView.CHAT_BOX_VISIBLE_CLASS_NAME_);
+ui.Chat.prototype.onNameClicked_ = function(player) {
+  this.chatBox_.classList.add(ui.Chat.CHAT_BOX_VISIBLE_CLASS_NAME_);
   this.chatBox_.focus();
 
   if (this.chatBox_.value.length > 0 && this.chatBox_.value[this.chatBox_.value.length - 1] != ' ') {
@@ -191,6 +191,6 @@ views.ChatView.prototype.onNameClicked_ = function(player) {
  * @return {boolean}
  * @private
  */
-views.ChatView.prototype.isChatBoxVisible_ = function() {
-  return this.chatBox_.classList.contains(views.ChatView.CHAT_BOX_VISIBLE_CLASS_NAME_);
+ui.Chat.prototype.isChatBoxVisible_ = function() {
+  return this.chatBox_.classList.contains(ui.Chat.CHAT_BOX_VISIBLE_CLASS_NAME_);
 };
