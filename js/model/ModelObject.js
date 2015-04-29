@@ -1,5 +1,7 @@
 goog.provide('model.ModelObject');
 
+goog.require('goog.asserts');
+
 /**
  * @constructor
  * @param {!model.Simulation} simulation
@@ -30,9 +32,8 @@ model.ModelObject.prototype.isValid = function() {
 };
 
 model.ModelObject.prototype.invalidate = function() {
-  if (!this.isValid_) {
-    return;
-  }
+  goog.asserts.assert(this.isValid_, 'Duplicate invalidation of model object.');
+
   this.isValid_ = false;
   this.simulation_.unregisterObject(this);
   this.onInvalidate_();

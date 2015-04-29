@@ -408,7 +408,9 @@ model.player.Player.prototype.addProjectile = function(projectile) {
  */
 model.player.Player.prototype.clearProjectiles_ = function() {
   goog.array.forEach(this.projectiles_, function(projectile) {
-    projectile.invalidate();
+    if (projectile.isValid()) {
+      projectile.invalidate();
+    }
   });
   this.projectiles_ = [];
 };
