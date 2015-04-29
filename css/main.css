@@ -255,7 +255,7 @@ body {
 .dv {
   position: absolute;
   top: 0px;
-  right: 0px;
+  left: 0px;
   color: #FF0071;
   padding: 5px 5px 0 0;
 }

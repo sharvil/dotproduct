@@ -88,9 +88,11 @@ ui.Debug.prototype.update = function() {
     html += '<br><br>';
   }
 
-  html += this.game_.getProtocol().getRoundTripTime() + 'ms, ' +
-          this.frames_ + 'fps, ' +
-          this.game_.getPlayerIndex().getCount();
+  if (Labs.DEBUG_UI) {
+    html += this.game_.getProtocol().getRoundTripTime() + 'ms, ' +
+            this.frames_ + 'fps, ' +
+            this.game_.getPlayerIndex().getCount();
+  }
 
   this.view_.innerHTML = html;
 

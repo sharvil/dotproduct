@@ -145,7 +145,7 @@ layers.HudLayer.prototype.renderNearShipEnergyDisplay_ = function(context, dimen
 layers.HudLayer.prototype.renderShipInfoDisplay_ = function(context, dimensions) {
   var statusHudLeft = dimensions.width - this.statusHudImage_.getTileWidth();
   var statusHudRight = statusHudLeft + this.statusHudImage_.getTileWidth();
-  var statusHudTop = 50;
+  var statusHudTop = 5;
 
   this.statusHudImage_.render(context, statusHudLeft, statusHudTop);
 

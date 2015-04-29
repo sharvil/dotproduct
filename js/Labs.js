@@ -8,6 +8,13 @@ goog.provide('Labs');
 Labs.BOMB_TRAILS = false;
 
 /**
+ * True if the debug UI should be displayed.
+ *
+ * @define {boolean}
+ */
+Labs.DEBUG_UI = false;
+
+/**
  * True if we should display when the next game is taking place.
  *
  * @define {boolean}
