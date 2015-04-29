@@ -1,6 +1,8 @@
 goog.provide('model.projectile.Burst');
 
+goog.require('Listener');
 goog.require('model.projectile.Projectile');
+goog.require('model.projectile.Projectile.Event');
 goog.require('model.Weapon.Type');
 goog.require('math.Vector');
 
@@ -27,6 +29,14 @@ model.projectile.Burst = function(game, owner, position, velocity, lifetime, dam
   this.velocity_ = velocity;
 };
 goog.inherits(model.projectile.Burst, model.projectile.Projectile);
+goog.mixin(model.projectile.Burst.prototype, Listener.prototype);
+
+/**
+ * @return {boolean} returns true if the projectile is active, false otherwise.
+ */
+model.projectile.Burst.prototype.isActive = function() {
+  return this.isActive_;
+};
 
 /**
  * @override
@@ -56,6 +66,8 @@ model.projectile.Burst.prototype.checkPlayerCollision_ = function(player) {
  * @override
  */
 model.projectile.Burst.prototype.explode_ = function(hitPlayer) {
+  goog.base(this, 'explode_', hitPlayer);
+
   this.lifetime_ = 0;
 
   if (hitPlayer) {

@@ -1,29 +1,34 @@
 goog.provide('model.projectile.BombSprite');
 
 goog.require('Labs');
-goog.require('model.projectile.Bomb');
-goog.require('model.Effect');
 goog.require('math.Vector');
-goog.require('graphics.Drawable');
+goog.require('model.Effect');
+goog.require('model.projectile.Projectile.Event');
 goog.require('graphics.Layer');
 
 /**
  * @constructor
- * @extends {model.projectile.Bomb}
+ * @extends {model.ModelObject}
  * @implements {graphics.Drawable}
  * @param {!Game} game
- * @param {!model.player.Player} owner
- * @param {number} level
- * @param {!math.Vector} position
- * @param {!math.Vector} velocity
- * @param {number} lifetime
- * @param {number} damage
- * @param {number} bounceCount
- * @param {number} blastRadius
- * @param {number} proxRadius
+ * @param {!model.projectile.Bomb} bomb
  */
-model.projectile.BombSprite = function(game, owner, level, position, velocity, lifetime, damage, bounceCount, blastRadius, proxRadius) {
-  goog.base(this, game, owner, level, position, velocity, lifetime, damage, bounceCount, blastRadius, proxRadius);
+model.projectile.BombSprite = function(game, bomb) {
+  goog.base(this, game.getSimulation());
+
+  var level = bomb.getLevel();
+
+  /**
+   * @type {!Game}
+   * @private
+   */
+  this.game_ = game;
+
+  /**
+   * @type {!model.projectile.Bomb}
+   * @private
+   */
+  this.bomb_ = bomb;
 
   /**
    * @type {!graphics.Animation}
@@ -45,9 +50,11 @@ model.projectile.BombSprite = function(game, owner, level, position, velocity, l
    */
   this.trailTimer_ = 0;
 
+  this.bomb_.addListener(model.projectile.Projectile.Event.EXPLODE, this.onExplode_.bind(this));
+
   game.getPainter().registerDrawable(graphics.Layer.PROJECTILES, this);
 };
-goog.inherits(model.projectile.BombSprite, model.projectile.Bomb);
+goog.inherits(model.projectile.BombSprite, model.ModelObject);
 
 /**
  * @override
@@ -55,13 +62,11 @@ goog.inherits(model.projectile.BombSprite, model.projectile.Bomb);
 model.projectile.BombSprite.prototype.advanceTime = function() {
   // First advance and drop the trail.
   if (Labs.BOMB_TRAILS && ++this.trailTimer_ == 2) {
-    var animation = this.game_.getResourceManager().getSpriteSheet('bombTrails').getAnimation(this.level_);
-    var trail = new model.Effect(this.game_, animation, this.position_, new math.Vector(0, 0), graphics.Layer.TRAILS);
+    var animation = this.game_.getResourceManager().getSpriteSheet('bombTrails').getAnimation(this.bomb_.getLevel());
+    new model.Effect(this.game_, animation, this.bomb_.getPosition(), math.Vector.ZERO, graphics.Layer.TRAILS);
     this.trailTimer_ = 0;
   }
 
-  // Then advance the bomb itself.
-  goog.base(this, 'advanceTime');
   this.animation_.update();
   this.bouncingAnimation_.update();
 };
@@ -70,11 +75,16 @@ model.projectile.BombSprite.prototype.advanceTime = function() {
  * @override
  */
 model.projectile.BombSprite.prototype.render = function(viewport) {
-  var dimensions = viewport.getDimensions();
-  var x = Math.floor(this.position_.getX() - dimensions.left - this.animation_.getWidth() / 2);
-  var y = Math.floor(this.position_.getY() - dimensions.top - this.animation_.getHeight() / 2);
+  if (!this.bomb_.isValid()) {
+    this.invalidate();
+    return;
+  }
 
-  if(this.bounceCount_) {
+  var dimensions = viewport.getDimensions();
+  var x = Math.floor(this.bomb_.getPosition().getX() - dimensions.left - this.animation_.getWidth() / 2);
+  var y = Math.floor(this.bomb_.getPosition().getY() - dimensions.top - this.animation_.getHeight() / 2);
+
+  if(this.bomb_.isBouncing()) {
     this.bouncingAnimation_.render(viewport.getContext(), x, y);
   } else {
     this.animation_.render(viewport.getContext(), x, y);
@@ -82,14 +92,14 @@ model.projectile.BombSprite.prototype.render = function(viewport) {
 };
 
 /**
- * @override
+ * This function gets called when a bomb explodes.
+ *
+ * @param {!model.projectile.Projectile} projectile
+ * @param {!model.player.Player} hitPlayer
  */
-model.projectile.BombSprite.prototype.explode_ = function(hitPlayer) {
-  goog.base(this, 'explode_', hitPlayer);
-
-  // Add an explosion animation.
+model.projectile.BombSprite.prototype.onExplode_ = function(projectile, hitPlayer) {
   var animation = this.game_.getResourceManager().getSpriteSheet('explode2').getAnimation(0);
-  var explosion = new model.Effect(this.game_, animation, this.position_, new math.Vector(0, 0));
+  new model.Effect(this.game_, animation, this.bomb_.getPosition(), math.Vector.ZERO);
 };
 
 /**

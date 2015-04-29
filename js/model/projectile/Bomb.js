@@ -1,5 +1,6 @@
 goog.provide('model.projectile.Bomb');
 
+goog.require('Listener');
 goog.require('model.projectile.Projectile');
 goog.require('model.Weapon.Type');
 goog.require('math.Vector');
@@ -49,6 +50,7 @@ model.projectile.Bomb = function(game, owner, level, position, velocity, lifetim
   this.lastDistanceToProxActivator_;
 };
 goog.inherits(model.projectile.Bomb, model.projectile.Projectile);
+goog.mixin(model.projectile.Bomb.prototype, Listener.prototype);
 
 /**
  * @override
@@ -81,6 +83,8 @@ model.projectile.Bomb.prototype.checkPlayerCollision_ = function(player) {
  * @override
  */
 model.projectile.Bomb.prototype.explode_ = function(hitPlayer) {
+  goog.base(this, 'explode_', hitPlayer);
+
   // Reset bomb state.
   this.velocity_ = math.Vector.ZERO;
   this.lifetime_ = 0;

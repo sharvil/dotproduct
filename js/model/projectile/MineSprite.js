@@ -1,41 +1,49 @@
 goog.provide('model.projectile.MineSprite');
 
 goog.require('math.Vector');
-goog.require('model.projectile.Mine');
 goog.require('model.Effect');
-goog.require('graphics.Drawable');
+goog.require('model.projectile.Projectile.Event');
 goog.require('graphics.Layer');
 
 /**
  * @constructor
- * @extends {model.projectile.Mine}
+ * @extends {model.ModelObject}
  * @implements {graphics.Drawable}
  * @param {!Game} game
- * @param {!model.player.Player} owner
- * @param {number} level
- * @param {!math.Vector} position
- * @param {number} lifetime
- * @param {number} damage
+ * @param {!model.projectile.Mine} mine
  */
-model.projectile.MineSprite = function(game, owner, level, position, lifetime, damage) {
-  goog.base(this, game, owner, level, position, lifetime, damage);
+model.projectile.MineSprite = function(game, mine) {
+  goog.base(this, game.getSimulation());
+
+  /**
+   * @type {!Game}
+   * @private
+   */
+  this.game_ = game;
+
+  /**
+   * @type {model.projectile.Mine}
+   * @private
+   */
+  this.mine_ = mine;
 
   /**
    * @type {!graphics.Animation}
    * @private
    */
-  this.animation_ = game.getResourceManager().getSpriteSheet('mines').getAnimation(level);
+  this.animation_ = game.getResourceManager().getSpriteSheet('mines').getAnimation(mine.getLevel());
   this.animation_.setRepeatCount(-1);
+
+  this.mine_.addListener(model.projectile.Projectile.Event.EXPLODE, this.onExplode_.bind(this));
 
   game.getPainter().registerDrawable(graphics.Layer.PROJECTILES, this);
 };
-goog.inherits(model.projectile.MineSprite, model.projectile.Mine);
+goog.inherits(model.projectile.MineSprite, model.ModelObject);
 
 /**
  * @override
  */
 model.projectile.MineSprite.prototype.advanceTime = function() {
-  goog.base(this, 'advanceTime');
   this.animation_.update();
 };
 
@@ -43,22 +51,28 @@ model.projectile.MineSprite.prototype.advanceTime = function() {
  * @override
  */
 model.projectile.MineSprite.prototype.render = function(viewport) {
+  if (!this.mine_.isValid()) {
+    this.invalidate();
+    return;
+  }
+
   var dimensions = viewport.getDimensions();
-  var x = Math.floor(this.position_.getX() - dimensions.left - this.animation_.getWidth() / 2);
-  var y = Math.floor(this.position_.getY() - dimensions.top - this.animation_.getHeight() / 2);
+  var x = Math.floor(this.mine_.getPosition().getX() - dimensions.left - this.animation_.getWidth() / 2);
+  var y = Math.floor(this.mine_.getPosition().getY() - dimensions.top - this.animation_.getHeight() / 2);
 
   this.animation_.render(viewport.getContext(), x, y);
 };
 
 /**
- * @override
+ * This function gets called when a mine explodes.
+ *
+ * @param {!model.projectile.Projectile} projectile
+ * @param {!model.player.Player} hitPlayer
  */
-model.projectile.MineSprite.prototype.explode_ = function(hitPlayer) {
-  goog.base(this, 'explode_', hitPlayer);
-
+model.projectile.MineSprite.prototype.onExplode_ = function(projectile, hitPlayer) {
   // Add an explosion animation.
   var animation = this.game_.getResourceManager().getSpriteSheet('explode2').getAnimation(0);
-  var explosion = new model.Effect(this.game_, animation, this.position_, math.Vector.ZERO);
+  new model.Effect(this.game_, animation, this.mine_.getPosition(), math.Vector.ZERO);
 };
 
 /**

@@ -1,24 +1,31 @@
 goog.provide('model.projectile.BurstSprite');
 
 goog.require('math.Vector');
-goog.require('model.projectile.Burst');
 goog.require('model.Effect');
-goog.require('graphics.Drawable');
+goog.require('model.projectile.Projectile.Event');
 goog.require('graphics.Layer');
 
 /**
  * @constructor
- * @extends {model.projectile.Burst}
+ * @extends {model.ModelObject}
  * @implements {graphics.Drawable}
  * @param {!Game} game
- * @param {!model.player.Player} owner
- * @param {!math.Vector} position
- * @param {!math.Vector} velocity
- * @param {number} lifetime
- * @param {number} damage
+ * @param {!model.projectile.Burst} burst
  */
-model.projectile.BurstSprite = function(game, owner, position, velocity, lifetime, damage) {
-  goog.base(this, game, owner, position, velocity, lifetime, damage);
+model.projectile.BurstSprite = function(game, burst) {
+  goog.base(this, game.getSimulation());
+
+  /**
+   * @type {!Game}
+   * @private
+   */
+  this.game_ = game;
+
+  /**
+   * @type {!model.projectile.Burst}
+   * @private
+   */
+  this.burst_ = burst;
 
   /**
    * @type {!graphics.Animation}
@@ -34,15 +41,16 @@ model.projectile.BurstSprite = function(game, owner, position, velocity, lifetim
   this.inactiveAnimation_ = game.getResourceManager().getSpriteSheet('bullets').getAnimation(4);
   this.inactiveAnimation_.setRepeatCount(-1);
 
+  this.burst_.addListener(model.projectile.Projectile.Event.EXPLODE, this.onExplode_.bind(this));
+
   game.getPainter().registerDrawable(graphics.Layer.PROJECTILES, this);
 };
-goog.inherits(model.projectile.BurstSprite, model.projectile.Burst);
+goog.inherits(model.projectile.BurstSprite, model.ModelObject);
 
 /**
  * @override
  */
 model.projectile.BurstSprite.prototype.advanceTime = function() {
-  goog.base(this, 'advanceTime');
   this.activeAnimation_.update();
   this.inactiveAnimation_.update();
 };
@@ -51,23 +59,29 @@ model.projectile.BurstSprite.prototype.advanceTime = function() {
  * @override
  */
 model.projectile.BurstSprite.prototype.render = function(viewport) {
-  var animation = this.isActive_ ? this.activeAnimation_ : this.inactiveAnimation_;
+  if (!this.burst_.isValid()) {
+    this.invalidate();
+    return;
+  }
+
+  var animation = this.burst_.isActive() ? this.activeAnimation_ : this.inactiveAnimation_;
   var dimensions = viewport.getDimensions();
-  var x = Math.floor(this.position_.getX() - dimensions.left - animation.getWidth() / 2);
-  var y = Math.floor(this.position_.getY() - dimensions.top - animation.getHeight() / 2);
+  var x = Math.floor(this.burst_.getPosition().getX() - dimensions.left - animation.getWidth() / 2);
+  var y = Math.floor(this.burst_.getPosition().getY() - dimensions.top - animation.getHeight() / 2);
 
   animation.render(viewport.getContext(), x, y);
 };
 
 /**
- * @override
+ * This function gets called when a burst bullet explodes and hits a player.
+ *
+ * @param {!model.projectile.Projectile} projectile
+ * @param {!model.player.Player} hitPlayer
  */
-model.projectile.BurstSprite.prototype.explode_ = function(hitPlayer) {
-  goog.base(this, 'explode_', hitPlayer);
-
+model.projectile.BurstSprite.prototype.onExplode_ = function(projectile, hitPlayer) {
   // Add an explosion animation.
   var animation = this.game_.getResourceManager().getSpriteSheet('explode0').getAnimation(0);
-  var explosion = new model.Effect(this.game_, animation, this.position_, math.Vector.ZERO);
+  new model.Effect(this.game_, animation, this.burst_.getPosition(), math.Vector.ZERO);
 };
 
 /**

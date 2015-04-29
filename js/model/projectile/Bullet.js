@@ -1,5 +1,6 @@
 goog.provide('model.projectile.Bullet');
 
+goog.require('Listener');
 goog.require('model.projectile.Projectile');
 goog.require('model.Weapon.Type');
 goog.require('math.Vector');
@@ -23,6 +24,7 @@ model.projectile.Bullet = function(game, owner, level, position, velocity, lifet
   this.velocity_ = velocity;
 };
 goog.inherits(model.projectile.Bullet, model.projectile.Projectile);
+goog.mixin(model.projectile.Bullet.prototype, Listener.prototype);
 
 /**
  * @override
@@ -43,6 +45,8 @@ model.projectile.Bullet.prototype.checkPlayerCollision_ = function(player) {
  * @override
  */
 model.projectile.Bullet.prototype.explode_ = function(hitPlayer) {
+  goog.base(this, 'explode_', hitPlayer);
+
   this.velocity_ = math.Vector.ZERO;
   this.lifetime_ = 0;
   if (hitPlayer) {

@@ -1,4 +1,5 @@
 goog.provide('model.projectile.Projectile');
+goog.provide('model.projectile.Projectile.Event');
 
 goog.require('model.Entity');
 
@@ -48,6 +49,32 @@ model.projectile.Projectile = function(game, owner, level, lifetime, damage, bou
 goog.inherits(model.projectile.Projectile, model.Entity);
 
 /**
+ * @enum {string}
+ */
+model.projectile.Projectile.Event = {
+  EXPLODE: 'explode'
+};
+
+/**
+ * Returns the level of this projectile. The values vary for each type of
+ * projectile, but the weakest level is 0.
+ *
+ * @return {number}
+ */
+model.projectile.Projectile.prototype.getLevel = function() {
+  return this.level_;
+};
+
+/**
+ * This function returns true if the projectile is bouncy, false otherwise.
+ *
+ * @return {boolean}
+ */
+model.projectile.Projectile.prototype.isBouncing = function() {
+  return this.bounceCount_ != 0;
+};
+
+/**
  * @param {!model.player.Player} player
  * @protected
  */
@@ -57,7 +84,9 @@ model.projectile.Projectile.prototype.checkPlayerCollision_ = goog.abstractMetho
  * @param {model.player.Player} player The player who was directly hit or null if there was no direct hit.
  * @protected
  */
-model.projectile.Projectile.prototype.explode_ = goog.abstractMethod;
+model.projectile.Projectile.prototype.explode_ = function(player) {
+  this.fireEvent_(model.projectile.Projectile.Event.EXPLODE, player);
+};
 
 model.projectile.Projectile.prototype.advanceTime = function() {
   if (--this.lifetime_ <= 0) {

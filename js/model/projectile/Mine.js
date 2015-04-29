@@ -40,6 +40,8 @@ model.projectile.Mine.prototype.checkPlayerCollision_ = function(player) {
  * @override
  */
 model.projectile.Mine.prototype.explode_ = function(hitPlayer) {
+  goog.base(this, 'explode_', hitPlayer);
+
   this.lifetime_ = 0;
 
   if (hitPlayer) {
