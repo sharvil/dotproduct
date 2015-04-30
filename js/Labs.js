@@ -5,7 +5,7 @@ goog.provide('Labs');
  *
  * @define {boolean}
  */
-Labs.BOMB_TRAILS = false;
+Labs.BOMB_TRAILS = true;
 
 /**
  * True if the debug UI should be displayed.

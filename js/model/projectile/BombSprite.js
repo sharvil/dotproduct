@@ -44,12 +44,6 @@ model.projectile.BombSprite = function(game, bomb) {
   this.bouncingAnimation_ = game.getResourceManager().getSpriteSheet('bombs').getAnimation(level + 8);
   this.bouncingAnimation_.setRepeatCount(-1);
 
-  /**
-   * @type {number}
-   * @private
-   */
-  this.trailTimer_ = 0;
-
   this.bomb_.addListener(model.projectile.Projectile.Event.EXPLODE, this.onExplode_.bind(this));
 
   game.getPainter().registerDrawable(graphics.Layer.PROJECTILES, this);
@@ -61,10 +55,9 @@ goog.inherits(model.projectile.BombSprite, model.ModelObject);
  */
 model.projectile.BombSprite.prototype.advanceTime = function() {
   // First advance and drop the trail.
-  if (Labs.BOMB_TRAILS && ++this.trailTimer_ == 2) {
+  if (Labs.BOMB_TRAILS) {
     var animation = this.game_.getResourceManager().getSpriteSheet('bombTrails').getAnimation(this.bomb_.getLevel());
     new model.Effect(this.game_, animation, this.bomb_.getPosition(), math.Vector.ZERO, graphics.Layer.TRAILS);
-    this.trailTimer_ = 0;
   }
 
   this.animation_.update();
