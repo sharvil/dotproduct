@@ -232,6 +232,14 @@
       "period": 10
     },
 
+    "bulletTrails": {
+      "url": "data/shared/graphics/bullet_trails.png",
+      "xTiles": 14,
+      "yTiles": 8,
+      "frames": 14,
+      "period": 1
+    },
+
     "bombs": {
       "url": "data/shared/graphics/bombs.png",
       "xTiles": 10,

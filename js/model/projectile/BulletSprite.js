@@ -66,6 +66,11 @@ model.projectile.BulletSprite.prototype.render = function(viewport) {
     return;
   }
 
+  if (Labs.BULLET_TRAILS) {
+    var animation = this.game_.getResourceManager().getSpriteSheet('bulletTrails').getAnimation(3 + this.bullet_.getLevel());
+    new model.Effect(this.game_, animation, this.bullet_.getPosition(), math.Vector.ZERO, graphics.Layer.TRAILS);
+  }
+
   var dimensions = viewport.getDimensions();
   var x = Math.floor(this.bullet_.getPosition().getX() - dimensions.left - this.animation_.getWidth() / 2);
   var y = Math.floor(this.bullet_.getPosition().getY() - dimensions.top - this.animation_.getHeight() / 2);

@@ -1,6 +1,13 @@
 goog.provide('Labs');
 
 /**
+ * True if trails should follow bullets when they're fired.
+ *
+ * @define {boolean}
+ */
+Labs.BULLET_TRAILS = true;
+
+/**
  * True if trails should follow bombs when they're fired.
  *
  * @define {boolean}
