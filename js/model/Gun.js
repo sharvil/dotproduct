@@ -221,6 +221,9 @@ model.Gun.prototype.onFired = function(timeDiff, position, velocity, weaponData)
  * @private
  */
 model.Gun.prototype.getFireDelay_ = function() {
+  if (this.isMultifireEnabled_) {
+    return this.gunSettings_['multifire']['fireDelay'];
+  }
   return this.gunSettings_['fireDelay'];
 };
 
@@ -229,7 +232,10 @@ model.Gun.prototype.getFireDelay_ = function() {
  * @private
  */
 model.Gun.prototype.getFireEnergy_ = function() {
-  return this.gunSettings_['fireEnergy'] * (this.level_.getValue() + 1);
+  var baseEnery = this.isMultifireEnabled_
+      ? this.gunSettings_['multifire']['fireEnergy']
+      : this.gunSettings_['fireEnergy'];
+  return baseEnery * (this.level_.getValue() + 1);
 };
 
 /**
