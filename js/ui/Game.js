@@ -439,7 +439,7 @@ Game.prototype.onPlayerPosition_ = function(packet) {
   if (player) {
     player.onPositionUpdate(timeDiff, angle, position, velocity, isSafe);
     if (packet.length > 8) {
-      player.onWeaponFired(timeDiff, packet[8]);
+      player.onWeaponFired(timeDiff, position, velocity, packet[8]);
     }
   }
 };
@@ -622,6 +622,9 @@ Game.prototype.onLocalPlayerCollectedPrize_ = function(player, prize) {
       break;
     case PrizeType.BOUNCING_BULLETS:
       message = 'Bouncing bullets!';
+      break;
+    case PrizeType.MULTIFIRE:
+      message = 'Multifire!';
       break;
     default:
       goog.asserts.assert(false, 'Unhandled prize type: ' + prize.getType());

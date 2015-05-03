@@ -1,5 +1,6 @@
 goog.provide('model.player.LocalPlayer');
 
+goog.require('goog.asserts');
 goog.require('goog.events');
 goog.require('goog.events.KeyCodes');
 goog.require('goog.object');
@@ -86,6 +87,8 @@ model.player.LocalPlayer.prototype.onPrizeCollected = function(prize) {
   goog.base(this, 'onPrizeCollected', prize);
 
   switch (prize.getType()) {
+    case PrizeType.NONE:
+      break;
     case PrizeType.GUN_UPGRADE:
       this.gun_.upgrade();
       break;
@@ -99,6 +102,11 @@ model.player.LocalPlayer.prototype.onPrizeCollected = function(prize) {
     case PrizeType.BOUNCING_BULLETS:
       this.gun_.setBounces(true);
       break;
+    case PrizeType.MULTIFIRE:
+      this.gun_.grantMultifire();
+      break;
+    default:
+      goog.asserts.fail('Unhandled prize type: ' + prize.getType());
   }
 };
 
@@ -228,7 +236,7 @@ model.player.LocalPlayer.prototype.advanceTime = function() {
         this.velocity_ = math.Vector.ZERO;
       } else {
         var angle = this.getAngle_();
-        var position = new math.Vector(0, -this.yRadius_).rotate(angle).add(this.position_);
+        var position = this.position_;
         var velocity = this.velocity_;
 
         weaponData = this.gun_.fire(angle, position, velocity, (function(fireEnergy, fireDelay) {

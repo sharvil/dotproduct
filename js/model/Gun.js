@@ -2,6 +2,7 @@ goog.provide('model.Gun');
 
 goog.require('goog.asserts');
 goog.require('math.Range');
+goog.require('model.projectile.BulletGroup');
 goog.require('model.Weapon.Type');
 
 /**
@@ -42,6 +43,18 @@ model.Gun = function(game, gunSettings, owner) {
    * @private
    */
   this.bouncingBullets_ = false;
+
+  /**
+   * @type {boolean}
+   * @private
+   */
+  this.hasMultifire_ = false;
+
+  /**
+   * @type {boolean}
+   * @private
+   */
+  this.isMultifireEnabled_ = false;
 };
 
 /**
@@ -70,6 +83,27 @@ model.Gun.prototype.setBounces = function(bounces) {
 };
 
 /**
+ * Grants the ability to shoot multifire bullets from this gun. Multifire can
+ * only be granted if the 'multifire' section exists in the gun settings.
+ */
+model.Gun.prototype.grantMultifire = function() {
+  // If multifire is a newly granted capability, enable it by default.
+  if (!this.hasMultifire_) {
+    this.hasMultifire_ = this.isMultifireEnabled_ = !!this.gunSettings_['multifire'];
+  }
+};
+
+/**
+ * Enables or disables multifire bullets on the gun. If the gun doesn't have
+ * multifire, this function won't enable multifire.
+ *
+ * @param {boolean} enabled
+ */
+model.Gun.prototype.setMultifireEnabled = function(enabled) {
+  this.isMultifireEnabled_ = this.hasMultifire_ && enabled;
+};
+
+/**
  * @param {number} angle
  * @param {!math.Vector} position
  * @param {!math.Vector} velocity
@@ -85,44 +119,81 @@ model.Gun.prototype.fire = function(angle, position, velocity, commitFireFn) {
     return null;
   }
 
+  var factory = this.game_.getModelObjectFactory();
   var lifetime = this.getLifetime_();
   var damage = this.getDamage_();
   var bounceCount = this.getBounceCount_();
-  var newVelocity = velocity.add(math.Vector.fromPolar(this.getBulletSpeed_(), angle));
-  var projectile = this.game_.getModelObjectFactory().newBullet(this.game_, this.owner_, level, position, newVelocity, lifetime, damage, bounceCount);
+  var bulletSpeed = this.getBulletSpeed_();
+  var multifireAngle = this.isMultifireEnabled_ ? this.gunSettings_['multifire']['angle'] : 0;
 
-  this.owner_.addProjectile(projectile);
+  var count = this.isMultifireEnabled_ ? 3 : 1;
+  var bullets = [];
+  for (var i = 0; i < count; ++i) {
+    // Clever. This generates [-1, 0, 1] which we can use to multiply the angle
+    // by and generate the multifire spread.
+    var factor = (i - 1);
+    var bulletVelocity = velocity.add(math.Vector.fromPolar(bulletSpeed, angle + multifireAngle * factor));
+
+    var bullet = factory.newBullet(this.game_, this.owner_, level, position, bulletVelocity, lifetime, damage, bounceCount);
+
+    bullets.push(bullet);
+    this.owner_.addProjectile(bullet);
+  }
+
+  new model.projectile.BulletGroup(bullets);
   this.game_.getResourceManager().playSound('gun' + level);
 
   return {
     'type': this.getType(),
+    'angle': angle,
     'level': level,
-    'pos': position.toArray(),
-    'vel': newVelocity.toArray(),
-    'bounceCount': bounceCount
-  };
+    'bounceCount': bounceCount,
+    'multifire': this.isMultifireEnabled_
+  }
 };
 
 /**
  * @override
  */
-model.Gun.prototype.onFired = function(timeDiff, weaponData) {
+model.Gun.prototype.onFired = function(timeDiff, position, velocity, weaponData) {
   goog.asserts.assert(weaponData['type'] == this.getType(), 'Cannot fire gun with incorrect weapon type: ' + weaponData['type']);
 
+  var factory = this.game_.getModelObjectFactory();
   var level = weaponData['level'];
-  var position = math.Vector.fromArray(weaponData['pos']);
-  var velocity = math.Vector.fromArray(weaponData['vel']);
+  var angle = weaponData['angle'];
   var bounceCount = weaponData['bounceCount'];
+  var isMultifire = weaponData['multifire'];
 
   // Make sure the level is correct so the following getters use the right value for their calculations.
   this.level_.setValue(level);
 
-  var projectile = this.game_.getModelObjectFactory().newBullet(this.game_, this.owner_, this.level_.getValue(), position, velocity, this.getLifetime_(), this.getDamage_(), bounceCount);
-  for (var i = 0; i < timeDiff; ++i) {
-    projectile.advanceTime();
+  var factory = this.game_.getModelObjectFactory();
+  var lifetime = this.getLifetime_();
+  var damage = this.getDamage_();
+  var bulletSpeed = this.getBulletSpeed_();
+  var multifireAngle = isMultifire ? this.gunSettings_['multifire']['angle'] : 0;
+
+  var count = isMultifire ? 3 : 1;
+  var bullets = [];
+  for (var i = 0; i < count; ++i) {
+    // Clever. This generates [-1, 0, 1] which we can use to multiply the angle
+    // by and generate the multifire spread.
+    var factor = (i - 1);
+    var bulletVelocity = velocity.add(math.Vector.fromPolar(bulletSpeed, angle + multifireAngle * factor));
+
+    var bullet = factory.newBullet(this.game_, this.owner_, level, position, bulletVelocity, lifetime, damage, bounceCount);
+
+    bullets.push(bullet);
+    this.owner_.addProjectile(bullet);
   }
 
-  this.owner_.addProjectile(projectile);
+  new model.projectile.BulletGroup(bullets);
+
+  for (var i = 0; i < timeDiff; ++i) {
+    for (var j = 0; j < bullets.length; ++j) {
+      bullets[j].advanceTime();
+    }
+  }
 };
 
 /**

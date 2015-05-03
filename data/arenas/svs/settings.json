@@ -21,20 +21,20 @@
       0, 
       0, 
       0, 
+      0, 
       0
     ]
   }, 
   "ships": [
     {
       "name": "Warbird", 
-      "xRadius": 14, 
-      "yRadius": 14, 
+      "radius": 14, 
       "bounceFactor": 0.7272727272727273, 
       "rotationRadiansPerTick": 0.03298672286269283, 
-      "speedPixelsPerTick": 2.01, 
+      "speedPixelsPerTick": 2.0100000000000002, 
       "maxEnergy": 1000, 
       "accelerationPerTick": 0.016, 
-      "afterburnerMaxSpeed": 4.02, 
+      "afterburnerMaxSpeed": 4.0200000000000005, 
       "afterburnerAcceleration": 0.02, 
       "afterburnerEnergy": 1.2, 
       "rechargeRate": 0.4, 
@@ -48,7 +48,12 @@
         "damageUpgrade": 100, 
         "initialLevel": 0, 
         "maxLevel": 2, 
-        "bounces": false
+        "bounces": false, 
+        "multifire": {
+          "fireEnergy": 30, 
+          "fireDelay": 50, 
+          "angle": 0.07853981633974483
+        }
       }, 
       "bomb": {
         "fireEnergy": 300, 
@@ -79,8 +84,7 @@
     }, 
     {
       "name": "Javelin", 
-      "xRadius": 14, 
-      "yRadius": 14, 
+      "radius": 14, 
       "bounceFactor": 0.7272727272727273, 
       "rotationRadiansPerTick": 0.031415926535897934, 
       "speedPixelsPerTick": 2.2, 
@@ -100,7 +104,12 @@
         "damageUpgrade": 100, 
         "initialLevel": 0, 
         "maxLevel": 2, 
-        "bounces": false
+        "bounces": false, 
+        "multifire": {
+          "fireEnergy": 30, 
+          "fireDelay": 50, 
+          "angle": 0.07853981633974483
+        }
       }, 
       "bomb": {
         "fireEnergy": 300, 
@@ -131,14 +140,13 @@
     }, 
     {
       "name": "Spider", 
-      "xRadius": 14, 
-      "yRadius": 14, 
+      "radius": 14, 
       "bounceFactor": 0.7272727272727273, 
       "rotationRadiansPerTick": 0.031415926535897934, 
-      "speedPixelsPerTick": 2.01, 
+      "speedPixelsPerTick": 2.0100000000000002, 
       "maxEnergy": 1000, 
       "accelerationPerTick": 0.015, 
-      "afterburnerMaxSpeed": 4.02, 
+      "afterburnerMaxSpeed": 4.0200000000000005, 
       "afterburnerAcceleration": 0.02, 
       "afterburnerEnergy": 1.2, 
       "rechargeRate": 0.5, 
@@ -152,7 +160,12 @@
         "damageUpgrade": 100, 
         "initialLevel": 0, 
         "maxLevel": 2, 
-        "bounces": false
+        "bounces": false, 
+        "multifire": {
+          "fireEnergy": 30, 
+          "fireDelay": 50, 
+          "angle": 0.07853981633974483
+        }
       }, 
       "bomb": {
         "fireEnergy": 300, 
@@ -183,14 +196,13 @@
     }, 
     {
       "name": "Leviathan", 
-      "xRadius": 14, 
-      "yRadius": 14, 
+      "radius": 14, 
       "bounceFactor": 0.7272727272727273, 
       "rotationRadiansPerTick": 0.031415926535897934, 
-      "speedPixelsPerTick": 2.01, 
+      "speedPixelsPerTick": 2.0100000000000002, 
       "maxEnergy": 1000, 
       "accelerationPerTick": 0.015, 
-      "afterburnerMaxSpeed": 4.02, 
+      "afterburnerMaxSpeed": 4.0200000000000005, 
       "afterburnerAcceleration": 0.02, 
       "afterburnerEnergy": 1.2, 
       "rechargeRate": 0.4, 
@@ -204,7 +216,12 @@
         "damageUpgrade": 100, 
         "initialLevel": 0, 
         "maxLevel": 2, 
-        "bounces": false
+        "bounces": false, 
+        "multifire": {
+          "fireEnergy": 30, 
+          "fireDelay": 50, 
+          "angle": 0.07853981633974483
+        }
       }, 
       "bomb": {
         "fireEnergy": 300, 
@@ -235,14 +252,13 @@
     }, 
     {
       "name": "Terrier", 
-      "xRadius": 14, 
-      "yRadius": 14, 
+      "radius": 14, 
       "bounceFactor": 0.7272727272727273, 
       "rotationRadiansPerTick": 0.031415926535897934, 
-      "speedPixelsPerTick": 2.01, 
+      "speedPixelsPerTick": 2.0100000000000002, 
       "maxEnergy": 1000, 
       "accelerationPerTick": 0.015, 
-      "afterburnerMaxSpeed": 4.02, 
+      "afterburnerMaxSpeed": 4.0200000000000005, 
       "afterburnerAcceleration": 0.02, 
       "afterburnerEnergy": 1.2, 
       "rechargeRate": 0.4, 
@@ -256,7 +272,12 @@
         "damageUpgrade": 100, 
         "initialLevel": 1, 
         "maxLevel": 2, 
-        "bounces": false
+        "bounces": false, 
+        "multifire": {
+          "fireEnergy": 30, 
+          "fireDelay": 50, 
+          "angle": 0.07853981633974483
+        }
       }, 
       "bomb": {
         "fireEnergy": 300, 
@@ -287,14 +308,13 @@
     }, 
     {
       "name": "Weasel", 
-      "xRadius": 14, 
-      "yRadius": 14, 
+      "radius": 14, 
       "bounceFactor": 0.7272727272727273, 
       "rotationRadiansPerTick": 0.031415926535897934, 
-      "speedPixelsPerTick": 2.01, 
+      "speedPixelsPerTick": 2.0100000000000002, 
       "maxEnergy": 1000, 
       "accelerationPerTick": 0.015, 
-      "afterburnerMaxSpeed": 4.02, 
+      "afterburnerMaxSpeed": 4.0200000000000005, 
       "afterburnerAcceleration": 0.02, 
       "afterburnerEnergy": 1.2, 
       "rechargeRate": 0.4, 
@@ -308,7 +328,12 @@
         "damageUpgrade": 100, 
         "initialLevel": 0, 
         "maxLevel": 2, 
-        "bounces": false
+        "bounces": false, 
+        "multifire": {
+          "fireEnergy": 30, 
+          "fireDelay": 50, 
+          "angle": 0.07853981633974483
+        }
       }, 
       "bomb": {
         "fireEnergy": 300, 
@@ -339,14 +364,13 @@
     }, 
     {
       "name": "Lancaster", 
-      "xRadius": 14, 
-      "yRadius": 14, 
+      "radius": 14, 
       "bounceFactor": 0.7272727272727273, 
       "rotationRadiansPerTick": 0.031415926535897934, 
-      "speedPixelsPerTick": 2.01, 
+      "speedPixelsPerTick": 2.0100000000000002, 
       "maxEnergy": 1000, 
       "accelerationPerTick": 0.015, 
-      "afterburnerMaxSpeed": 4.02, 
+      "afterburnerMaxSpeed": 4.0200000000000005, 
       "afterburnerAcceleration": 0.02, 
       "afterburnerEnergy": 1.2, 
       "rechargeRate": 0.4, 
@@ -360,7 +384,12 @@
         "damageUpgrade": 100, 
         "initialLevel": 0, 
         "maxLevel": 2, 
-        "bounces": false
+        "bounces": false, 
+        "multifire": {
+          "fireEnergy": 30, 
+          "fireDelay": 50, 
+          "angle": 0.07853981633974483
+        }
       }, 
       "bomb": {
         "fireEnergy": 300, 
@@ -391,14 +420,13 @@
     }, 
     {
       "name": "Shark", 
-      "xRadius": 14, 
-      "yRadius": 14, 
+      "radius": 14, 
       "bounceFactor": 0.7272727272727273, 
       "rotationRadiansPerTick": 0.031415926535897934, 
-      "speedPixelsPerTick": 2.01, 
+      "speedPixelsPerTick": 2.0100000000000002, 
       "maxEnergy": 1000, 
       "accelerationPerTick": 0.015, 
-      "afterburnerMaxSpeed": 4.02, 
+      "afterburnerMaxSpeed": 4.0200000000000005, 
       "afterburnerAcceleration": 0.02, 
       "afterburnerEnergy": 1.2, 
       "rechargeRate": 0.4, 
@@ -412,7 +440,12 @@
         "damageUpgrade": 100, 
         "initialLevel": 0, 
         "maxLevel": 2, 
-        "bounces": false
+        "bounces": false, 
+        "multifire": {
+          "fireEnergy": 30, 
+          "fireDelay": 50, 
+          "angle": 0.07853981633974483
+        }
       }, 
       "bomb": {
         "fireEnergy": 300, 
