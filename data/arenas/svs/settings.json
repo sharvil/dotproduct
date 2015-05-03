@@ -17,12 +17,12 @@
     "radius": 128, 
     "decayTime": 18000, 
     "weights": [
-      1, 
       0, 
-      0, 
-      0, 
-      0, 
-      0
+      60, 
+      50, 
+      80, 
+      30, 
+      30
     ]
   }, 
   "ships": [
@@ -49,6 +49,7 @@
         "initialLevel": 0, 
         "maxLevel": 2, 
         "bounces": false, 
+        "doubleBarrel": false, 
         "multifire": {
           "fireEnergy": 30, 
           "fireDelay": 50, 
@@ -105,6 +106,7 @@
         "initialLevel": 0, 
         "maxLevel": 2, 
         "bounces": false, 
+        "doubleBarrel": false, 
         "multifire": {
           "fireEnergy": 30, 
           "fireDelay": 50, 
@@ -161,6 +163,7 @@
         "initialLevel": 0, 
         "maxLevel": 2, 
         "bounces": false, 
+        "doubleBarrel": false, 
         "multifire": {
           "fireEnergy": 30, 
           "fireDelay": 50, 
@@ -217,6 +220,7 @@
         "initialLevel": 0, 
         "maxLevel": 2, 
         "bounces": false, 
+        "doubleBarrel": false, 
         "multifire": {
           "fireEnergy": 30, 
           "fireDelay": 50, 
@@ -273,6 +277,7 @@
         "initialLevel": 1, 
         "maxLevel": 2, 
         "bounces": false, 
+        "doubleBarrel": true, 
         "multifire": {
           "fireEnergy": 30, 
           "fireDelay": 50, 
@@ -329,6 +334,7 @@
         "initialLevel": 0, 
         "maxLevel": 2, 
         "bounces": false, 
+        "doubleBarrel": false, 
         "multifire": {
           "fireEnergy": 30, 
           "fireDelay": 50, 
@@ -385,6 +391,7 @@
         "initialLevel": 0, 
         "maxLevel": 2, 
         "bounces": false, 
+        "doubleBarrel": false, 
         "multifire": {
           "fireEnergy": 30, 
           "fireDelay": 50, 
@@ -441,6 +448,7 @@
         "initialLevel": 0, 
         "maxLevel": 2, 
         "bounces": false, 
+        "doubleBarrel": false, 
         "multifire": {
           "fireEnergy": 30, 
           "fireDelay": 50, 
