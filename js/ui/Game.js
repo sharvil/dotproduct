@@ -612,19 +612,19 @@ Game.prototype.onLocalPlayerCollectedPrize_ = function(player, prize) {
       message = 'No prize for you. Sadface.';
       break;
     case PrizeType.GUN_UPGRADE:
-      message = 'Guns upgraded!';
+      message = 'Guns upgraded.';
       break;
     case PrizeType.BOMB_UPGRADE:
-      message = 'Bombs upgraded!';
+      message = 'Bombs upgraded.';
       break;
     case PrizeType.FULL_ENERGY:
-      message = 'Full charge!';
+      message = 'Full charge.';
       break;
     case PrizeType.BOUNCING_BULLETS:
-      message = 'Bouncing bullets!';
+      message = 'Bouncing bullets.';
       break;
     case PrizeType.MULTIFIRE:
-      message = 'Multifire!';
+      message = 'Multifire bullets.';
       break;
     default:
       goog.asserts.assert(false, 'Unhandled prize type: ' + prize.getType());
