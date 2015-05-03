@@ -126,18 +126,28 @@ model.Gun.prototype.fire = function(angle, position, velocity, commitFireFn) {
   var bulletSpeed = this.getBulletSpeed_();
   var multifireAngle = this.isMultifireEnabled_ ? this.gunSettings_['multifire']['angle'] : 0;
 
-  var count = this.isMultifireEnabled_ ? 3 : 1;
   var bullets = [];
-  for (var i = 0; i < count; ++i) {
-    // Clever. This generates [-1, 0, 1] which we can use to multiply the angle
-    // by and generate the multifire spread.
-    var factor = (i - 1);
-    var bulletVelocity = velocity.add(math.Vector.fromPolar(bulletSpeed, angle + multifireAngle * factor));
+  if (this.gunSettings_['doubleBarrel']) {
+    var bulletVelocity = velocity.add(math.Vector.fromPolar(bulletSpeed, angle));
+    var leftPosition = position.add(math.Vector.fromPolar(10, angle - Math.PI / 2));
+    var rightPosition = position.add(math.Vector.fromPolar(10, angle + Math.PI / 2));
 
-    var bullet = factory.newBullet(this.game_, this.owner_, level, position, bulletVelocity, lifetime, damage, bounceCount);
+    bullets.push(factory.newBullet(this.game_, this.owner_, level, leftPosition, bulletVelocity, lifetime, damage, bounceCount));
+    bullets.push(factory.newBullet(this.game_, this.owner_, level, rightPosition, bulletVelocity, lifetime, damage, bounceCount));
+  } else {
+    var bulletVelocity = velocity.add(math.Vector.fromPolar(bulletSpeed, angle));
+    bullets.push(factory.newBullet(this.game_, this.owner_, level, position, bulletVelocity, lifetime, damage, bounceCount));
+  }
 
-    bullets.push(bullet);
-    this.owner_.addProjectile(bullet);
+  if (this.isMultifireEnabled_) {
+    var leftVelocity = velocity.add(math.Vector.fromPolar(bulletSpeed, angle - multifireAngle));
+    var rightVelocity = velocity.add(math.Vector.fromPolar(bulletSpeed, angle + multifireAngle));
+    bullets.push(factory.newBullet(this.game_, this.owner_, level, position, leftVelocity, lifetime, damage, bounceCount));
+    bullets.push(factory.newBullet(this.game_, this.owner_, level, position, rightVelocity, lifetime, damage, bounceCount));
+  }
+
+  for (var i = 0; i < bullets.length; ++i) {
+    this.owner_.addProjectile(bullets[i]);
   }
 
   new model.projectile.BulletGroup(bullets);
@@ -173,18 +183,28 @@ model.Gun.prototype.onFired = function(timeDiff, position, velocity, weaponData)
   var bulletSpeed = this.getBulletSpeed_();
   var multifireAngle = isMultifire ? this.gunSettings_['multifire']['angle'] : 0;
 
-  var count = isMultifire ? 3 : 1;
   var bullets = [];
-  for (var i = 0; i < count; ++i) {
-    // Clever. This generates [-1, 0, 1] which we can use to multiply the angle
-    // by and generate the multifire spread.
-    var factor = (i - 1);
-    var bulletVelocity = velocity.add(math.Vector.fromPolar(bulletSpeed, angle + multifireAngle * factor));
+  if (this.gunSettings_['doubleBarrel']) {
+    var bulletVelocity = velocity.add(math.Vector.fromPolar(bulletSpeed, angle));
+    var leftPosition = position.add(math.Vector.fromPolar(10, angle - Math.PI / 2));
+    var rightPosition = position.add(math.Vector.fromPolar(10, angle + Math.PI / 2));
 
-    var bullet = factory.newBullet(this.game_, this.owner_, level, position, bulletVelocity, lifetime, damage, bounceCount);
+    bullets.push(factory.newBullet(this.game_, this.owner_, level, leftPosition, bulletVelocity, lifetime, damage, bounceCount));
+    bullets.push(factory.newBullet(this.game_, this.owner_, level, rightPosition, bulletVelocity, lifetime, damage, bounceCount));
+  } else {
+    var bulletVelocity = velocity.add(math.Vector.fromPolar(bulletSpeed, angle));
+    bullets.push(factory.newBullet(this.game_, this.owner_, level, position, bulletVelocity, lifetime, damage, bounceCount));
+  }
 
-    bullets.push(bullet);
-    this.owner_.addProjectile(bullet);
+  if (isMultifire) {
+    var leftVelocity = velocity.add(math.Vector.fromPolar(bulletSpeed, angle - multifireAngle));
+    var rightVelocity = velocity.add(math.Vector.fromPolar(bulletSpeed, angle + multifireAngle));
+    bullets.push(factory.newBullet(this.game_, this.owner_, level, position, leftVelocity, lifetime, damage, bounceCount));
+    bullets.push(factory.newBullet(this.game_, this.owner_, level, position, rightVelocity, lifetime, damage, bounceCount));
+  }
+
+  for (var i = 0; i < bullets.length; ++i) {
+    this.owner_.addProjectile(bullets[i]);
   }
 
   new model.projectile.BulletGroup(bullets);
