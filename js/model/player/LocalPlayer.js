@@ -253,7 +253,7 @@ model.player.LocalPlayer.prototype.advanceTime = function() {
         this.velocity_ = math.Vector.ZERO;
       } else {
         var angle = this.getAngle_();
-        var position = new math.Vector(0, -this.yRadius_).rotate(angle).add(this.position_);
+        var position = new math.Vector(0, -this.radius_).rotate(angle).add(this.position_);
         var velocity = this.velocity_;
 
         weaponData = this.bombBay_.fire(angle, position, velocity, (function(fireEnergy, fireDelay, recoil) {
@@ -352,7 +352,7 @@ model.player.LocalPlayer.prototype.applyThrust_ = function(thrustVector) {
   }
 
   var angle = this.getAngle_();
-  var bottomOfShip = this.position_.subtract(math.Vector.fromPolar(this.yRadius_, angle));
+  var bottomOfShip = this.position_.subtract(math.Vector.fromPolar(this.radius_, angle));
   var exhaustVelocity = this.velocity_.subtract(thrustVector.resize(5));
   var perpendicular = math.Vector.fromPolar(1, angle + Math.PI / 2);
 

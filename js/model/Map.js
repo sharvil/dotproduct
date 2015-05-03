@@ -188,10 +188,10 @@ model.Map.prototype.getSpawnLocation = function(entity) {
     x = Math.floor(cX + deltaX);
     y = Math.floor(cY + deltaY);
 
-    dimensions.left = x - dimensions.xRadius;
-    dimensions.right = x + dimensions.xRadius;
-    dimensions.top = y - dimensions.yRadius;
-    dimensions.bottom = y + dimensions.yRadius;
+    dimensions.left = x - dimensions.radius;
+    dimensions.right = x + dimensions.radius;
+    dimensions.top = y - dimensions.radius;
+    dimensions.bottom = y + dimensions.radius;
 
   } while (this.getCollision_(dimensions) && attempts++ < model.Map.MAX_SPAWN_LOCATION_ATTEMPTS_);
 
@@ -215,8 +215,7 @@ model.Map.prototype.getCollision_ = function(dimensions) {
   var right = dimensions.right;
   var top = dimensions.top;
   var bottom = dimensions.bottom;
-  var xRadius = dimensions.xRadius;
-  var yRadius = dimensions.yRadius;
+  var radius = dimensions.radius;
 
   var totalWidth = this.width_ * this.tileWidth_;
   var totalHeight = this.height_ * this.tileHeight_;
@@ -224,10 +223,10 @@ model.Map.prototype.getCollision_ = function(dimensions) {
   // Trivial case 1: left/top of map.
   if (left < 0 || top < 0) {
     return {
-      left: -model.Map.COLLISION_EPSILON_ - xRadius,
-      right: this.tileWidth_ + xRadius,
-      top: -model.Map.COLLISION_EPSILON_ - yRadius,
-      bottom: this.tileHeight_ + yRadius,
+      left: -model.Map.COLLISION_EPSILON_ - radius,
+      right: this.tileWidth_ + radius,
+      top: -model.Map.COLLISION_EPSILON_ - radius,
+      bottom: this.tileHeight_ + radius,
       xTile: 0,
       yTile: 0,
       tileValue: TileType.COLLISION,
@@ -238,10 +237,10 @@ model.Map.prototype.getCollision_ = function(dimensions) {
   // Trivial case 2: right/bottom of map.
   if (right >= totalWidth || bottom >= totalHeight) {
     return {
-      left: totalWidth - this.tileWidth_ - model.Map.COLLISION_EPSILON_ - xRadius,
-      right: totalWidth + xRadius,
-      top: totalHeight - this.tileHeight_ - model.Map.COLLISION_EPSILON_ - yRadius,
-      bottom: totalHeight + yRadius,
+      left: totalWidth - this.tileWidth_ - model.Map.COLLISION_EPSILON_ - radius,
+      right: totalWidth + radius,
+      top: totalHeight - this.tileHeight_ - model.Map.COLLISION_EPSILON_ - radius,
+      bottom: totalHeight + radius,
       xTile: this.width_,
       yTile: this.height_,
       tileValue: TileType.COLLISION,
@@ -265,10 +264,10 @@ model.Map.prototype.getCollision_ = function(dimensions) {
       var tileProperties = this.getTileProperties(tileValue);
       if (tileProperties['collision']) {
         ret = {
-          left: xTile * this.tileWidth_ - model.Map.COLLISION_EPSILON_ - xRadius,
-          right: (xTile + 1) * this.tileWidth_ + xRadius,
-          top: yTile * this.tileHeight_ - model.Map.COLLISION_EPSILON_ - yRadius,
-          bottom: (yTile + 1) * this.tileHeight_ + yRadius,
+          left: xTile * this.tileWidth_ - model.Map.COLLISION_EPSILON_ - radius,
+          right: (xTile + 1) * this.tileWidth_ + radius,
+          top: yTile * this.tileHeight_ - model.Map.COLLISION_EPSILON_ - radius,
+          bottom: (yTile + 1) * this.tileHeight_ + radius,
           xTile: xTile,
           yTile: yTile,
           tileValue: tileValue,

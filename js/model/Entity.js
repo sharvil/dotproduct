@@ -37,13 +37,7 @@ model.Entity = function(game) {
    * @type {number}
    * @protected
    */
-  this.xRadius_ = 0;
-
-  /**
-   * @type {number}
-   * @protected
-   */
-  this.yRadius_ = 0;
+  this.radius_ = 0;
 };
 goog.inherits(model.Entity, model.ModelObject);
 
@@ -71,15 +65,14 @@ model.Entity.prototype.getDimensions = function() {
   return {
     x: x,
     y: y,
-    left: x - this.xRadius_,
-    right: x + this.xRadius_,
-    top: y - this.yRadius_,
-    bottom: y + this.yRadius_,
-    width: this.xRadius_ * 2,
-    height: this.yRadius_ * 2,
-    xRadius: this.xRadius_,
-    yRadius: this.yRadius_,
-    boundingRect: new math.Rect(x - this.xRadius_, y - this.yRadius_, this.xRadius_ * 2, this.yRadius_ * 2)
+    left: x - this.radius_,
+    right: x + this.radius_,
+    top: y - this.radius_,
+    bottom: y + this.radius_,
+    width: this.radius_ * 2,
+    height: this.radius_ * 2,
+    radius: this.radius_,
+    boundingRect: new math.Rect(x - this.radius_, y - this.radius_, this.radius_ * 2, this.radius_ * 2)
   };
 };
 

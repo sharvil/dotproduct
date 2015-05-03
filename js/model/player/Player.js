@@ -304,8 +304,7 @@ model.player.Player.prototype.setShip = function(ship) {
   this.velocity_ = math.Vector.ZERO;
   this.energy_ = 0;
   this.bounty_ = 0;
-  this.xRadius_ = this.shipSettings_['radius'];
-  this.yRadius_ = this.shipSettings_['radius'];
+  this.radius_ = this.shipSettings_['radius'];
   this.clearProjectiles_();
 
   // If we changed ship type, fire an event. Otherwise, we're simply resetting
