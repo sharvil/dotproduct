@@ -81,6 +81,21 @@ layers.RadarLayer.RADAR_SIZE_PERCENT_ = 0.3;
 layers.RadarLayer.BLINK_DELTA_ = 0.03;
 
 /**
+ * Returns the size of the radar for a given viewport.
+ *
+ * @param {!Viewport} viewport
+ * @return {!{width: number, height: number}}
+ */
+layers.RadarLayer.sizeForViewport = function(viewport) {
+  var viewportDimensions = viewport.getDimensions();
+  var size = Math.floor(Math.min(viewportDimensions.width, viewportDimensions.height) * layers.RadarLayer.RADAR_SIZE_PERCENT_);
+  return {
+    width: size,
+    height: size
+  }
+};
+
+/**
  * @override
  */
 layers.RadarLayer.prototype.advanceTime = function() {
@@ -101,31 +116,30 @@ layers.RadarLayer.prototype.render = function(viewport) {
   var context = viewport.getContext();
   var dimensions = viewport.getDimensions();
 
-  var radarHeight = Math.floor(dimensions.height * layers.RadarLayer.RADAR_SIZE_PERCENT_);
-  var radarWidth = radarHeight;
+  var size = layers.RadarLayer.sizeForViewport(viewport);
 
   context.save();
-    var left = dimensions.width - radarWidth;
-    var top = dimensions.height - radarHeight;
+    var left = dimensions.width - size.width;
+    var top = dimensions.height - size.height;
     context.translate(left, top);
 
     // Render border. The Canvas API is retarded with strokes -- apparently it draws
     // half a pixel *around* the stroke path so we have to offset coordinates by 0.5px.
     context.strokeStyle = Palette.borderColor();
-    context.strokeRect(-0.5, -0.5, radarWidth, radarHeight);
+    context.strokeRect(-0.5, -0.5, size.width, size.height);
 
     // Set clipping region
     context.beginPath();
-      context.rect(0, 0, radarWidth, radarHeight);
+      context.rect(0, 0, size.width, size.height);
     context.clip();
 
     // Draw radar background
     context.fillStyle = Palette.radarBgColor();
-    context.fillRect(0, 0, radarWidth, radarHeight);
+    context.fillRect(0, 0, size.width, size.height);
 
-    this.renderMap_(context, dimensions, radarWidth, radarHeight);
-    this.renderPrizes_(context, dimensions, radarWidth, radarHeight);
-    this.renderPlayers_(context, dimensions, radarWidth, radarHeight);
+    this.renderMap_(context, dimensions, size.width, size.height);
+    this.renderPrizes_(context, dimensions, size.width, size.height);
+    this.renderPlayers_(context, dimensions, size.width, size.height);
   context.restore();
 };
 

@@ -1,10 +1,10 @@
 /*
-  #A839B2
-  #FF0071
-  #ACD030
-  #58AA00
-  #00AA78
-  #0074AE
+  purple:     #A839B2 = rgb(168, 57, 178)
+  red:        #FF0071 = rgb(255, 0, 113)
+  green:      #ACD030 = rgb(172, 208, 48)
+  dark green: #58AA00 = rgb(88, 170, 0)
+  HSC green:  #00AA78 = rgb(0, 170, 120)
+  blue:       #0074AE = rgb(0, 116, 174)
 
   text:
     #5c5c5c
@@ -135,7 +135,6 @@ body {
  **************************************/
 
 .cv {
-  width: 80%;
   max-height: 15%;
   overflow: scroll;
   position: absolute;
@@ -184,7 +183,9 @@ body {
   color: rgba(190, 190, 190, 1);
   background: rgba(0, 0, 0, 0);
   border: none;
-  width: 80%;
+  width: 95%;
+  border-left: 2px solid rgb(255, 0, 113);
+  padding-left: 5px;
   outline: none;
   display: none;
 }

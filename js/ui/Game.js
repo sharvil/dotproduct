@@ -653,4 +653,8 @@ Game.prototype.onMouseMoved_ = function(event) {
 Game.prototype.onResize_ = function() {
   this.canvas_.width = window.innerWidth - this.canvas_.parentNode.offsetLeft;
   this.canvas_.height = window.innerHeight - this.canvas_.parentNode.offsetTop;
+
+  // The chat window goes to the left of the radar.
+  var size = layers.RadarLayer.sizeForViewport(this.viewport_);
+  this.chatView_.setRightPosition(size.width);
 };

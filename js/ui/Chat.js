@@ -124,6 +124,15 @@ ui.Chat.prototype.addSystemMessage = function(message) {
   }
 };
 
+/**
+ * Sets the position of the right edge of the chat view.
+ *
+ * @param {number} position
+ */
+ui.Chat.prototype.setRightPosition = function(position) {
+  this.view_.style.right = position + 'px';
+};
+
 ui.Chat.prototype.onGlobalKeyPress_ = function(event) {
   if (event.keyCode == goog.events.KeyCodes.NUM_ZERO) {
     this.view_.classList.toggle('cv-expanded');
