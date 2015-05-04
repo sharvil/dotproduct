@@ -73,7 +73,7 @@
     },
 
     "ship5": {
-      "url": "data/shared/graphics/ship5.png",
+      "url": "data/arenas/trench/graphics/ship5.png",
       "xTiles": 10,
       "yTiles": 4
     },
@@ -177,7 +177,7 @@
     },
 
     "ship5_junk": {
-      "url": "data/shared/graphics/ship5_junk.png",
+      "url": "data/arenas/trench/graphics/ship5_junk.png",
       "xTiles": 10,
       "yTiles": 9,
       "frames": 10,
