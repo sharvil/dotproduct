@@ -1,7 +1,7 @@
 {
   "images": {
     "tileset": {
-      "url": "data/arenas/svs/tileset.bmp",
+      "url": "data/arenas/svs/tileset.png",
       "xTiles": 19,
       "yTiles": 10
     },
