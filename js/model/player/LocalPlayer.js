@@ -232,7 +232,7 @@ model.player.LocalPlayer.prototype.advanceTime = function() {
 
   if (this.projectileFireDelay_.isLow()) {
     if (keyboard.isKeyPressed(input.Keymap.FIRE_GUN)) {
-      if (isSafe) {
+      if (this.isSafe()) {
         this.velocity_ = math.Vector.ZERO;
       } else {
         var angle = this.getAngle_();
@@ -249,7 +249,7 @@ model.player.LocalPlayer.prototype.advanceTime = function() {
         }).bind(this));
       }
     } else if (keyboard.isKeyPressed(input.Keymap.FIRE_BOMB)) {
-      if (isSafe) {
+      if (this.isSafe()) {
         this.velocity_ = math.Vector.ZERO;
       } else {
         var angle = this.getAngle_();
@@ -267,27 +267,39 @@ model.player.LocalPlayer.prototype.advanceTime = function() {
         }).bind(this));
       }
     } else if (keyboard.isKeyPressed(input.Keymap.FIRE_MINE)) {
-      var self = this;
-      weaponData = this.mineLayer_.fire(this.position_, function(fireEnergy, fireDelay) {
-        if (self.energy_ > fireEnergy) {
-          self.energy_ -= fireEnergy;
+      if (this.isSafe()) {
+        this.velocity_ = math.Vector.ZERO;
+      } else {
+        var self = this;
+        weaponData = this.mineLayer_.fire(this.position_, function(fireEnergy, fireDelay) {
+          if (self.energy_ > fireEnergy) {
+            self.energy_ -= fireEnergy;
+            self.projectileFireDelay_.setValue(fireDelay);
+            return true;
+          }
+          return false;
+        });
+      }
+    } else if (keyboard.isKeyPressed(input.Keymap.FIRE_BURST)) {
+      if (this.isSafe()) {
+        this.velocity_ = math.Vector.ZERO;
+      } else {
+        var self = this;
+        weaponData = this.burst_.fire(this.position_, function(fireEnergy, fireDelay) {
           self.projectileFireDelay_.setValue(fireDelay);
           return true;
-        }
-        return false;
-      });
-    } else if (keyboard.isKeyPressed(input.Keymap.FIRE_BURST)) {
-      var self = this;
-      weaponData = this.burst_.fire(this.position_, function(fireEnergy, fireDelay) {
-        self.projectileFireDelay_.setValue(fireDelay);
-        return true;
-      });
+        });
+      }
     } else if (keyboard.isKeyPressed(input.Keymap.FIRE_DECOY)) {
-      var self = this;
-      weaponData = this.decoy_.fire(this.position_, function(fireEnergy, fireDelay) {
-        self.projectileFireDelay_.setValue(fireDelay);
-        return true;
-      });
+      if (this.isSafe()) {
+        this.velocity_ = math.Vector.ZERO;
+      } else {
+        var self = this;
+        weaponData = this.decoy_.fire(this.position_, function(fireEnergy, fireDelay) {
+          self.projectileFireDelay_.setValue(fireDelay);
+          return true;
+        });
+      }
     }
   }
 
