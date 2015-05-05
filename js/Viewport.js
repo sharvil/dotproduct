@@ -52,15 +52,19 @@ Viewport.prototype.update = function() {
  * @return {!Object}
  */
 Viewport.prototype.getDimensions = function() {
+  var ratio = this.getHdpiRatio();
+  var width = this.context_.canvas.width / ratio;
+  var height = this.context_.canvas.height / ratio;
+
   return {
     x: this.x_,
     y: this.y_,
-    width: this.context_.canvas.width,
-    height: this.context_.canvas.height,
-    left: this.x_ - Math.floor(this.context_.canvas.width / 2),
-    right: this.x_ + Math.floor(this.context_.canvas.width / 2),
-    top: this.y_ - Math.floor(this.context_.canvas.height / 2),
-    bottom: this.y_ + Math.floor(this.context_.canvas.height / 2)
+    width: width,
+    height: height,
+    left: this.x_ - Math.floor(width / 2),
+    right: this.x_ + Math.floor(width / 2),
+    top: this.y_ - Math.floor(height / 2),
+    bottom: this.y_ + Math.floor(height / 2)
   };
 };
 
@@ -81,4 +85,15 @@ Viewport.prototype.contains = function(vector) {
  */
 Viewport.prototype.getContext = function() {
   return this.context_;
+};
+
+/**
+ * See http://www.html5rocks.com/en/tutorials/canvas/hidpi/ for an explanation
+ * of this inanity.
+ *
+ * @return {number}
+ */
+Viewport.prototype.getHdpiRatio = function() {
+  var backingStorePixelRatio = this.context_.backingStorePixelRatio || 1;
+  return window.devicePixelRatio / backingStorePixelRatio;
 };
