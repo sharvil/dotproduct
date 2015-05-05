@@ -57,6 +57,7 @@ layers.WeaponIndicators.prototype.render = function(viewport) {
   var gunLevel = this.localPlayer_.gun_.getLevel();
   var bombLevel = this.localPlayer_.bombBay_.getLevel();
   var bursts = this.localPlayer_.burst_.getCount();
+  var decoys = this.localPlayer_.decoy_.getCount();
   var numIndicators = 2;
   var padding = 1;
 
@@ -70,14 +71,17 @@ layers.WeaponIndicators.prototype.render = function(viewport) {
   var label = 'Guns: ' + goog.events.KeyNames[input.Keymap.FIRE_GUN];
   this.renderLeveledWeapon_(context, new math.Rect(left, top, width, height), gunLevel, 0, label);
 
+  label = 'Burst: ' + goog.events.KeyNames[input.Keymap.FIRE_BURST];
+  this.renderConsumableWeapon_(context, new math.Rect(0, top, width, height), bursts, 30, label);
+
   top += padding + height;
 
   label = 'Bombs: ' + goog.events.KeyNames[input.Keymap.FIRE_BOMB] + '\n';
   label += 'Mines: ' + goog.events.KeyNames[input.Keymap.FIRE_MINE];
   this.renderLeveledWeapon_(context, new math.Rect(left, top, width, height), bombLevel, 18, label);
 
-  label = 'Burst: ' + goog.events.KeyNames[input.Keymap.FIRE_BURST];
-  this.renderConsumableWeapon_(context, new math.Rect(0, top, width, height), bursts, 30, label);
+  label = 'Decoy: ' + goog.events.KeyNames[input.Keymap.FIRE_DECOY];
+  this.renderConsumableWeapon_(context, new math.Rect(0, top, width, height), decoys, 40, label);
 };
 
 /**
