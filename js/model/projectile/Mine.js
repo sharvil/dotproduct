@@ -1,5 +1,6 @@
 goog.provide('model.projectile.Mine');
 
+goog.require('Listener');
 goog.require('model.projectile.Projectile');
 goog.require('model.Weapon.Type');
 goog.require('math.Vector');
@@ -20,6 +21,7 @@ model.projectile.Mine = function(game, owner, level, position, lifetime, damage)
   this.position_ = position;
 };
 goog.inherits(model.projectile.Mine, model.projectile.Projectile);
+goog.mixin(model.projectile.Mine.prototype, Listener.prototype);
 
 /**
  * @override
