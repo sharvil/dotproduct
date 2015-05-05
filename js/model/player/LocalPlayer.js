@@ -282,6 +282,12 @@ model.player.LocalPlayer.prototype.advanceTime = function() {
         self.projectileFireDelay_.setValue(fireDelay);
         return true;
       });
+    } else if (keyboard.isKeyPressed(input.Keymap.FIRE_DECOY)) {
+      var self = this;
+      weaponData = this.decoy_.fire(this.position_, function(fireEnergy, fireDelay) {
+        self.projectileFireDelay_.setValue(fireDelay);
+        return true;
+      });
     }
   }
 

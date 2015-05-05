@@ -48,38 +48,36 @@ model.player.PlayerSprite.prototype.render = function(viewport) {
     return;
   }
 
-  var resourceManager = this.game_.getResourceManager();
-  var shipImage = resourceManager.getImage('ship' + this.player_.getShip());
-  var awayImage = resourceManager.getImage('presenceAway');
-  var typingImage = resourceManager.getImage('presenceTyping');
+  model.player.PlayerSprite.renderPlayer(this.game_, viewport, this.player_, this.player_.getDirection(), this.player_.getPosition());
+};
 
-  var tileNum = this.player_.getDirection();
+/**
+ * This function renders the given |player| with an override for |direction| and
+ * |position|. It's used to share player rendering code between PlayerSprite
+ * and DecoySprite.
+ *
+ * @param {!Game} game
+ * @param {!Viewport} viewport
+ * @param {!model.player.Player} player
+ * @param {number} direction
+ * @param {!math.Vector} position
+ */
+model.player.PlayerSprite.renderPlayer = function(game, viewport, player, direction, position) {
+  var resourceManager = game.getResourceManager();
+  var shipImage = resourceManager.getImage('ship' + player.getShip());
+
   var dimensions = viewport.getDimensions();
   var context = viewport.getContext();
-  var position = this.player_.getPosition();
 
   var x = Math.floor(position.getX() - dimensions.left - shipImage.getTileWidth() / 2);
   var y = Math.floor(position.getY() - dimensions.top - shipImage.getTileHeight() / 2);
 
-  shipImage.render(context, x, y, tileNum);
-
-  var presenceImage = null;
-  if (this.player_.hasPresence(model.player.Player.Presence.AWAY)) {
-    presenceImage = awayImage;
-  } else if (this.player_.hasPresence(model.player.Player.Presence.TYPING)) {
-    presenceImage = typingImage;
-  }
-
-  if (presenceImage) {
-    var speechX = x + shipImage.getTileWidth() - Math.floor(presenceImage.getTileWidth() / 2);
-    var speechY = y - Math.floor(presenceImage.getTileHeight() / 2);
-    presenceImage.render(context, speechX, speechY);
-  }
+  shipImage.render(context, x, y, direction);
 
   // Draw a label for the player's name.
-  var name = this.player_.getName();
-  var bounty = this.player_.getBounty();
-  var isFriend = this.player_.isFriend(this.game_.getPlayerIndex().getLocalPlayer());
+  var name = player.getName();
+  var bounty = player.getBounty();
+  var isFriend = player.isFriend(game.getPlayerIndex().getLocalPlayer());
   context.save();
     context.font = Font.playerFont().toString();
     context.fillStyle = isFriend ? Palette.friendColor() : Palette.foeColor();
@@ -87,6 +85,20 @@ model.player.PlayerSprite.prototype.render = function(viewport) {
     context.textBaseline = 'top';
     context.fillText(name + '(' + bounty + ')', x + shipImage.getTileWidth() / 2, y + shipImage.getTileHeight());
   context.restore();
+
+  // Draw a presence indicator for the player if applicable.
+  var presenceImage = null;
+  if (player.hasPresence(model.player.Player.Presence.AWAY)) {
+    presenceImage = resourceManager.getImage('presenceAway');
+  } else if (player.hasPresence(model.player.Player.Presence.TYPING)) {
+    presenceImage = resourceManager.getImage('presenceTyping');
+  }
+
+  if (presenceImage) {
+    var speechX = x + shipImage.getTileWidth() - Math.floor(presenceImage.getTileWidth() / 2);
+    var speechY = y - Math.floor(presenceImage.getTileHeight() / 2);
+    presenceImage.render(context, speechX, speechY);
+  }
 };
 
 /**

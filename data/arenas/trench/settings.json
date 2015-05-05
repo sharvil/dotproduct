@@ -76,6 +76,12 @@
         "shrapnelCount": 1, 
         "initialCount": 0, 
         "maxCount": 0
+      }, 
+      "decoy": {
+        "fireDelay": 100, 
+        "lifetime": 10000, 
+        "initialCount": 0, 
+        "maxCount": 3
       }
     }, 
     {
@@ -133,6 +139,12 @@
         "shrapnelCount": 1, 
         "initialCount": 0, 
         "maxCount": 0
+      }, 
+      "decoy": {
+        "fireDelay": 60, 
+        "lifetime": 10000, 
+        "initialCount": 0, 
+        "maxCount": 3
       }
     }, 
     {
@@ -185,6 +197,12 @@
         "shrapnelCount": 1, 
         "initialCount": 0, 
         "maxCount": 0
+      }, 
+      "decoy": {
+        "fireDelay": 35, 
+        "lifetime": 10000, 
+        "initialCount": 0, 
+        "maxCount": 3
       }
     }, 
     {
@@ -242,6 +260,12 @@
         "shrapnelCount": 1, 
         "initialCount": 0, 
         "maxCount": 0
+      }, 
+      "decoy": {
+        "fireDelay": 60, 
+        "lifetime": 10000, 
+        "initialCount": 0, 
+        "maxCount": 3
       }
     }, 
     {
@@ -299,6 +323,12 @@
         "shrapnelCount": 3, 
         "initialCount": 1, 
         "maxCount": 1
+      }, 
+      "decoy": {
+        "fireDelay": 75, 
+        "lifetime": 10000, 
+        "initialCount": 0, 
+        "maxCount": 3
       }
     }, 
     {
@@ -356,6 +386,12 @@
         "shrapnelCount": 1, 
         "initialCount": 0, 
         "maxCount": 0
+      }, 
+      "decoy": {
+        "fireDelay": 40, 
+        "lifetime": 10000, 
+        "initialCount": 0, 
+        "maxCount": 1
       }
     }, 
     {
@@ -413,6 +449,12 @@
         "shrapnelCount": 1, 
         "initialCount": 0, 
         "maxCount": 0
+      }, 
+      "decoy": {
+        "fireDelay": 45, 
+        "lifetime": 10000, 
+        "initialCount": 0, 
+        "maxCount": 3
       }
     }, 
     {
@@ -465,6 +507,12 @@
         "shrapnelCount": 1, 
         "initialCount": 0, 
         "maxCount": 0
+      }, 
+      "decoy": {
+        "fireDelay": 10, 
+        "lifetime": 10000, 
+        "initialCount": 0, 
+        "maxCount": 3
       }
     }
   ]

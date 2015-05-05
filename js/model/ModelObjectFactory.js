@@ -76,3 +76,13 @@ model.ModelObjectFactory.prototype.newMine = goog.abstractMethod;
  * @return {!model.projectile.Burst}
  */
 model.ModelObjectFactory.prototype.newBurst = goog.abstractMethod;
+
+/**
+ * @param {!Game} game
+ * @param {!model.player.Player} player
+ * @param {!math.Vector} position
+ * @param {!math.Vector} velocity
+ * @param {number} lifetime
+ * @return {!model.projectile.Decoy}
+ */
+model.ModelObjectFactory.prototype.newDecoy = goog.abstractMethod;

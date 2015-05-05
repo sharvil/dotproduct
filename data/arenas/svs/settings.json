@@ -81,6 +81,12 @@
         "shrapnelCount": 24, 
         "initialCount": 0, 
         "maxCount": 3
+      }, 
+      "decoy": {
+        "fireDelay": 25, 
+        "lifetime": 3000, 
+        "initialCount": 0, 
+        "maxCount": 3
       }
     }, 
     {
@@ -136,6 +142,12 @@
         "damage": 600, 
         "speed": 3.0, 
         "shrapnelCount": 24, 
+        "initialCount": 0, 
+        "maxCount": 3
+      }, 
+      "decoy": {
+        "fireDelay": 25, 
+        "lifetime": 3000, 
         "initialCount": 0, 
         "maxCount": 3
       }
@@ -195,6 +207,12 @@
         "shrapnelCount": 24, 
         "initialCount": 0, 
         "maxCount": 3
+      }, 
+      "decoy": {
+        "fireDelay": 25, 
+        "lifetime": 3000, 
+        "initialCount": 1, 
+        "maxCount": 3
       }
     }, 
     {
@@ -250,6 +268,12 @@
         "damage": 600, 
         "speed": 3.0, 
         "shrapnelCount": 24, 
+        "initialCount": 0, 
+        "maxCount": 3
+      }, 
+      "decoy": {
+        "fireDelay": 25, 
+        "lifetime": 3000, 
         "initialCount": 0, 
         "maxCount": 3
       }
@@ -309,6 +333,12 @@
         "shrapnelCount": 24, 
         "initialCount": 0, 
         "maxCount": 3
+      }, 
+      "decoy": {
+        "fireDelay": 30, 
+        "lifetime": 3000, 
+        "initialCount": 0, 
+        "maxCount": 3
       }
     }, 
     {
@@ -364,6 +394,12 @@
         "damage": 600, 
         "speed": 3.0, 
         "shrapnelCount": 24, 
+        "initialCount": 0, 
+        "maxCount": 3
+      }, 
+      "decoy": {
+        "fireDelay": 25, 
+        "lifetime": 3000, 
         "initialCount": 0, 
         "maxCount": 3
       }
@@ -423,6 +459,12 @@
         "shrapnelCount": 24, 
         "initialCount": 0, 
         "maxCount": 3
+      }, 
+      "decoy": {
+        "fireDelay": 25, 
+        "lifetime": 3000, 
+        "initialCount": 0, 
+        "maxCount": 3
       }
     }, 
     {
@@ -478,6 +520,12 @@
         "damage": 600, 
         "speed": 3.0, 
         "shrapnelCount": 24, 
+        "initialCount": 0, 
+        "maxCount": 3
+      }, 
+      "decoy": {
+        "fireDelay": 25, 
+        "lifetime": 3000, 
         "initialCount": 0, 
         "maxCount": 3
       }

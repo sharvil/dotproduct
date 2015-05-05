@@ -13,9 +13,11 @@ model.Weapon.prototype.getType = function() {};
 
 /**
  * @param {number} timeDiff
+ * @param {!math.Vector} position
+ * @param {!math.Vector} velocity
  * @param {!Object} weaponData
  */
-model.Weapon.prototype.onFired = function(timeDiff, weaponData) {};
+model.Weapon.prototype.onFired = function(timeDiff, position, velocity, weaponData) {};
 
 /**
  * @enum {number}
@@ -24,5 +26,6 @@ model.Weapon.Type = {
   GUN: 1,
   BOMB: 2,
   MINE: 3,
-  BURST: 4
+  BURST: 4,
+  DECOY: 5
 };

@@ -91,7 +91,6 @@ model.BombBay.prototype.fire = function(angle, position, velocity, commitFireFn)
   return {
     'type': this.getType(),
     'level': level,
-    'pos': position.toArray(),
     'vel': newVelocity.toArray(),
     'bounceCount': bounceCount
   };
@@ -100,13 +99,12 @@ model.BombBay.prototype.fire = function(angle, position, velocity, commitFireFn)
 /**
  * @override
  */
-model.BombBay.prototype.onFired = function(timeDiff, weaponData) {
+model.BombBay.prototype.onFired = function(timeDiff, position, velocity, weaponData) {
   goog.asserts.assert(weaponData['type'] == this.getType(), 'Cannot fire bomb with incorrect weapon type: ' + weaponData['type']);
 
   var level = weaponData['level'];
-  var position = math.Vector.fromArray(weaponData['pos']);
-  var velocity = math.Vector.fromArray(weaponData['vel']);
   var bounceCount = weaponData['bounceCount'];
+  velocity = math.Vector.fromArray(weaponData['vel']);
 
   // Make sure the level is correct so the following getters use the right value for their calculations.
   this.level_.setValue(level);

@@ -75,20 +75,15 @@ model.Burst.prototype.fire = function(position, commitFireFn) {
   this.game_.getResourceManager().playSound('burst');
 
   return {
-    'type': this.getType(),
-    'pos': this.owner_.getPosition().toArray(),
-    'vel': this.owner_.getVelocity().toArray()
+    'type': this.getType()
   };
 };
 
 /**
  * @override
  */
-model.Burst.prototype.onFired = function(timeDiff, weaponData) {
+model.Burst.prototype.onFired = function(timeDiff, position, velocity, weaponData) {
   goog.asserts.assert(weaponData['type'] == this.getType(), 'Cannot fire burst with incorrect weapon type: ' + weaponData['type']);
-
-  var position = math.Vector.fromArray(weaponData['pos']);
-  var velocity = math.Vector.fromArray(weaponData['vel']);
 
   var shrapnelCount = this.settings_['shrapnelCount'];
   var lifetime = this.settings_['lifetime'];

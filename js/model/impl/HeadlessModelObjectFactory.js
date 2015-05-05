@@ -6,6 +6,7 @@ goog.require('model.player.RemotePlayer');
 goog.require('model.projectile.Bomb');
 goog.require('model.projectile.Bullet');
 goog.require('model.projectile.Burst');
+goog.require('model.projectile.Decoy');
 goog.require('model.projectile.Mine');
 
 
@@ -53,6 +54,13 @@ model.impl.HeadlessModelObjectFactory.prototype.newMine = function(game, owner, 
 /**
  * @override
  */
-model.impl.HeadlessModelObjectFactory.prototype.newBurst = function(game, owner, shrapnelCount, position, lifetime, damage) {
-  return new model.projectile.Burst(game, owner, shrapnelCount, position, lifetime, damage);
+model.impl.HeadlessModelObjectFactory.prototype.newBurst = function(game, owner, position, velocity, lifetime, damage) {
+  return new model.projectile.Burst(game, owner, position, velocity, lifetime, damage);
+};
+
+/**
+ * @override
+ */
+model.impl.HeadlessModelObjectFactory.prototype.newDecoy = function(game, owner, position, velocity, lifetime) {
+  return new model.projectile.Decoy(game, owner, position, velocity, lifetime);
 };

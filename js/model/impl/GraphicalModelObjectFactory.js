@@ -11,6 +11,8 @@ goog.require('model.projectile.Bullet');
 goog.require('model.projectile.BulletSprite');
 goog.require('model.projectile.Burst');
 goog.require('model.projectile.BurstSprite');
+goog.require('model.projectile.Decoy');
+goog.require('model.projectile.DecoySprite');
 goog.require('model.projectile.Mine');
 goog.require('model.projectile.MineSprite');
 
@@ -73,9 +75,19 @@ model.impl.GraphicalModelObjectFactory.prototype.newMine = function(game, owner,
 /**
  * @override
  */
-model.impl.GraphicalModelObjectFactory.prototype.newBurst = function(game, owner, shrapnelCount, position, lifetime, damage) {
-  var projectile = new model.projectile.Burst(game, owner, shrapnelCount, position, lifetime, damage);
+model.impl.GraphicalModelObjectFactory.prototype.newBurst = function(game, owner, position, velocity, lifetime, damage) {
+  var projectile = new model.projectile.Burst(game, owner, position, velocity, lifetime, damage);
   var sprite = new model.projectile.BurstSprite(game, projectile);
+
+  return projectile;
+};
+
+/**
+ * @override
+ */
+model.impl.GraphicalModelObjectFactory.prototype.newDecoy = function(game, owner, position, velocity, lifetime) {
+  var projectile = new model.projectile.Decoy(game, owner, position, velocity, lifetime);
+  var sprite = new model.projectile.DecoySprite(game, projectile);
 
   return projectile;
 };

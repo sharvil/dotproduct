@@ -83,19 +83,17 @@ model.MineLayer.prototype.fire = function(position, commitFireFn) {
 
   return {
     'type': this.getType(),
-    'level': level,
-    'pos': position.toArray()
+    'level': level
   };
 };
 
 /**
  * @override
  */
-model.MineLayer.prototype.onFired = function(timeDiff, weaponData) {
+model.MineLayer.prototype.onFired = function(timeDiff, position, velocity, weaponData) {
   goog.asserts.assert(weaponData['type'] == this.getType(), 'Cannot fire mine with incorrect weapon type: ' + weaponData['type']);
 
   var level = weaponData['level'];
-  var position = math.Vector.fromArray(weaponData['pos']);
 
   // Make sure the level is correct so the following getters use the right value for their calculations.
   this.level_.setValue(level);
