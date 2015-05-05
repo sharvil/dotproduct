@@ -228,80 +228,6 @@ model.player.LocalPlayer.prototype.advanceTime = function() {
 
   var oldAngle = this.angleInRadians_;
   var oldVelocity = this.velocity_;
-  var weaponData;
-
-  if (this.projectileFireDelay_.isLow()) {
-    if (keyboard.isKeyPressed(input.Keymap.FIRE_GUN)) {
-      if (this.isSafe()) {
-        this.velocity_ = math.Vector.ZERO;
-      } else {
-        var angle = this.getAngle_();
-        var position = this.position_;
-        var velocity = this.velocity_;
-
-        weaponData = this.gun_.fire(angle, position, velocity, (function(fireEnergy, fireDelay) {
-          if (this.energy_ > fireEnergy) {
-            this.energy_ -= fireEnergy;
-            this.projectileFireDelay_.setValue(fireDelay);
-            return true;
-          }
-          return false;
-        }).bind(this));
-      }
-    } else if (keyboard.isKeyPressed(input.Keymap.FIRE_BOMB)) {
-      if (this.isSafe()) {
-        this.velocity_ = math.Vector.ZERO;
-      } else {
-        var angle = this.getAngle_();
-        var position = new math.Vector(0, -this.radius_).rotate(angle).add(this.position_);
-        var velocity = this.velocity_;
-
-        weaponData = this.bombBay_.fire(angle, position, velocity, (function(fireEnergy, fireDelay, recoil) {
-          if (this.energy_ > fireEnergy) {
-            this.energy_ -= fireEnergy;
-            this.projectileFireDelay_.setValue(fireDelay);
-            this.velocity_ = this.velocity_.subtract(math.Vector.fromPolar(recoil, angle));
-            return true;
-          }
-          return false;
-        }).bind(this));
-      }
-    } else if (keyboard.isKeyPressed(input.Keymap.FIRE_MINE)) {
-      if (this.isSafe()) {
-        this.velocity_ = math.Vector.ZERO;
-      } else {
-        var self = this;
-        weaponData = this.mineLayer_.fire(this.position_, function(fireEnergy, fireDelay) {
-          if (self.energy_ > fireEnergy) {
-            self.energy_ -= fireEnergy;
-            self.projectileFireDelay_.setValue(fireDelay);
-            return true;
-          }
-          return false;
-        });
-      }
-    } else if (keyboard.isKeyPressed(input.Keymap.FIRE_BURST)) {
-      if (this.isSafe()) {
-        this.velocity_ = math.Vector.ZERO;
-      } else {
-        var self = this;
-        weaponData = this.burst_.fire(this.position_, function(fireEnergy, fireDelay) {
-          self.projectileFireDelay_.setValue(fireDelay);
-          return true;
-        });
-      }
-    } else if (keyboard.isKeyPressed(input.Keymap.FIRE_DECOY)) {
-      if (this.isSafe()) {
-        this.velocity_ = math.Vector.ZERO;
-      } else {
-        var self = this;
-        weaponData = this.decoy_.fire(this.position_, function(fireEnergy, fireDelay) {
-          self.projectileFireDelay_.setValue(fireDelay);
-          return true;
-        });
-      }
-    }
-  }
 
   var shipRotation = this.shipSettings_['rotationRadiansPerTick'];
   if (keyboard.isKeyPressed(input.Keymap.ROTATE_LEFT)) {
@@ -346,6 +272,8 @@ model.player.LocalPlayer.prototype.advanceTime = function() {
 
   this.updatePosition_(this.shipSettings_['bounceFactor']);
 
+  var weaponData = this.getFiredWeapon_();
+
   // If, after the position update, we moved into / out of a safe zone, send a force update.
   if (this.isSafe() != isSafe) {
     // This convoluted bit of logic says that if we transitioned from !safe -> safe, we should
@@ -357,6 +285,104 @@ model.player.LocalPlayer.prototype.advanceTime = function() {
   }
   this.sendPositionUpdate_(forceSendUpdate, this.velocity_ != oldVelocity || this.angleInRadians_ != oldAngle, weaponData);
 };
+
+/**
+ * Returns an object that contains all the data for a weapon that needs to get
+ * serialized over the network. If this function returns null, the player didn't
+ * fire any weapon.
+ *
+ * @return {Object}
+ * @private
+ */
+model.player.LocalPlayer.prototype.getFiredWeapon_ = function() {
+  if (!this.projectileFireDelay_.isLow()) {
+    return null;
+  }
+
+  var self = this;
+  var keyboard = this.game_.getKeyboard();
+
+  if (keyboard.isKeyPressed(input.Keymap.FIRE_GUN)) {
+    if (this.isSafe()) {
+      this.velocity_ = math.Vector.ZERO;
+      return null;
+    } else {
+      var angle = this.getAngle_();
+      var position = this.position_;
+      var velocity = this.velocity_;
+
+      return this.gun_.fire(angle, position, velocity, function(fireEnergy, fireDelay) {
+        if (self.energy_ > fireEnergy) {
+          self.energy_ -= fireEnergy;
+          self.projectileFireDelay_.setValue(fireDelay);
+          return true;
+        }
+        return false;
+      });
+    }
+  }
+
+  if (keyboard.isKeyPressed(input.Keymap.FIRE_BOMB)) {
+    if (this.isSafe()) {
+      this.velocity_ = math.Vector.ZERO;
+      return null;
+    } else {
+      var angle = this.getAngle_();
+      var position = new math.Vector(0, -this.radius_).rotate(angle).add(this.position_);
+      var velocity = this.velocity_;
+
+      return this.bombBay_.fire(angle, position, velocity, function(fireEnergy, fireDelay, recoil) {
+        if (self.energy_ > fireEnergy) {
+          self.energy_ -= fireEnergy;
+          self.projectileFireDelay_.setValue(fireDelay);
+          self.velocity_ = self.velocity_.subtract(math.Vector.fromPolar(recoil, angle));
+          return true;
+        }
+        return false;
+      });
+    }
+  }
+
+  if (keyboard.isKeyPressed(input.Keymap.FIRE_MINE)) {
+    if (this.isSafe()) {
+      this.velocity_ = math.Vector.ZERO;
+      return null;
+    } else {
+      return this.mineLayer_.fire(this.position_, function(fireEnergy, fireDelay) {
+        if (self.energy_ > fireEnergy) {
+          self.energy_ -= fireEnergy;
+          self.projectileFireDelay_.setValue(fireDelay);
+          return true;
+        }
+        return false;
+      });
+    }
+  }
+
+  if (keyboard.isKeyPressed(input.Keymap.FIRE_BURST)) {
+    if (this.isSafe()) {
+      this.velocity_ = math.Vector.ZERO;
+      return null;
+    } else {
+      return this.burst_.fire(this.position_, function(fireEnergy, fireDelay) {
+        self.projectileFireDelay_.setValue(fireDelay);
+        return true;
+      });
+    }
+  }
+
+  if (keyboard.isKeyPressed(input.Keymap.FIRE_DECOY)) {
+    if (this.isSafe()) {
+      this.velocity_ = math.Vector.ZERO;
+      return null;
+    } else {
+      return this.decoy_.fire(this.position_, function(fireEnergy, fireDelay) {
+        self.projectileFireDelay_.setValue(fireDelay);
+        return true;
+      });
+    }
+  }
+}
 
 /**
  * @param {!math.Vector} thrustVector
