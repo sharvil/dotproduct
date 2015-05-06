@@ -266,7 +266,7 @@ model.player.LocalPlayer.prototype.advanceTime = function() {
 
   // Magnitude of speed is greater than maximum ship speed - clamp.
   var magnitude = this.velocity_.magnitude();
-  if (magnitude >= maximumSpeed) {
+  if (magnitude > maximumSpeed) {
     this.velocity_ = this.velocity_.resize(maximumSpeed);
   }
 
