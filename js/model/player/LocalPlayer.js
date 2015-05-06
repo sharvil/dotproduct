@@ -258,12 +258,6 @@ model.player.LocalPlayer.prototype.advanceTime = function() {
     this.energy_ -= accelerationEnergy;
   }
 
-  if (keyboard.isKeyPressed(input.Keymap.STRAFE_LEFT)) {
-    this.velocity_ = this.velocity_.add(math.Vector.fromPolar(-acceleration, angle + Math.PI / 2));
-  } else if (keyboard.isKeyPressed(input.Keymap.STRAFE_RIGHT)) {
-    this.velocity_ = this.velocity_.add(math.Vector.fromPolar(acceleration, angle + Math.PI / 2));
-  }
-
   // Magnitude of speed is greater than maximum ship speed - clamp.
   var magnitude = this.velocity_.magnitude();
   if (magnitude > maximumSpeed) {
