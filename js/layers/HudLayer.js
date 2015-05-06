@@ -3,6 +3,7 @@ goog.provide('layers.HudLayer');
 goog.require('graphics.Drawable');
 goog.require('model.player.LocalPlayer');
 goog.require('model.player.Player');
+goog.require('Palette');
 
 /**
  * @constructor
@@ -101,7 +102,7 @@ layers.HudLayer.prototype.renderEnergyBar_ = function(context, dimensions) {
 
     // Energy bar top
     context.beginPath();
-    context.strokeStyle = 'rgba(127, 127, 127, 1)';
+    context.strokeStyle = 'rgb(127, 127, 127)';
     context.moveTo((dimensions.width - energyBarMaxWidth) / 2, 10);
     context.lineTo((dimensions.width + energyBarMaxWidth) / 2, 10);
     context.stroke();
@@ -126,10 +127,7 @@ layers.HudLayer.prototype.renderNearShipEnergyDisplay_ = function(context, dimen
     var y = Math.floor(playerDimensions.top - dimensions.top);
 
     context.save();
-      context.fillStyle = percentEnergy < 0.25 ? 'rgba(200, 0, 0, 0.5)' :
-                          percentEnergy < 0.5 ? 'rgba(200, 200, 0, 0.5)' :
-                          percentEnergy < 0.75 ? 'rgba(0, 200, 0, 0.5)' :
-                          'rgba(0, 200, 200, 0.5)';
+      context.fillStyle = percentEnergy < 0.25 ? Palette.criticalEnergyWarningColor() : Palette.lowEnergyWarningColor();
       context.font = Font.playerFont().toString();
       context.textAlign = 'right';
       context.textBaseline = 'bottom';

@@ -90,3 +90,17 @@ Palette.personalNotificationsColor = function(opt_alpha) {
 Palette.enterNotificationsColor = function(opt_alpha) {
   return Palette.foeColor(opt_alpha);
 };
+
+/**
+ * @return {string}
+ */
+Palette.criticalEnergyWarningColor = function() {
+  return 'rgb(200, 0, 0)';
+};
+
+/**
+ * @return {string}
+ */
+Palette.lowEnergyWarningColor = function() {
+  return Palette.friendColor();
+};
