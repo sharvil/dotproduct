@@ -12,7 +12,6 @@ goog.require('html5.Notifications');
 
 goog.require('FlagIndex');
 goog.require('graphics.Painter');
-goog.require('graphics.Tween');
 goog.require('input.Keyboard');
 goog.require('input.Mouse');
 goog.require('layers.HudLayer');
@@ -364,10 +363,6 @@ Game.prototype.renderingLoop_ = function() {
   }
 
   this.viewport_.update();
-
-  for (var i = 0; i < timeDiff; ++i) {
-    graphics.Tween.advanceAll();
-  }
 
   this.painter_.render(this.viewport_);
 
