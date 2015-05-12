@@ -131,7 +131,7 @@ net.Protocol.prototype.getMillisSinceServerTime = function(timestamp) {
   if (diff < 0) {
     diff += 0x100000000;
   }
-  diff = this.asUint32_(goog.now()) - diff;
+  diff = this.asInt32_(goog.now()) - diff;
   if (diff < 0) {
     diff += 0x100000000;
   }
@@ -184,7 +184,7 @@ net.Protocol.prototype.startGame = function(ship) {
  * @param {Object=} opt_weaponData
  */
 net.Protocol.prototype.sendPosition = function(direction, position, velocity, isSafe, opt_weaponData) {
-  var packet = [net.Protocol.C2SPacketType_.POSITION, this.asRemoteTime_(goog.now()), direction, position.getX(), position.getY(), velocity.getX(), velocity.getY(), isSafe];
+  var packet = [net.Protocol.C2SPacketType_.POSITION, this.remoteTime_(), direction, position.getX(), position.getY(), velocity.getX(), velocity.getY(), isSafe];
   if (opt_weaponData) {
     packet.push(opt_weaponData);
   }
@@ -192,7 +192,7 @@ net.Protocol.prototype.sendPosition = function(direction, position, velocity, is
 };
 
 net.Protocol.prototype.syncClocks_ = function() {
-  this.send_([net.Protocol.C2SPacketType_.CLOCK_SYNC, this.asUint32_(goog.now())]);
+  this.send_([net.Protocol.C2SPacketType_.CLOCK_SYNC, this.asInt32_(goog.now())]);
 };
 
 /**
@@ -202,7 +202,7 @@ net.Protocol.prototype.syncClocks_ = function() {
 net.Protocol.prototype.onClockSyncReply_ = function(packet) {
   var clientTime0 = packet[0];
   var serverTime = packet[1];
-  var rtt = this.asUint32_(goog.now()) - clientTime0;
+  var rtt = this.asInt32_(goog.now()) - clientTime0;
 
   // Correct for integer overflow since clock sync timestamps are fixed precision 32-bit integers.
   if (rtt < 0) {
@@ -261,7 +261,7 @@ net.Protocol.prototype.sendSetPresence = function(presence) {
  * @param {number} id
  */
 net.Protocol.prototype.sendFlagCaptured = function(id) {
-  this.send_([net.Protocol.C2SPacketType_.FLAG_CAPTURED, this.asRemoteTime_(goog.now()), id]);
+  this.send_([net.Protocol.C2SPacketType_.FLAG_CAPTURED, this.remoteTime_(), id]);
 };
 
 net.Protocol.prototype.onOpen_ = function() {
@@ -340,13 +340,13 @@ net.Protocol.prototype.createSocket_ = function() {
  * @return {number}
  * @private
  */
-net.Protocol.prototype.asUint32_ = function(num) {
-  return num >>> 0;
+net.Protocol.prototype.asInt32_ = function(num) {
+  return num | 0;
 };
 
 /**
  * @return {number}
  */
-net.Protocol.prototype.asRemoteTime_ = function(timestamp) {
-  return this.asUint32_(timestamp + this.serverTimeDelta_);
+net.Protocol.prototype.remoteTime_ = function() {
+  return this.asInt32_(goog.now() + this.serverTimeDelta_);
 };
