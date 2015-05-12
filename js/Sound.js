@@ -16,10 +16,10 @@ Sound = function() {
 };
 
 /**
- * @type {!Object}
+ * @type {Object}
  * @private
  */
-Sound.audioContext_ = new AudioContext();
+Sound.audioContext_ = 'webkitAudioContext' in window ? new webkitAudioContext() : new AudioContext();
 
 /**
  * @param {string} url
@@ -36,10 +36,19 @@ Sound.prototype.load = function(url, loadCb) {
 Sound.prototype.play = function() {
   goog.asserts.assert(!!this.buffer_, 'Unable to play sound before it\'s loaded.');
 
+  if (!Sound.audioContext_) {
+    return;
+  }
+
   var source = Sound.audioContext_.createBufferSource();
   source.buffer = this.buffer_;
   source.connect(Sound.audioContext_.destination);
-  source.start();
+
+  if ('noteOn' in source) {
+    source.noteOn(0);
+  } else {
+    source.start();
+  }
 };
 
 /**
