@@ -428,7 +428,13 @@ Game.prototype.onPlayerPosition_ = function(packet) {
   var velocity = new math.Vector(packet[5], packet[6]);
   var isSafe = packet[7];
 
-  timeDiff = Math.min(timeDiff, 150);
+  // If the packet is really old, just discard it entirely. We should be getting
+  // an updated one soon anyway. It may be the case that we discard a weapon
+  // packet, but the remote player is lagging so their experience will be
+  // degraded but everyone else's will be fine.
+  if (timeDiff >= Game.MAX_TICKS_PER_FRAME_) {
+    return;
+  }
 
   var player = this.playerIndex_.findById(id);
   if (player) {
