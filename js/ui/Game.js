@@ -450,12 +450,11 @@ Game.prototype.onPlayerPosition_ = function(packet) {
  * @private
  */
 Game.prototype.onPlayerDied_ = function(packet) {
-  var timestamp = packet[0];
-  var x = packet[1];
-  var y = packet[2];
-  var killee = this.playerIndex_.findById(packet[3]);
-  var killer = this.playerIndex_.findById(packet[4]);
-  var bountyGained = packet[5];
+  var x = packet[0];
+  var y = packet[1];
+  var killee = this.playerIndex_.findById(packet[2]);
+  var killer = this.playerIndex_.findById(packet[3]);
+  var bountyGained = packet[4];
 
   if (!killer || !killee) {
     return;

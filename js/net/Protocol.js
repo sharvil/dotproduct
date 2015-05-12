@@ -224,7 +224,7 @@ net.Protocol.prototype.onClockSyncReply_ = function(packet) {
  * @param {!model.player.Player} killer
  */
 net.Protocol.prototype.sendDeath = function(position, killer) {
-  this.send_([net.Protocol.C2SPacketType_.PLAYER_DIED, this.asRemoteTime_(goog.now()), position.getX(), position.getY(), killer.getId()]);
+  this.send_([net.Protocol.C2SPacketType_.PLAYER_DIED, position.getX(), position.getY(), killer.getId()]);
 };
 
 /**
