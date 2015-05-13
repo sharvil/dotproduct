@@ -219,7 +219,7 @@ Game = function(protocol, resourceManager, settings, mapData, tileProperties) {
   html5.Notifications.requestPermission();
 
   // Make sure the game canvas is the right size and start rendering loop.
-  goog.dom.getElement('game').style.display = 'block';
+  goog.dom.getElement('game').classList.add('in-game');
   this.onResize_();
   this.renderingLoop_();
 };

@@ -121,13 +121,20 @@ body {
               GAME VIEW
  **************************************/
 
-#game {
+.game {
   position: relative;
   font-family: 'SubSpace Regular';
   font-size: 12px;
   font-smooth: never;
   -webkit-font-smoothing: none;
-  display: none;
+  transform: scale(0.98);
+  opacity: 0.15;
+  transition: transform 0.3s, opacity 0.3s;
+}
+
+.in-game {
+  transform: scale(1.0);
+  opacity: 1;
 }
 
 /**************************************
