@@ -3,6 +3,7 @@ goog.provide('model.Simulation');
 goog.require('goog.array');
 goog.require('goog.asserts');
 goog.require('model.ModelObject');
+goog.require('time.Timer');
 
 /**
  * @constructor
@@ -20,6 +21,12 @@ model.Simulation = function(modelObjectFactory) {
    * @private
    */
   this.registeredObjects_ = [];
+
+  /**
+   * @type {number}
+   * @private
+   */
+  this.timeMillis_ = goog.now();
 };
 
 /**
@@ -38,9 +45,18 @@ model.Simulation.prototype.unregisterObject = function(obj) {
 };
 
 model.Simulation.prototype.advanceTime = function() {
+  this.timeMillis_ += time.Timer.ticksToMillis(1);
+
   /** @type {!Array.<!model.ModelObject>} */
   var objectSnapshot = goog.array.clone(this.registeredObjects_);
   goog.array.forEach(objectSnapshot, function(obj) {
     obj.advanceTime();
   });
+};
+
+/**
+ * @return {number}
+ */
+model.Simulation.prototype.getTimeMillis = function() {
+  return this.timeMillis_;
 };

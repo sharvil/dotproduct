@@ -98,7 +98,7 @@ model.player.RemotePlayer.prototype.onPositionUpdate = function(timeDiff, angle,
   }
 
   // Ignore position updates from before the last wall bounce.
-  if(goog.now() - time.Timer.ticksToMillis(timeDiff) < this.bounceTimestamp_) {
+  if(this.simulation_.getTimeMillis() - time.Timer.ticksToMillis(timeDiff) < this.bounceTimestamp_) {
     return;
   }
 
@@ -167,5 +167,5 @@ model.player.RemotePlayer.prototype.extrapolatePosition_ = function(timeDiff, st
  */
 model.player.RemotePlayer.prototype.bounce_ = function() {
   this.velocityAdjustTimer_ = 0;
-  this.bounceTimestamp_ = goog.now();
+  this.bounceTimestamp_ = this.simulation_.getTimeMillis();
 };

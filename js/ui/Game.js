@@ -201,7 +201,7 @@ Game = function(protocol, resourceManager, settings, mapData, tileProperties) {
   this.protocol_.registerPacketHandler(net.Protocol.S2CPacketType.PRIZE_COLLECTED, this.onPrizeCollected_.bind(this));
   this.protocol_.registerPacketHandler(net.Protocol.S2CPacketType.SET_PRESENCE, this.onSetPresence_.bind(this));
   this.protocol_.registerPacketHandler(net.Protocol.S2CPacketType.FLAG_UPDATE, this.onFlagUpdate_.bind(this));
-  this.protocol_.startGame(startingShip);
+  this.protocol_.startGame(this.simulation_, startingShip);
 
   this.viewport_.followPlayer(localPlayer);
 

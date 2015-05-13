@@ -69,6 +69,12 @@ net.Protocol = function(url) {
    */
   this.roundTripTime_ = 0;
 
+  /**
+   * @type {model.Simulation}
+   * @private
+   */
+  this.simulation_ = null;
+
   this.registerPacketHandler(net.Protocol.S2CPacketType.CLOCK_SYNC_REPLY, this.onClockSyncReply_.bind(this));
 };
 
@@ -131,7 +137,7 @@ net.Protocol.prototype.getMillisSinceServerTime = function(timestamp) {
   if (diff < 0) {
     diff += 0x100000000;
   }
-  diff = this.asInt32_(goog.now()) - diff;
+  diff = this.asInt32_(this.simulation_.getTimeMillis()) - diff;
   if (diff < 0) {
     diff += 0x100000000;
   }
@@ -168,9 +174,11 @@ net.Protocol.prototype.login = function(loginData) {
 };
 
 /**
+ * @param {!model.Simulation} simulation
  * @param {number} ship
  */
-net.Protocol.prototype.startGame = function(ship) {
+net.Protocol.prototype.startGame = function(simulation, ship) {
+  this.simulation_ = simulation;
   this.send_([net.Protocol.C2SPacketType_.START_GAME, ship]);
   this.syncClocks_();
   this.syncTimer_ = time.Timer.setInterval(this.syncClocks_.bind(this), net.Protocol.CLOCK_SYNC_PERIOD_);
@@ -348,5 +356,5 @@ net.Protocol.prototype.asInt32_ = function(num) {
  * @return {number}
  */
 net.Protocol.prototype.remoteTime_ = function() {
-  return this.asInt32_(goog.now() + this.serverTimeDelta_);
+  return this.asInt32_(this.simulation_.getTimeMillis() + this.serverTimeDelta_);
 };
