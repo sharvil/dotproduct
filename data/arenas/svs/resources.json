@@ -6,6 +6,42 @@
       "yTiles": 10
     },
 
+    "star0": {
+      "url": "data/shared/graphics/star0.png",
+      "xTiles": 1,
+      "yTiles": 1
+    },
+
+    "star1": {
+      "url": "data/shared/graphics/star1.png",
+      "xTiles": 1,
+      "yTiles": 1
+    },
+
+    "star2": {
+      "url": "data/shared/graphics/star2.png",
+      "xTiles": 1,
+      "yTiles": 1
+    },
+
+    "star3": {
+      "url": "data/shared/graphics/star3.png",
+      "xTiles": 1,
+      "yTiles": 1
+    },
+
+    "star4": {
+      "url": "data/shared/graphics/star4.png",
+      "xTiles": 1,
+      "yTiles": 1
+    },
+
+    "star5": {
+      "url": "data/shared/graphics/star5.png",
+      "xTiles": 1,
+      "yTiles": 1
+    },
+
     "ship0": {
       "url": "data/shared/graphics/ship0.png",
       "xTiles": 10,
@@ -19,12 +55,36 @@
     },
 
     "ship2": {
-      "url": "data/shared/graphics/ship3.png",
+      "url": "data/shared/graphics/ship2.png",
       "xTiles": 10,
       "yTiles": 4
     },
 
     "ship3": {
+      "url": "data/shared/graphics/ship3.png",
+      "xTiles": 10,
+      "yTiles": 4
+    },
+
+    "ship4": {
+      "url": "data/shared/graphics/ship4.png",
+      "xTiles": 10,
+      "yTiles": 4
+    },
+
+    "ship5": {
+      "url": "data/shared/graphics/ship5.png",
+      "xTiles": 10,
+      "yTiles": 4
+    },
+
+    "ship6": {
+      "url": "data/shared/graphics/ship6.png",
+      "xTiles": 10,
+      "yTiles": 4
+    },
+
+    "ship7": {
       "url": "data/shared/graphics/ship7.png",
       "xTiles": 10,
       "yTiles": 4
@@ -172,22 +232,126 @@
       "period": 3
     },
 
-    "prize": {
+    "anim0": {
       "url": "data/shared/graphics/prize.png",
       "xTiles": 10,
       "yTiles": 1,
       "frames": 10,
       "period": 5
+    },
+
+    "anim1": {
+      "url": "data/shared/graphics/over1.png",
+      "xTiles": 15,
+      "yTiles": 2,
+      "frames": 30,
+      "period": 5
+    },
+
+    "anim2": {
+      "url": "data/shared/graphics/over2.png",
+      "xTiles": 10,
+      "yTiles": 3,
+      "frames": 30,
+      "period": 5
+    },
+
+    "anim3": {
+      "url": "data/shared/graphics/over3.png",
+      "xTiles": 15,
+      "yTiles": 2,
+      "frames": 30,
+      "period": 5
+    },
+
+    "anim4": {
+      "url": "data/shared/graphics/flag_friend.png",
+      "xTiles": 10,
+      "yTiles": 1,
+      "frames": 10,
+      "period": 10
+    },
+
+    "anim5": {
+      "url": "data/shared/graphics/flag_foe.png",
+      "xTiles": 10,
+      "yTiles": 1,
+      "frames": 10,
+      "period": 10
     }
   },
 
   "sounds": {
+    "bomb0": {
+      "url": "data/shared/sounds/bomb0.wav"
+    },
+
+    "bomb1": {
+		  "url": "data/shared/sounds/bomb1.wav"
+	  },
+
+    "bomb2": {
+      "url": "data/shared/sounds/bomb2.wav"
+    },
+
+    "bomb3": {
+      "url": "data/shared/sounds/bomb3.wav"
+    },
+
     "bounce": {
       "url": "data/shared/sounds/bounce.wav"
     },
 
-    "bullet": {
+    "burst": {
+      "url": "data/shared/sounds/burst.wav"
+    },
+
+    "explodeBullet": {
+      "url": "data/shared/sounds/explode0.wav"
+    },
+
+    "explodeShip": {
+      "url": "data/shared/sounds/explode1.wav"
+    },
+
+    "explodeBomb": {
+      "url": "data/shared/sounds/explode2.wav"
+    },
+
+    "gun0": {
+      "url": "data/shared/sounds/gun0.wav"
+    },
+
+    "gun1": {
       "url": "data/shared/sounds/gun1.wav"
-    }
+    },
+
+    "gun2": {
+      "url": "data/shared/sounds/gun2.wav"
+    },
+
+    "gun3": {
+      "url": "data/shared/sounds/gun3.wav"
+    },
+
+    "mine0": {
+      "url": "data/shared/sounds/mine0.wav"
+    },
+
+    "mine1": {
+      "url": "data/shared/sounds/mine1.wav"
+    },
+
+    "mine2": {
+      "url": "data/shared/sounds/mine2.wav"
+    },
+
+    "mine3": {
+      "url": "data/shared/sounds/mine3.wav"
+    },
+
+    "prize": {
+		  "url": "data/shared/sounds/prize.wav"
+	  }
   }
 }
