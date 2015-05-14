@@ -590,7 +590,11 @@ Game.prototype.onLocalPlayerShipChanged_ = function(player, shipType) {
  * @private
  */
 Game.prototype.onLocalPlayerDied_ = function(player, killer) {
+  var x = player.getPosition().getX();
+  var y = player.getPosition().getY();
+
   this.notifications_.addPersonalMessage('You were killed by ' + killer.getName() + '!');
+  this.prizeIndex_.addKillPrize(x, y);
   this.protocol_.sendDeath(player.getPosition(), killer);
 };
 
