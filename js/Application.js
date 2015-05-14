@@ -91,6 +91,6 @@ Application.prototype.onLoadComplete_ = function() {
 
 var _main = function() {
   var settings = window.toObject(window.location.hash.substr(1));
-  new Application(settings, 'ws://' + window.location.host + '/dotproduct/v1/');
+  new Application(settings, 'ws://' + window.location.host + '/dotproduct/v1/' + settings['arena']);
   window.location.hash = '';
 };

@@ -8,8 +8,10 @@
 
     <link rel="stylesheet" href="css/main.css" type="text/css" />
     <script>
+      var defaultArena = 'trench';
+
       function anonymousLogin() {
-        window.location.href = './#strategy=anonymous&accessToken=.';
+        window.location.href = './#strategy=anonymous&accessToken=.&arena=' + defaultArena;
       }
 
       function facebookLogin() {
@@ -40,7 +42,7 @@
 
       function onFacebookResponse(response) {
         if (response.status === 'connected' && response.authResponse) {
-          window.location.href = './#strategy=facebook&accessToken=' + response.authResponse.accessToken;
+          window.location.href = './#strategy=facebook&accessToken=' + response.authResponse.accessToken + '&arena=' + defaultArena;
         } else {
           document.getElementById('content').style.display = 'block';
         }
