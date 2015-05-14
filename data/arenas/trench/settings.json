@@ -48,7 +48,7 @@
         "damageUpgrade": 520, 
         "initialLevel": 2, 
         "maxLevel": 2, 
-        "bounces": false, 
+        "bounces": true, 
         "doubleBarrel": false
       }, 
       "bomb": {
@@ -106,7 +106,7 @@
         "damageUpgrade": 520, 
         "initialLevel": 0, 
         "maxLevel": 0, 
-        "bounces": false, 
+        "bounces": true, 
         "doubleBarrel": false, 
         "multifire": {
           "fireEnergy": 300, 
@@ -169,7 +169,7 @@
         "damageUpgrade": 520, 
         "initialLevel": 0, 
         "maxLevel": 0, 
-        "bounces": false, 
+        "bounces": true, 
         "doubleBarrel": false
       }, 
       "bomb": {
@@ -227,7 +227,7 @@
         "damageUpgrade": 520, 
         "initialLevel": 1, 
         "maxLevel": 1, 
-        "bounces": false, 
+        "bounces": true, 
         "doubleBarrel": true, 
         "multifire": {
           "fireEnergy": 400, 
@@ -290,7 +290,7 @@
         "damageUpgrade": 520, 
         "initialLevel": 0, 
         "maxLevel": 0, 
-        "bounces": false, 
+        "bounces": true, 
         "doubleBarrel": true, 
         "multifire": {
           "fireEnergy": 500, 
@@ -353,7 +353,7 @@
         "damageUpgrade": 520, 
         "initialLevel": 2, 
         "maxLevel": 2, 
-        "bounces": false, 
+        "bounces": true, 
         "doubleBarrel": false, 
         "multifire": {
           "fireEnergy": 242, 
@@ -416,7 +416,7 @@
         "damageUpgrade": 520, 
         "initialLevel": 1, 
         "maxLevel": 1, 
-        "bounces": false, 
+        "bounces": true, 
         "doubleBarrel": true, 
         "multifire": {
           "fireEnergy": 435, 
@@ -479,7 +479,7 @@
         "damageUpgrade": 520, 
         "initialLevel": -1, 
         "maxLevel": -1, 
-        "bounces": false, 
+        "bounces": true, 
         "doubleBarrel": false
       }, 
       "bomb": {
