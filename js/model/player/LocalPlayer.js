@@ -230,10 +230,10 @@ model.player.LocalPlayer.prototype.advanceTime = function() {
   var oldVelocity = this.velocity_;
 
   var shipRotation = this.shipSettings_['rotationRadiansPerTick'];
-  if (keyboard.isKeyPressed(input.Keymap.ROTATE_LEFT)) {
-    this.angleInRadians_ -= shipRotation;
-  } else if (keyboard.isKeyPressed(input.Keymap.ROTATE_RIGHT)) {
+  if (keyboard.isKeyPressed(input.Keymap.ROTATE_RIGHT)) {
     this.angleInRadians_ += shipRotation;
+  } else if (keyboard.isKeyPressed(input.Keymap.ROTATE_LEFT)) {
+    this.angleInRadians_ -= shipRotation;
   }
 
   if (this.angleInRadians_ < 0 || this.angleInRadians_ >= Math.PI * 2) {
@@ -250,11 +250,11 @@ model.player.LocalPlayer.prototype.advanceTime = function() {
     accelerationEnergy = this.shipSettings_['afterburnerEnergy'];
   }
 
-  if (keyboard.isKeyPressed(input.Keymap.FORWARD_THRUST)) {
-    this.applyThrust_(math.Vector.fromPolar(acceleration, angle));
-    this.energy_ -= accelerationEnergy;
-  } else if (keyboard.isKeyPressed(input.Keymap.REVERSE_THRUST)) {
+  if (keyboard.isKeyPressed(input.Keymap.REVERSE_THRUST)) {
     this.applyThrust_(math.Vector.fromPolar(acceleration, angle).scale(-1));
+    this.energy_ -= accelerationEnergy;
+  } else if (keyboard.isKeyPressed(input.Keymap.FORWARD_THRUST)) {
+    this.applyThrust_(math.Vector.fromPolar(acceleration, angle));
     this.energy_ -= accelerationEnergy;
   }
 
