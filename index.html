@@ -9,6 +9,10 @@
     <meta property="og:description" content="Power up your ship and blast your friends in this fast-paced multiplayer space shooter!" />
     <meta property="fb:admins" content="615600520" />
     <meta property="fb:app_id" content="409286079118102" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
+    <script src="//code.jquery.com/jquery-1.11.2.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
     <script src="js/bootstrap/bootstrap.js" type="text/javascript"></script>
   </head>
   <body style="overflow: hidden">
@@ -37,6 +41,39 @@
 
         <!-- Debug view -->
         <div id="dv" class="dv"></div>
+
+        <!-- Help view -->
+        <div id="help" class="help">
+          <div style="float: left">
+            <table>
+              <caption>Movement</caption>
+              <tr><td class="help-key"><span class="help-icon"><i class="glyphicon glyphicon-arrow-up"></i></span></td><td class="help-text">Accelerate forward</td></tr>
+              <tr><td class="help-key"><span class="help-icon"><i class="glyphicon glyphicon-arrow-down"></i></span></td><td class="help-text">Accelerate backward</td></tr>
+              <tr><td class="help-key"><span class="help-icon"><i class="glyphicon glyphicon-arrow-left"></i></span></td><td class="help-text">Turn left</td></tr>
+              <tr><td class="help-key"><span class="help-icon"><i class="glyphicon glyphicon-arrow-right"></i></span></td><td class="help-text">Turn right</td></tr>
+              <tr><td class="help-key"><span class="help-icon">A</span></td><td class="help-text">Afterburners<br>(while accelerating)</td></tr>
+            </table>
+            <table>
+              <caption>Misc</caption>
+              <tr><td class="help-key"><span class="help-icon">1</span> - <span class="help-icon">8</span></td><td>Choose ship</td></tr>
+              <tr><td class="help-key"><span class="help-icon">ENTER</span></td><td>Send chat message</td></tr>
+              <tr><td class="help-key"><span class="help-icon">?</span></td><td>Show help</td></tr>
+            </table>
+          </div>
+          <div style="float: right; left-margin: 30px">
+            <table>
+              <caption>Basic Weapons</caption>
+              <tr><td class="help-key"><span class="help-icon">SPACE</span></td><td class="help-text">Fire gun</td></tr>
+              <tr><td class="help-key"><span class="help-icon">F</span></td><td class="help-text">Fire bomb</td></tr>
+              <tr><td class="help-key"><span class="help-icon">V</span></td><td class="help-text">Lay mine</td></tr>
+            </table>
+            <table>
+              <caption>Advanced Weapons</caption>
+              <tr><td class="help-key"><span class="help-icon">G</span></td><td class="help-text">Burst</td></tr>
+              <tr><td class="help-key"><span class="help-icon">D</span></td><td class="help-text">Decoy</td></tr>
+            </table>
+          </div>
+        </div>
 
         <!-- Disconnected view -->
         <div id="dcv" class="dcv">

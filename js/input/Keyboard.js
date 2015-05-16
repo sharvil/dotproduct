@@ -5,6 +5,7 @@ goog.require('goog.events.EventHandler');
 goog.require('goog.events.EventTarget');
 goog.require('goog.events.EventType');
 goog.require('goog.events.KeyCodes');
+goog.require('Listener');
 
 /**
  * @constructor
@@ -17,9 +18,11 @@ input.Keyboard = function() {
   this.keys_ = {};
 
   goog.events.listen(document, this.getVisibilityEvent_(), this.documentVisibilityChanged_.bind(this));
-  goog.events.listen(window, goog.events.EventType.KEYDOWN, this.keyPressed_.bind(this));
-  goog.events.listen(window, goog.events.EventType.KEYUP, this.keyReleased_.bind(this));
+  goog.events.listen(window, goog.events.EventType.KEYPRESS, this.keyPressed_.bind(this));
+  goog.events.listen(window, goog.events.EventType.KEYDOWN, this.keyDown_.bind(this));
+  goog.events.listen(window, goog.events.EventType.KEYUP, this.keyUp_.bind(this));
 };
+goog.mixin(input.Keyboard.prototype, Listener.prototype);
 
 /**
  * @param {!goog.events.KeyCodes} keyCode
@@ -34,6 +37,20 @@ input.Keyboard.prototype.isKeyPressed = function(keyCode) {
  * @private
  */
 input.Keyboard.prototype.keyPressed_ = function(e) {
+  this.fireEvent_(e.keyCode);
+};
+
+/**
+ * @param {!Event} e
+ * @private
+ */
+input.Keyboard.prototype.keyDown_ = function(e) {
+  // Simulate escape character key press since it doesn't generate 'keypress'
+  // events in Chrome.
+  if (e.keyCode == goog.events.KeyCodes.ESC) {
+    this.fireEvent_(e.keyCode);
+  }
+
   if (e.keyCode == goog.events.KeyCodes.LEFT || e.keyCode == goog.events.KeyCodes.RIGHT ||
       e.keyCode == goog.events.KeyCodes.UP   || e.keyCode == goog.events.KeyCodes.DOWN ||
       e.keyCode == goog.events.KeyCodes.TAB  || e.keyCode == goog.events.KeyCodes.BACKSPACE) {
@@ -46,7 +63,7 @@ input.Keyboard.prototype.keyPressed_ = function(e) {
  * @param {Event} e
  * @private
  */
-input.Keyboard.prototype.keyReleased_ = function(e) {
+input.Keyboard.prototype.keyUp_ = function(e) {
   this.keys_[e.keyCode] = false;
 };
 

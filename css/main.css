@@ -257,6 +257,60 @@ body {
 }
 
 /**************************************
+               HELP VIEW
+ **************************************/
+.help {
+  position: fixed;
+  top: 25px;
+  left: 50%;
+  border: 1px solid #222;
+  padding: 20px;
+  padding-top: 5px;
+  background: rgba(30, 30, 30, 0.75);
+  transform: translate(-50%, 0%);
+  transition: opacity 0.3s;
+  opacity: 0;
+}
+
+.help-visible {
+  opacity: 1;
+}
+
+.help td {
+  color: #777;
+  padding-bottom: 5px;
+  padding-right: 10px;
+}
+
+.help-key {
+  text-align: right;
+}
+
+.help caption {
+  white-space: nowrap;
+  font-family: 'SubSpace Large';
+  font-size: 14px;
+  color: #ccc;
+}
+
+.help-icon {
+  color: #000000;
+  font-family: Arial;
+  font-weight: bold;
+  font-smooth: always;
+  -webkit-font-smoothing: antialiased;
+  padding: 2px 4px;
+  background: #f4f7f8;
+  border-radius: 3px;
+  box-shadow: 0 3px 0 0 rgba(244, 247, 248, 0.4);
+  display: inline-block;
+  min-width: 20px;
+  min-height: 20px;
+  text-align: center;
+}
+
+
+/**************************************
               DEBUG VIEW
  **************************************/
 

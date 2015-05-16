@@ -133,6 +133,13 @@ ui.Chat.prototype.setRightPosition = function(position) {
   this.view_.style.right = position + 'px';
 };
 
+/**
+ * @return {boolean}
+ */
+ui.Chat.prototype.isChatBoxVisible = function() {
+  return this.chatBox_.classList.contains(ui.Chat.CHAT_BOX_VISIBLE_CLASS_NAME_);
+};
+
 ui.Chat.prototype.onGlobalKeyPress_ = function(event) {
   if (event.keyCode == goog.events.KeyCodes.NUM_ZERO) {
     this.view_.classList.toggle('cv-expanded');
@@ -177,7 +184,7 @@ ui.Chat.prototype.keyFilter_ = function(event) {
     return;
   }
 
-  if (this.isChatBoxVisible_()) {
+  if (this.isChatBoxVisible()) {
     event.stopPropagation();
   }
 };
@@ -194,12 +201,4 @@ ui.Chat.prototype.onNameClicked_ = function(player) {
     this.chatBox_.value += ' ';
   }
   this.chatBox_.value += '@' + player.getName();
-};
-
-/**
- * @return {boolean}
- * @private
- */
-ui.Chat.prototype.isChatBoxVisible_ = function() {
-  return this.chatBox_.classList.contains(ui.Chat.CHAT_BOX_VISIBLE_CLASS_NAME_);
 };

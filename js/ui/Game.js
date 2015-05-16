@@ -6,6 +6,7 @@ goog.require('goog.dom');
 goog.require('goog.events');
 goog.require('goog.events.BrowserEvent');
 goog.require('goog.events.EventType');
+goog.require('goog.events.KeyCodes');
 
 goog.require('html5.AnimationFrame');
 goog.require('html5.Notifications');
@@ -144,7 +145,7 @@ Game = function(protocol, resourceManager, settings, mapData, tileProperties) {
    * @private
    */
   this.chatView_ = new ui.Chat(this);
-  this.chatView_.addSystemMessage('Welcome to dotproduct! Select one of 8 ships with the 1-8 keys.');
+  this.chatView_.addSystemMessage('Welcome to dotproduct! Press ? for help.');
 
   /**
    * @type {!ui.Scoreboard}
@@ -208,6 +209,9 @@ Game = function(protocol, resourceManager, settings, mapData, tileProperties) {
   localPlayer.addListener(model.player.Player.Event.SHIP_CHANGE, this.onLocalPlayerShipChanged_.bind(this));
   localPlayer.addListener(model.player.Player.Event.COLLECT_PRIZE, this.onLocalPlayerCollectedPrize_.bind(this));
   localPlayer.addListener(model.player.Player.Event.DEATH, this.onLocalPlayerDied_.bind(this));
+
+  this.keyboard_.addListener(goog.events.KeyCodes.ESC, this.onEscapePressed_.bind(this));
+  this.keyboard_.addListener(goog.events.KeyCodes.QUESTION_MARK, this.onHelp_.bind(this));
 
   goog.events.listen(window, goog.events.EventType.RESIZE, this.onResize_.bind(this));
   goog.events.listen(this.canvas_, goog.events.EventType.MOUSEMOVE, this.onMouseMoved_.bind(this));
@@ -636,6 +640,24 @@ Game.prototype.onLocalPlayerCollectedPrize_ = function(player, prize) {
 
   if (message) {
     this.notifications_.addMessage(message);
+  }
+};
+
+/**
+ * @private
+ */
+Game.prototype.onEscapePressed_ = function() {
+  if (!this.chatView_.isChatBoxVisible()) {
+    goog.dom.getElement('help').classList.remove('help-visible');
+  }
+};
+
+/**
+ * @private
+ */
+Game.prototype.onHelp_ = function() {
+  if (!this.chatView_.isChatBoxVisible()) {
+    goog.dom.getElement('help').classList.toggle('help-visible');
   }
 };
 
