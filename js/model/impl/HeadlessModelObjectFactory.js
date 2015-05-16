@@ -7,8 +7,6 @@ goog.require('model.projectile.Bomb');
 goog.require('model.projectile.Bullet');
 goog.require('model.projectile.Burst');
 goog.require('model.projectile.Decoy');
-goog.require('model.projectile.Mine');
-
 
 /**
  * @constructor
@@ -42,13 +40,6 @@ model.impl.HeadlessModelObjectFactory.prototype.newBullet = function(game, owner
  */
 model.impl.HeadlessModelObjectFactory.prototype.newBomb = function(game, owner, level, position, velocity, lifetime, damage, bounceCount, blastRadius, proxRadius) {
   return new model.projectile.Bomb(game, owner, level, position, velocity, lifetime, damage, bounceCount, blastRadius, proxRadius);
-};
-
-/**
- * @override
- */
-model.impl.HeadlessModelObjectFactory.prototype.newMine = function(game, owner, level, position, lifetime, damage) {
-  return new model.projectile.Mine(game, owner, level, position, lifetime, damage);
 };
 
 /**

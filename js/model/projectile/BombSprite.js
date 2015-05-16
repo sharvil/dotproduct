@@ -34,7 +34,7 @@ model.projectile.BombSprite = function(game, bomb) {
    * @type {!graphics.Animation}
    * @private
    */
-  this.animation_ = game.getResourceManager().getSpriteSheet('bombs').getAnimation(level);
+  this.animation_ = game.getResourceManager().getSpriteSheet((bomb.isMine()) ? 'mines' : 'bombs').getAnimation(level);
   this.animation_.setRepeatCount(-1);
 
   /**
@@ -55,7 +55,7 @@ goog.inherits(model.projectile.BombSprite, model.ModelObject);
  */
 model.projectile.BombSprite.prototype.advanceTime = function() {
   // First advance and drop the trail.
-  if (Labs.BOMB_TRAILS) {
+  if (!this.bomb_.isMine() && Labs.BOMB_TRAILS) {
     var animation = this.game_.getResourceManager().getSpriteSheet('bombTrails').getAnimation(this.bomb_.getLevel());
     new model.Effect(this.game_, animation, this.bomb_.getPosition(), math.Vector.ZERO, graphics.Layer.TRAILS);
   }

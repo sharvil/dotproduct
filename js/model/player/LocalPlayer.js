@@ -330,36 +330,21 @@ model.player.LocalPlayer.prototype.getFiredWeapon_ = function() {
     }
   }
 
-  if (this.keyboard_.isKeyPressed(input.Keymap.FIRE_BOMB)) {
+  if (this.keyboard_.isKeyPressed(input.Keymap.FIRE_BOMB) || this.keyboard_.isKeyPressed(input.Keymap.FIRE_MINE)) {
     if (this.isSafe()) {
       this.velocity_ = math.Vector.ZERO;
       return null;
     } else {
       var angle = this.getAngle_();
-      var position = new math.Vector(0, -this.radius_).rotate(angle).add(this.position_);
+      var position = this.position_;
       var velocity = this.velocity_;
+      var isMine = this.keyboard_.isKeyPressed(input.Keymap.FIRE_MINE);
 
-      return this.bombBay_.fire(angle, position, velocity, function(fireEnergy, fireDelay, recoil) {
+      return this.bombBay_.fire(angle, position, velocity, isMine, function(fireEnergy, fireDelay, recoil) {
         if (self.energy_ > fireEnergy) {
           self.energy_ -= fireEnergy;
           self.projectileFireDelay_.setValue(fireDelay);
           self.velocity_ = self.velocity_.subtract(math.Vector.fromPolar(recoil, angle));
-          return true;
-        }
-        return false;
-      });
-    }
-  }
-
-  if (this.keyboard_.isKeyPressed(input.Keymap.FIRE_MINE)) {
-    if (this.isSafe()) {
-      this.velocity_ = math.Vector.ZERO;
-      return null;
-    } else {
-      return this.mineLayer_.fire(this.position_, function(fireEnergy, fireDelay) {
-        if (self.energy_ > fireEnergy) {
-          self.energy_ -= fireEnergy;
-          self.projectileFireDelay_.setValue(fireDelay);
           return true;
         }
         return false;

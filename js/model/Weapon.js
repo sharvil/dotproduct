@@ -25,7 +25,6 @@ model.Weapon.prototype.onFired = function(timeDiff, position, velocity, weaponDa
 model.Weapon.Type = {
   GUN: 1,
   BOMB: 2,
-  MINE: 3,
-  BURST: 4,
-  DECOY: 5
+  BURST: 3,
+  DECOY: 4
 };

@@ -53,6 +53,15 @@ goog.inherits(model.projectile.Bomb, model.projectile.Projectile);
 goog.mixin(model.projectile.Bomb.prototype, Listener.prototype);
 
 /**
+ * Returns whether or not this bomb is actually a mine.
+ *
+ * @return {boolean}
+ */
+model.projectile.Bomb.prototype.isMine = function() {
+  return this.velocity_.magnitude() == 0;
+};
+
+/**
  * @override
  */
 model.projectile.Bomb.prototype.checkPlayerCollision_ = function(player) {

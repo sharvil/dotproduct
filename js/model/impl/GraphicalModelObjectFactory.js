@@ -13,8 +13,6 @@ goog.require('model.projectile.Burst');
 goog.require('model.projectile.BurstSprite');
 goog.require('model.projectile.Decoy');
 goog.require('model.projectile.DecoySprite');
-goog.require('model.projectile.Mine');
-goog.require('model.projectile.MineSprite');
 
 /**
  * @constructor
@@ -58,16 +56,6 @@ model.impl.GraphicalModelObjectFactory.prototype.newBullet = function(game, owne
 model.impl.GraphicalModelObjectFactory.prototype.newBomb = function(game, owner, level, position, velocity, lifetime, damage, bounceCount, blastRadius, proxRadius) {
   var projectile = new model.projectile.Bomb(game, owner, level, position, velocity, lifetime, damage, bounceCount, blastRadius, proxRadius);
   var sprite = new model.projectile.BombSprite(game, projectile);
-
-  return projectile;
-};
-
-/**
- * @override
- */
-model.impl.GraphicalModelObjectFactory.prototype.newMine = function(game, owner, level, position, lifetime, damage) {
-  var projectile = new model.projectile.Mine(game, owner, level, position, lifetime, damage);
-  var sprite = new model.projectile.MineSprite(game, projectile);
 
   return projectile;
 };

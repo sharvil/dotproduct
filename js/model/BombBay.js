@@ -60,10 +60,11 @@ model.BombBay.prototype.upgrade = function() {
  * @param {number} angle
  * @param {!math.Vector} position
  * @param {!math.Vector} velocity
+ * @param {boolean} isMine
  * @param {function(number, number, number): boolean} commitFireFn
  * @return {Object}
  */
-model.BombBay.prototype.fire = function(angle, position, velocity, commitFireFn) {
+model.BombBay.prototype.fire = function(angle, position, velocity, isMine, commitFireFn) {
   var level = this.level_.getValue();
   if(level < 0) {
     return null;
@@ -71,7 +72,7 @@ model.BombBay.prototype.fire = function(angle, position, velocity, commitFireFn)
 
   var fireEnergy = this.getFireEnergy_();
   var fireDelay = this.getFireDelay_();
-  var recoilAcceleration = this.getRecoilAcceleration_();
+  var recoilAcceleration = isMine ? 0 : this.getRecoilAcceleration_();
 
   if (!commitFireFn(fireEnergy, fireDelay, recoilAcceleration)) {
     return null;
@@ -82,11 +83,16 @@ model.BombBay.prototype.fire = function(angle, position, velocity, commitFireFn)
   var bounceCount = this.getBounceCount_();
   var blastRadius = this.getBlastRadius_();
   var proxRadius = this.getProxRadius_();
-  var newVelocity = velocity.add(math.Vector.fromPolar(this.getBombSpeed_(), angle));
+  var newVelocity = isMine ? math.Vector.ZERO : velocity.add(math.Vector.fromPolar(this.getBombSpeed_(), angle));
   var projectile = this.game_.getModelObjectFactory().newBomb(this.game_, this.owner_, level, position, newVelocity, lifetime, damage, bounceCount, blastRadius, proxRadius);
 
   this.owner_.addProjectile(projectile);
-  this.game_.getResourceManager().playSound('bomb' + level);
+
+  if (isMine) {
+    this.game_.getResourceManager().playSound('mine' + level);
+  } else {
+    this.game_.getResourceManager().playSound('bomb' + level);
+  }
 
   return {
     'type': this.getType(),

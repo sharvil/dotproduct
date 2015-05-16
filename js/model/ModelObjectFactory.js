@@ -58,17 +58,6 @@ model.ModelObjectFactory.prototype.newBomb = goog.abstractMethod;
 /**
  * @param {!Game} game
  * @param {!model.player.Player} owner
- * @param {number} level
- * @param {!math.Vector} position
- * @param {number} lifetime
- * @param {number} damage
- * @return {!model.projectile.Mine}
- */
-model.ModelObjectFactory.prototype.newMine = goog.abstractMethod;
-
-/**
- * @param {!Game} game
- * @param {!model.player.Player} owner
  * @param {!math.Vector} position
  * @param {!math.Vector} velocity
  * @param {number} lifetime

@@ -11,7 +11,6 @@ goog.require('model.Burst');
 goog.require('model.Decoy');
 goog.require('model.Entity');
 goog.require('model.Gun');
-goog.require('model.MineLayer');
 goog.require('model.Weapon.Type');
 
 /**
@@ -50,12 +49,6 @@ model.player.Player = function(game, id, name, team, ship, bounty) {
    * @protected
    */
   this.bombBay_ = new model.BombBay(game, this.shipSettings_['bomb'], this);
-
-  /**
-   * @type {!model.MineLayer}
-   * @protected
-   */
-  this.mineLayer_ = new model.MineLayer(game, this.shipSettings_['bomb'], this);
 
   /**
    * @type {!model.Burst}
@@ -304,7 +297,6 @@ model.player.Player.prototype.setShip = function(ship) {
   this.shipSettings_ = this.settings_['ships'][this.ship_];
   this.gun_ = new model.Gun(this.game_, this.shipSettings_['bullet'], this);
   this.bombBay_ = new model.BombBay(this.game_, this.shipSettings_['bomb'], this);
-  this.mineLayer_ = new model.MineLayer(this.game_, this.shipSettings_['bomb'], this);
   this.burst_ = new model.Burst(this.game_, this.shipSettings_['burst'], this);
   this.decoy_ = new model.Decoy(this.game_, this.shipSettings_['decoy'], this);
 
@@ -335,9 +327,6 @@ model.player.Player.prototype.onWeaponFired = function(timeDiff, position, veloc
       break;
     case this.bombBay_.getType():
       this.bombBay_.onFired(timeDiff, position, velocity, weaponData);
-      break;
-    case this.mineLayer_.getType():
-      this.mineLayer_.onFired(timeDiff, position, velocity, weaponData);
       break;
     case this.burst_.getType():
       this.burst_.onFired(timeDiff, position, velocity, weaponData);
