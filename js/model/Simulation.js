@@ -26,7 +26,7 @@ model.Simulation = function(modelObjectFactory) {
    * @type {number}
    * @private
    */
-  this.timeMillis_ = goog.now();
+  this.timeMillis_ = 0;
 };
 
 /**
@@ -45,7 +45,14 @@ model.Simulation.prototype.unregisterObject = function(obj) {
 };
 
 model.Simulation.prototype.advanceTime = function() {
-  this.timeMillis_ += time.Timer.ticksToMillis(1);
+  // Start counting time from the first tick of the simulation instead of
+  // when this object was constructed. Doing it this way makes sure we don't
+  // have a clock bias due to the delay from object construction -> first tick.
+  if (!this.timeMillis_) {
+    this.timeMillis_ = goog.now();
+  } else {
+    this.timeMillis_ += time.Timer.ticksToMillis(1);
+  }
 
   /** @type {!Array.<!model.ModelObject>} */
   var objectSnapshot = goog.array.clone(this.registeredObjects_);
