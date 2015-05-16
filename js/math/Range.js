@@ -88,6 +88,20 @@ math.Range.prototype.setHigh = function() {
 /**
  * @return {number}
  */
+math.Range.prototype.getLow = function() {
+  return this.low_;
+};
+
+/**
+ * @return {number}
+ */
+math.Range.prototype.getHigh = function() {
+  return this.high_;
+};
+
+/**
+ * @return {number}
+ */
 math.Range.prototype.getValue = function() {
   return this.value_;
 };

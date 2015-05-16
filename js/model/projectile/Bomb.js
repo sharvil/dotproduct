@@ -89,19 +89,24 @@ model.projectile.Bomb.prototype.explode_ = function(hitPlayer) {
   this.velocity_ = math.Vector.ZERO;
   this.lifetime_ = 0;
 
-  // Figure out how much damage the local player is going to take from this bomb explosion.
-  var damageRatio;
   var localPlayer = this.game_.getPlayerIndex().getLocalPlayer();
-  if (hitPlayer == localPlayer) {
-    damageRatio = 1;
-  } else {
+  var viewport = this.game_.getViewport();
+
+  // Figure out how much damage the local player is going to take from this bomb explosion.
+  var damage = this.damage_;
+  if (hitPlayer != localPlayer) {
     var normDistance = this.position_.subtract(localPlayer.getPosition()).magnitude() / this.blastRadius_;
-    damageRatio = Math.max(1 - normDistance, 0);
+    damage *= Math.max(1 - normDistance, 0);
   }
 
-  localPlayer.onDamage(this.owner_, this, this.damage_ * damageRatio);
+  if (damage > 0) {
+    localPlayer.onDamage(this.owner_, this, damage);
 
-  if (this.game_.getViewport().contains(this.position_)) {
+    // TODO: get jitter ticks from settings.
+    viewport.jitter(72);
+  }
+
+  if (viewport.contains(this.position_)) {
     this.game_.getResourceManager().playSound('explodeBomb');
   }
 };

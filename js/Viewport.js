@@ -1,5 +1,7 @@
 goog.provide('Viewport');
 
+goog.require('math.Range');
+
 /**
  * @constructor
  * @param {!Game} game
@@ -29,6 +31,32 @@ Viewport = function(game, context) {
    * @private
    */
   this.followingPlayer_;
+
+  /**
+   * @type {!math.Range}
+   * @private
+   */
+  this.jitterTime_ = new math.Range(0, 1, 1);
+};
+
+/**
+ * Maximum number of pixels the viewport can be offset by during jitter.
+ *
+ * @type {number}
+ * @private
+ * @const
+ */
+Viewport.MAX_JITTER_MAGNITUDE_ = 8;
+
+/**
+ * Shakes the viewport around the local player for the amount of time specified
+ * in |ticks|.
+ *
+ * @param {number} ticks
+ */
+Viewport.prototype.jitter = function(ticks) {
+  this.jitterTime_ = new math.Range(0, ticks, 1);
+  this.jitterTime_.setHigh();
 };
 
 /**
@@ -46,6 +74,8 @@ Viewport.prototype.update = function() {
   var position = this.followingPlayer_.getPosition();
   this.x_ = Math.floor(position.getX());
   this.y_ = Math.floor(position.getY());
+
+  this.jitterTime_.decrement();
 };
 
 /**
@@ -56,15 +86,19 @@ Viewport.prototype.getDimensions = function() {
   var width = this.context_.canvas.width / ratio;
   var height = this.context_.canvas.height / ratio;
 
+  var magnitude = this.jitterTime_.getValue() / this.jitterTime_.getHigh() * Viewport.MAX_JITTER_MAGNITUDE_;
+  var x = this.x_ + Math.floor((Math.random() - 0.5) * 2 * magnitude);
+  var y = this.y_ + Math.floor((Math.random() - 0.5) * 2 * magnitude);
+
   return {
-    x: this.x_,
-    y: this.y_,
+    x: x,
+    y: y,
     width: width,
     height: height,
-    left: this.x_ - Math.floor(width / 2),
-    right: this.x_ + Math.floor(width / 2),
-    top: this.y_ - Math.floor(height / 2),
-    bottom: this.y_ + Math.floor(height / 2)
+    left: x - Math.floor(width / 2),
+    right: x + Math.floor(width / 2),
+    top: y - Math.floor(height / 2),
+    bottom: y + Math.floor(height / 2)
   };
 };
 
