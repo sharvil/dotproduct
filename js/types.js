@@ -1,6 +1,16 @@
 goog.provide('ObjectType');
 goog.provide('PrizeType');
 goog.provide('TileType');
+goog.provide('ToggleState');
+
+/**
+ * @enum {number}
+ */
+ToggleState = {
+  UNAVAILABLE: 0,
+  DISABLED: 1,
+  ENABLED: 2
+};
 
 /**
  * @enum {number}

@@ -4,6 +4,7 @@ goog.require('goog.asserts');
 goog.require('math.Range');
 goog.require('model.projectile.BulletGroup');
 goog.require('model.Weapon.Type');
+goog.require('ToggleState');
 
 /**
  * @constructor
@@ -45,16 +46,10 @@ model.Gun = function(game, gunSettings, owner) {
   this.bouncingBullets_ = false;
 
   /**
-   * @type {boolean}
+   * @type {ToggleState}
    * @private
    */
-  this.hasMultifire_ = false;
-
-  /**
-   * @type {boolean}
-   * @private
-   */
-  this.isMultifireEnabled_ = false;
+  this.multifireState_ = ToggleState.UNAVAILABLE;
 };
 
 /**
@@ -88,19 +83,30 @@ model.Gun.prototype.setBounces = function(bounces) {
  */
 model.Gun.prototype.grantMultifire = function() {
   // If multifire is a newly granted capability, enable it by default.
-  if (!this.hasMultifire_) {
-    this.hasMultifire_ = this.isMultifireEnabled_ = !!this.gunSettings_['multifire'];
+  if (this.multifireState_ == ToggleState.UNAVAILABLE && this.gunSettings_['multifire']) {
+    this.multifireState_ = ToggleState.ENABLED;
   }
 };
 
 /**
- * Enables or disables multifire bullets on the gun. If the gun doesn't have
- * multifire, this function won't enable multifire.
+ * @return {ToggleState}
+ */
+model.Gun.prototype.getMultifireState = function() {
+  return this.multifireState_;
+};
+
+/**
+ * Toggles multifire bullets on the gun. This function won't enable multifire if
+ * it's not available.
  *
  * @param {boolean} enabled
  */
-model.Gun.prototype.setMultifireEnabled = function(enabled) {
-  this.isMultifireEnabled_ = this.hasMultifire_ && enabled;
+model.Gun.prototype.toggleMultifire = function() {
+  if (this.multifireState_ == ToggleState.ENABLED) {
+    this.multifireState_ = ToggleState.DISABLED;
+  } else if (this.multifireState_ == ToggleState.DISABLED) {
+    this.multifireState_ = ToggleState.ENABLED;
+  }
 };
 
 /**
@@ -124,7 +130,7 @@ model.Gun.prototype.fire = function(angle, position, velocity, commitFireFn) {
   var damage = this.getDamage_();
   var bounceCount = this.getBounceCount_();
   var bulletSpeed = this.getBulletSpeed_();
-  var multifireAngle = this.isMultifireEnabled_ ? this.gunSettings_['multifire']['angle'] : 0;
+  var multifireAngle = (this.multifireState_ == ToggleState.ENABLED) ? this.gunSettings_['multifire']['angle'] : 0;
 
   var bullets = [];
   if (this.gunSettings_['doubleBarrel']) {
@@ -139,7 +145,7 @@ model.Gun.prototype.fire = function(angle, position, velocity, commitFireFn) {
     bullets.push(factory.newBullet(this.game_, this.owner_, level, position, bulletVelocity, lifetime, damage, bounceCount));
   }
 
-  if (this.isMultifireEnabled_) {
+  if (this.multifireState_ == ToggleState.ENABLED) {
     var leftVelocity = velocity.add(math.Vector.fromPolar(bulletSpeed, angle - multifireAngle));
     var rightVelocity = velocity.add(math.Vector.fromPolar(bulletSpeed, angle + multifireAngle));
     bullets.push(factory.newBullet(this.game_, this.owner_, level, position, leftVelocity, lifetime, damage, bounceCount));
@@ -158,7 +164,7 @@ model.Gun.prototype.fire = function(angle, position, velocity, commitFireFn) {
     'angle': angle,
     'level': level,
     'bounceCount': bounceCount,
-    'multifire': this.isMultifireEnabled_
+    'multifire': this.multifireState_ == ToggleState.ENABLED
   }
 };
 
@@ -221,7 +227,7 @@ model.Gun.prototype.onFired = function(timeDiff, position, velocity, weaponData)
  * @private
  */
 model.Gun.prototype.getFireDelay_ = function() {
-  if (this.isMultifireEnabled_) {
+  if (this.multifireState_ == ToggleState.ENABLED) {
     return this.gunSettings_['multifire']['fireDelay'];
   }
   return this.gunSettings_['fireDelay'];
@@ -232,7 +238,7 @@ model.Gun.prototype.getFireDelay_ = function() {
  * @private
  */
 model.Gun.prototype.getFireEnergy_ = function() {
-  var baseEnery = this.isMultifireEnabled_
+  var baseEnery = this.multifireState_ == ToggleState.ENABLED
       ? this.gunSettings_['multifire']['fireEnergy']
       : this.gunSettings_['fireEnergy'];
   return baseEnery * (this.level_.getValue() + 1);

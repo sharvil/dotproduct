@@ -37,6 +37,11 @@ input.Keyboard.prototype.isKeyPressed = function(keyCode) {
  * @private
  */
 input.Keyboard.prototype.keyPressed_ = function(e) {
+  // Translate lowercase character codes to uppercase character codes since
+  // Google Closure doesn't provide keycode names for lowercase characters.
+  if (e.keyCode >= 'a'.charCodeAt(0) && e.keyCode <= 'z'.charCodeAt(0)) {
+    e.keyCode += 'A'.charCodeAt(0) - 'a'.charCodeAt(0);
+  }
   this.fireEvent_(e.keyCode);
 };
 

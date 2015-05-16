@@ -17,5 +17,7 @@ input.Keymap = {
   FIRE_BURST: goog.events.KeyCodes.G,
   FIRE_DECOY: goog.events.KeyCodes.D,
 
+  TOGGLE_MULTIFIRE: goog.events.KeyCodes.M,
+
   AFTERBURNER: goog.events.KeyCodes.A
 };

@@ -1,6 +1,7 @@
 goog.provide('model.player.LocalPlayerSprite');
 
 goog.require('goog.array');
+goog.require('model.player.LocalPlayer.Event');
 goog.require('model.player.Player.Event');
 goog.require('model.player.PlayerSprite');
 goog.require('graphics.Layer');
@@ -23,6 +24,7 @@ model.player.LocalPlayerSprite = function(game, localPlayer) {
 
   localPlayer.addListener(model.player.Player.Event.COLLECT_PRIZE, this.collectPrize_.bind(this));
   localPlayer.addListener(model.player.Player.Event.BOUNCE, this.bounce_.bind(this));
+  localPlayer.addListener(model.player.LocalPlayer.Event.TOGGLE_MULTIFIRE, this.toggleMultifire_.bind(this));
 };
 goog.inherits(model.player.LocalPlayerSprite, model.player.PlayerSprite);
 
@@ -92,4 +94,16 @@ model.player.LocalPlayerSprite.prototype.bounce_ = function(player) {
   if (player.getVelocity().magnitude() > 1) {
     this.resourceManager_.playSound('bounce');
   }
+};
+
+/**
+ * Called when the local player toggles multifire.
+ *
+ * @param {!model.player.LocalPlayer} player
+ * @param {boolean} enabled
+ * @private
+ */
+model.player.LocalPlayerSprite.prototype.toggleMultifire_ = function(player, enabled) {
+  var resource = enabled ? 'multion' : 'multioff';
+  this.resourceManager_.playSound(resource);
 };

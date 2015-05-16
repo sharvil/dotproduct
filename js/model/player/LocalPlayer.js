@@ -1,4 +1,5 @@
 goog.provide('model.player.LocalPlayer');
+goog.provide('model.player.LocalPlayer.Event');
 
 goog.require('goog.asserts');
 goog.require('goog.events');
@@ -13,6 +14,7 @@ goog.require('model.projectile.Bullet');
 goog.require('model.Exhaust');
 goog.require('model.player.Player');
 goog.require('PrizeType');
+goog.require('ToggleState');
 
 /**
  * @constructor
@@ -24,7 +26,6 @@ goog.require('PrizeType');
  * @param {number} ship
  */
 model.player.LocalPlayer = function(game, id, name, team, ship) {
-
   /**
    * @type {!math.Range}
    * @private
@@ -61,9 +62,24 @@ model.player.LocalPlayer = function(game, id, name, team, ship) {
    */
   this.exhaustTimer_ = new math.Range(0, 6, 1);
 
+  /**
+   * @type {!input.Keyboard}
+   * @private
+   */
+  this.keyboard_ = game.getKeyboard();
+
+  this.keyboard_.addListener(goog.events.KeyCodes.M, this.onToggleMultifire_.bind(this));
+
   goog.base(this, game, id, name, team, ship, 0 /* bounty */);
 };
 goog.inherits(model.player.LocalPlayer, model.player.Player);
+
+/**
+ * @enum {string}
+ */
+model.player.LocalPlayer.Event = {
+  TOGGLE_MULTIFIRE: 'multifire',
+};
 
 /**
  * TODO: split exhaust into the standard model/view classes and don't expose
@@ -188,7 +204,6 @@ model.player.LocalPlayer.prototype.clearPresence = function(presence) {
  */
 model.player.LocalPlayer.prototype.advanceTime = function() {
   var forceSendUpdate = false;
-  var keyboard = this.game_.getKeyboard();
   var isSafe = this.isSafe();
 
   --this.respawnTimer_;
@@ -210,7 +225,7 @@ model.player.LocalPlayer.prototype.advanceTime = function() {
   if (this.shipChangeDelay_.isLow()) {
     for (var i = 0; i < this.settings_['ships'].length; ++i) {
       var keycode = /** @type {goog.events.KeyCodes} */ (goog.events.KeyCodes.ONE + i);
-      if (keyboard.isKeyPressed(keycode)) {
+      if (this.keyboard_.isKeyPressed(keycode)) {
         if (i != this.ship_) {
           if (this.energy_ >= this.maxEnergy_) {
             this.setShip(i);
@@ -230,9 +245,9 @@ model.player.LocalPlayer.prototype.advanceTime = function() {
   var oldVelocity = this.velocity_;
 
   var shipRotation = this.shipSettings_['rotationRadiansPerTick'];
-  if (keyboard.isKeyPressed(input.Keymap.ROTATE_RIGHT)) {
+  if (this.keyboard_.isKeyPressed(input.Keymap.ROTATE_RIGHT)) {
     this.angleInRadians_ += shipRotation;
-  } else if (keyboard.isKeyPressed(input.Keymap.ROTATE_LEFT)) {
+  } else if (this.keyboard_.isKeyPressed(input.Keymap.ROTATE_LEFT)) {
     this.angleInRadians_ -= shipRotation;
   }
 
@@ -244,16 +259,16 @@ model.player.LocalPlayer.prototype.advanceTime = function() {
   var maximumSpeed = this.shipSettings_['speedPixelsPerTick'];
   var acceleration = this.shipSettings_['accelerationPerTick'];
   var accelerationEnergy = 0;
-  if (keyboard.isKeyPressed(input.Keymap.AFTERBURNER) && this.energy_ > this.shipSettings_['afterburnerEnergy']) {
+  if (this.keyboard_.isKeyPressed(input.Keymap.AFTERBURNER) && this.energy_ > this.shipSettings_['afterburnerEnergy']) {
     maximumSpeed = this.shipSettings_['afterburnerMaxSpeed'];
     acceleration = this.shipSettings_['afterburnerAcceleration'];
     accelerationEnergy = this.shipSettings_['afterburnerEnergy'];
   }
 
-  if (keyboard.isKeyPressed(input.Keymap.REVERSE_THRUST)) {
+  if (this.keyboard_.isKeyPressed(input.Keymap.REVERSE_THRUST)) {
     this.applyThrust_(math.Vector.fromPolar(acceleration, angle).scale(-1));
     this.energy_ -= accelerationEnergy;
-  } else if (keyboard.isKeyPressed(input.Keymap.FORWARD_THRUST)) {
+  } else if (this.keyboard_.isKeyPressed(input.Keymap.FORWARD_THRUST)) {
     this.applyThrust_(math.Vector.fromPolar(acceleration, angle));
     this.energy_ -= accelerationEnergy;
   }
@@ -294,9 +309,8 @@ model.player.LocalPlayer.prototype.getFiredWeapon_ = function() {
   }
 
   var self = this;
-  var keyboard = this.game_.getKeyboard();
 
-  if (keyboard.isKeyPressed(input.Keymap.FIRE_GUN)) {
+  if (this.keyboard_.isKeyPressed(input.Keymap.FIRE_GUN)) {
     if (this.isSafe()) {
       this.velocity_ = math.Vector.ZERO;
       return null;
@@ -316,7 +330,7 @@ model.player.LocalPlayer.prototype.getFiredWeapon_ = function() {
     }
   }
 
-  if (keyboard.isKeyPressed(input.Keymap.FIRE_BOMB)) {
+  if (this.keyboard_.isKeyPressed(input.Keymap.FIRE_BOMB)) {
     if (this.isSafe()) {
       this.velocity_ = math.Vector.ZERO;
       return null;
@@ -337,7 +351,7 @@ model.player.LocalPlayer.prototype.getFiredWeapon_ = function() {
     }
   }
 
-  if (keyboard.isKeyPressed(input.Keymap.FIRE_MINE)) {
+  if (this.keyboard_.isKeyPressed(input.Keymap.FIRE_MINE)) {
     if (this.isSafe()) {
       this.velocity_ = math.Vector.ZERO;
       return null;
@@ -353,7 +367,7 @@ model.player.LocalPlayer.prototype.getFiredWeapon_ = function() {
     }
   }
 
-  if (keyboard.isKeyPressed(input.Keymap.FIRE_BURST)) {
+  if (this.keyboard_.isKeyPressed(input.Keymap.FIRE_BURST)) {
     if (this.isSafe()) {
       this.velocity_ = math.Vector.ZERO;
       return null;
@@ -365,7 +379,7 @@ model.player.LocalPlayer.prototype.getFiredWeapon_ = function() {
     }
   }
 
-  if (keyboard.isKeyPressed(input.Keymap.FIRE_DECOY)) {
+  if (this.keyboard_.isKeyPressed(input.Keymap.FIRE_DECOY)) {
     if (this.isSafe()) {
       this.velocity_ = math.Vector.ZERO;
       return null;
@@ -430,6 +444,15 @@ model.player.LocalPlayer.prototype.sendPositionUpdate_ = function(forceSendUpdat
  */
 model.player.LocalPlayer.prototype.getAngle_ = function() {
   return 2 * Math.PI * this.getDirection() / model.player.Player.DIRECTION_STEPS;
+};
+
+model.player.LocalPlayer.prototype.onToggleMultifire_ = function() {
+  this.gun_.toggleMultifire();
+
+  var state = this.gun_.getMultifireState();
+  if (state != ToggleState.UNAVAILABLE) {
+    this.fireEvent_(model.player.LocalPlayer.Event.TOGGLE_MULTIFIRE, state == ToggleState.ENABLED);
+  }
 };
 
 /**

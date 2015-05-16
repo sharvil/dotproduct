@@ -390,6 +390,14 @@
       "url": "data/shared/sounds/mine3.wav"
     },
 
+    "multion": {
+      "url": "data/shared/sounds/multion.wav"
+    },
+
+    "multioff": {
+      "url": "data/shared/sounds/multioff.wav"
+    },
+
     "prize": {
 		  "url": "data/shared/sounds/prize.wav"
 	  }
