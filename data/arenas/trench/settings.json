@@ -38,7 +38,7 @@
       "afterburnerAcceleration": 0.024, 
       "afterburnerEnergy": 5.5, 
       "rechargeRate": 4.0, 
-      "respawnDelay": 500, 
+      "respawnDelay": 400, 
       "bullet": {
         "fireEnergy": 450, 
         "speed": 5.0, 
@@ -96,7 +96,7 @@
       "afterburnerAcceleration": 0.024, 
       "afterburnerEnergy": 5.0, 
       "rechargeRate": 1.5, 
-      "respawnDelay": 500, 
+      "respawnDelay": 400, 
       "bullet": {
         "fireEnergy": 300, 
         "speed": -0.9, 
@@ -159,7 +159,7 @@
       "afterburnerAcceleration": 0.024, 
       "afterburnerEnergy": 6.2, 
       "rechargeRate": 2.5, 
-      "respawnDelay": 500, 
+      "respawnDelay": 400, 
       "bullet": {
         "fireEnergy": 225, 
         "speed": 4.0, 
@@ -217,7 +217,7 @@
       "afterburnerAcceleration": 0.024, 
       "afterburnerEnergy": 12.0, 
       "rechargeRate": 1.1, 
-      "respawnDelay": 500, 
+      "respawnDelay": 400, 
       "bullet": {
         "fireEnergy": 400, 
         "speed": 1.0, 
@@ -280,7 +280,7 @@
       "afterburnerAcceleration": 0.024, 
       "afterburnerEnergy": 4.0, 
       "rechargeRate": 1.8, 
-      "respawnDelay": 500, 
+      "respawnDelay": 400, 
       "bullet": {
         "fireEnergy": 400, 
         "speed": 0.8, 
@@ -343,7 +343,7 @@
       "afterburnerAcceleration": 0.024, 
       "afterburnerEnergy": 3.6, 
       "rechargeRate": 1.5, 
-      "respawnDelay": 500, 
+      "respawnDelay": 400, 
       "bullet": {
         "fireEnergy": 208, 
         "speed": 1.0, 
@@ -406,7 +406,7 @@
       "afterburnerAcceleration": 0.028, 
       "afterburnerEnergy": 4.25, 
       "rechargeRate": 2.5, 
-      "respawnDelay": 500, 
+      "respawnDelay": 400, 
       "bullet": {
         "fireEnergy": 310, 
         "speed": 3.65, 
@@ -469,7 +469,7 @@
       "afterburnerAcceleration": 0.024, 
       "afterburnerEnergy": 4.0, 
       "rechargeRate": 1.5, 
-      "respawnDelay": 500, 
+      "respawnDelay": 400, 
       "bullet": {
         "fireEnergy": 32000, 
         "speed": 0.001, 
