@@ -16,6 +16,7 @@ input.Keymap = {
   FIRE_MINE: goog.events.KeyCodes.V,
   FIRE_BURST: goog.events.KeyCodes.G,
   FIRE_DECOY: goog.events.KeyCodes.D,
+  FIRE_REPEL: goog.events.KeyCodes.R,
 
   TOGGLE_MULTIFIRE: goog.events.KeyCodes.M,
 

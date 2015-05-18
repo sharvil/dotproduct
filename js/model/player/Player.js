@@ -11,6 +11,7 @@ goog.require('model.Burst');
 goog.require('model.Decoy');
 goog.require('model.Entity');
 goog.require('model.Gun');
+goog.require('model.Repel');
 goog.require('model.Weapon.Type');
 
 /**
@@ -61,6 +62,12 @@ model.player.Player = function(game, id, name, team, ship, bounty) {
    * @protected
    */
   this.decoy_ = new model.Decoy(game, this.shipSettings_['decoy'], this);
+
+  /**
+   * @type {!model.Repel}
+   * @private
+   */
+  this.repel_ = new model.Repel(game, this.shipSettings_['repel'], this);
 
   /**
    * @type {string}
@@ -299,6 +306,7 @@ model.player.Player.prototype.setShip = function(ship) {
   this.bombBay_ = new model.BombBay(this.game_, this.shipSettings_['bomb'], this);
   this.burst_ = new model.Burst(this.game_, this.shipSettings_['burst'], this);
   this.decoy_ = new model.Decoy(this.game_, this.shipSettings_['decoy'], this);
+  this.repel_ = new model.Repel(this.game_, this.shipSettings_['repel'], this);
 
   this.position_ = math.Vector.ZERO;
   this.velocity_ = math.Vector.ZERO;
@@ -333,6 +341,9 @@ model.player.Player.prototype.onWeaponFired = function(timeDiff, position, veloc
       break;
     case this.decoy_.getType():
       this.decoy_.onFired(timeDiff, position, velocity, weaponData);
+      break;
+    case this.repel_.getType():
+      this.repel_.onFired(timeDiff, position, velocity, weaponData);
       break;
     default:
       break;
@@ -394,6 +405,20 @@ model.player.Player.prototype.onScoreUpdate = function(points, wins, losses) {
 model.player.Player.prototype.onPrizeCollected = function(prize) {
   ++this.bounty_;
   this.fireEvent_(model.player.Player.Event.COLLECT_PRIZE, prize);
+};
+
+/**
+ * This function is called when a repel is active and may affect the player and
+ * their projectiles.
+ *
+ * @param {!model.projectile.Repel} repel
+ */
+model.player.Player.prototype.onRepelled = function(repel) {
+  this.velocity_ = repel.apply(this.position_, this.velocity_);
+
+  for (var i = 0; i < this.projectiles_.length; ++i) {
+    this.projectiles_[i].onRepelled(repel);
+  }
 };
 
 /**

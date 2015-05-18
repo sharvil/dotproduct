@@ -232,6 +232,14 @@
       "period": 3
     },
 
+    "repel": {
+      "url": "data/shared/graphics/repel.png",
+      "xTiles": 5,
+      "yTiles": 2,
+      "frames": 10,
+      "period": 5
+    },
+
     "anim0": {
       "url": "data/shared/graphics/prize.png",
       "xTiles": 10,
@@ -360,6 +368,10 @@
 
     "prize": {
 		  "url": "data/shared/sounds/prize.wav"
-	  }
+	  },
+
+    "repel": {
+      "url": "data/shared/sounds/repel.wav"
+    }
   }
 }

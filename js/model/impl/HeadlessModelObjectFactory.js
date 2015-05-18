@@ -7,6 +7,7 @@ goog.require('model.projectile.Bomb');
 goog.require('model.projectile.Bullet');
 goog.require('model.projectile.Burst');
 goog.require('model.projectile.Decoy');
+goog.require('model.projectile.Repel');
 
 /**
  * @constructor
@@ -54,4 +55,11 @@ model.impl.HeadlessModelObjectFactory.prototype.newBurst = function(game, owner,
  */
 model.impl.HeadlessModelObjectFactory.prototype.newDecoy = function(game, owner, position, velocity, lifetime) {
   return new model.projectile.Decoy(game, owner, position, velocity, lifetime);
+};
+
+/**
+ * @override
+ */
+model.impl.HeadlessModelObjectFactory.prototype.newRepel = function(game, owner, position, lifetime, distance, speed) {
+  return new model.projectile.Decoy(game, owner, position, lifetime, distance, speed);
 };

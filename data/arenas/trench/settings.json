@@ -82,6 +82,14 @@
         "lifetime": 10000, 
         "initialCount": 0, 
         "maxCount": 3
+      }, 
+      "repel": {
+        "fireDelay": 50, 
+        "initialCount": 0, 
+        "maxCount": 0, 
+        "lifetime": 150, 
+        "distance": 150, 
+        "speed": 1.2
       }
     }, 
     {
@@ -145,6 +153,14 @@
         "lifetime": 10000, 
         "initialCount": 0, 
         "maxCount": 3
+      }, 
+      "repel": {
+        "fireDelay": 50, 
+        "initialCount": 0, 
+        "maxCount": 0, 
+        "lifetime": 150, 
+        "distance": 150, 
+        "speed": 1.2
       }
     }, 
     {
@@ -203,6 +219,14 @@
         "lifetime": 10000, 
         "initialCount": 0, 
         "maxCount": 3
+      }, 
+      "repel": {
+        "fireDelay": 50, 
+        "initialCount": 0, 
+        "maxCount": 0, 
+        "lifetime": 150, 
+        "distance": 150, 
+        "speed": 1.2
       }
     }, 
     {
@@ -266,6 +290,14 @@
         "lifetime": 10000, 
         "initialCount": 0, 
         "maxCount": 3
+      }, 
+      "repel": {
+        "fireDelay": 50, 
+        "initialCount": 0, 
+        "maxCount": 1, 
+        "lifetime": 150, 
+        "distance": 150, 
+        "speed": 1.2
       }
     }, 
     {
@@ -329,6 +361,14 @@
         "lifetime": 10000, 
         "initialCount": 0, 
         "maxCount": 3
+      }, 
+      "repel": {
+        "fireDelay": 50, 
+        "initialCount": 0, 
+        "maxCount": 0, 
+        "lifetime": 150, 
+        "distance": 150, 
+        "speed": 1.2
       }
     }, 
     {
@@ -392,6 +432,14 @@
         "lifetime": 10000, 
         "initialCount": 0, 
         "maxCount": 1
+      }, 
+      "repel": {
+        "fireDelay": 50, 
+        "initialCount": 1, 
+        "maxCount": 1, 
+        "lifetime": 150, 
+        "distance": 150, 
+        "speed": 1.2
       }
     }, 
     {
@@ -455,6 +503,14 @@
         "lifetime": 10000, 
         "initialCount": 0, 
         "maxCount": 3
+      }, 
+      "repel": {
+        "fireDelay": 50, 
+        "initialCount": 0, 
+        "maxCount": 0, 
+        "lifetime": 150, 
+        "distance": 150, 
+        "speed": 1.2
       }
     }, 
     {
@@ -513,6 +569,14 @@
         "lifetime": 10000, 
         "initialCount": 0, 
         "maxCount": 3
+      }, 
+      "repel": {
+        "fireDelay": 50, 
+        "initialCount": 3, 
+        "maxCount": 3, 
+        "lifetime": 150, 
+        "distance": 150, 
+        "speed": 1.2
       }
     }
   ]

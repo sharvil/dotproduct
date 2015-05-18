@@ -99,6 +99,15 @@ model.projectile.Projectile.prototype.advanceTime = function() {
 };
 
 /**
+ * This function is called when a repel may affect the projectile.
+ *
+ * @param {!model.projectile.Repel} repel
+ */
+model.projectile.Projectile.prototype.onRepelled = function(repel) {
+  this.velocity_ = repel.apply(this.position_, this.velocity_);
+};
+
+/**
  * @override
  */
 model.projectile.Projectile.prototype.bounce_ = function() {

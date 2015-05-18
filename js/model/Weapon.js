@@ -26,5 +26,6 @@ model.Weapon.Type = {
   GUN: 1,
   BOMB: 2,
   BURST: 3,
-  DECOY: 4
+  DECOY: 4,
+  REPEL: 5
 };

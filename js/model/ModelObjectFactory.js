@@ -75,3 +75,13 @@ model.ModelObjectFactory.prototype.newBurst = goog.abstractMethod;
  * @return {!model.projectile.Decoy}
  */
 model.ModelObjectFactory.prototype.newDecoy = goog.abstractMethod;
+
+/**
+ * @param {!Game} game
+ * @param {!model.player.Player} player
+ * @param {!math.Vector} position
+ * @param {number} lifetime
+ * @param {number} distance
+ * @param {number} speed
+ */
+model.ModelObjectFactory.prototype.newRepel = goog.abstractMethod;

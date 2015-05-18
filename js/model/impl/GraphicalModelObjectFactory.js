@@ -13,6 +13,8 @@ goog.require('model.projectile.Burst');
 goog.require('model.projectile.BurstSprite');
 goog.require('model.projectile.Decoy');
 goog.require('model.projectile.DecoySprite');
+goog.require('model.projectile.Repel');
+goog.require('model.projectile.RepelSprite');
 
 /**
  * @constructor
@@ -76,6 +78,16 @@ model.impl.GraphicalModelObjectFactory.prototype.newBurst = function(game, owner
 model.impl.GraphicalModelObjectFactory.prototype.newDecoy = function(game, owner, position, velocity, lifetime) {
   var projectile = new model.projectile.Decoy(game, owner, position, velocity, lifetime);
   var sprite = new model.projectile.DecoySprite(game, projectile);
+
+  return projectile;
+};
+
+/**
+ * @override
+ */
+model.impl.GraphicalModelObjectFactory.prototype.newRepel = function(game, owner, position, lifetime, distance, speed) {
+  var projectile = new model.projectile.Repel(game, owner, position, lifetime, distance, speed);
+  var sprite = new model.projectile.RepelSprite(game, projectile);
 
   return projectile;
 };
