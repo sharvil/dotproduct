@@ -77,7 +77,7 @@ model.projectile.BombSprite.prototype.render = function(viewport) {
   var x = Math.floor(this.bomb_.getPosition().getX() - dimensions.left - this.animation_.getWidth() / 2);
   var y = Math.floor(this.bomb_.getPosition().getY() - dimensions.top - this.animation_.getHeight() / 2);
 
-  if(this.bomb_.isBouncing()) {
+  if (!this.bomb_.isMine() && this.bomb_.isBouncing()) {
     this.bouncingAnimation_.render(viewport.getContext(), x, y);
   } else {
     this.animation_.render(viewport.getContext(), x, y);
