@@ -91,6 +91,10 @@ Application.prototype.onLoadComplete_ = function() {
 
 var _main = function() {
   var settings = window.toObject(window.location.hash.substr(1));
-  new Application(settings, 'ws://' + window.location.host + '/dotproduct/v1/' + settings['arena']);
+  var socketUri = 'ws://' + window.location.host + '/dotproduct/v1/' + settings['arena'];
+  if (window.location.protocol == 'https:') {
+    socketUri = socketUri.replace('ws://', 'wss://');
+  }
+  new Application(settings, socketUri);
   window.location.hash = '';
 };
