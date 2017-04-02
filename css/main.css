@@ -12,42 +12,45 @@
 
 @font-face {
   font-family: 'SubSpace Tiny';
-  src: url('../data/shared/fonts/Tiny.eot');
-  src: local('☺'),
-       url('../data/shared/fonts/Tiny.ttf') format('truetype');
+  src: url('../data/shared/fonts/Tiny.eot') format('eot');
+  src: url('../data/shared/fonts/Tiny.ttf') format('truetype');
 }
 
 @font-face {
   font-family: 'SubSpace Small';
-  src: url('../data/shared/fonts/Small.eot');
-  src: local('☺'),
-       url('../data/shared/fonts/Small.ttf') format('truetype');
+  src: url('../data/shared/fonts/Small.eot') format('eot');
+  src: url('../data/shared/fonts/Small.ttf') format('truetype');
 }
 
 @font-face {
   font-family: 'SubSpace Regular';
-  src: url('../data/shared/fonts/Regular.eot');
-  src: local('☺'),
-       url('../data/shared/fonts/Regular.ttf') format('truetype');
+  src: url('../data/shared/fonts/Regular.eot') format('eot');
+  src: url('../data/shared/fonts/Regular.ttf') format('truetype');
 }
 
 @font-face {
   font-family: 'SubSpace Large';
-  src: url('../data/shared/fonts/Large.eot');
-  src: local('☺'),
-       url('../data/shared/fonts/Large.ttf') format('truetype');
+  src: url('../data/shared/fonts/Large.eot') format('eot');
+  src: url('../data/shared/fonts/Large.ttf') format('truetype');
 }
 
 @font-face {
   font-family: 'SubSpace Huge';
-  src: url('../data/shared/fonts/Huge.eot');
-  src: local('☺'),
-       url('../data/shared/fonts/Huge.ttf') format('truetype');
+  src: url('../data/shared/fonts/Huge.eot') format('eot');
+  src: url('../data/shared/fonts/Huge.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Anxiolytic';
+  src: url('../data/shared/fonts/Anxiolytic.eot') format('eot'),
+       url('../data/shared/fonts/Anxiolytic.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
 }
 
 body {
   margin: 0;
-  background: #000;
+  background: url('/img/background_blurred.jpg');
   font-family: Verdana;
   font-size: 14pt;
   color: #ccc;
@@ -58,14 +61,15 @@ body {
 }
 
 .title {
-  padding: 40px 0 40px 80px;
+  font-family: 'Anxiolytic';
+  text-align: center;
+  padding: 20px 0 60px;
   font-size: 55px;
   font-weight: 100;
-  background: #111;
-  border-bottom: 1px solid #222;
-  color: #dd489a;
-/*  color: #80d850;*/
-/*  color: #36ade1;*/
+  background: -webkit-linear-gradient(black 25%, transparent);
+  /*color: #dd489a;*/
+  /*color: #80d850;*/
+  color: #36ade1;
 }
 
 .content {
@@ -80,6 +84,7 @@ body {
 
 .title .dot {
   color: #fff;
+  font-weight: bold;
 }
 
 .helpButton + .helpContent {
