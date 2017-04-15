@@ -2,6 +2,7 @@ import Game from 'ui/Game';
 import Protocol from 'net/Protocol';
 import ResourceManager from 'ResourceManager';
 import Loading from 'ui/Loading';
+import Jukebox from 'Jukebox';
 
 export default class Application {
   private protocol_ : Protocol;
@@ -11,6 +12,7 @@ export default class Application {
   private mapProperties_ : any;
   private game_ : Game | undefined;
   private loadingView_ : Loading;
+  private jukebox_ : Jukebox | null;
 
   constructor(settings : any, url : string) {
     this.protocol_ = new Protocol(url);
@@ -19,6 +21,7 @@ export default class Application {
     this.mapData_ = {};
     this.mapProperties_ = {};
     this.loadingView_ = new Loading(this.resourceManager_, this.onLoadComplete_.bind(this));
+    this.jukebox_ = null;
 
     let loginData = {
       'strategy': settings.strategy,
@@ -41,6 +44,7 @@ export default class Application {
       this.mapProperties_ = mapProperties;
 
       this.loadingView_.load(resources);
+      this.jukebox_ = new Jukebox(resources['music']);
     } else {
       alert('Login failure: ' + packet[1]);
     }
@@ -48,6 +52,9 @@ export default class Application {
 
   private onLoadComplete_() {
     this.game_ = new Game(this.protocol_, this.resourceManager_, this.settings_, this.mapData_, this.mapProperties_);
+    if (this.jukebox_ != null) {
+      this.jukebox_.play();
+    }
   }
 }
 

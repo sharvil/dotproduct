@@ -373,5 +373,20 @@
     "repel": {
       "url": "data/shared/sounds/repel.wav"
     }
-  }
+  },
+
+  "music": [
+    {
+      "title": "Red Decision",
+      "url": "data/shared/music/Red Decision.mp3"
+    },
+    {
+      "title": "Enviable Abandon",
+      "url": "data/shared/music/Enviable Abandon.mp3"
+    },
+    {
+      "title": "Atomic Feelings",
+      "url": "data/shared/music/Atomic Feelings.mp3"
+    }
+  ]
 }
