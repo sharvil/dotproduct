@@ -91,8 +91,7 @@ class Protocol {
 
   public startGame(simulation : Simulation, ship : number) {
     this.simulation_ = simulation;
-    this.send_([C2SPacketType_.START_GAME, ship]);
-    this.syncClocks_();
+    this.send_([C2SPacketType_.START_GAME, ship, this.asInt32_(Date.now())]);
     this.syncTimer_ = Timer.setInterval(this.syncClocks_.bind(this), Protocol.CLOCK_SYNC_PERIOD_);
   }
 
