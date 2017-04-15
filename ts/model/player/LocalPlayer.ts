@@ -71,6 +71,7 @@ export default class LocalPlayer extends Player {
     super.captureFlag_(flag);
 
     if (flag.captureFlag(this.getTeam())) {
+      Listener.fire(this, 'capture_flag', flag);
       this.game_.getProtocol().sendFlagCaptured(flag.getId());
     }
   }

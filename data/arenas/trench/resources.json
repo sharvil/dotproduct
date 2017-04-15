@@ -412,6 +412,10 @@
 
     "repel": {
       "url": "data/shared/sounds/repel.wav"
+    },
+
+    "flag": {
+      "url": "data/shared/sounds/flag.wav"
     }
   },
 

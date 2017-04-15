@@ -10,6 +10,7 @@ import Viewport from 'Viewport';
 import Listener from 'Listener';
 import Player from 'model/player/Player';
 import Prize from 'model/Prize';
+import Flag from 'model/Flag';
 
 export default class LocalPlayerSprite extends PlayerSprite {
   private resourceManager_ : ResourceManager;
@@ -24,6 +25,7 @@ export default class LocalPlayerSprite extends PlayerSprite {
     Listener.add(localPlayer, 'collect_prize', this.collectPrize_.bind(this));
     Listener.add(localPlayer, 'bounce', this.bounce_.bind(this));
     Listener.add(localPlayer, 'multifire', this.toggleMultifire_.bind(this));
+    Listener.add(localPlayer, 'capture_flag', this.captureFlag_.bind(this));
   }
 
   public render(viewport : Viewport) {
@@ -65,6 +67,11 @@ export default class LocalPlayerSprite extends PlayerSprite {
       context.fillText('Safety - weapons disabled.', x, y - 50);
       context.restore();
     }
+  }
+
+  /** Called when the local player captures a flag for the team. */
+  private captureFlag_(flag : Flag) {
+    this.resourceManager_.playSound('flag');
   }
 
   /** Called when the local player collects a prize. */
