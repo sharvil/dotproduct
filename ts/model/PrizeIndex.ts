@@ -28,14 +28,14 @@ export default class PrizeIndex {
   }
 
   public addKillPrize(x : number, y : number) {
-    var coordinates = this.map_.toTileCoordinates(new Vector(x, y));
-    var xTile = coordinates.x;
-    var yTile = coordinates.y;
+    let coordinates = this.map_.toTileCoordinates(new Vector(x, y));
+    let xTile = coordinates.x;
+    let yTile = coordinates.y;
 
     if (this.map_.getTile(xTile, yTile) == 0) {
-      var type = this.generatePrizeType_(this.killPrng_);
-      var ttl = this.generateTimeToLive_(this.killPrng_);
-      var prize = new Prize(this.simulation_, this.map_, type, xTile, yTile, ttl);
+      let type = this.generatePrizeType_(this.killPrng_);
+      let ttl = this.generateTimeToLive_(this.killPrng_);
+      let prize = new Prize(this.simulation_, this.map_, type, xTile, yTile, ttl);
       this.prizes_.push(prize);
     }
   }
@@ -46,17 +46,17 @@ export default class PrizeIndex {
     this.killPrng_.seed(this.killPrng_.random() ^ seed);
 
     // Create prizes using new seed.
-    var prizeRadius = this.prizeSettings_['radius'];
-    for (var i = 0; i < this.prizeSettings_['count']; ++i) {
-      var type = this.generatePrizeType_(this.prng_);
-      var ttl = this.generateTimeToLive_(this.prng_);
+    let prizeRadius = this.prizeSettings_['radius'];
+    for (let i = 0; i < this.prizeSettings_['count']; ++i) {
+      let type = this.generatePrizeType_(this.prng_);
+      let ttl = this.generateTimeToLive_(this.prng_);
 
       // Generate random coordinates in the range [-prizeRadius, prizeRadius) and offset by the center of the map.
-      var xTile = Math.floor(this.map_.getWidth() / 2 + this.prng_.random() % prizeRadius * 2 - prizeRadius);
-      var yTile = Math.floor(this.map_.getHeight() / 2 + this.prng_.random() % prizeRadius * 2 - prizeRadius);
+      let xTile = Math.floor(this.map_.getWidth() / 2 + this.prng_.random() % prizeRadius * 2 - prizeRadius);
+      let yTile = Math.floor(this.map_.getHeight() / 2 + this.prng_.random() % prizeRadius * 2 - prizeRadius);
 
       if (this.map_.getTile(xTile, yTile) == 0) {
-        var prize = new Prize(this.simulation_, this.map_, type, xTile, yTile, ttl);
+        let prize = new Prize(this.simulation_, this.map_, type, xTile, yTile, ttl);
         this.prizes_.push(prize);
       }
     }
@@ -90,17 +90,17 @@ export default class PrizeIndex {
   }
 
   private generatePrizeType_(prng : Prng) : PrizeType {
-    var prizeWeights = this.prizeSettings_['weights'];
+    let prizeWeights = this.prizeSettings_['weights'];
 
-    var sum = 0;
-    for (var i = 0; i < prizeWeights.length; ++i) {
+    let sum = 0;
+    for (let i = 0; i < prizeWeights.length; ++i) {
       sum += prizeWeights[i];
     }
 
     assert(sum > 0, 'Prize weights must be greater than 0.');
 
-    var type;
-    var variate = prng.random() % sum;
+    let type;
+    let variate = prng.random() % sum;
     for (type = 0, sum = 0; type < prizeWeights.length; ++type) {
       sum += prizeWeights[type];
       if (sum > variate) {

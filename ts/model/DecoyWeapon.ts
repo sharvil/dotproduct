@@ -30,8 +30,8 @@ export default class DecoyWeapon implements Weapon {
     }
 
     --this.count_;
-    var lifetime = this.settings_['lifetime'];
-    var projectile = this.game_.getModelObjectFactory().newDecoy(this.game_, this.owner_, this.owner_.getPosition(), this.owner_.getVelocity(), lifetime);
+    let lifetime = this.settings_['lifetime'];
+    let projectile = this.game_.getModelObjectFactory().newDecoy(this.game_, this.owner_, this.owner_.getPosition(), this.owner_.getVelocity(), lifetime);
     this.owner_.addProjectile(projectile);
 
     return {
@@ -42,12 +42,12 @@ export default class DecoyWeapon implements Weapon {
   public onFired(timeDiff : number, position : Vector, velocity : Vector, weaponData : any) {
     assert(weaponData['type'] == this.getType(), 'Cannot fire decoy with incorrect weapon type: ' + weaponData['type']);
 
-    var lifetime = this.settings_['lifetime'];
+    let lifetime = this.settings_['lifetime'];
 
-    var projectile = this.game_.getModelObjectFactory().newDecoy(this.game_, this.owner_, this.owner_.getPosition(), this.owner_.getVelocity(), lifetime);
+    let projectile = this.game_.getModelObjectFactory().newDecoy(this.game_, this.owner_, this.owner_.getPosition(), this.owner_.getVelocity(), lifetime);
     this.owner_.addProjectile(projectile);
 
-    for (var i = 0; i < timeDiff; ++i) {
+    for (let i = 0; i < timeDiff; ++i) {
       projectile.advanceTime();
     }
   }

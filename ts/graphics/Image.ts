@@ -30,17 +30,17 @@ export default class Image {
       context.drawImage(this.node_, x, y, this.node_.width, this.node_.height);
       context.restore();
     } else {
-      var numTiles = this.tilesPerRow_ * this.tilesPerCol_;
+      let numTiles = this.tilesPerRow_ * this.tilesPerCol_;
 
       if (tileNum < 0 || tileNum >= numTiles || !this.isLoaded()) {
         return;
       }
 
-      var tileWidth = this.getTileWidth();
-      var tileHeight = this.getTileHeight();
+      let tileWidth = this.getTileWidth();
+      let tileHeight = this.getTileHeight();
 
-      var row = Math.floor(tileNum / this.tilesPerRow_);
-      var column = tileNum % this.tilesPerRow_;
+      let row = Math.floor(tileNum / this.tilesPerRow_);
+      let column = tileNum % this.tilesPerRow_;
 
       context.save();
       context.drawImage(this.node_,

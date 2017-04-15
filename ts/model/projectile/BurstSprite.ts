@@ -43,17 +43,17 @@ export default class BurstSprite extends ModelObject implements Drawable {
       return;
     }
 
-    var animation = this.burst_.isActive() ? this.activeAnimation_ : this.inactiveAnimation_;
-    var dimensions = viewport.getDimensions();
-    var x = Math.floor(this.burst_.getPosition().x - dimensions.left - animation.getWidth() / 2);
-    var y = Math.floor(this.burst_.getPosition().y - dimensions.top - animation.getHeight() / 2);
+    let animation = this.burst_.isActive() ? this.activeAnimation_ : this.inactiveAnimation_;
+    let dimensions = viewport.getDimensions();
+    let x = Math.floor(this.burst_.getPosition().x - dimensions.left - animation.getWidth() / 2);
+    let y = Math.floor(this.burst_.getPosition().y - dimensions.top - animation.getHeight() / 2);
 
     animation.render(viewport.getContext(), x, y);
   }
 
   protected onExplode_(projectile : Projectile, hitPlayer : Player | null) {
     // Add an explosion animation.
-    var animation = this.game_.getResourceManager().getSpriteSheet('explode0').getAnimation(0);
+    let animation = this.game_.getResourceManager().getSpriteSheet('explode0').getAnimation(0);
     new Effect(this.game_, animation, this.burst_.getPosition(), Vector.ZERO);
   }
 

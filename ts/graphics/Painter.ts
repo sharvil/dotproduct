@@ -7,7 +7,7 @@ export default class Painter {
 
   constructor() {
     this.layers_ = [];
-    for (var i = 0; i < NUM_LAYERS; ++i) {
+    for (let i = 0; i < NUM_LAYERS; ++i) {
       this.layers_.push([]);
     }
   }
@@ -23,11 +23,11 @@ export default class Painter {
   }
 
   public render(viewport : Viewport) {
-    var context = viewport.getContext();
+    let context = viewport.getContext();
     context.save();
     context.fillStyle = '#000';
     context.fillRect(0, 0, context.canvas.width, context.canvas.height);
-    for (var i = 0; i < this.layers_.length; ++i) {
+    for (let i = 0; i < this.layers_.length; ++i) {
       this.layers_[i].forEach(function (drawable) {
         drawable.render(viewport);
       });

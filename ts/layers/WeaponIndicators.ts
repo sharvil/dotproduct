@@ -26,24 +26,24 @@ export default class WeaponIndicators implements Drawable {
   }
 
   public render(viewport : Viewport) {
-    var context = viewport.getContext();
-    var dimensions = viewport.getDimensions();
+    let context = viewport.getContext();
+    let dimensions = viewport.getDimensions();
 
-    var gunLevel = this.localPlayer_.gunLevel;
-    var bombLevel = this.localPlayer_.bombLevel;
-    var bursts = this.localPlayer_.burstCount;
-    var decoys = this.localPlayer_.decoyCount;
-    var numIndicators = 2;
-    var padding = 1;
+    let gunLevel = this.localPlayer_.gunLevel;
+    let bombLevel = this.localPlayer_.bombLevel;
+    let bursts = this.localPlayer_.burstCount;
+    let decoys = this.localPlayer_.decoyCount;
+    let numIndicators = 2;
+    let padding = 1;
 
-    var width = this.icons_.getTileWidth();
-    var height = this.icons_.getTileHeight();
-    var top = Math.floor((dimensions.height - (numIndicators * height + (numIndicators - 1) * padding)) / 2);
-    var left = dimensions.width - width;
+    let width = this.icons_.getTileWidth();
+    let height = this.icons_.getTileHeight();
+    let top = Math.floor((dimensions.height - (numIndicators * height + (numIndicators - 1) * padding)) / 2);
+    let left = dimensions.width - width;
 
     this.tooltip_.classList.add(WeaponIndicators.TOOLTIP_HIDE_CLASS_NAME_);
 
-    var label = 'Guns: ' + Key.Name[Key.Map.FIRE_GUN];
+    let label = 'Guns: ' + Key.Name[Key.Map.FIRE_GUN];
     this.renderLeveledWeapon_(context, new Rect(left, top, width, height), gunLevel, 0, label);
 
     label = 'Burst: ' + Key.Name[Key.Map.FIRE_BURST];
@@ -60,8 +60,8 @@ export default class WeaponIndicators implements Drawable {
   }
 
   private renderLeveledWeapon_(context : CanvasRenderingContext2D, rect : Rect, level : number, tileNum : number, label : string) {
-    var x = rect.x;
-    var y = rect.y;
+    let x = rect.x;
+    let y = rect.y;
 
     if (level >= 0) {
       tileNum += level;
@@ -80,8 +80,8 @@ export default class WeaponIndicators implements Drawable {
   }
 
   private renderConsumableWeapon_(context : CanvasRenderingContext2D, rect : Rect, count : number, tileNum : number, label : string) {
-    var x = rect.x;
-    var y = rect.y;
+    let x = rect.x;
+    let y = rect.y;
 
     if (count <= 0) {
       x -= rect.width - 4;

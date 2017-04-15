@@ -21,7 +21,7 @@ export default class BulletSprite extends ModelObject implements Drawable {
   constructor(game : Game, bullet : Bullet) {
     super(game.getSimulation());
 
-    var level = bullet.getLevel();
+    let level = bullet.getLevel();
 
     this.game_ = game;
     this.bullet_ = bullet;
@@ -46,21 +46,21 @@ export default class BulletSprite extends ModelObject implements Drawable {
     }
 
     if (Labs.BULLET_TRAILS) {
-      var animation = this.game_.getResourceManager().getSpriteSheet('bulletTrails').getAnimation(3 + this.bullet_.getLevel());
+      let animation = this.game_.getResourceManager().getSpriteSheet('bulletTrails').getAnimation(3 + this.bullet_.getLevel());
       new Effect(this.game_, animation, this.bullet_.getPosition(), Vector.ZERO, Layer.TRAILS);
     }
 
-    var dimensions = viewport.getDimensions();
-    var x = Math.floor(this.bullet_.getPosition().x - dimensions.left - this.animation_.getWidth() / 2);
-    var y = Math.floor(this.bullet_.getPosition().y - dimensions.top - this.animation_.getHeight() / 2);
-    var animation = this.bullet_.isBouncing() ? this.bouncingAnimation_ : this.animation_;
+    let dimensions = viewport.getDimensions();
+    let x = Math.floor(this.bullet_.getPosition().x - dimensions.left - this.animation_.getWidth() / 2);
+    let y = Math.floor(this.bullet_.getPosition().y - dimensions.top - this.animation_.getHeight() / 2);
+    let animation = this.bullet_.isBouncing() ? this.bouncingAnimation_ : this.animation_;
 
     animation.render(viewport.getContext(), x, y);
   }
 
   /** This function gets called when a bullet explodes and hits a player. */
   private onExplode_(projectile : Projectile, hitPlayer : Player | null) {
-    var animation = this.game_.getResourceManager().getSpriteSheet('explode0').getAnimation(0);
+    let animation = this.game_.getResourceManager().getSpriteSheet('explode0').getAnimation(0);
     new Effect(this.game_, animation, this.bullet_.getPosition(), Vector.ZERO);
   }
 

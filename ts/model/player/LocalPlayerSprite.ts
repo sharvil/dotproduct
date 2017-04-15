@@ -34,14 +34,14 @@ export default class LocalPlayerSprite extends PlayerSprite {
       return;
     }
 
-    var context = viewport.getContext();
-    var dimensions = viewport.getDimensions();
+    let context = viewport.getContext();
+    let dimensions = viewport.getDimensions();
 
     if (!this.player_.isAlive()) {
-      var millis = Timer.ticksToMillis(this.localPlayer_.getRespawnTimer());
-      var seconds = Math.floor(millis / 1000);
-      var tenths = Math.floor((millis % 1000) / 100);
-      var time = seconds + '.' + tenths;
+      let millis = Timer.ticksToMillis(this.localPlayer_.getRespawnTimer());
+      let seconds = Math.floor(millis / 1000);
+      let tenths = Math.floor((millis % 1000) / 100);
+      let time = seconds + '.' + tenths;
       context.save();
       context.font = Font.playerFont().toString();
       context.fillStyle = Palette.friendColor();
@@ -56,8 +56,8 @@ export default class LocalPlayerSprite extends PlayerSprite {
 
     super.render(viewport);
 
-    var x = Math.floor(dimensions.width / 2);
-    var y = Math.floor(dimensions.height / 2);
+    let x = Math.floor(dimensions.width / 2);
+    let y = Math.floor(dimensions.height / 2);
     if (this.localPlayer_.isSafe()) {
       context.save();
       context.font = Font.playerFont().toString();
@@ -89,7 +89,7 @@ export default class LocalPlayerSprite extends PlayerSprite {
 
   /** Called when the local player toggles multifire. */
   private toggleMultifire_(player : LocalPlayer, enabled : boolean) {
-    var resource = enabled ? 'multion' : 'multioff';
+    let resource = enabled ? 'multion' : 'multioff';
     this.resourceManager_.playSound(resource);
   }
 }

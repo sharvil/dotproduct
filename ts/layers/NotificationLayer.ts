@@ -30,8 +30,8 @@ export default class NotificationLayer extends ModelObject implements Drawable {
   }
 
   public render(viewport : Viewport) {
-    var context = viewport.getContext();
-    var font = Font.notificationsFont();
+    let context = viewport.getContext();
+    let font = Font.notificationsFont();
 
     context.save();
     context.font = font.toString();
@@ -41,7 +41,7 @@ export default class NotificationLayer extends ModelObject implements Drawable {
         return;
       }
 
-      var opacity = 1;
+      let opacity = 1;
       if (message.ticks > NotificationLayer.MESSAGE_PERIOD_) {
         opacity -= (message.ticks - NotificationLayer.MESSAGE_PERIOD_) / NotificationLayer.FADE_PERIOD_;
       }

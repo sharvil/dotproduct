@@ -20,8 +20,8 @@ export default class Map {
   private quadtree_ : Quadtree;
 
   constructor(game : Game, mapData : any, tileProperties : Array<any>) {
-    var settings = game.getSettings();
-    var tileset = game.getResourceManager().getImage('tileset');
+    let settings = game.getSettings();
+    let tileset = game.getResourceManager().getImage('tileset');
 
     this.mapData_ = mapData;
     this.tileProperties_ = tileProperties;
@@ -50,8 +50,8 @@ export default class Map {
   }
 
   public toTileCoordinates(vector : Vector) : Vector {
-    var xTile = Math.floor(vector.x / this.tileWidth_);
-    var yTile = Math.floor(vector.y / this.tileHeight_);
+    let xTile = Math.floor(vector.x / this.tileWidth_);
+    let yTile = Math.floor(vector.y / this.tileHeight_);
 
     assert(xTile >= 0 && xTile < this.width_, 'Invalid x coordinate.');
     assert(yTile >= 0 && yTile < this.height_, 'Invalid y coordinate.');
@@ -60,7 +60,7 @@ export default class Map {
   }
 
   public getTile(x : number, y : number) : number {
-    var index = x + y * this.width_;
+    let index = x + y * this.width_;
     return this.mapData_[index] ? this.mapData_[index] : TileType.NONE;
   }
 
@@ -68,7 +68,7 @@ export default class Map {
     assert(x >= 0 && x < this.width_, 'Invalid x coordinate.');
     assert(y >= 0 && y < this.height_, 'Invalid y coordinate.');
 
-    var index = x + y * this.width_;
+    let index = x + y * this.width_;
     if (value == TileType.NONE) {
       delete this.mapData_[index];
     } else {
@@ -86,17 +86,17 @@ export default class Map {
   }
 
   public getSpawnLocation(entity : Entity) : Vector {
-    var cX = this.width_ * this.tileWidth_ / 2;
-    var cY = this.height_ * this.tileHeight_ / 2;
-    var dimensions = entity.getDimensions();
+    let cX = this.width_ * this.tileWidth_ / 2;
+    let cY = this.height_ * this.tileHeight_ / 2;
+    let dimensions = entity.getDimensions();
 
-    var x;
-    var y;
-    var attempts = 0;
+    let x;
+    let y;
+    let attempts = 0;
 
     do {
-      var deltaX = Math.random() * this.spawnRadius_ * 2 - this.spawnRadius_;
-      var deltaY = Math.random() * this.spawnRadius_ * 2 - this.spawnRadius_;
+      let deltaX = Math.random() * this.spawnRadius_ * 2 - this.spawnRadius_;
+      let deltaY = Math.random() * this.spawnRadius_ * 2 - this.spawnRadius_;
 
       x = Math.floor(cX + deltaX);
       y = Math.floor(cY + deltaY);
@@ -116,14 +116,14 @@ export default class Map {
   }
 
   private getCollision_(dimensions : any) : any {
-    var left = dimensions.left;
-    var right = dimensions.right;
-    var top = dimensions.top;
-    var bottom = dimensions.bottom;
-    var radius = dimensions.radius;
+    let left = dimensions.left;
+    let right = dimensions.right;
+    let top = dimensions.top;
+    let bottom = dimensions.bottom;
+    let radius = dimensions.radius;
 
-    var totalWidth = this.width_ * this.tileWidth_;
-    var totalHeight = this.height_ * this.tileHeight_;
+    let totalWidth = this.width_ * this.tileWidth_;
+    let totalHeight = this.height_ * this.tileHeight_;
 
     // Trivial case 1: left/top of map.
     if (left < 0 || top < 0) {
@@ -153,20 +153,20 @@ export default class Map {
       };
     }
 
-    var leftTile = Math.floor(left / this.tileWidth_);
-    var rightTile = Math.floor(right / this.tileWidth_);
-    var topTile = Math.floor(top / this.tileHeight_);
-    var bottomTile = Math.floor(bottom / this.tileHeight_);
-    var ret : any = null;
+    let leftTile = Math.floor(left / this.tileWidth_);
+    let rightTile = Math.floor(right / this.tileWidth_);
+    let topTile = Math.floor(top / this.tileHeight_);
+    let bottomTile = Math.floor(bottom / this.tileHeight_);
+    let ret : any = null;
 
-    for (var yTile = topTile; yTile <= bottomTile; ++yTile) {
-      for (var xTile = leftTile; xTile <= rightTile; ++xTile) {
-        var tileValue = this.getTile(xTile, yTile);
+    for (let yTile = topTile; yTile <= bottomTile; ++yTile) {
+      for (let xTile = leftTile; xTile <= rightTile; ++xTile) {
+        let tileValue = this.getTile(xTile, yTile);
         if (tileValue == TileType.NONE) {
           continue;
         }
 
-        var tileProperties = this.getTileProperties(tileValue);
+        let tileProperties = this.getTileProperties(tileValue);
         if (tileProperties['collision']) {
           ret = {
             left: xTile * this.tileWidth_ - Map.COLLISION_EPSILON_ - radius,

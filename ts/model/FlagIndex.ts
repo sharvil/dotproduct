@@ -17,7 +17,7 @@ export default class FlagIndex {
   }
 
   public updateFlag = function (id : number, team : number, xTile : number, yTile : number) {
-    var flag = this.getFlag(xTile, yTile);
+    let flag = this.getFlag(xTile, yTile);
     if (!flag) {
       this.flags_.push(new Flag(this.game_, this.game_.getMap(), id, team, xTile, yTile));
     } else {

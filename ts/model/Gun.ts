@@ -70,42 +70,42 @@ export default class Gun implements Weapon {
   }
 
   public fire(angle : number, position : Vector, velocity : Vector, commitFireFn : (fireEnergy : number, fireDelay : number) => boolean) : any {
-    var fireEnergy = this.getFireEnergy_();
-    var fireDelay = this.getFireDelay_();
-    var level = this.level_.getValue();
+    let fireEnergy = this.getFireEnergy_();
+    let fireDelay = this.getFireDelay_();
+    let level = this.level_.getValue();
 
     if (level < 0 || !commitFireFn(fireEnergy, fireDelay)) {
       return null;
     }
 
-    var factory = this.game_.getModelObjectFactory();
-    var lifetime = this.getLifetime_();
-    var damage = this.getDamage_();
-    var bounceCount = this.getBounceCount_();
-    var bulletSpeed = this.getBulletSpeed_();
-    var multifireAngle = (this.multifireState_ == ToggleState.ENABLED) ? this.gunSettings_['multifire']['angle'] : 0;
+    let factory = this.game_.getModelObjectFactory();
+    let lifetime = this.getLifetime_();
+    let damage = this.getDamage_();
+    let bounceCount = this.getBounceCount_();
+    let bulletSpeed = this.getBulletSpeed_();
+    let multifireAngle = (this.multifireState_ == ToggleState.ENABLED) ? this.gunSettings_['multifire']['angle'] : 0;
 
-    var bullets = new Array<Bullet>();
+    let bullets = new Array<Bullet>();
     if (this.gunSettings_['doubleBarrel']) {
-      var bulletVelocity = velocity.add(Vector.fromPolar(bulletSpeed, angle));
-      var leftPosition = position.add(Vector.fromPolar(10, angle - Math.PI / 2));
-      var rightPosition = position.add(Vector.fromPolar(10, angle + Math.PI / 2));
+      let bulletVelocity = velocity.add(Vector.fromPolar(bulletSpeed, angle));
+      let leftPosition = position.add(Vector.fromPolar(10, angle - Math.PI / 2));
+      let rightPosition = position.add(Vector.fromPolar(10, angle + Math.PI / 2));
 
       bullets.push(factory.newBullet(this.game_, this.owner_, level, leftPosition, bulletVelocity, lifetime, damage, bounceCount));
       bullets.push(factory.newBullet(this.game_, this.owner_, level, rightPosition, bulletVelocity, lifetime, damage, bounceCount));
     } else {
-      var bulletVelocity = velocity.add(Vector.fromPolar(bulletSpeed, angle));
+      let bulletVelocity = velocity.add(Vector.fromPolar(bulletSpeed, angle));
       bullets.push(factory.newBullet(this.game_, this.owner_, level, position, bulletVelocity, lifetime, damage, bounceCount));
     }
 
     if (this.multifireState_ == ToggleState.ENABLED) {
-      var leftVelocity = velocity.add(Vector.fromPolar(bulletSpeed, angle - multifireAngle));
-      var rightVelocity = velocity.add(Vector.fromPolar(bulletSpeed, angle + multifireAngle));
+      let leftVelocity = velocity.add(Vector.fromPolar(bulletSpeed, angle - multifireAngle));
+      let rightVelocity = velocity.add(Vector.fromPolar(bulletSpeed, angle + multifireAngle));
       bullets.push(factory.newBullet(this.game_, this.owner_, level, position, leftVelocity, lifetime, damage, bounceCount));
       bullets.push(factory.newBullet(this.game_, this.owner_, level, position, rightVelocity, lifetime, damage, bounceCount));
     }
 
-    for (var i = 0; i < bullets.length; ++i) {
+    for (let i = 0; i < bullets.length; ++i) {
       this.owner_.addProjectile(bullets[i]);
     }
 
@@ -124,48 +124,48 @@ export default class Gun implements Weapon {
   public onFired(timeDiff : number, position : Vector, velocity : Vector, weaponData : any) {
     assert(weaponData['type'] == this.getType(), 'Cannot fire gun with incorrect weapon type: ' + weaponData['type']);
 
-    var factory = this.game_.getModelObjectFactory();
-    var level = weaponData['level'];
-    var angle = weaponData['angle'];
-    var bounceCount = weaponData['bounceCount'];
-    var isMultifire = weaponData['multifire'];
+    let factory = this.game_.getModelObjectFactory();
+    let level = weaponData['level'];
+    let angle = weaponData['angle'];
+    let bounceCount = weaponData['bounceCount'];
+    let isMultifire = weaponData['multifire'];
 
     // Make sure the level is correct so the following getters use the right value for their calculations.
     this.level_.setValue(level);
 
-    var lifetime = this.getLifetime_();
-    var damage = this.getDamage_();
-    var bulletSpeed = this.getBulletSpeed_();
-    var multifireAngle = isMultifire ? this.gunSettings_['multifire']['angle'] : 0;
+    let lifetime = this.getLifetime_();
+    let damage = this.getDamage_();
+    let bulletSpeed = this.getBulletSpeed_();
+    let multifireAngle = isMultifire ? this.gunSettings_['multifire']['angle'] : 0;
 
-    var bullets = new Array<Bullet>();
+    let bullets = new Array<Bullet>();
     if (this.gunSettings_['doubleBarrel']) {
-      var bulletVelocity = velocity.add(Vector.fromPolar(bulletSpeed, angle));
-      var leftPosition = position.add(Vector.fromPolar(10, angle - Math.PI / 2));
-      var rightPosition = position.add(Vector.fromPolar(10, angle + Math.PI / 2));
+      let bulletVelocity = velocity.add(Vector.fromPolar(bulletSpeed, angle));
+      let leftPosition = position.add(Vector.fromPolar(10, angle - Math.PI / 2));
+      let rightPosition = position.add(Vector.fromPolar(10, angle + Math.PI / 2));
 
       bullets.push(factory.newBullet(this.game_, this.owner_, level, leftPosition, bulletVelocity, lifetime, damage, bounceCount));
       bullets.push(factory.newBullet(this.game_, this.owner_, level, rightPosition, bulletVelocity, lifetime, damage, bounceCount));
     } else {
-      var bulletVelocity = velocity.add(Vector.fromPolar(bulletSpeed, angle));
+      let bulletVelocity = velocity.add(Vector.fromPolar(bulletSpeed, angle));
       bullets.push(factory.newBullet(this.game_, this.owner_, level, position, bulletVelocity, lifetime, damage, bounceCount));
     }
 
     if (isMultifire) {
-      var leftVelocity = velocity.add(Vector.fromPolar(bulletSpeed, angle - multifireAngle));
-      var rightVelocity = velocity.add(Vector.fromPolar(bulletSpeed, angle + multifireAngle));
+      let leftVelocity = velocity.add(Vector.fromPolar(bulletSpeed, angle - multifireAngle));
+      let rightVelocity = velocity.add(Vector.fromPolar(bulletSpeed, angle + multifireAngle));
       bullets.push(factory.newBullet(this.game_, this.owner_, level, position, leftVelocity, lifetime, damage, bounceCount));
       bullets.push(factory.newBullet(this.game_, this.owner_, level, position, rightVelocity, lifetime, damage, bounceCount));
     }
 
-    for (var i = 0; i < bullets.length; ++i) {
+    for (let i = 0; i < bullets.length; ++i) {
       this.owner_.addProjectile(bullets[i]);
     }
 
     new BulletGroup(bullets);
 
-    for (var i = 0; i < timeDiff; ++i) {
-      for (var j = 0; j < bullets.length; ++j) {
+    for (let i = 0; i < timeDiff; ++i) {
+      for (let j = 0; j < bullets.length; ++j) {
         bullets[j].advanceTime();
       }
     }
@@ -179,7 +179,7 @@ export default class Gun implements Weapon {
   }
 
   private getFireEnergy_() : number {
-    var baseEnery = this.multifireState_ == ToggleState.ENABLED
+    let baseEnery = this.multifireState_ == ToggleState.ENABLED
       ? this.gunSettings_['multifire']['fireEnergy']
       : this.gunSettings_['fireEnergy'];
     return baseEnery * (this.level_.getValue() + 1);

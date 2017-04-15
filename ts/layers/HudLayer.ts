@@ -28,8 +28,8 @@ export default class HudLayer implements Drawable {
   }
 
   public render(viewport : Viewport) {
-    var context = viewport.getContext();
-    var dimensions = viewport.getDimensions();
+    let context = viewport.getContext();
+    let dimensions = viewport.getDimensions();
 
     this.renderEnergyBar_(context, dimensions);
     this.renderNearShipEnergyDisplay_(context, dimensions);
@@ -37,10 +37,10 @@ export default class HudLayer implements Drawable {
   }
 
   private renderEnergyBar_(context : CanvasRenderingContext2D, dimensions : any) {
-    var percentEnergy = this.player_.getEnergy() / this.player_.getMaxEnergy();
-    var energyBarMaxWidth = 300;
-    var energyBarWidth = percentEnergy * energyBarMaxWidth;
-    var energyBarHeight = 10;
+    let percentEnergy = this.player_.getEnergy() / this.player_.getMaxEnergy();
+    let energyBarMaxWidth = 300;
+    let energyBarWidth = percentEnergy * energyBarMaxWidth;
+    let energyBarHeight = 10;
 
     context.save();
     // Energy bar
@@ -84,13 +84,13 @@ export default class HudLayer implements Drawable {
       return;
     }
 
-    var energy = this.player_.getEnergy();
-    var playerDimensions = this.player_.getDimensions();
-    var percentEnergy = energy / this.player_.getMaxEnergy();
+    let energy = this.player_.getEnergy();
+    let playerDimensions = this.player_.getDimensions();
+    let percentEnergy = energy / this.player_.getMaxEnergy();
 
     if (percentEnergy < 0.5) {
-      var x = Math.floor(playerDimensions.left - dimensions.left - 10);
-      var y = Math.floor(playerDimensions.top - dimensions.top);
+      let x = Math.floor(playerDimensions.left - dimensions.left - 10);
+      let y = Math.floor(playerDimensions.top - dimensions.top);
 
       context.save();
       context.fillStyle = percentEnergy < 0.25 ? Palette.criticalEnergyWarningColor() : Palette.lowEnergyWarningColor();
@@ -103,16 +103,16 @@ export default class HudLayer implements Drawable {
   }
 
   private renderShipInfoDisplay_(context : CanvasRenderingContext2D, dimensions : any) {
-    var statusHudLeft = dimensions.width - this.statusHudImage_.getTileWidth();
-    var statusHudRight = statusHudLeft + this.statusHudImage_.getTileWidth();
-    var statusHudTop = 5;
+    let statusHudLeft = dimensions.width - this.statusHudImage_.getTileWidth();
+    let statusHudRight = statusHudLeft + this.statusHudImage_.getTileWidth();
+    let statusHudTop = 5;
 
     this.statusHudImage_.render(context, statusHudLeft, statusHudTop);
 
     // Energy
-    var self = this;
-    var x = statusHudRight - 30;
-    var y = statusHudTop - 5;
+    let self = this;
+    let x = statusHudRight - 30;
+    let y = statusHudTop - 5;
     this.forEachDigitInReverse_(this.player_.getEnergy(), function (digit) {
       self.energyFontImage_.render(context, x, y, digit);
       x -= self.energyFontImage_.getTileWidth();

@@ -44,21 +44,21 @@ export default class PlayerSprite implements Drawable {
    * and DecoySprite.
    */
   public static renderPlayer(game : Game, viewport : Viewport, player : Player, direction : number, position : Vector) {
-    var resourceManager = game.getResourceManager();
-    var shipImage = resourceManager.getImage('ship' + player.getShip());
+    let resourceManager = game.getResourceManager();
+    let shipImage = resourceManager.getImage('ship' + player.getShip());
 
-    var dimensions = viewport.getDimensions();
-    var context = viewport.getContext();
+    let dimensions = viewport.getDimensions();
+    let context = viewport.getContext();
 
-    var x = Math.floor(position.x - dimensions.left - shipImage.getTileWidth() / 2);
-    var y = Math.floor(position.y - dimensions.top - shipImage.getTileHeight() / 2);
+    let x = Math.floor(position.x - dimensions.left - shipImage.getTileWidth() / 2);
+    let y = Math.floor(position.y - dimensions.top - shipImage.getTileHeight() / 2);
 
     shipImage.render(context, x, y, direction);
 
     // Draw a label for the player's name.
-    var name = player.getName();
-    var bounty = player.getBounty();
-    var isFriend = player.isFriend(game.getPlayerIndex().getLocalPlayer());
+    let name = player.getName();
+    let bounty = player.getBounty();
+    let isFriend = player.isFriend(game.getPlayerIndex().getLocalPlayer());
     context.save();
     context.font = Font.playerFont().toString();
     context.fillStyle = isFriend ? Palette.friendColor() : Palette.foeColor();
@@ -68,7 +68,7 @@ export default class PlayerSprite implements Drawable {
     context.restore();
 
     // Draw a presence indicator for the player if applicable.
-    var presenceImage : Image | null = null;
+    let presenceImage : Image | null = null;
     if (player.hasPresence(Player.Presence.AWAY)) {
       presenceImage = resourceManager.getImage('presenceAway');
     } else if (player.hasPresence(Player.Presence.TYPING)) {
@@ -76,8 +76,8 @@ export default class PlayerSprite implements Drawable {
     }
 
     if (presenceImage) {
-      var speechX = x + shipImage.getTileWidth() - Math.floor(presenceImage.getTileWidth() / 2);
-      var speechY = y - Math.floor(presenceImage.getTileHeight() / 2);
+      let speechX = x + shipImage.getTileWidth() - Math.floor(presenceImage.getTileWidth() / 2);
+      let speechY = y - Math.floor(presenceImage.getTileHeight() / 2);
       presenceImage.render(context, speechX, speechY);
     }
   }
@@ -86,17 +86,17 @@ export default class PlayerSprite implements Drawable {
    * Called when the player this sprite represents gets killed.
    */
   private death_(killee : Player, killer : Player) {
-    var position = killee.getPosition();
-    var velocity = killee.getVelocity();
+    let position = killee.getPosition();
+    let velocity = killee.getVelocity();
 
-    var resourceManager = this.game_.getResourceManager();
-    var ensemble = resourceManager.getSpriteSheet('explode1');
+    let resourceManager = this.game_.getResourceManager();
+    let ensemble = resourceManager.getSpriteSheet('explode1');
     new Effect(this.game_, ensemble.getAnimation(0), position, velocity);
 
     ensemble = resourceManager.getSpriteSheet('ship' + killee.getShip() + '_junk');
-    for (var i = 0; i < ensemble.getNumAnimations(); ++i) {
-      var animation = ensemble.getAnimation(i);
-      var deltaVelocity = Vector.fromPolar(Math.random() * 2, Math.random() * 2 * Math.PI);
+    for (let i = 0; i < ensemble.getNumAnimations(); ++i) {
+      let animation = ensemble.getAnimation(i);
+      let deltaVelocity = Vector.fromPolar(Math.random() * 2, Math.random() * 2 * Math.PI);
       new Effect(this.game_, animation, position, velocity.add(deltaVelocity));
     }
 
@@ -107,8 +107,8 @@ export default class PlayerSprite implements Drawable {
 
   /** Called when the player this sprite represents respawns. */
   private respawn_(player : Player) {
-    var resourceManager = this.game_.getResourceManager();
-    var animation = resourceManager.getSpriteSheet('warp').getAnimation(0);
+    let resourceManager = this.game_.getResourceManager();
+    let animation = resourceManager.getSpriteSheet('warp').getAnimation(0);
     new Effect(this.game_, animation, player.getPosition(), Vector.ZERO);
   }
 }

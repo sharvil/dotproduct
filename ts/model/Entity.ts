@@ -30,8 +30,8 @@ abstract class Entity extends ModelObject {
   }
 
   public getDimensions() : any {
-    var x = this.position_.x;
-    var y = this.position_.y;
+    let x = this.position_.x;
+    let y = this.position_.y;
 
     return {
       x: x,
@@ -48,19 +48,19 @@ abstract class Entity extends ModelObject {
   }
 
   protected updatePosition_(bounceFactor? : number) {
-    var map = this.game_.getMap();
-    var prizeIndex = this.game_.getPrizeIndex();
-    var flagIndex = this.game_.getFlagIndex();
+    let map = this.game_.getMap();
+    let prizeIndex = this.game_.getPrizeIndex();
+    let flagIndex = this.game_.getFlagIndex();
     bounceFactor = bounceFactor || 1;
 
-    var tileWidth = map.getTileWidth();
-    var xSpeed = Math.abs(this.velocity_.x);
-    for (var i = 0; i < xSpeed; i += tileWidth) {
-      var xVel = this.velocity_.x;
-      var dx = Math.min(xSpeed - i, tileWidth);
+    let tileWidth = map.getTileWidth();
+    let xSpeed = Math.abs(this.velocity_.x);
+    for (let i = 0; i < xSpeed; i += tileWidth) {
+      let xVel = this.velocity_.x;
+      let dx = Math.min(xSpeed - i, tileWidth);
       this.position_ = this.position_.add(new Vector(xVel < 0 ? -dx : dx, 0));
 
-      var collision = map.getCollision(this);
+      let collision = map.getCollision(this);
       if (collision) {
         switch (collision.object) {
           case ObjectType.NONE:
@@ -70,14 +70,14 @@ abstract class Entity extends ModelObject {
             this.bounce_();
             break;
           case ObjectType.PRIZE:
-            var prize = prizeIndex.getPrize(collision.xTile, collision.yTile);
+            let prize = prizeIndex.getPrize(collision.xTile, collision.yTile);
             if (prize && this.shouldCollectPrize_(prize)) {
               this.onPrizeCollected(prize);
               prizeIndex.removePrize(prize);
             }
             break;
           case ObjectType.FLAG:
-            var flag = flagIndex.getFlag(collision.xTile, collision.yTile);
+            let flag = flagIndex.getFlag(collision.xTile, collision.yTile);
             if (flag != null) {
               this.captureFlag_(flag);
             } else {
@@ -90,14 +90,14 @@ abstract class Entity extends ModelObject {
       }
     }
 
-    var tileHeight = map.getTileHeight();
-    var ySpeed = Math.abs(this.velocity_.y);
-    for (var i = 0; i < ySpeed; i += tileHeight) {
-      var yVel = this.velocity_.y;
-      var dy = Math.min(ySpeed - i, tileHeight);
+    let tileHeight = map.getTileHeight();
+    let ySpeed = Math.abs(this.velocity_.y);
+    for (let i = 0; i < ySpeed; i += tileHeight) {
+      let yVel = this.velocity_.y;
+      let dy = Math.min(ySpeed - i, tileHeight);
       this.position_ = this.position_.add(new Vector(0, yVel < 0 ? -dy : dy));
 
-      var collision = this.game_.getMap().getCollision(this);
+      let collision = this.game_.getMap().getCollision(this);
       if (collision) {
         switch (collision.object) {
           case ObjectType.NONE:
@@ -107,14 +107,14 @@ abstract class Entity extends ModelObject {
             this.bounce_();
             break;
           case ObjectType.PRIZE:
-            var prize = prizeIndex.getPrize(collision.xTile, collision.yTile);
+            let prize = prizeIndex.getPrize(collision.xTile, collision.yTile);
             if (prize && this.shouldCollectPrize_(prize)) {
               this.onPrizeCollected(prize);
               prizeIndex.removePrize(prize);
             }
             break;
           case ObjectType.FLAG:
-            var flag = flagIndex.getFlag(collision.xTile, collision.yTile);
+            let flag = flagIndex.getFlag(collision.xTile, collision.yTile);
             if (flag != null) {
               this.captureFlag_(flag);
             } else {

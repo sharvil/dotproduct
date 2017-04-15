@@ -23,11 +23,11 @@ export default class Starfield implements Drawable {
 
     // TODO(sharvil): seed this PRNG with something map-unique so
     // we get a map-specific stable, random star pattern.
-    var rng = new Prng();
-    var map = game.getMap();
-    var mapWidth = map.getTileWidth() * map.getWidth();
-    var mapHeight = map.getTileHeight() * map.getHeight();
-    for (var i = 0; i < Starfield.NUM_LARGE_STARS_; ++i) {
+    let rng = new Prng();
+    let map = game.getMap();
+    let mapWidth = map.getTileWidth() * map.getWidth();
+    let mapHeight = map.getTileHeight() * map.getHeight();
+    for (let i = 0; i < Starfield.NUM_LARGE_STARS_; ++i) {
       let star = {
         asset: 'star' + (rng.random() % 6),
         x: rng.random() % mapWidth,
@@ -36,7 +36,7 @@ export default class Starfield implements Drawable {
       this.bigStars_.push(star);
     }
 
-    for (var i = 0; i < Starfield.STAR_DENSITY_; ++i) {
+    for (let i = 0; i < Starfield.STAR_DENSITY_; ++i) {
       let star = {
         x: Math.round(Math.random() * Starfield.STAR_TILE_SIZE_),
         y: Math.round(Math.random() * Starfield.STAR_TILE_SIZE_)
@@ -48,34 +48,34 @@ export default class Starfield implements Drawable {
   }
 
   public render(viewport : Viewport) {
-    var context = viewport.getContext();
-    var dimensions = viewport.getDimensions();
-    var x = dimensions.x;
-    var y = dimensions.y;
-    var w = dimensions.width;
-    var h = dimensions.height;
+    let context = viewport.getContext();
+    let dimensions = viewport.getDimensions();
+    let x = dimensions.x;
+    let y = dimensions.y;
+    let w = dimensions.width;
+    let h = dimensions.height;
 
     context.save();
 
-    var leftTile = Math.floor((x - w * 1.5) / Starfield.STAR_TILE_SIZE_);
-    var rightTile = Math.floor((x + w * 1.5) / Starfield.STAR_TILE_SIZE_);
-    var topTile = Math.floor((y - h * 1.5) / Starfield.STAR_TILE_SIZE_);
-    var bottomTile = Math.floor((y + h * 1.5) / Starfield.STAR_TILE_SIZE_);
+    let leftTile = Math.floor((x - w * 1.5) / Starfield.STAR_TILE_SIZE_);
+    let rightTile = Math.floor((x + w * 1.5) / Starfield.STAR_TILE_SIZE_);
+    let topTile = Math.floor((y - h * 1.5) / Starfield.STAR_TILE_SIZE_);
+    let bottomTile = Math.floor((y + h * 1.5) / Starfield.STAR_TILE_SIZE_);
 
     context.fillStyle = Starfield.STAR_L2_COLOR_;
-    for (var yTile = topTile; yTile <= bottomTile; ++yTile) {
-      for (var xTile = leftTile; xTile <= rightTile; ++xTile) {
-        for (var i = 0; i < this.stars_.length; ++i) {
+    for (let yTile = topTile; yTile <= bottomTile; ++yTile) {
+      for (let xTile = leftTile; xTile <= rightTile; ++xTile) {
+        for (let i = 0; i < this.stars_.length; ++i) {
           // Instead of simply stamping each tile onto the screen, make it look a little
           // more random by multiplying (modulo tile size) by the tile number. This way
           // each tile will have a unique pattern and won't look repetitive. Multiply by
           // another 31 to make this star pattern look different than the equivalent for
           // the L1 stars.
-          var tiledX = (31 * xTile * this.stars_[i].x) % Starfield.STAR_TILE_SIZE_;
-          var tiledY = (31 * yTile * this.stars_[i].y) % Starfield.STAR_TILE_SIZE_;
+          let tiledX = (31 * xTile * this.stars_[i].x) % Starfield.STAR_TILE_SIZE_;
+          let tiledY = (31 * yTile * this.stars_[i].y) % Starfield.STAR_TILE_SIZE_;
 
-          var dx = Math.floor((xTile * Starfield.STAR_TILE_SIZE_ + tiledX - x) / 3 + w / 2);
-          var dy = Math.floor((yTile * Starfield.STAR_TILE_SIZE_ + tiledY - y) / 3 + h / 2);
+          let dx = Math.floor((xTile * Starfield.STAR_TILE_SIZE_ + tiledX - x) / 3 + w / 2);
+          let dy = Math.floor((yTile * Starfield.STAR_TILE_SIZE_ + tiledY - y) / 3 + h / 2);
           context.fillRect(dx, dy, 1, 1);
         }
       }
@@ -87,25 +87,25 @@ export default class Starfield implements Drawable {
     bottomTile = Math.floor((y + h) / Starfield.STAR_TILE_SIZE_);
 
     context.fillStyle = Starfield.STAR_L1_COLOR_;
-    for (var yTile = topTile; yTile <= bottomTile; ++yTile) {
-      for (var xTile = leftTile; xTile <= rightTile; ++xTile) {
-        for (var i = 0; i < this.stars_.length; ++i) {
+    for (let yTile = topTile; yTile <= bottomTile; ++yTile) {
+      for (let xTile = leftTile; xTile <= rightTile; ++xTile) {
+        for (let i = 0; i < this.stars_.length; ++i) {
           // Instead of simply stamping each tile onto the screen, make it look a little
           // more random by multiplying (modulo tile size) by the tile number. This way
           // each tile will have a unique pattern and won't look repetitive.
-          var tiledX = (xTile * this.stars_[i].x) % Starfield.STAR_TILE_SIZE_;
-          var tiledY = (yTile * this.stars_[i].y) % Starfield.STAR_TILE_SIZE_;
+          let tiledX = (xTile * this.stars_[i].x) % Starfield.STAR_TILE_SIZE_;
+          let tiledY = (yTile * this.stars_[i].y) % Starfield.STAR_TILE_SIZE_;
 
-          var dx = Math.floor((xTile * Starfield.STAR_TILE_SIZE_ + tiledX - x + w) / 2);
-          var dy = Math.floor((yTile * Starfield.STAR_TILE_SIZE_ + tiledY - y + h) / 2);
+          let dx = Math.floor((xTile * Starfield.STAR_TILE_SIZE_ + tiledX - x + w) / 2);
+          let dy = Math.floor((yTile * Starfield.STAR_TILE_SIZE_ + tiledY - y + h) / 2);
           context.fillRect(dx, dy, 1, 1);
         }
       }
     }
 
-    for (var i = 0; i < this.bigStars_.length; ++i) {
-      var star = this.bigStars_[i];
-      var image = this.game_.getResourceManager().getImage(star.asset);
+    for (let i = 0; i < this.bigStars_.length; ++i) {
+      let star = this.bigStars_[i];
+      let image = this.game_.getResourceManager().getImage(star.asset);
       image.render(context, Math.round(star.x - (x * 0.6)), Math.round(star.y - (y * 0.6)));
     }
 

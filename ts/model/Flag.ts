@@ -36,7 +36,7 @@ export default class Flag {
 
   // Returns true if flag ownership changed, false otherwise.
   public captureFlag(team : number) : boolean {
-    var changedOwnership = (this.team_ != team);
+    let changedOwnership = (this.team_ != team);
     this.team_ = team;
     this.map_.setTile(this.xTile_, this.yTile_, this.getTileType_());
     return changedOwnership;

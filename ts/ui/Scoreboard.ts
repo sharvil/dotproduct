@@ -15,7 +15,7 @@ export default class Scoreboard {
     this.view_ = <HTMLDivElement> document.getElementById('sv');
     this.playerIndex_ = game.getPlayerIndex();
 
-    var self = this;
+    let self = this;
     setTimeout(function() {
       self.hide();
     }, 2000);
@@ -32,22 +32,22 @@ export default class Scoreboard {
   public update = function () {
     this.view_.innerHTML = '';
 
-    var self = this;
-    var localPlayer = this.playerIndex_.getLocalPlayer();
-    var compareFn = function (p1, p2) {
+    let self = this;
+    let localPlayer = this.playerIndex_.getLocalPlayer();
+    let compareFn = function (p1, p2) {
       return p2.getPoints() - p1.getPoints();
     };
 
     this.playerIndex_.forEach(function (player) {
-      var nameNode = document.createElement('span');
+      let nameNode = document.createElement('span');
       nameNode.classList.add(Scoreboard.NAME_CLASS_NAME_);
       nameNode.textContent = player.getName();
 
-      var scoreNode = document.createElement('span');
+      let scoreNode = document.createElement('span');
       scoreNode.classList.add(Scoreboard.SCORE_CLASS_NAME_);
       scoreNode.textContent = player.getPoints();
 
-      var container = document.createElement('div');
+      let container = document.createElement('div');
       container.classList.add(player.isFriend(localPlayer) ? Scoreboard.FRIEND_CLASS_NAME_ : Scoreboard.FOE_CLASS_NAME_);
       container.appendChild(nameNode);
       container.appendChild(scoreNode);

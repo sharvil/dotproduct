@@ -34,8 +34,8 @@ export default class RadarLayer extends ModelObject implements Drawable {
   }
 
   public static sizeForViewport(viewport : Viewport) : { width: number, height: number} {
-    var viewportDimensions = viewport.getDimensions();
-    var size = Math.floor(Math.min(viewportDimensions.width, viewportDimensions.height) * RadarLayer.RADAR_SIZE_PERCENT_);
+    let viewportDimensions = viewport.getDimensions();
+    let size = Math.floor(Math.min(viewportDimensions.width, viewportDimensions.height) * RadarLayer.RADAR_SIZE_PERCENT_);
     return {
       width: size,
       height: size
@@ -54,14 +54,14 @@ export default class RadarLayer extends ModelObject implements Drawable {
   }
 
   public render(viewport : Viewport) {
-    var context = viewport.getContext();
-    var dimensions = viewport.getDimensions();
+    let context = viewport.getContext();
+    let dimensions = viewport.getDimensions();
 
-    var size = RadarLayer.sizeForViewport(viewport);
+    let size = RadarLayer.sizeForViewport(viewport);
 
     context.save();
-    var left = dimensions.width - size.width;
-    var top = dimensions.height - size.height;
+    let left = dimensions.width - size.width;
+    let top = dimensions.height - size.height;
     context.translate(left, top);
 
     // Render border. The Canvas API is retarded with strokes -- apparently it draws
@@ -92,17 +92,17 @@ export default class RadarLayer extends ModelObject implements Drawable {
       }
     }
 
-    var SCALE_FACTOR = RadarLayer.SCALE_FACTOR_;
+    let SCALE_FACTOR = RadarLayer.SCALE_FACTOR_;
 
-    var tileWidth = this.tileWidth_;
-    var tileHeight = this.tileHeight_;
-    var scaledTileWidth = Math.floor(tileWidth * SCALE_FACTOR) || 1;
-    var scaledTileHeight = Math.floor(tileHeight * SCALE_FACTOR) || 1;
+    let tileWidth = this.tileWidth_;
+    let tileHeight = this.tileHeight_;
+    let scaledTileWidth = Math.floor(tileWidth * SCALE_FACTOR) || 1;
+    let scaledTileHeight = Math.floor(tileHeight * SCALE_FACTOR) || 1;
 
-    var sourceX = Math.floor((dimensions.x * scaledTileWidth / tileWidth) - (radarWidth / 2));
-    var sourceY = Math.floor((dimensions.y * scaledTileHeight / tileHeight) - (radarHeight / 2));
-    var destX = 0;
-    var destY = 0;
+    let sourceX = Math.floor((dimensions.x * scaledTileWidth / tileWidth) - (radarWidth / 2));
+    let sourceY = Math.floor((dimensions.y * scaledTileHeight / tileHeight) - (radarHeight / 2));
+    let destX = 0;
+    let destY = 0;
 
     // Make sure all source dimensions fall within the source image. If they don't, the drawImage
     // will fail.
@@ -124,43 +124,43 @@ export default class RadarLayer extends ModelObject implements Drawable {
   }
 
   private renderPrizes_(context : CanvasRenderingContext2D, dimensions : any, radarWidth : number, radarHeight : number) {
-    var SCALE_FACTOR = RadarLayer.SCALE_FACTOR_;
+    let SCALE_FACTOR = RadarLayer.SCALE_FACTOR_;
 
-    var tileWidth = this.tileWidth_;
-    var tileHeight = this.tileHeight_;
-    var scaledTileWidth = Math.floor(tileWidth * SCALE_FACTOR) || 1;
-    var scaledTileHeight = Math.floor(tileHeight * SCALE_FACTOR) || 1;
+    let tileWidth = this.tileWidth_;
+    let tileHeight = this.tileHeight_;
+    let scaledTileWidth = Math.floor(tileWidth * SCALE_FACTOR) || 1;
+    let scaledTileHeight = Math.floor(tileHeight * SCALE_FACTOR) || 1;
 
     context.fillStyle = Palette.radarPrizeColor();
     this.game_.getPrizeIndex().forEach(function (prize) {
-      var xPixels = (prize.getX() - dimensions.x / tileWidth) * scaledTileWidth;
-      var yPixels = (prize.getY() - dimensions.y / tileHeight) * scaledTileHeight;
-      var x = Math.floor(xPixels + radarWidth / 2);
-      var y = Math.floor(yPixels + radarHeight / 2);
+      let xPixels = (prize.getX() - dimensions.x / tileWidth) * scaledTileWidth;
+      let yPixels = (prize.getY() - dimensions.y / tileHeight) * scaledTileHeight;
+      let x = Math.floor(xPixels + radarWidth / 2);
+      let y = Math.floor(yPixels + radarHeight / 2);
 
       context.fillRect(x, y, scaledTileWidth, scaledTileHeight);
     });
   }
 
   private renderPlayers_(context : CanvasRenderingContext2D, dimensions : any, radarWidth : number, radarHeight : number) {
-    var self = this;
-    var localPlayer = this.game_.getPlayerIndex().getLocalPlayer();
+    let self = this;
+    let localPlayer = this.game_.getPlayerIndex().getLocalPlayer();
 
-    var SCALE_FACTOR = RadarLayer.SCALE_FACTOR_;
-    var actualXScale = (Math.floor(this.tileWidth_ * SCALE_FACTOR) || 1) / this.tileWidth_;
-    var actualYScale = (Math.floor(this.tileHeight_ * SCALE_FACTOR) || 1) / this.tileHeight_;
+    let SCALE_FACTOR = RadarLayer.SCALE_FACTOR_;
+    let actualXScale = (Math.floor(this.tileWidth_ * SCALE_FACTOR) || 1) / this.tileWidth_;
+    let actualYScale = (Math.floor(this.tileHeight_ * SCALE_FACTOR) || 1) / this.tileHeight_;
 
     this.game_.getPlayerIndex().forEach(function (player) {
       if (!player.isAlive()) {
         return;
       }
 
-      var position = player.getPosition();
-      var xPixels = Math.floor(position.x * actualXScale) - (dimensions.x * actualXScale);
-      var yPixels = Math.floor(position.y * actualYScale) - (dimensions.y * actualYScale);
-      var x = Math.floor(xPixels + radarWidth / 2);
-      var y = Math.floor(yPixels + radarHeight / 2);
-      var alpha = (player == localPlayer) ? self.blinkAlpha_ : 1;
+      let position = player.getPosition();
+      let xPixels = Math.floor(position.x * actualXScale) - (dimensions.x * actualXScale);
+      let yPixels = Math.floor(position.y * actualYScale) - (dimensions.y * actualYScale);
+      let x = Math.floor(xPixels + radarWidth / 2);
+      let y = Math.floor(yPixels + radarHeight / 2);
+      let alpha = (player == localPlayer) ? self.blinkAlpha_ : 1;
 
       context.fillStyle = player.isFriend(localPlayer) ? Palette.friendColor(alpha) : Palette.foeColor();
       context.fillRect(x - 1, y - 1, 3, 3);
@@ -168,19 +168,19 @@ export default class RadarLayer extends ModelObject implements Drawable {
   }
 
   private prerenderMapOnCanvas_() {
-    var SCALE_FACTOR = RadarLayer.SCALE_FACTOR_;
-    var map = this.game_.getMap();
-    var tileWidth = this.tileWidth_;
-    var tileHeight = this.tileHeight_;
-    var scaledTileWidth = Math.floor(tileWidth * SCALE_FACTOR) || 1;
-    var scaledTileHeight = Math.floor(tileHeight * SCALE_FACTOR) || 1;
+    let SCALE_FACTOR = RadarLayer.SCALE_FACTOR_;
+    let map = this.game_.getMap();
+    let tileWidth = this.tileWidth_;
+    let tileHeight = this.tileHeight_;
+    let scaledTileWidth = Math.floor(tileWidth * SCALE_FACTOR) || 1;
+    let scaledTileHeight = Math.floor(tileHeight * SCALE_FACTOR) || 1;
 
     this.mapCanvas_ = document.createElement('canvas');
     this.mapCanvas_.width = Math.ceil(map.getWidth() * scaledTileWidth);
     this.mapCanvas_.height = Math.ceil(map.getHeight() * scaledTileHeight);
 
-    var context = this.mapCanvas_.getContext('2d');
-    var tiles = map.getTiles(Rect.fromBox(0, 0, map.getWidth() - 1, map.getHeight() - 1));
+    let context = this.mapCanvas_.getContext('2d');
+    let tiles = map.getTiles(Rect.fromBox(0, 0, map.getWidth() - 1, map.getHeight() - 1));
 
     if (!context) {
       this.mapCanvas_ = null;
@@ -188,10 +188,10 @@ export default class RadarLayer extends ModelObject implements Drawable {
     }
 
     context.fillStyle = Palette.radarTileColor();
-    for (var i = 0; i < tiles.length; ++i) {
-      var tile = tiles[i];
-      var x = tile.x * scaledTileWidth;
-      var y = tile.y * scaledTileHeight;
+    for (let i = 0; i < tiles.length; ++i) {
+      let tile = tiles[i];
+      let x = tile.x * scaledTileWidth;
+      let y = tile.y * scaledTileHeight;
 
       context.fillRect(x, y, scaledTileWidth, scaledTileHeight);
     }

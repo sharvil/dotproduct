@@ -132,7 +132,7 @@ abstract class Player extends Entity {
   }
 
   public setShip(ship : number) {
-    var oldShip = this.ship_;
+    let oldShip = this.ship_;
 
     this.ship_ = ship;
     this.shipSettings_ = this.settings_['ships'][this.ship_];
@@ -227,7 +227,7 @@ abstract class Player extends Entity {
   public onRepelled(repel : Repel) {
     this.velocity_ = repel.apply(this.position_, this.velocity_);
 
-    for (var i = 0; i < this.projectiles_.length; ++i) {
+    for (let i = 0; i < this.projectiles_.length; ++i) {
       this.projectiles_[i].onRepelled(repel);
     }
   }

@@ -27,7 +27,7 @@ structs.Heap = function(comparator) {
  * @return {!structs.Heap}
  */
 structs.Heap.fromArray = function(array, comparator) {
-  var heap = new structs.Heap(comparator);
+  let heap = new structs.Heap(comparator);
   heap.heap_ = array;
   heap.heapify_();
   return heap;
@@ -46,7 +46,7 @@ structs.Heap.prototype.peek = function() {
  */
 structs.Heap.prototype.pop = function() {
   goog.asserts.assert(!this.isEmpty(), 'Cannot pop from an empty heap.');
-  var ret = this.heap_[0];
+  let ret = this.heap_[0];
   if (this.getCount() == 1) {
     goog.array.clear(this.heap_);
   } else {
@@ -68,9 +68,9 @@ structs.Heap.prototype.insert = function(value) {
  * @param {*} value
  */
 structs.Heap.prototype.remove = function(value) {
-  var nodes = this.heap_;
-  var count = this.getCount();
-  for (var i = 0; i < count; ++i) {
+  let nodes = this.heap_;
+  let count = this.getCount();
+  for (let i = 0; i < count; ++i) {
     if (value == nodes[i]) {
       nodes[i] = nodes.pop();
       this.floatDown_(i);
@@ -101,7 +101,7 @@ structs.Heap.prototype.isEmpty = function() {
  * @private
  */
 structs.Heap.prototype.heapify_ = function() {
-  for (var index = (this.getCount() >> 1) - 1; index >= 0; --index) {
+  for (let index = (this.getCount() >> 1) - 1; index >= 0; --index) {
     this.floatDown_(index);
   }
 };
@@ -111,14 +111,14 @@ structs.Heap.prototype.heapify_ = function() {
  * @private
  */
 structs.Heap.prototype.floatDown_ = function(index) {
-  var nodes = this.heap_;
-  var count = this.getCount();
-  var node = nodes[index];
+  let nodes = this.heap_;
+  let count = this.getCount();
+  let node = nodes[index];
   while (index < (count >> 1)) {
-    var left = this.leftChild_(index);
-    var right = this.rightChild_(index);
+    let left = this.leftChild_(index);
+    let right = this.rightChild_(index);
 
-    var smallerChild = left;
+    let smallerChild = left;
     if (right < count && this.compare_(nodes[left], nodes[right]) > 0) {
       smallerChild = right;
     }
@@ -138,10 +138,10 @@ structs.Heap.prototype.floatDown_ = function(index) {
  * @private
  */
 structs.Heap.prototype.bubbleUp_ = function(index) {
-  var nodes = this.heap_;
-  var node = nodes[index];
+  let nodes = this.heap_;
+  let node = nodes[index];
   while (index > 0) {
-    var parent = this.parent_(index);
+    let parent = this.parent_(index);
     if (this.compare_(node, nodes[parent]) >= 0) {
       break;
     }

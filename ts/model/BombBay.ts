@@ -31,26 +31,26 @@ export default class BombBay implements Weapon {
   }
 
   public fire(angle : number, position : Vector, velocity : Vector, isMine : boolean, commitFireFn : (fireEnergy : number, fireDelay : number, recoilAcceleration : number) => boolean) : any {
-    var level = this.level_.getValue();
+    let level = this.level_.getValue();
     if (level < 0) {
       return null;
     }
 
-    var fireEnergy = this.getFireEnergy_();
-    var fireDelay = this.getFireDelay_();
-    var recoilAcceleration = isMine ? 0 : this.getRecoilAcceleration_();
+    let fireEnergy = this.getFireEnergy_();
+    let fireDelay = this.getFireDelay_();
+    let recoilAcceleration = isMine ? 0 : this.getRecoilAcceleration_();
 
     if (!commitFireFn(fireEnergy, fireDelay, recoilAcceleration)) {
       return null;
     }
 
-    var lifetime = this.getLifetime_();
-    var damage = this.getDamage_();
-    var bounceCount = this.getBounceCount_();
-    var blastRadius = this.getBlastRadius_();
-    var proxRadius = this.getProxRadius_();
-    var newVelocity = isMine ? Vector.ZERO : velocity.add(Vector.fromPolar(this.getBombSpeed_(), angle));
-    var projectile = this.game_.getModelObjectFactory().newBomb(this.game_, this.owner_, level, position, newVelocity, lifetime, damage, bounceCount, blastRadius, proxRadius);
+    let lifetime = this.getLifetime_();
+    let damage = this.getDamage_();
+    let bounceCount = this.getBounceCount_();
+    let blastRadius = this.getBlastRadius_();
+    let proxRadius = this.getProxRadius_();
+    let newVelocity = isMine ? Vector.ZERO : velocity.add(Vector.fromPolar(this.getBombSpeed_(), angle));
+    let projectile = this.game_.getModelObjectFactory().newBomb(this.game_, this.owner_, level, position, newVelocity, lifetime, damage, bounceCount, blastRadius, proxRadius);
 
     this.owner_.addProjectile(projectile);
 
@@ -71,15 +71,15 @@ export default class BombBay implements Weapon {
   public onFired(timeDiff : number, position : Vector, velocity : Vector, weaponData : any) {
     assert(weaponData['type'] == this.getType(), 'Cannot fire bomb with incorrect weapon type: ' + weaponData['type']);
 
-    var level = weaponData['level'];
-    var bounceCount = weaponData['bounceCount'];
+    let level = weaponData['level'];
+    let bounceCount = weaponData['bounceCount'];
     velocity = Vector.fromArray(weaponData['vel']);
 
     // Make sure the level is correct so the following getters use the right value for their calculations.
     this.level_.setValue(level);
 
-    var projectile = this.game_.getModelObjectFactory().newBomb(this.game_, this.owner_, this.level_.getValue(), position, velocity, this.getLifetime_(), this.getDamage_(), bounceCount, this.getBlastRadius_(), this.getProxRadius_());
-    for (var i = 0; i < timeDiff; ++i) {
+    let projectile = this.game_.getModelObjectFactory().newBomb(this.game_, this.owner_, this.level_.getValue(), position, velocity, this.getLifetime_(), this.getDamage_(), bounceCount, this.getBlastRadius_(), this.getProxRadius_());
+    for (let i = 0; i < timeDiff; ++i) {
       projectile.advanceTime();
     }
     this.owner_.addProjectile(projectile);

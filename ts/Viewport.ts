@@ -37,7 +37,7 @@ export default class Viewport {
       return;
     }
 
-    var position = this.followingPlayer_.getPosition();
+    let position = this.followingPlayer_.getPosition();
     this.x_ = Math.floor(position.x);
     this.y_ = Math.floor(position.y);
 
@@ -45,13 +45,13 @@ export default class Viewport {
   }
 
   public getDimensions() : any {
-    var ratio = this.getHdpiRatio();
-    var width = this.context_.canvas.width / ratio;
-    var height = this.context_.canvas.height / ratio;
+    let ratio = this.getHdpiRatio();
+    let width = this.context_.canvas.width / ratio;
+    let height = this.context_.canvas.height / ratio;
 
-    var magnitude = this.jitterTime_.getValue() / this.jitterTime_.getHigh() * Viewport.MAX_JITTER_MAGNITUDE_;
-    var x = this.x_ + Math.floor((Math.random() - 0.5) * 2 * magnitude);
-    var y = this.y_ + Math.floor((Math.random() - 0.5) * 2 * magnitude);
+    let magnitude = this.jitterTime_.getValue() / this.jitterTime_.getHigh() * Viewport.MAX_JITTER_MAGNITUDE_;
+    let x = this.x_ + Math.floor((Math.random() - 0.5) * 2 * magnitude);
+    let y = this.y_ + Math.floor((Math.random() - 0.5) * 2 * magnitude);
 
     return {
       x: x,
@@ -67,9 +67,9 @@ export default class Viewport {
 
   // Returns true if the specified |vector| is contained within the viewport.
   public contains(vector : Vector) : boolean {
-    var x = vector.x;
-    var y = vector.y;
-    var dimensions = this.getDimensions();
+    let x = vector.x;
+    let y = vector.y;
+    let dimensions = this.getDimensions();
     return x >= dimensions.left && x <= dimensions.right &&
       y >= dimensions.top && y <= dimensions.bottom;
   }

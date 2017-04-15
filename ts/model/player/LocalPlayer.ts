@@ -90,7 +90,7 @@ export default class LocalPlayer extends Player {
 
     this.energy_ = Math.max(this.energy_ - energy, (shooter == this) ? 1 : 0);
     if (this.energy_ <= 0) {
-      var bountyGained = this.bounty_;
+      let bountyGained = this.bounty_;
       this.onDeath(shooter);
       shooter.onKill(this, bountyGained);
     }
@@ -128,8 +128,8 @@ export default class LocalPlayer extends Player {
   }
 
   public advanceTime() {
-    var forceSendUpdate = false;
-    var isSafe = this.isSafe();
+    let forceSendUpdate = false;
+    let isSafe = this.isSafe();
 
     --this.respawnTimer_;
     if (this.respawnTimer_ > 0) {
@@ -148,8 +148,8 @@ export default class LocalPlayer extends Player {
 
     // Check for ship change before we read any ship settings.
     if (this.shipChangeDelay_.isLow()) {
-      for (var i = 0; i < this.settings_['ships'].length; ++i) {
-        var keycode = (49 + i);  // Digits 1-n
+      for (let i = 0; i < this.settings_['ships'].length; ++i) {
+        let keycode = (49 + i);  // Digits 1-n
         if (this.keyboard_.isKeyPressed(keycode)) {
           if (i != this.ship_) {
             if (this.energy_ >= this.maxEnergy_) {
@@ -166,10 +166,10 @@ export default class LocalPlayer extends Player {
       }
     }
 
-    var oldAngle = this.angleInRadians_;
-    var oldVelocity = this.velocity_;
+    let oldAngle = this.angleInRadians_;
+    let oldVelocity = this.velocity_;
 
-    var shipRotation = this.shipSettings_['rotationRadiansPerTick'];
+    let shipRotation = this.shipSettings_['rotationRadiansPerTick'];
     if (this.keyboard_.isKeyPressed(Key.Map.ROTATE_RIGHT)) {
       this.angleInRadians_ += shipRotation;
     } else if (this.keyboard_.isKeyPressed(Key.Map.ROTATE_LEFT)) {
@@ -180,10 +180,10 @@ export default class LocalPlayer extends Player {
       this.angleInRadians_ -= Math.floor(this.angleInRadians_ / (2 * Math.PI)) * 2 * Math.PI;
     }
 
-    var angle = this.getAngle_();
-    var maximumSpeed = this.shipSettings_['speedPixelsPerTick'];
-    var acceleration = this.shipSettings_['accelerationPerTick'];
-    var accelerationEnergy = 0;
+    let angle = this.getAngle_();
+    let maximumSpeed = this.shipSettings_['speedPixelsPerTick'];
+    let acceleration = this.shipSettings_['accelerationPerTick'];
+    let accelerationEnergy = 0;
     if (this.keyboard_.isKeyPressed(Key.Map.AFTERBURNER) && this.energy_ > this.shipSettings_['afterburnerEnergy']) {
       maximumSpeed = this.shipSettings_['afterburnerMaxSpeed'];
       acceleration = this.shipSettings_['afterburnerAcceleration'];
@@ -199,14 +199,14 @@ export default class LocalPlayer extends Player {
     }
 
     // Magnitude of speed is greater than maximum ship speed - clamp.
-    var magnitude = this.velocity_.magnitude();
+    let magnitude = this.velocity_.magnitude();
     if (magnitude > maximumSpeed) {
       this.velocity_ = this.velocity_.resize(maximumSpeed);
     }
 
     this.updatePosition_(this.shipSettings_['bounceFactor']);
 
-    var weaponData = this.getFiredWeapon_();
+    let weaponData = this.getFiredWeapon_();
 
     // If, after the position update, we moved into / out of a safe zone, send a force update.
     if (this.isSafe() != isSafe) {
@@ -230,16 +230,16 @@ export default class LocalPlayer extends Player {
       return null;
     }
 
-    var self = this;
+    let self = this;
 
     if (this.keyboard_.isKeyPressed(Key.Map.FIRE_GUN)) {
       if (this.isSafe()) {
         this.velocity_ = Vector.ZERO;
         return null;
       }
-      var angle = this.getAngle_();
-      var position = this.position_;
-      var velocity = this.velocity_;
+      let angle = this.getAngle_();
+      let position = this.position_;
+      let velocity = this.velocity_;
 
       return this.gun_.fire(angle, position, velocity, function (fireEnergy, fireDelay) {
         if (self.energy_ > fireEnergy) {
@@ -256,10 +256,10 @@ export default class LocalPlayer extends Player {
         this.velocity_ = Vector.ZERO;
         return null;
       }
-      var angle = this.getAngle_();
-      var position = this.position_;
-      var velocity = this.velocity_;
-      var isMine = this.keyboard_.isKeyPressed(Key.Map.FIRE_MINE);
+      let angle = this.getAngle_();
+      let position = this.position_;
+      let velocity = this.velocity_;
+      let isMine = this.keyboard_.isKeyPressed(Key.Map.FIRE_MINE);
 
       return this.bombBay_.fire(angle, position, velocity, isMine, function (fireEnergy, fireDelay, recoil) {
         if (self.energy_ > fireEnergy) {
@@ -313,13 +313,13 @@ export default class LocalPlayer extends Player {
       return;
     }
 
-    var angle = this.getAngle_();
-    var bottomOfShip = this.position_.subtract(Vector.fromPolar(this.radius_, angle));
-    var exhaustVelocity = this.velocity_.subtract(thrustVector.resize(5));
-    var perpendicular = Vector.fromPolar(1, angle + Math.PI / 2);
+    let angle = this.getAngle_();
+    let bottomOfShip = this.position_.subtract(Vector.fromPolar(this.radius_, angle));
+    let exhaustVelocity = this.velocity_.subtract(thrustVector.resize(5));
+    let perpendicular = Vector.fromPolar(1, angle + Math.PI / 2);
 
-    var e1 = new Exhaust(this.game_, bottomOfShip.add(perpendicular.scale(3)), exhaustVelocity.add(perpendicular));
-    var e2 = new Exhaust(this.game_, bottomOfShip.subtract(perpendicular.scale(3)), exhaustVelocity.subtract(perpendicular));
+    let e1 = new Exhaust(this.game_, bottomOfShip.add(perpendicular.scale(3)), exhaustVelocity.add(perpendicular));
+    let e2 = new Exhaust(this.game_, bottomOfShip.subtract(perpendicular.scale(3)), exhaustVelocity.subtract(perpendicular));
     this.exhaust_.push(e1);
     this.exhaust_.push(e2);
     this.exhaustTimer_.setHigh();
@@ -327,7 +327,7 @@ export default class LocalPlayer extends Player {
 
   private sendPositionUpdate_(forceSendUpdate : boolean, isAccelerating : boolean, weaponData? : any) {
     if (!forceSendUpdate) {
-      var sendPositionDelay = this.settings_['network']['sendPositionDelay'];
+      let sendPositionDelay = this.settings_['network']['sendPositionDelay'];
       if (isAccelerating) {
         sendPositionDelay = this.settings_['network']['fastSendPositionDelay'];
       }
@@ -349,17 +349,17 @@ export default class LocalPlayer extends Player {
   private onToggleMultifire_() {
     this.gun_.toggleMultifire();
 
-    var state = this.gun_.getMultifireState();
+    let state = this.gun_.getMultifireState();
     if (state != ToggleState.UNAVAILABLE) {
       Listener.fire(this, 'multifire', state == ToggleState.ENABLED)
     }
   }
 
   public isSafe() : boolean {
-    var map = this.game_.getMap();
-    var pos = map.toTileCoordinates(this.position_);
-    var tile = map.getTile(pos.x, pos.y);
-    var tileProperties = map.getTileProperties(tile);
+    let map = this.game_.getMap();
+    let pos = map.toTileCoordinates(this.position_);
+    let tile = map.getTile(pos.x, pos.y);
+    let tileProperties = map.getTileProperties(tile);
     return !!tileProperties['safe'];
   }
 

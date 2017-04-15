@@ -31,11 +31,11 @@ export default class RepelWeapon implements Weapon {
 
     --this.count_;
 
-    var lifetime = this.settings_['lifetime'];
-    var distance = this.settings_['distance'];
-    var speed = this.settings_['speed'];
+    let lifetime = this.settings_['lifetime'];
+    let distance = this.settings_['distance'];
+    let speed = this.settings_['speed'];
 
-    var projectile = this.game_.getModelObjectFactory().newRepel(this.game_, this.owner_, this.owner_.getPosition(), lifetime, distance, speed);
+    let projectile = this.game_.getModelObjectFactory().newRepel(this.game_, this.owner_, this.owner_.getPosition(), lifetime, distance, speed);
     this.owner_.addProjectile(projectile);
 
     this.game_.getResourceManager().playSound('repel');
@@ -49,14 +49,14 @@ export default class RepelWeapon implements Weapon {
   public onFired(timeDiff : number, position : Vector, velocity : Vector, weaponData : any) {
     assert(weaponData['type'] == this.getType(), 'Cannot fire repel with incorrect weapon type: ' + weaponData['type']);
 
-    var lifetime = this.settings_['lifetime'];
-    var distance = this.settings_['distance'];
-    var speed = this.settings_['speed'];
+    let lifetime = this.settings_['lifetime'];
+    let distance = this.settings_['distance'];
+    let speed = this.settings_['speed'];
 
-    var projectile = this.game_.getModelObjectFactory().newRepel(this.game_, this.owner_, position, lifetime, distance, speed);
+    let projectile = this.game_.getModelObjectFactory().newRepel(this.game_, this.owner_, position, lifetime, distance, speed);
     this.owner_.addProjectile(projectile);
 
-    for (var i = 0; i < timeDiff; ++i) {
+    for (let i = 0; i < timeDiff; ++i) {
       projectile.advanceTime();
     }
   }

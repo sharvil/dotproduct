@@ -34,7 +34,7 @@ export default class Bomb extends Projectile {
       return false;
     }
 
-    var distance = this.position_.subtract(player.getPosition()).magnitude();
+    let distance = this.position_.subtract(player.getPosition()).magnitude();
     if (player.getDimensions().boundingRect.contains(this.position_)) {
       this.explode_(player);
       return true;
@@ -60,13 +60,13 @@ export default class Bomb extends Projectile {
     this.velocity_ = Vector.ZERO;
     this.lifetime_ = 0;
 
-    var localPlayer = this.game_.getPlayerIndex().getLocalPlayer();
-    var viewport = this.game_.getViewport();
+    let localPlayer = this.game_.getPlayerIndex().getLocalPlayer();
+    let viewport = this.game_.getViewport();
 
     // Figure out how much damage the local player is going to take from this bomb explosion.
-    var damage = this.damage_;
+    let damage = this.damage_;
     if (hitPlayer != localPlayer) {
-      var normDistance = this.position_.subtract(localPlayer.getPosition()).magnitude() / this.blastRadius_;
+      let normDistance = this.position_.subtract(localPlayer.getPosition()).magnitude() / this.blastRadius_;
       damage *= Math.max(1 - normDistance, 0);
     }
 

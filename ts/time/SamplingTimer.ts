@@ -34,7 +34,7 @@ time.SamplingTimer = function(rate) {
  * @param {string} name
  */
 time.SamplingTimer.prototype.start = function(name) {
-  var timer = this.timers_[name];
+  let timer = this.timers_[name];
   if (!timer) {
     timer = { start: 0, sample: 0 };
   }
@@ -51,7 +51,7 @@ time.SamplingTimer.prototype.start = function(name) {
  * @param {string} name
  */
 time.SamplingTimer.prototype.end = function(name) {
-  var timer = this.timers_[name];
+  let timer = this.timers_[name];
   goog.asserts.assert(timer, 'No timer found matching name: ' + name);
 
   if (timer.start) {

@@ -32,16 +32,16 @@ export default class Chat {
   }
 
   public addMessage(player : Player, message : string) {
-    var isAtBottom = this.view_.scrollTop + this.view_.offsetHeight >= this.view_.scrollHeight;
+    let isAtBottom = this.view_.scrollTop + this.view_.offsetHeight >= this.view_.scrollHeight;
 
-    var messageNode = document.createElement('div');
+    let messageNode = document.createElement('div');
 
-    var nameNode = document.createElement('span');
+    let nameNode = document.createElement('span');
     nameNode.classList.add(Chat.TEXT_NAME_CLASS_NAME_);
     nameNode.textContent = player.getName() + ': ';
     nameNode.addEventListener('click', this.onNameClicked_.bind(this, player));
 
-    var textNode = document.createElement('span');
+    let textNode = document.createElement('span');
     textNode.classList.add(Chat.TEXT_MESSAGE_CLASS_NAME_);
     textNode.textContent = message;
     textNode.innerHTML = window['linkify'](textNode.innerHTML);
@@ -56,9 +56,9 @@ export default class Chat {
   }
 
   public addSystemMessage(message : string) {
-    var isAtBottom = this.view_.scrollTop + this.view_.offsetHeight >= this.view_.scrollHeight;
+    let isAtBottom = this.view_.scrollTop + this.view_.offsetHeight >= this.view_.scrollHeight;
 
-    var messageNode = document.createElement('div');
+    let messageNode = document.createElement('div');
     messageNode.classList.add(Chat.SYSTEM_MESSAGE_CLASS_NAME_);
     messageNode.textContent = message;
     messageNode.innerHTML = window['linkify'](messageNode.innerHTML);
@@ -96,9 +96,9 @@ export default class Chat {
       return;
     }
 
-    var message = this.chatBox_.value.trim();
+    let message = this.chatBox_.value.trim();
     if (message != '') {
-      var command = message.split(' ')[0];
+      let command = message.split(' ')[0];
       this.protocol_.sendChat(message);
       this.addMessage(this.localPlayer_, message);
     }

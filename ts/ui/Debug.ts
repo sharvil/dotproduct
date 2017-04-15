@@ -20,12 +20,12 @@ export default class Debug {
   public update() {
     ++this.frames_;
 
-    var now = Date.now();
+    let now = Date.now();
     if (now - this.lastTime_ < 1000) {
       return;
     }
 
-    var html = Labs.NEXT_GAME_VIEW ? this.getEventTimeString_() : '';
+    let html = Labs.NEXT_GAME_VIEW ? this.getEventTimeString_() : '';
     if (html) {
       html += '<br><br>';
     }
@@ -43,13 +43,13 @@ export default class Debug {
   }
 
   private getEventTimeString_() : string {
-    var daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-    var monthName = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-    var today = new Date();
-    var daysUntilThursday = (4 - today.getDay() + 7) % 7;
-    var nextEventDate = new Date(Date.UTC(today.getFullYear(), today.getMonth(), today.getDate() + daysUntilThursday, 22));
+    let daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+    let monthName = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    let today = new Date();
+    let daysUntilThursday = (4 - today.getDay() + 7) % 7;
+    let nextEventDate = new Date(Date.UTC(today.getFullYear(), today.getMonth(), today.getDate() + daysUntilThursday, 22));
 
-    var delta = nextEventDate.getTime() - today.getTime();
+    let delta = nextEventDate.getTime() - today.getTime();
     if (delta < 0) {
       if (delta > -1000 * 3600 * 2) {
         return '';
@@ -58,20 +58,20 @@ export default class Debug {
       delta = nextEventDate.getTime() - today.getTime();
     }
 
-    var days = Math.floor(delta / 24 / 3600 / 1000);
-    var hours = Math.floor(delta / 3600 / 1000) % 24;
-    var minutes = Math.floor(delta / 60 / 1000) % 60;
-    var seconds = Math.floor(delta / 1000) % 60;
+    let days = Math.floor(delta / 24 / 3600 / 1000);
+    let hours = Math.floor(delta / 3600 / 1000) % 24;
+    let minutes = Math.floor(delta / 60 / 1000) % 60;
+    let seconds = Math.floor(delta / 1000) % 60;
 
-    var str = 'Next game';
+    let str = 'Next game';
     if (days > 0) {
-      var pad = nextEventDate.getMinutes() < 10 ? '0' : '';
-      var ampm = nextEventDate.getHours() >= 12 ? 'pm' : 'am';
+      let pad = nextEventDate.getMinutes() < 10 ? '0' : '';
+      let ampm = nextEventDate.getHours() >= 12 ? 'pm' : 'am';
       str += ' on ' + daysOfWeek[nextEventDate.getDay()] + ', ' + monthName[nextEventDate.getMonth()] + ' ' + nextEventDate.getDate() + ' at ' + (nextEventDate.getHours() % 12) + ':' + pad + nextEventDate.getMinutes() + ampm;
     } else {
-      var sPad = seconds < 10 ? '0' : '';
-      var mPad = minutes < 10 ? '0' : '';
-      var hPad = hours < 10 ? '0' : '';
+      let sPad = seconds < 10 ? '0' : '';
+      let mPad = minutes < 10 ? '0' : '';
+      let hPad = hours < 10 ? '0' : '';
       str += ' starting in ' + hPad + hours + ':' + mPad + minutes + ':' + sPad + seconds;
     }
     return str;

@@ -7,7 +7,7 @@ export default class Sound {
   }
 
   public load(url : string, loadCb : VoidFunction) {
-    var xhr = new XMLHttpRequest();
+    let xhr = new XMLHttpRequest();
     xhr.open('GET', url, true);
     xhr.responseType = 'arraybuffer';
     xhr.addEventListener('load', this.onLoad_.bind(this, loadCb));
@@ -17,14 +17,14 @@ export default class Sound {
   public play() {
     assert(!!this.buffer_, 'Unable to play sound before it\'s loaded.');
 
-    var source = Sound.audioContext_.createBufferSource();
+    let source = Sound.audioContext_.createBufferSource();
     source.buffer = this.buffer_;
     source.connect(Sound.audioContext_.destination);
     source.start();
   }
 
   private onLoad_(loadCb : VoidFunction, event : any) {
-    var self = this;
+    let self = this;
     Sound.audioContext_.decodeAudioData(event.target.response, function (buffer) {
       self.buffer_ = buffer;
       loadCb();

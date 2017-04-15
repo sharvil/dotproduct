@@ -34,7 +34,7 @@ export default class Prize extends ModelObject {
   }
 
   public advanceTime(fastForwardTicks? : number) {
-    var ticks = (fastForwardTicks === undefined) ? 1 : fastForwardTicks;
+    let ticks = (fastForwardTicks === undefined) ? 1 : fastForwardTicks;
     this.ttl_ = Math.max(0, this.ttl_ - ticks);
     if (this.ttl_ == 0) {
       this.invalidate();

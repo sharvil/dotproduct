@@ -32,7 +32,7 @@ export default class Simulation {
       this.timeMillis_ += Timer.ticksToMillis(1);
     }
 
-    var objectSnapshot = Array.from(this.registeredObjects_);
+    let objectSnapshot = Array.from(this.registeredObjects_);
     objectSnapshot.forEach(function (obj) {
       obj.advanceTime();
     });

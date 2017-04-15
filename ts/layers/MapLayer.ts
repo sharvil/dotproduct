@@ -27,7 +27,7 @@ export default class MapLayer extends ModelObject implements Drawable {
   }
 
   public advanceTime() {
-    for (var i = 0; i < this.animations_.length; ++i) {
+    for (let i = 0; i < this.animations_.length; ++i) {
       if (this.animations_[i]) {
         this.animations_[i].update();
       }
@@ -39,23 +39,23 @@ export default class MapLayer extends ModelObject implements Drawable {
   }
 
   public render(viewport : Viewport) {
-    var map = this.map_;
-    var dimensions = viewport.getDimensions();
-    var context = viewport.getContext();
+    let map = this.map_;
+    let dimensions = viewport.getDimensions();
+    let context = viewport.getContext();
 
-    var tileWidth = this.tileset_.getTileWidth();
-    var tileHeight = this.tileset_.getTileHeight();
+    let tileWidth = this.tileset_.getTileWidth();
+    let tileHeight = this.tileset_.getTileHeight();
 
     context.save();
-    var halfWidth = Math.floor(dimensions.width / 2);
-    var halfHeight = Math.floor(dimensions.height / 2);
+    let halfWidth = Math.floor(dimensions.width / 2);
+    let halfHeight = Math.floor(dimensions.height / 2);
 
     // Render one extra tile around the top and left in case we have a large
     // rock that's only partially protruding into the viewport.
-    var leftTile = Math.floor((dimensions.x - halfWidth) / tileWidth) - 1;
-    var topTile = Math.floor((dimensions.y - halfHeight) / tileHeight) - 1;
-    var numHorizTiles = Math.ceil(dimensions.width / tileWidth) + 1;
-    var numVertTiles = Math.ceil(dimensions.height / tileHeight) + 1;
+    let leftTile = Math.floor((dimensions.x - halfWidth) / tileWidth) - 1;
+    let topTile = Math.floor((dimensions.y - halfHeight) / tileHeight) - 1;
+    let numHorizTiles = Math.ceil(dimensions.width / tileWidth) + 1;
+    let numVertTiles = Math.ceil(dimensions.height / tileHeight) + 1;
 
     // Don't render tiles before 0th index.
     topTile = Math.max(topTile, 0);
@@ -70,15 +70,15 @@ export default class MapLayer extends ModelObject implements Drawable {
       numHorizTiles = map.getWidth() - leftTile - 1;
     }
 
-    for (var y = topTile; y <= topTile + numVertTiles; ++y) {
-      for (var x = leftTile; x <= leftTile + numHorizTiles; ++x) {
-        var tileNum = map.getTile(x, y);
+    for (let y = topTile; y <= topTile + numVertTiles; ++y) {
+      for (let x = leftTile; x <= leftTile + numHorizTiles; ++x) {
+        let tileNum = map.getTile(x, y);
         if (tileNum == TileType.NONE) {
           continue;
         }
 
-        var tileProperties = map.getTileProperties(tileNum);
-        var index = tileProperties['index'];
+        let tileProperties = map.getTileProperties(tileNum);
+        let index = tileProperties['index'];
         if (!tileProperties['animated']) {
           if (index <= this.tileset_.getNumTiles()) {
             this.tileset_.render(context,

@@ -27,11 +27,11 @@ namespace Quadtree {
       this.tiles_ = [];
       this.count_ = 0;
 
-      var width = rect.width;
-      var height = rect.height;
+      let width = rect.width;
+      let height = rect.height;
       if (width > MIN_SIZE_ && height > MIN_SIZE_) {
-        var midX = rect.left + Math.floor(width / 2);
-        var midY = rect.top + Math.floor(height / 2);
+        let midX = rect.left + Math.floor(width / 2);
+        let midY = rect.top + Math.floor(height / 2);
         this.children_.push(new Node(mapData, stride, Rect.fromBox(rect.left, rect.top, midX, midY)));
         this.children_.push(new Node(mapData, stride, Rect.fromBox(midX + 1, rect.top, rect.right, midY)));
         this.children_.push(new Node(mapData, stride, Rect.fromBox(rect.left, midY + 1, midX, rect.bottom)));
@@ -39,9 +39,9 @@ namespace Quadtree {
         this.merge_();
         this.prune_();
       } else {
-        for (var y = rect.top; y <= rect.bottom; ++y) {
-          for (var x = rect.left; x <= rect.right; ++x) {
-            var tileValue = mapData[y * stride + x];
+        for (let y = rect.top; y <= rect.bottom; ++y) {
+          for (let x = rect.left; x <= rect.right; ++x) {
+            let tileValue = mapData[y * stride + x];
             if (tileValue) {
               this.tiles_.push({ x: x, y: y, tileValue: tileValue });
             }
@@ -52,25 +52,25 @@ namespace Quadtree {
     }
 
     public tilesForViewport(viewport : Rect) : Array<any> {
-      var ret : Array<any> = [];
+      let ret : Array<any> = [];
       if (!this.overlaps_(viewport)) {
         return ret;
       }
 
       ret = ret.concat(this.tiles_);
-      for (var i = 0; i < this.children_.length; ++i) {
+      for (let i = 0; i < this.children_.length; ++i) {
         ret = ret.concat(this.children_[i].tilesForViewport(viewport));
       }
       return ret;
     }
 
     private merge_() {
-      for (var i = 0; i < this.children_.length; ++i) {
+      for (let i = 0; i < this.children_.length; ++i) {
         this.count_ += this.children_[i].count_;
       }
 
       if (this.count_ <= MIN_TILES_) {
-        for (var i = 0; i < this.children_.length; ++i) {
+        for (let i = 0; i < this.children_.length; ++i) {
           this.tiles_ = this.tiles_.concat(this.children_[i].tiles_);
         }
         this.children_ = [];
@@ -78,9 +78,9 @@ namespace Quadtree {
     }
 
     private prune_() {
-      var prunedChildren : Array<Node> = [];
-      for (var i = 0; i < this.children_.length; ++i) {
-        var child = this.children_[i];
+      let prunedChildren : Array<Node> = [];
+      for (let i = 0; i < this.children_.length; ++i) {
+        let child = this.children_[i];
         if (child.count_) {
           prunedChildren.push(child);
         }

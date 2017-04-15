@@ -21,7 +21,7 @@ export default class Repel extends Projectile {
    * velocity the entity should have after being repelled.
    */
   public apply(position : Vector, velocity : Vector) : Vector {
-    var delta = position.subtract(this.position_);
+    let delta = position.subtract(this.position_);
     if (delta.magnitude() <= this.distance_) {
       velocity = delta.resize(this.speed_);
     }

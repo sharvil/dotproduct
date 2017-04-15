@@ -62,8 +62,8 @@ export default class RemotePlayer extends Player {
       return;
     }
 
-    var finalPosition = this.extrapolatePosition_(timeDiff, position, velocity);
-    var distance = finalPosition.subtract(this.position_);
+    let finalPosition = this.extrapolatePosition_(timeDiff, position, velocity);
+    let distance = finalPosition.subtract(this.position_);
 
     this.angleInRadians_ = angle;
     this.velocity_ = velocity;
@@ -84,7 +84,7 @@ export default class RemotePlayer extends Player {
   }
 
   public advanceTime() {
-    var bounceFactor = this.game_.getSettings()['ships'][this.ship_]['bounceFactor'];
+    let bounceFactor = this.game_.getSettings()['ships'][this.ship_]['bounceFactor'];
     --this.velocityAdjustTimer_;
     if (this.velocityAdjustTimer_ == 0) {
       this.velocity_ = this.originalVelocity_;
@@ -94,17 +94,17 @@ export default class RemotePlayer extends Player {
   }
 
   private extrapolatePosition_(timeDiff : number, startPosition : Vector, startVelocity : Vector) : Vector {
-    var bounceFactor = this.game_.getSettings()['ships'][this.ship_]['bounceFactor'];
-    var savedPosition = this.position_;
-    var savedVelocity = this.velocity_;
+    let bounceFactor = this.game_.getSettings()['ships'][this.ship_]['bounceFactor'];
+    let savedPosition = this.position_;
+    let savedVelocity = this.velocity_;
 
     this.position_ = startPosition;
     this.velocity_ = startVelocity;
-    for (var i = 0; i < timeDiff; ++i) {
+    for (let i = 0; i < timeDiff; ++i) {
       this.updatePosition_(bounceFactor);
     }
 
-    var extrapolatedPosition = this.position_;
+    let extrapolatedPosition = this.position_;
 
     this.position_ = savedPosition;
     this.velocity_ = savedVelocity;

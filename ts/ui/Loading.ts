@@ -19,10 +19,10 @@ export default class Loading {
     this.setLoadPercent_(0);
     this.container_.style.display = 'block';
 
-    var self = this;
-    var totalResources = 0;
-    var loadedResources = 0;
-    var completionCb = function() {
+    let self = this;
+    let totalResources = 0;
+    let loadedResources = 0;
+    let completionCb = function() {
       self.setLoadPercent_(++loadedResources / totalResources * 100);
       if (loadedResources == totalResources) {
         self.container_.style.display = 'none';
@@ -30,20 +30,20 @@ export default class Loading {
       }
     };
 
-    for (var name in resources['images']) {
-      var resource = resources['images'][name];
+    for (let name in resources['images']) {
+      let resource = resources['images'][name];
       this.resourceManager_.loadImage(name, resource['url'], resource['xTiles'], resource['yTiles'], completionCb);
       ++totalResources;
     }
 
-    for (var name in resources['spritesheets']) {
-      var resource = resources['spritesheets'][name];
+    for (let name in resources['spritesheets']) {
+      let resource = resources['spritesheets'][name];
       this.resourceManager_.loadSpriteSheet(name, resource['url'], resource['xTiles'], resource['yTiles'], resource['frames'], resource['period'], completionCb);
       ++totalResources;
     }
 
-    for (var name in resources['sounds']) {
-      var resource = resources['sounds'][name];
+    for (let name in resources['sounds']) {
+      let resource = resources['sounds'][name];
       this.resourceManager_.loadSound(name, resource['url'], completionCb);
       ++totalResources;
     }

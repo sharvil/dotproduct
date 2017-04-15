@@ -71,8 +71,8 @@ export default class Game {
     this.viewport_ = new Viewport(this, <CanvasRenderingContext2D> (this.canvas_.getContext('2d')));
     this.map_ = new Map(this, mapData, tileProperties);
 
-    var startingShip = Math.floor(Math.random() * this.settings_['ships'].length);
-    var localPlayer = this.modelObjectFactory_.newLocalPlayer(this, this.settings_['id'], this.settings_['name'], this.settings_['team'], startingShip);
+    let startingShip = Math.floor(Math.random() * this.settings_['ships'].length);
+    let localPlayer = this.modelObjectFactory_.newLocalPlayer(this, this.settings_['id'], this.settings_['name'], this.settings_['team'], startingShip);
     this.playerIndex_ = new PlayerIndex(localPlayer);
     this.prizeIndex_ = new PrizeIndex(this);
     this.flagIndex_ = new FlagIndex(this);
@@ -189,7 +189,7 @@ export default class Game {
 
   private heartbeat_() {
     // Keep the game running even if we're in the background.
-    var curTime = Date.now();
+    let curTime = Date.now();
     while (curTime - this.lastTime_ > 500) {
       cancelAnimationFrame(this.animationId_);
       this.renderingLoop_();
@@ -199,12 +199,12 @@ export default class Game {
   private renderingLoop_() {
     this.animationId_ = requestAnimationFrame(this.renderingLoop_.bind(this));
 
-    var curTime = Date.now();
-    var timeDiff = Timer.millisToTicks(curTime - this.lastTime_ + this.tickResidue_);
+    let curTime = Date.now();
+    let timeDiff = Timer.millisToTicks(curTime - this.lastTime_ + this.tickResidue_);
 
     timeDiff = Math.min(timeDiff, Game.MAX_TICKS_PER_FRAME_);
 
-    for (var i = 0; i < timeDiff; ++i) {
+    for (let i = 0; i < timeDiff; ++i) {
       this.simulation_.advanceTime();
     }
 
@@ -221,21 +221,21 @@ export default class Game {
   }
 
   private onConnectionLost_() {
-    var self = this;
+    let self = this;
     this.renderingLoop_ = function () { self.lastTime_ = Date.now(); };
     this.disconnectedView_.show();
   }
 
   private onPlayerEntered_(packet : Array<any>) {
-    var id = packet[0];
-    var name = packet[1];
-    var team = packet[2];
-    var isAlive = packet[3];
-    var ship = packet[4];
-    var bounty = packet[5];
-    var presence = <Player.Presence> (packet[6]);
+    let id = packet[0];
+    let name = packet[1];
+    let team = packet[2];
+    let isAlive = packet[3];
+    let ship = packet[4];
+    let bounty = packet[5];
+    let presence = <Player.Presence> (packet[6]);
 
-    var player = this.modelObjectFactory_.newRemotePlayer(this, id, name, team, isAlive, ship, bounty);
+    let player = this.modelObjectFactory_.newRemotePlayer(this, id, name, team, isAlive, ship, bounty);
     player.setPresence(presence);
     this.playerIndex_.addPlayer(player);
 
@@ -243,8 +243,8 @@ export default class Game {
   }
 
   private onPlayerLeft_(packet : Array<any>) {
-    var id = packet[0];
-    var player = this.playerIndex_.findById(id);
+    let id = packet[0];
+    let player = this.playerIndex_.findById(id);
     if (player) {
       this.playerIndex_.removePlayer(player);
       this.notifications_.addEnterMessage('Player left: ' + player.getName());
@@ -252,12 +252,12 @@ export default class Game {
   }
 
   private onPlayerPosition_(packet : Array<any>) {
-    var timeDiff = Timer.millisToTicks(this.protocol_.getMillisSinceServerTime(packet[0]));
-    var id = packet[1];
-    var angle = packet[2];
-    var position = new Vector(packet[3], packet[4]);
-    var velocity = new Vector(packet[5], packet[6]);
-    var isSafe = packet[7];
+    let timeDiff = Timer.millisToTicks(this.protocol_.getMillisSinceServerTime(packet[0]));
+    let id = packet[1];
+    let angle = packet[2];
+    let position = new Vector(packet[3], packet[4]);
+    let velocity = new Vector(packet[5], packet[6]);
+    let isSafe = packet[7];
 
     // If the packet is really old, just discard it entirely. We should be getting
     // an updated one soon anyway. It may be the case that we discard a weapon
@@ -267,7 +267,7 @@ export default class Game {
       return;
     }
 
-    var player = this.playerIndex_.findById(id);
+    let player = this.playerIndex_.findById(id);
     if (player) {
       (<RemotePlayer> player).onPositionUpdate(timeDiff, angle, position, velocity, isSafe);
       if (packet.length > 8) {
@@ -277,11 +277,11 @@ export default class Game {
   }
 
   private onPlayerDied_(packet : Array<any>) {
-    var x = packet[0];
-    var y = packet[1];
-    var killee = this.playerIndex_.findById(packet[2]);
-    var killer = this.playerIndex_.findById(packet[3]);
-    var bountyGained = packet[4];
+    let x = packet[0];
+    let y = packet[1];
+    let killee = this.playerIndex_.findById(packet[2]);
+    let killer = this.playerIndex_.findById(packet[3]);
+    let bountyGained = packet[4];
 
     if (!killer || !killee) {
       return;
@@ -291,7 +291,7 @@ export default class Game {
     killer.onKill(killee, bountyGained);
     this.prizeIndex_.addKillPrize(x, y);
 
-    var message = killee.getName() + '(' + bountyGained + ') killed by: ' + killer.getName()
+    let message = killee.getName() + '(' + bountyGained + ') killed by: ' + killer.getName()
     if (killer == this.playerIndex_.getLocalPlayer()) {
       this.notifications_.addPersonalMessage(message);
     } else {
@@ -300,8 +300,8 @@ export default class Game {
   }
 
   private onShipChanged_(packet : Array<any>) {
-    var player = this.playerIndex_.findById(packet[0]);
-    var ship = packet[1];
+    let player = this.playerIndex_.findById(packet[0]);
+    let ship = packet[1];
 
     if (player) {
       player.setShip(ship);
@@ -309,13 +309,13 @@ export default class Game {
   }
 
   private onChatMessage_(packet : Array<any>) {
-    var playerId = packet[0];
-    var message = packet[1];
+    let playerId = packet[0];
+    let message = packet[1];
 
     if (playerId == Player.SYSTEM_PLAYER_ID) {
       this.chatView_.addSystemMessage(message);
     } else {
-      var player = this.playerIndex_.findById(packet[0]);
+      let player = this.playerIndex_.findById(packet[0]);
       if (player) {
         this.chatView_.addMessage(player, message);
       }
@@ -323,10 +323,10 @@ export default class Game {
   }
 
   private onScoreUpdated_(packet : Array<any>) {
-    var player = this.playerIndex_.findById(packet[0]);
-    var points = packet[1];
-    var wins = packet[2];
-    var losses = packet[3];
+    let player = this.playerIndex_.findById(packet[0]);
+    let points = packet[1];
+    let wins = packet[2];
+    let losses = packet[3];
 
     if (player) {
       player.onScoreUpdate(points, wins, losses);
@@ -334,21 +334,21 @@ export default class Game {
   }
 
   private onPrizeSeedUpdated_(packet : Array<any>) {
-    var seed = packet[0];
-    var timeDeltaMillis = this.protocol_.getMillisSinceServerTime(packet[1]);
+    let seed = packet[0];
+    let timeDeltaMillis = this.protocol_.getMillisSinceServerTime(packet[1]);
 
-    var ticks = Timer.millisToTicks(timeDeltaMillis);
+    let ticks = Timer.millisToTicks(timeDeltaMillis);
     this.prizeIndex_.onSeedUpdate(seed, ticks);
   }
 
   private onPrizeCollected_(packet : Array<any>) {
-    var player = this.playerIndex_.findById(packet[0]);
-    var type = packet[1];
-    var xTile = packet[2];
-    var yTile = packet[3];
+    let player = this.playerIndex_.findById(packet[0]);
+    let type = packet[1];
+    let xTile = packet[2];
+    let yTile = packet[3];
 
     // Remove the prize from the map if we have it in our model.
-    var prize = this.prizeIndex_.getPrize(xTile, yTile);
+    let prize = this.prizeIndex_.getPrize(xTile, yTile);
     if (prize) {
       this.prizeIndex_.removePrize(prize);
     }
@@ -362,8 +362,8 @@ export default class Game {
   }
 
   private onSetPresence_(packet : Array<any>) {
-    var player = this.playerIndex_.findById(packet[0]);
-    var presence = <Player.Presence> packet[1];
+    let player = this.playerIndex_.findById(packet[0]);
+    let presence = <Player.Presence> packet[1];
     if (player) {
       player.clearPresence(Player.Presence.ALL);
       player.setPresence(presence);
@@ -371,10 +371,10 @@ export default class Game {
   }
 
   private onFlagUpdate_(packet : Array<any>) {
-    var id = packet[0];
-    var team = packet[1];
-    var xTile = packet[2];
-    var yTile = packet[3];
+    let id = packet[0];
+    let team = packet[1];
+    let xTile = packet[2];
+    let yTile = packet[3];
 
     this.flagIndex_.updateFlag(id, team, xTile, yTile);
   }
@@ -384,8 +384,8 @@ export default class Game {
   }
 
   private onLocalPlayerDied_(player : Player, killer : Player) {
-    var x = player.getPosition().x;
-    var y = player.getPosition().y;
+    let x = player.getPosition().x;
+    let y = player.getPosition().y;
 
     this.notifications_.addPersonalMessage('You were killed by ' + killer.getName() + '!');
     this.prizeIndex_.addKillPrize(x, y);
@@ -400,7 +400,7 @@ export default class Game {
     }
 
     this.protocol_.sendPrizeCollected(prize.getType(), prize.getX(), prize.getY());
-    var message;
+    let message;
     switch (prize.getType()) {
       case PrizeType.NONE:
         message = 'No prize for you. Sadface.';
@@ -450,10 +450,10 @@ export default class Game {
   }
 
   private onResize_ = function () {
-    var width = window.innerWidth - this.canvas_.parentNode.offsetLeft;
-    var height = window.innerHeight - this.canvas_.parentNode.offsetTop;
+    let width = window.innerWidth - this.canvas_.parentNode.offsetLeft;
+    let height = window.innerHeight - this.canvas_.parentNode.offsetTop;
 
-    var ratio = this.viewport_.getHdpiRatio();
+    let ratio = this.viewport_.getHdpiRatio();
 
     this.canvas_.width = width * ratio;
     this.canvas_.height = height * ratio;
@@ -461,13 +461,13 @@ export default class Game {
     this.canvas_.style.width = width + 'px';
     this.canvas_.style.height = height + 'px';
 
-    var context = this.canvas_.getContext('2d');
+    let context = this.canvas_.getContext('2d');
     context.imageSmoothingEnabled = false;
     context.webkitImageSmoothingEnabled = false;
     context.scale(ratio, ratio);
 
     // The chat window goes to the left of the radar.
-    var size = RadarLayer.sizeForViewport(this.viewport_);
+    let size = RadarLayer.sizeForViewport(this.viewport_);
     this.chatView_.setRightPosition(size.width);
   }
 }

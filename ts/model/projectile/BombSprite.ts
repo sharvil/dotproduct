@@ -21,7 +21,7 @@ export default class BombSprite extends ModelObject implements Drawable {
   constructor(game : Game, bomb : Bomb) {
     super(game.getSimulation());
 
-    var level = bomb.getLevel();
+    let level = bomb.getLevel();
 
     this.game_ = game;
     this.bomb_ = bomb;
@@ -38,7 +38,7 @@ export default class BombSprite extends ModelObject implements Drawable {
   public advanceTime() {
     // First advance and drop the trail.
     if (!this.bomb_.isMine() && Labs.BOMB_TRAILS) {
-      var animation = this.game_.getResourceManager().getSpriteSheet('bombTrails').getAnimation(this.bomb_.getLevel());
+      let animation = this.game_.getResourceManager().getSpriteSheet('bombTrails').getAnimation(this.bomb_.getLevel());
       new Effect(this.game_, animation, this.bomb_.getPosition(), Vector.ZERO, Layer.TRAILS);
     }
 
@@ -52,9 +52,9 @@ export default class BombSprite extends ModelObject implements Drawable {
       return;
     }
 
-    var dimensions = viewport.getDimensions();
-    var x = Math.floor(this.bomb_.getPosition().x - dimensions.left - this.animation_.getWidth() / 2);
-    var y = Math.floor(this.bomb_.getPosition().y - dimensions.top - this.animation_.getHeight() / 2);
+    let dimensions = viewport.getDimensions();
+    let x = Math.floor(this.bomb_.getPosition().x - dimensions.left - this.animation_.getWidth() / 2);
+    let y = Math.floor(this.bomb_.getPosition().y - dimensions.top - this.animation_.getHeight() / 2);
 
     if (!this.bomb_.isMine() && this.bomb_.isBouncing()) {
       this.bouncingAnimation_.render(viewport.getContext(), x, y);
@@ -64,7 +64,7 @@ export default class BombSprite extends ModelObject implements Drawable {
   }
 
   private onExplode_(projectile : Projectile, hitPlayer : Player | null) {
-    var animation = this.game_.getResourceManager().getSpriteSheet('explode2').getAnimation(0);
+    let animation = this.game_.getResourceManager().getSpriteSheet('explode2').getAnimation(0);
     new Effect(this.game_, animation, this.bomb_.getPosition(), Vector.ZERO);
   }
 

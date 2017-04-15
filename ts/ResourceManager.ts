@@ -14,8 +14,8 @@ export default class ResourceManager {
   }
 
   public loadImage(name : string, url : string, xTiles : number, yTiles : number, loadCb : VoidFunction) {
-    var self = this;
-    var callback = function() {
+    let self = this;
+    let callback = function() {
       console.info('Loaded image: "' + name + '"');
       loadCb();
     };
@@ -26,8 +26,8 @@ export default class ResourceManager {
   }
 
   public loadSpriteSheet(name : string, url : string, xTiles : number, yTiles : number, frames : number, period : number, loadCb : VoidFunction) {
-    var self = this;
-    var callback = function() {
+    let self = this;
+    let callback = function() {
       console.info('Loaded sprite sheet: "' + name + '"');
       loadCb();
     };

@@ -38,7 +38,7 @@ class Protocol {
     this.eventHandler_ = function() {};
 
     this.handlers_ = new Map<Protocol.S2CPacketType, Array<PacketHandler>>();
-    for (var i = 0; i < 256; ++i) {
+    for (let i = 0; i < 256; ++i) {
       this.handlers_[i] = [];
     }
 
@@ -62,7 +62,7 @@ class Protocol {
       return 0;
     }
 
-    var diff = timestamp - this.serverTimeDelta_;
+    let diff = timestamp - this.serverTimeDelta_;
     if (diff < 0) {
       diff += 0x100000000;
     }
@@ -96,7 +96,7 @@ class Protocol {
   }
 
   public sendPosition = function(direction : number, position : Vector, velocity : Vector, isSafe : boolean, weaponData? : Object) {
-    var packet = [C2SPacketType_.POSITION, this.remoteTime_(), direction, position.x, position.y, velocity.x, velocity.y, isSafe];
+    let packet = [C2SPacketType_.POSITION, this.remoteTime_(), direction, position.x, position.y, velocity.x, velocity.y, isSafe];
     if (weaponData) {
       packet.push(weaponData);
     }
@@ -108,9 +108,9 @@ class Protocol {
   }
 
   private onClockSyncReply_ = function(packet : Array<any>) {
-    var clientTime0 = packet[0];
-    var serverTime = packet[1];
-    var rtt = this.asInt32_(Date.now()) - clientTime0;
+    let clientTime0 = packet[0];
+    let serverTime = packet[1];
+    let rtt = this.asInt32_(Date.now()) - clientTime0;
 
     // Correct for integer overflow since clock sync timestamps are fixed precision 32-bit integers.
     if (rtt < 0) {
@@ -153,7 +153,7 @@ class Protocol {
   }
 
   private onOpen_() {
-    for (var i = 0; i < this.packetQueue_.length; ++i) {
+    for (let i = 0; i < this.packetQueue_.length; ++i) {
       this.socket_.send(this.packetQueue_[i]);
     }
 
@@ -169,19 +169,19 @@ class Protocol {
   }
 
   private onMessage_(event : MessageEvent) {
-    var obj;
+    let obj;
     try {
-      var msg = event.data;
+      let msg = event.data;
       obj = JSON.parse(msg);
     } catch (e) {
       console.error('Error parsing JSON: ' + event.data + '\n' + e);
       return;
     }
 
-    var packetHandlers = this.handlers_[obj[0]];
+    let packetHandlers = this.handlers_[obj[0]];
     if (packetHandlers) {
-      var slicedObj = obj.slice(1);
-      for (var i = 0; packetHandlers[i]; ++i) {
+      let slicedObj = obj.slice(1);
+      for (let i = 0; packetHandlers[i]; ++i) {
         packetHandlers[i](slicedObj);
       }
     } else {
@@ -190,7 +190,7 @@ class Protocol {
   }
 
   private send_(data : Object) {
-    var packet = JSON.stringify(data);
+    let packet = JSON.stringify(data);
 
     if (this.socket_.readyState != WebSocket.OPEN) {
       this.packetQueue_.push(packet);

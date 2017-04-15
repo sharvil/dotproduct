@@ -14,7 +14,7 @@ export default class BulletGroup {
 
     this.bullets_ = bullets;
 
-    for (var i = 0; i < this.bullets_.length; ++i) {
+    for (let i = 0; i < this.bullets_.length; ++i) {
       Listener.add(this.bullets_[i], 'explode', this.onExplode_.bind(this));
     }
   }
@@ -29,7 +29,7 @@ export default class BulletGroup {
     // Notify all other bullets in the group that they should explode. The
     // original bullet will have a direct hit specified but all other bullets are
     // exploding because they're linked, not because they directly hit a player.
-    for (var i = 0; i < this.bullets_.length; ++i) {
+    for (let i = 0; i < this.bullets_.length; ++i) {
       if (this.bullets_[i] != bullet) {
         this.bullets_[i].explodeLinked();
       }

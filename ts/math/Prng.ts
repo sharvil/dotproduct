@@ -81,11 +81,11 @@ export default class Prng {
 
   // generates a random number on [0,0xffffffff]-interval
   public random() : number {
-    var y;
-    var mag01 = new Array(0x0, Prng.MATRIX_A_);
+    let y;
+    let mag01 = new Array(0x0, Prng.MATRIX_A_);
 
     if (this.mti_ >= Prng.N_) { /* generate N words at one time */
-      var kk;
+      let kk;
 
       if (this.mti_ == Prng.N_ + 1) {   /* if init_genrand() has not been called, */
         this.seed(5489); /* a default initial seed is used */
@@ -133,8 +133,8 @@ export default class Prng {
 
   // emulates overflow of a c 32-bits unsiged integer variable, instead of the operator *. these both arguments must be non-negative integers expressible using unsigned 32 bits.
   private multiplication32_(n1 : number, n2 : number) : number {
-    var sum = 0;
-    for (var i = 0; i < 32; ++i) {
+    let sum = 0;
+    for (let i = 0; i < 32; ++i) {
       if ((n1 >>> i) & 0x1) {
         sum = this.addition32_(sum, this.unsigned32_(n2 << i));
       }

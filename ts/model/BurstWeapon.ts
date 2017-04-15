@@ -29,13 +29,13 @@ export default class BurstWeapon implements Weapon {
     }
 
     --this.count_;
-    var shrapnelCount = this.settings_['shrapnelCount'];
-    var lifetime = this.settings_['lifetime'];
-    var damage = this.settings_['damage'];
+    let shrapnelCount = this.settings_['shrapnelCount'];
+    let lifetime = this.settings_['lifetime'];
+    let damage = this.settings_['damage'];
 
-    for (var i = 0; i < shrapnelCount; ++i) {
-      var velocity = Vector.fromPolar(this.settings_['speed'], i * 2 * Math.PI / shrapnelCount).add(this.owner_.getVelocity());
-      var projectile = this.game_.getModelObjectFactory().newBurst(this.game_, this.owner_, this.owner_.getPosition(), velocity, lifetime, damage);
+    for (let i = 0; i < shrapnelCount; ++i) {
+      let velocity = Vector.fromPolar(this.settings_['speed'], i * 2 * Math.PI / shrapnelCount).add(this.owner_.getVelocity());
+      let projectile = this.game_.getModelObjectFactory().newBurst(this.game_, this.owner_, this.owner_.getPosition(), velocity, lifetime, damage);
       this.owner_.addProjectile(projectile);
     }
 
@@ -49,14 +49,14 @@ export default class BurstWeapon implements Weapon {
   public onFired(timeDiff : number, position : Vector, velocity : Vector, weaponData : any) {
     assert(weaponData['type'] == this.getType(), 'Cannot fire burst with incorrect weapon type: ' + weaponData['type']);
 
-    var shrapnelCount = this.settings_['shrapnelCount'];
-    var lifetime = this.settings_['lifetime'];
-    var damage = this.settings_['damage'];
+    let shrapnelCount = this.settings_['shrapnelCount'];
+    let lifetime = this.settings_['lifetime'];
+    let damage = this.settings_['damage'];
 
-    for (var i = 0; i < shrapnelCount; ++i) {
-      var shrapVel = Vector.fromPolar(this.settings_['speed'], i * 2 * Math.PI / shrapnelCount).add(velocity);
-      var projectile = this.game_.getModelObjectFactory().newBurst(this.game_, this.owner_, position, shrapVel, lifetime, damage);
-      for (var j = 0; j < timeDiff; ++j) {
+    for (let i = 0; i < shrapnelCount; ++i) {
+      let shrapVel = Vector.fromPolar(this.settings_['speed'], i * 2 * Math.PI / shrapnelCount).add(velocity);
+      let projectile = this.game_.getModelObjectFactory().newBurst(this.game_, this.owner_, position, shrapVel, lifetime, damage);
+      for (let j = 0; j < timeDiff; ++j) {
         projectile.advanceTime();
       }
       this.owner_.addProjectile(projectile);
