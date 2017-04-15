@@ -22,11 +22,7 @@ export default class Keyboard {
   }
 
   private keyDown_(e : KeyboardEvent) {
-    // Simulate escape character key press since it doesn't generate 'keypress'
-    // events in Chrome.
-    if (e.keyCode == Key.Code.ESCAPE) {
-      Listener.fire(this, e.keyCode);
-    }
+    Listener.fire(this, e.keyCode);
 
     if (e.keyCode == Key.Code.LEFT || e.keyCode == Key.Code.RIGHT ||
         e.keyCode == Key.Code.UP || e.keyCode == Key.Code.DOWN ||
