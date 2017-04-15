@@ -218,6 +218,7 @@ body {
   height: 100%;
   padding: 5px;
   overflow: scroll;
+  border: 1px solid #222;
   background: rgba(30, 30, 30, 0.5);
   -moz-transition: left 1s;
   -webkit-transition: left 1s;
