@@ -6,16 +6,6 @@ import Player from 'model/player/Player';
 import Game from 'ui/Game';
 import Prize from 'model/Prize';
 
-/**
- * @constructor
- * @extends {model.projectile.Projectile}
- * @param {!Game} game
- * @param {!model.player.Player} owner
- * @param {!math.Vector} position
- * @param {!math.Vector} velocity
- * @param {number} lifetime
- * @param {number} damage
- */
 export default class Burst extends Projectile {
   protected isActive_ : boolean;
 

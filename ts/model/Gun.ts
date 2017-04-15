@@ -7,13 +7,6 @@ import Game from 'ui/Game';
 import { ToggleState } from 'types';
 import Bullet from 'model/projectile/Bullet';
 
-/**
- * @constructor
- * @implements model.Weapon
- * @param {!Game} game
- * @param {!Object} gunSettings
- * @param {!model.player.Player} owner
- */
 export default class Gun implements Weapon {
   private game_ : Game;
   private gunSettings_ : any;

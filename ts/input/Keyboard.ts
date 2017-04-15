@@ -1,12 +1,10 @@
 import Listener from 'Listener';
 import Key from 'input/Key';
 
-export default class Keyboard extends Listener {
+export default class Keyboard {
   private keys_ : Set<number>;
 
   constructor() {
-    super();
-
     this.keys_ = new Set();
 
     document.addEventListener('visibilitychange', this.documentVisibilityChanged_.bind(this));

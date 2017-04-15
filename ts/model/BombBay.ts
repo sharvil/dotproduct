@@ -4,13 +4,6 @@ import Weapon from 'model/Weapon';
 import Game from 'ui/Game';
 import Vector from 'math/Vector';
 
-/**
- * @constructor
- * @implements {model.Weapon}
- * @param {!Game} game
- * @param {!Object} bombBaySettings
- * @param {!model.player.Player} owner
- */
 export default class BombBay implements Weapon {
   private game_ : Game;
   private bombBaySettings_ : any;
