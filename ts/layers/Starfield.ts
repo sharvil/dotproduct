@@ -3,6 +3,7 @@ import { Layer } from 'graphics/Layer';
 import Prng from 'math/Prng';
 import Viewport from 'Viewport';
 import Game from 'ui/Game';
+import Map from 'model/Map';
 
 export default class Starfield implements Drawable {
   private static readonly NUM_LARGE_STARS_ = 256;
@@ -21,12 +22,11 @@ export default class Starfield implements Drawable {
     this.bigStars_ = [];
     this.stars_ = [];
 
-    // TODO(sharvil): seed this PRNG with something map-unique so
-    // we get a map-specific stable, random star pattern.
-    let rng = new Prng();
     let map = game.getMap();
     let mapWidth = map.getTileWidth() * map.getWidth();
     let mapHeight = map.getTileHeight() * map.getHeight();
+    let rng = new Prng();
+    rng.seed(map.hash);
     for (let i = 0; i < Starfield.NUM_LARGE_STARS_; ++i) {
       let star = {
         asset: 'star' + (rng.random() % 6),
@@ -38,8 +38,8 @@ export default class Starfield implements Drawable {
 
     for (let i = 0; i < Starfield.STAR_DENSITY_; ++i) {
       let star = {
-        x: Math.round(Math.random() * Starfield.STAR_TILE_SIZE_),
-        y: Math.round(Math.random() * Starfield.STAR_TILE_SIZE_)
+        x: Math.round(rng.random() % Starfield.STAR_TILE_SIZE_),
+        y: Math.round(rng.random() % Starfield.STAR_TILE_SIZE_)
       };
       this.stars_.push(star);
     }

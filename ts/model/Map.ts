@@ -191,4 +191,22 @@ export default class Map {
 
     return ret;
   }
+
+  public get hash() : number {
+    let hash = 0;
+    let tiles = this.getTiles(new Rect(0, 0, this.getWidth(), this.getHeight()));
+
+    let lower = Math.floor(tiles.length / 2) - 50;
+    let upper = Math.floor(tiles.length / 2) + 50 + 1;
+    if (tiles.length < 100) {
+      lower = 0;
+      upper = tiles.length;
+    }
+
+    for (let i = lower; i < upper; ++i) {
+      hash = ((31 * hash) + (tiles[i] * 2654435761)) | 0;
+    }
+
+    return hash;
+  }
 }
