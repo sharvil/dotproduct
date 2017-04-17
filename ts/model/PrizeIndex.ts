@@ -5,9 +5,9 @@ import Simulation from 'model/Simulation';
 import Map from 'model/Map';
 import Game from 'ui/Game';
 import Vector from 'math/Vector';
+import ModelObject from 'model/ModelObject';
 
-export default class PrizeIndex {
-  private simulation_ : Simulation;
+export default class PrizeIndex extends ModelObject {
   private prizeSettings_ : any;
   private map_ : Map;
   private prng_ : Prng;
@@ -15,7 +15,7 @@ export default class PrizeIndex {
   private prizes_ : Array<Prize>;
 
   constructor(game : Game) {
-    this.simulation_ = game.getSimulation();
+    super(game.getSimulation());
     this.prizeSettings_ = game.getSettings()['prize'];
     this.map_ = game.getMap();
     this.prng_ = new Prng();
@@ -61,7 +61,7 @@ export default class PrizeIndex {
       }
     }
 
-    this.advanceTime_(fastForwardTicks);
+    this.advanceTime(fastForwardTicks);
   }
 
   public getPrize(x : number, y : number) : Prize | null {
@@ -75,7 +75,7 @@ export default class PrizeIndex {
     prize.invalidate();
   }
 
-  private advanceTime_(fastForwardTicks? : number) {
+  public advanceTime(fastForwardTicks? : number) {
     this.forEach(function (prize) {
       prize.advanceTime(fastForwardTicks);
     });
@@ -87,6 +87,10 @@ export default class PrizeIndex {
       assert(!!prize, 'Null prize found in prize index.');
       cb(prize);
     });
+  }
+
+  protected onInvalidate_() : void {
+    assert(false, 'Cannot invalidate PrizeIndex');
   }
 
   private generatePrizeType_(prng : Prng) : PrizeType {
