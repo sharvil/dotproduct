@@ -13,12 +13,12 @@ export default class Loading {
     this.container_ = <HTMLDivElement> document.getElementById('loading');
     this.progressBar_ = <HTMLDivElement> document.getElementById('ldv-progress');
     this.progressBarValue_ = <HTMLDivElement> document.getElementById('ldv-progress-value');
+
+    this.setLoadPercent_(0);
+    this.container_.style.display = 'block';
   }
 
   public load(resources) {
-    this.setLoadPercent_(0);
-    this.container_.style.display = 'block';
-
     let self = this;
     let totalResources = 0;
     let loadedResources = 0;

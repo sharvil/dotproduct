@@ -51,6 +51,11 @@ export default class Application {
   }
 
   private onLoadComplete_() {
+    // Hide all HTML elements that have been tagged with 'ng' (not-game).
+    Array.from(document.getElementsByClassName('ng')).forEach((elem : HTMLElement) => {
+      elem.style.display = 'none';
+    });
+
     this.game_ = new Game(this.protocol_, this.resourceManager_, this.settings_, this.mapData_, this.mapProperties_);
     if (this.jukebox_ != null) {
       this.jukebox_.play();
@@ -58,15 +63,17 @@ export default class Application {
   }
 }
 
-const _main = function() {
-  const settings = window['toObject'](window.location.hash.substr(1));
-  let socketUri = 'ws://' + window.location.host + '/dotproduct/v1/' + settings['arena'];
+const startGame = (event : MouseEvent) => {
+  let socketUri = 'ws://' + window.location.host + '/dotproduct/v1/' + 'trench';
   if (window.location.protocol == 'https:') {
-    socketUri = socketUri.replace('ws://', 'wss://');
+    socketUri = socketUri.replace('ws:', 'wss:');
   }
-  new Application(settings, socketUri);
-  window.location.hash = '';
+
+  event.target.removeEventListener('click', startGame);
+  new Application({ strategy: 'anonymous', accessToken: '' }, socketUri);
 };
 
 // Global exports for Closure Compiler so these symbols don't get mangled.
-window['_main'] = _main;
+window['_main'] = () => {
+  (<HTMLDivElement> document.getElementById('anonymous')).addEventListener('click', startGame);
+};
