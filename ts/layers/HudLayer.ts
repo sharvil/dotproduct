@@ -38,7 +38,7 @@ export default class HudLayer implements Drawable {
 
   private renderEnergyBar_(context : CanvasRenderingContext2D, dimensions : any) {
     let percentEnergy = this.player_.getEnergy() / this.player_.getMaxEnergy();
-    let energyBarMaxWidth = 300;
+    let energyBarMaxWidth = Math.floor(dimensions.width * 0.25);
     let energyBarWidth = percentEnergy * energyBarMaxWidth;
     let energyBarHeight = 10;
 
@@ -50,32 +50,10 @@ export default class HudLayer implements Drawable {
           'rgba(0, 200, 200, 0.3)';
     context.fillRect((dimensions.width - energyBarWidth) / 2, 10, energyBarWidth, energyBarHeight);
 
-    // Energy bar markings
-    context.beginPath();
-    context.lineWidth = 1.3;
-    context.strokeStyle = 'rgba(127, 127, 127, 0.5)';
-    context.moveTo(dimensions.width / 2, 10);
-    context.lineTo(dimensions.width / 2, 10 + 0.9 * energyBarHeight);
-    context.moveTo((dimensions.width - 0.25 * energyBarMaxWidth) / 2, 10);
-    context.lineTo((dimensions.width - 0.25 * energyBarMaxWidth) / 2, 10 + 0.5 * energyBarHeight);
-    context.moveTo((dimensions.width + 0.25 * energyBarMaxWidth) / 2, 10);
-    context.lineTo((dimensions.width + 0.25 * energyBarMaxWidth) / 2, 10 + 0.5 * energyBarHeight);
-    context.moveTo((dimensions.width - 0.5 * energyBarMaxWidth) / 2, 10);
-    context.lineTo((dimensions.width - 0.5 * energyBarMaxWidth) / 2, 10 + 0.5 * energyBarHeight);
-    context.moveTo((dimensions.width + 0.5 * energyBarMaxWidth) / 2, 10);
-    context.lineTo((dimensions.width + 0.5 * energyBarMaxWidth) / 2, 10 + 0.5 * energyBarHeight);
-    context.moveTo((dimensions.width - 0.75 * energyBarMaxWidth) / 2, 10);
-    context.lineTo((dimensions.width - 0.75 * energyBarMaxWidth) / 2, 10 + 0.5 * energyBarHeight);
-    context.moveTo((dimensions.width + 0.75 * energyBarMaxWidth) / 2, 10);
-    context.lineTo((dimensions.width + 0.75 * energyBarMaxWidth) / 2, 10 + 0.5 * energyBarHeight);
-    context.stroke();
-
     // Energy bar top
     context.beginPath();
-    context.strokeStyle = 'rgb(127, 127, 127)';
-    context.moveTo((dimensions.width - energyBarMaxWidth) / 2, 10);
-    context.lineTo((dimensions.width + energyBarMaxWidth) / 2, 10);
-    context.stroke();
+    context.strokeStyle = 'rgb(34, 34, 34)';
+    context.strokeRect((dimensions.width - energyBarMaxWidth) / 2, 10, energyBarMaxWidth, 10);
     context.restore();
   }
 
