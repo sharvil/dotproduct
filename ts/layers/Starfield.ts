@@ -7,10 +7,10 @@ import Map from 'model/Map';
 
 export default class Starfield implements Drawable {
   private static readonly NUM_LARGE_STARS_ = 256;
-  private static readonly STAR_DENSITY_ = 32;
+  private static readonly STAR_DENSITY_ = 16;
   private static readonly STAR_TILE_SIZE_ = 1024;
-  private static readonly STAR_L1_COLOR_ = 'rgb(184, 184, 184)';
-  private static readonly STAR_L2_COLOR_ = 'rgb(96, 96, 96)';
+  private static readonly STAR_L1_COLOR_ = 'rgb(96, 96, 96)';
+  private static readonly STAR_L2_COLOR_ = 'rgb(48, 48, 48)';
 
   private game_ : Game;
   private bigStars_ : Array<{ asset: string, x: number, y: number}>;
