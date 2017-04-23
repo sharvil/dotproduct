@@ -52,11 +52,15 @@ export default class Palette {
     return Palette.foeColor(alpha);
   }
 
-  public static criticalEnergyWarningColor() : string {
+  public static energyCriticalColor() : string {
     return 'rgb(200, 0, 0)';
   }
 
-  public static lowEnergyWarningColor() : string {
+  public static energyWarningColor() : string {
     return Palette.friendColor();
+  }
+
+  public static energyNormalColor() : string {
+    return Palette.foeColor();
   }
 }

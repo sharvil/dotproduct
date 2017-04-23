@@ -44,15 +44,14 @@ export default class HudLayer implements Drawable {
 
     context.save();
     // Energy bar
-    context.fillStyle = percentEnergy < 0.25 ? 'rgba(200, 0, 0, 0.3)' :
-      percentEnergy < 0.5 ? 'rgba(200, 200, 0, 0.3)' :
-        percentEnergy < 0.75 ? 'rgba(0, 200, 0, 0.3)' :
-          'rgba(0, 200, 200, 0.3)';
+    context.fillStyle =
+      percentEnergy < 0.25 ? Palette.energyCriticalColor() :
+      percentEnergy < 0.50 ? Palette.energyWarningColor() : Palette.energyNormalColor();
     context.fillRect((dimensions.width - energyBarWidth) / 2, 10, energyBarWidth, energyBarHeight);
 
     // Energy bar top
     context.beginPath();
-    context.strokeStyle = 'rgb(34, 34, 34)';
+    context.strokeStyle = Palette.borderColor();
     context.strokeRect((dimensions.width - energyBarMaxWidth) / 2, 10, energyBarMaxWidth, 10);
     context.restore();
   }
@@ -71,7 +70,7 @@ export default class HudLayer implements Drawable {
       let y = Math.floor(playerDimensions.top - dimensions.top);
 
       context.save();
-      context.fillStyle = percentEnergy < 0.25 ? Palette.criticalEnergyWarningColor() : Palette.lowEnergyWarningColor();
+      context.fillStyle = percentEnergy < 0.25 ? Palette.energyCriticalColor() : Palette.energyWarningColor();
       context.font = Font.playerFont().toString();
       context.textAlign = 'right';
       context.textBaseline = 'bottom';
