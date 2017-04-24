@@ -2,7 +2,7 @@ import Game from 'ui/Game';
 import PlayerIndex from 'model/PlayerIndex';
 
 export default class Scoreboard {
-  private static readonly HIDE_CLASS_NAME_ = 'sv-hidden';
+  private static readonly VISIBLE_CLASS_NAME_ = 'sv-visible';
   private static readonly NAME_CLASS_NAME_ = 'sv-name';
   private static readonly SCORE_CLASS_NAME_ = 'sv-score';
   private static readonly FRIEND_CLASS_NAME_ = 'sv-row-friend';
@@ -14,22 +14,21 @@ export default class Scoreboard {
   constructor(game : Game) {
     this.view_ = <HTMLDivElement> document.getElementById('sv');
     this.playerIndex_ = game.getPlayerIndex();
-
-    let self = this;
-    setTimeout(function() {
-      self.hide();
-    }, 2000);
   }
 
   public show() {
-    this.view_.classList.remove(Scoreboard.HIDE_CLASS_NAME_);
+    this.view_.classList.add(Scoreboard.VISIBLE_CLASS_NAME_);
   }
 
   public hide() {
-    this.view_.classList.add(Scoreboard.HIDE_CLASS_NAME_);
+    this.view_.classList.remove(Scoreboard.VISIBLE_CLASS_NAME_);
   }
 
-  public update = function () {
+  public update() {
+    if (!this.view_.classList.contains(Scoreboard.VISIBLE_CLASS_NAME_)) {
+      return;
+    }
+
     this.view_.innerHTML = '';
 
     let self = this;

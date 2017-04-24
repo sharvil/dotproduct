@@ -205,21 +205,22 @@ body {
  **************************************/
 
 .sv {
-  position: absolute;
-  left: 0px;
-  top: 0px;
-  width: 20%;
-  height: 100%;
+  position: fixed;
+  left: 50%;
+  top: 25px;
+  width: 25%;
+  height: 20%;
   padding: 5px;
   overflow: scroll;
   border: 1px solid #222;
   background: rgba(30, 30, 30, 0.75);
-  transition: left 1s;
+  transform: translate(-50%, 0%);
+  transition: opacity 0.3s;
+  opacity: 0;
 }
 
-.sv-hidden {
-  left: -100%;
-  transition: left 1s;
+.sv-visible {
+  opacity: 1;
 }
 
 .sv-row-friend {
