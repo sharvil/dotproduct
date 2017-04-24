@@ -33,7 +33,6 @@ export default class HudLayer implements Drawable {
 
     this.renderEnergyBar_(context, dimensions);
     this.renderNearShipEnergyDisplay_(context, dimensions);
-    this.renderShipInfoDisplay_(context, dimensions);
   }
 
   private renderEnergyBar_(context : CanvasRenderingContext2D, dimensions : any) {
@@ -77,46 +76,5 @@ export default class HudLayer implements Drawable {
       context.fillText(energy.toString(), x, y);
       context.restore();
     }
-  }
-
-  private renderShipInfoDisplay_(context : CanvasRenderingContext2D, dimensions : any) {
-    let statusHudLeft = dimensions.width - this.statusHudImage_.getTileWidth();
-    let statusHudRight = statusHudLeft + this.statusHudImage_.getTileWidth();
-    let statusHudTop = 5;
-
-    this.statusHudImage_.render(context, statusHudLeft, statusHudTop);
-
-    // Energy
-    let self = this;
-    let x = statusHudRight - 30;
-    let y = statusHudTop - 5;
-    this.forEachDigitInReverse_(this.player_.getEnergy(), function (digit) {
-      self.energyFontImage_.render(context, x, y, digit);
-      x -= self.energyFontImage_.getTileWidth();
-    });
-
-    // Team
-    x = statusHudLeft + 65;
-    y = statusHudTop + 28;
-    this.forEachDigitInReverse_(this.player_.getTeam(), function (digit) {
-      self.ledFontImage_.render(context, x, y, digit);
-      x -= self.ledFontImage_.getTileWidth();
-    });
-
-    // Bounty
-    x = statusHudLeft + 65;
-    y = statusHudTop + 52;
-    this.forEachDigitInReverse_(this.player_.getBounty(), function (digit) {
-      self.ledFontImage_.render(context, x, y, digit);
-      x -= self.ledFontImage_.getTileWidth();
-    });
-  }
-
-  private forEachDigitInReverse_(num : number, callback : (digit : number) => void) {
-    num = Math.floor(num);
-    do {
-      callback(num % 10);
-      num = Math.floor(num / 10);
-    } while (num != 0);
   }
 }
