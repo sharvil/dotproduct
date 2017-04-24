@@ -10,8 +10,8 @@ export default class Animation {
   private counter_ : number;
 
   constructor(image : Image, startFrame : number, frameCount : number, period : number) {
-    assert(startFrame < image.getNumTiles(), 'Invalid starting frame for animation.');
-    assert(startFrame + frameCount <= image.getNumTiles(), 'Animation length out of bounds.');
+    assert(startFrame < image.numTiles, 'Invalid starting frame for animation.');
+    assert(startFrame + frameCount <= image.numTiles, 'Animation length out of bounds.');
 
     this.image_ = image;
     this.begin_ = startFrame;
@@ -30,12 +30,12 @@ export default class Animation {
     return this.currentFrame_ < this.end_;
   }
 
-  public getWidth() : number {
-    return this.image_.getTileWidth();
+  public get width() : number {
+    return this.image_.tileWidth;
   }
 
-  public getHeight() : number {
-    return this.image_.getTileHeight();
+  public get height() : number {
+    return this.image_.tileHeight;
   }
 
   public update() {

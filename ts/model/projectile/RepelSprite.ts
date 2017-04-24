@@ -30,8 +30,8 @@ export default class RepelSprite extends ModelObject implements Drawable {
 
   public render(viewport : Viewport) {
     let dimensions = viewport.getDimensions();
-    let x = Math.floor(this.repel_.getPosition().x - dimensions.left - this.animation_.getWidth() / 2);
-    let y = Math.floor(this.repel_.getPosition().y - dimensions.top - this.animation_.getHeight() / 2);
+    let x = Math.floor(this.repel_.getPosition().x - dimensions.left - this.animation_.width / 2);
+    let y = Math.floor(this.repel_.getPosition().y - dimensions.top - this.animation_.height / 2);
 
     this.animation_.render(viewport.getContext(), x, y);
   }

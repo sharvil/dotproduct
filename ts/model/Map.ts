@@ -28,8 +28,8 @@ export default class Map {
     this.width_ = settings['map']['width'];
     this.height_ = settings['map']['height'];
     this.spawnRadius_ = settings['map']['spawnRadius'];
-    this.tileWidth_ = tileset.getTileWidth();
-    this.tileHeight_ = tileset.getTileHeight();
+    this.tileWidth_ = tileset.tileWidth;
+    this.tileHeight_ = tileset.tileHeight;
     this.quadtree_ = new Quadtree(mapData, this.width_, this.height_);
   }
 

@@ -50,8 +50,8 @@ export default class PlayerSprite implements Drawable {
     let dimensions = viewport.getDimensions();
     let context = viewport.getContext();
 
-    let x = Math.floor(position.x - dimensions.left - shipImage.getTileWidth() / 2);
-    let y = Math.floor(position.y - dimensions.top - shipImage.getTileHeight() / 2);
+    let x = Math.floor(position.x - dimensions.left - shipImage.tileWidth / 2);
+    let y = Math.floor(position.y - dimensions.top - shipImage.tileHeight / 2);
 
     shipImage.render(context, x, y, direction);
 
@@ -64,7 +64,7 @@ export default class PlayerSprite implements Drawable {
     context.fillStyle = isFriend ? Palette.friendColor() : Palette.foeColor();
     context.textAlign = 'center';
     context.textBaseline = 'top';
-    context.fillText(name + '(' + bounty + ')', x + shipImage.getTileWidth() / 2, y + shipImage.getTileHeight());
+    context.fillText(name + '(' + bounty + ')', x + shipImage.tileWidth / 2, y + shipImage.tileHeight);
     context.restore();
 
     // Draw a presence indicator for the player if applicable.
@@ -76,8 +76,8 @@ export default class PlayerSprite implements Drawable {
     }
 
     if (presenceImage) {
-      let speechX = x + shipImage.getTileWidth() - Math.floor(presenceImage.getTileWidth() / 2);
-      let speechY = y - Math.floor(presenceImage.getTileHeight() / 2);
+      let speechX = x + shipImage.tileWidth - Math.floor(presenceImage.tileWidth / 2);
+      let speechY = y - Math.floor(presenceImage.tileHeight / 2);
       presenceImage.render(context, speechX, speechY);
     }
   }

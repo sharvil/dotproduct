@@ -45,8 +45,8 @@ export default class Exhaust extends Entity {
   public render(viewport : Viewport) {
     let context = viewport.getContext();
     let dimensions = viewport.getDimensions();
-    let x = Math.floor(this.position_.x - dimensions.left - this.image_.getWidth() / 2);
-    let y = Math.floor(this.position_.y - dimensions.top - this.image_.getHeight() / 2);
+    let x = Math.floor(this.position_.x - dimensions.left - this.image_.width / 2);
+    let y = Math.floor(this.position_.y - dimensions.top - this.image_.height / 2);
 
     this.image_.render(context, x, y);
   }

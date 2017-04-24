@@ -53,8 +53,8 @@ export default class BombSprite extends ModelObject implements Drawable {
     }
 
     let dimensions = viewport.getDimensions();
-    let x = Math.floor(this.bomb_.getPosition().x - dimensions.left - this.animation_.getWidth() / 2);
-    let y = Math.floor(this.bomb_.getPosition().y - dimensions.top - this.animation_.getHeight() / 2);
+    let x = Math.floor(this.bomb_.getPosition().x - dimensions.left - this.animation_.width / 2);
+    let y = Math.floor(this.bomb_.getPosition().y - dimensions.top - this.animation_.height / 2);
 
     if (!this.bomb_.isMine() && this.bomb_.isBouncing()) {
       this.bouncingAnimation_.render(viewport.getContext(), x, y);

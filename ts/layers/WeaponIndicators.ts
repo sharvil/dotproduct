@@ -36,8 +36,8 @@ export default class WeaponIndicators implements Drawable {
     let numIndicators = 2;
     let padding = 1;
 
-    let width = this.icons_.getTileWidth();
-    let height = this.icons_.getTileHeight();
+    let width = this.icons_.tileWidth;
+    let height = this.icons_.tileHeight;
     let top = Math.floor((dimensions.height - (numIndicators * height + (numIndicators - 1) * padding)) / 2);
     let left = dimensions.width - width;
 

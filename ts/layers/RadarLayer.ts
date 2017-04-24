@@ -24,8 +24,8 @@ export default class RadarLayer extends ModelObject implements Drawable {
     super(game.getSimulation());
 
     this.game_ = game;
-    this.tileWidth_ = this.game_.getResourceManager().getImage('tileset').getTileWidth();
-    this.tileHeight_ = this.game_.getResourceManager().getImage('tileset').getTileHeight();
+    this.tileWidth_ = this.game_.getResourceManager().getImage('tileset').tileWidth;
+    this.tileHeight_ = this.game_.getResourceManager().getImage('tileset').tileHeight;
     this.mapCanvas_ = null;
     this.blinkDirection_ = -1;
     this.blinkAlpha_ = 1;
@@ -54,6 +54,7 @@ export default class RadarLayer extends ModelObject implements Drawable {
   }
 
   public render(viewport : Viewport) {
+    /*
     let context = viewport.getContext();
     let dimensions = viewport.getDimensions();
 
@@ -82,6 +83,7 @@ export default class RadarLayer extends ModelObject implements Drawable {
     this.renderPrizes_(context, dimensions, size.width, size.height);
     this.renderPlayers_(context, dimensions, size.width, size.height);
     context.restore();
+    */
   }
 
   private renderMap_(context : CanvasRenderingContext2D, dimensions : any, radarWidth : number, radarHeight : number) {

@@ -37,8 +37,8 @@ export default class Effect extends ModelObject implements Drawable {
     let context = viewport.getContext();
     let dimensions = viewport.getDimensions();
 
-    let x = Math.floor(this.position_.x - dimensions.left - this.animation_.getWidth() / 2);
-    let y = Math.floor(this.position_.y - dimensions.top - this.animation_.getHeight() / 2);
+    let x = Math.floor(this.position_.x - dimensions.left - this.animation_.width / 2);
+    let y = Math.floor(this.position_.y - dimensions.top - this.animation_.height / 2);
 
     this.animation_.render(context, x, y);
   }

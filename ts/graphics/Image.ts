@@ -30,14 +30,12 @@ export default class Image {
       context.drawImage(this.node_, x, y, this.node_.width, this.node_.height);
       context.restore();
     } else {
-      let numTiles = this.tilesPerRow_ * this.tilesPerCol_;
-
-      if (tileNum < 0 || tileNum >= numTiles || !this.isLoaded()) {
+      if (tileNum < 0 || tileNum >= this.numTiles || !this.isLoaded()) {
         return;
       }
 
-      let tileWidth = this.getTileWidth();
-      let tileHeight = this.getTileHeight();
+      let tileWidth = this.tileWidth;
+      let tileHeight = this.tileHeight;
 
       let row = Math.floor(tileNum / this.tilesPerRow_);
       let column = tileNum % this.tilesPerRow_;
@@ -55,15 +53,15 @@ export default class Image {
     }
   }
 
-  public getNumTiles() : number {
+  public get numTiles() : number {
     return this.tilesPerRow_ * this.tilesPerCol_;
   }
 
-  public getTileWidth() : number {
+  public get tileWidth() : number {
     return Math.floor(this.node_.width / this.tilesPerRow_);
   }
 
-  public getTileHeight() : number {
+  public get tileHeight() : number {
     return Math.floor(this.node_.height / this.tilesPerCol_);
   }
 }

@@ -51,8 +51,8 @@ export default class BulletSprite extends ModelObject implements Drawable {
     }
 
     let dimensions = viewport.getDimensions();
-    let x = Math.floor(this.bullet_.getPosition().x - dimensions.left - this.animation_.getWidth() / 2);
-    let y = Math.floor(this.bullet_.getPosition().y - dimensions.top - this.animation_.getHeight() / 2);
+    let x = Math.floor(this.bullet_.getPosition().x - dimensions.left - this.animation_.width / 2);
+    let y = Math.floor(this.bullet_.getPosition().y - dimensions.top - this.animation_.height / 2);
     let animation = this.bullet_.isBouncing() ? this.bouncingAnimation_ : this.animation_;
 
     animation.render(viewport.getContext(), x, y);

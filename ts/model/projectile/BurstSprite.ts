@@ -45,8 +45,8 @@ export default class BurstSprite extends ModelObject implements Drawable {
 
     let animation = this.burst_.isActive() ? this.activeAnimation_ : this.inactiveAnimation_;
     let dimensions = viewport.getDimensions();
-    let x = Math.floor(this.burst_.getPosition().x - dimensions.left - animation.getWidth() / 2);
-    let y = Math.floor(this.burst_.getPosition().y - dimensions.top - animation.getHeight() / 2);
+    let x = Math.floor(this.burst_.getPosition().x - dimensions.left - animation.width / 2);
+    let y = Math.floor(this.burst_.getPosition().y - dimensions.top - animation.height / 2);
 
     animation.render(viewport.getContext(), x, y);
   }

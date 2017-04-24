@@ -43,8 +43,8 @@ export default class MapLayer extends ModelObject implements Drawable {
     let dimensions = viewport.getDimensions();
     let context = viewport.getContext();
 
-    let tileWidth = this.tileset_.getTileWidth();
-    let tileHeight = this.tileset_.getTileHeight();
+    let tileWidth = this.tileset_.tileWidth;
+    let tileHeight = this.tileset_.tileHeight;
 
     context.save();
     let halfWidth = Math.floor(dimensions.width / 2);
@@ -80,12 +80,10 @@ export default class MapLayer extends ModelObject implements Drawable {
         let tileProperties = map.getTileProperties(tileNum);
         let index = tileProperties['index'];
         if (!tileProperties['animated']) {
-          if (index <= this.tileset_.getNumTiles()) {
-            this.tileset_.render(context,
-              x * tileWidth - dimensions.x + halfWidth,
-              y * tileHeight - dimensions.y + halfHeight,
-              index);
-          }
+          this.tileset_.render(context,
+            x * tileWidth - dimensions.x + halfWidth,
+            y * tileHeight - dimensions.y + halfHeight,
+            index);
         } else {
           // Animated tile.
           if (!this.animations_[index]) {
