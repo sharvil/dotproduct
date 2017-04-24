@@ -11,6 +11,7 @@ export default class Effect extends ModelObject implements Drawable {
   private animation_ : Animation;
   private position_ : Vector;
   private velocity_ : Vector;
+  private layer_ : number;
 
   constructor(game : Game, animation : Animation, position : Vector, velocity : Vector, layer? : Layer) {
     super(game.getSimulation());
@@ -19,8 +20,9 @@ export default class Effect extends ModelObject implements Drawable {
     this.animation_ = animation;
     this.position_ = position;
     this.velocity_ = velocity;
+    this.layer_ = layer || Layer.EFFECTS;
 
-    game.getPainter().registerDrawable(layer !== undefined ? layer : Layer.EFFECTS, this);
+    game.getPainter().registerDrawable(this.layer_, this);
   }
 
   public advanceTime() {
@@ -43,6 +45,6 @@ export default class Effect extends ModelObject implements Drawable {
 
   protected onInvalidate_() {
     super.onInvalidate_();
-    this.game_.getPainter().unregisterDrawable(Layer.EFFECTS, this);
+    this.game_.getPainter().unregisterDrawable(this.layer_, this);
   }
 }
