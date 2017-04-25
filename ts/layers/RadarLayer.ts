@@ -54,7 +54,6 @@ export default class RadarLayer extends ModelObject implements Drawable {
   }
 
   public render(viewport : Viewport) {
-    /*
     let context = viewport.getContext();
     let dimensions = viewport.getDimensions();
 
@@ -83,7 +82,6 @@ export default class RadarLayer extends ModelObject implements Drawable {
     this.renderPrizes_(context, dimensions, size.width, size.height);
     this.renderPlayers_(context, dimensions, size.width, size.height);
     context.restore();
-    */
   }
 
   private renderMap_(context : CanvasRenderingContext2D, dimensions : any, radarWidth : number, radarHeight : number) {
