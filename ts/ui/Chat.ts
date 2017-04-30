@@ -79,19 +79,17 @@ export default class Chat {
   }
 
   private onGlobalKeyPress_(event : KeyboardEvent) {
-    if (event.keyCode == 48 /* 0 */) {
+    if (event.keyCode == Key.Code.ZERO) {
       this.view_.classList.toggle('cv-expanded');
+    } else if (event.keyCode == Key.Code.ENTER) {
+      this.chatBox_.classList.add(Chat.CHAT_BOX_VISIBLE_CLASS_NAME_);
+      this.chatBox_.focus();
     }
-
-    if (event.keyCode != Key.Code.ENTER) {
-      return;
-    }
-
-    this.chatBox_.classList.add(Chat.CHAT_BOX_VISIBLE_CLASS_NAME_);
-    this.chatBox_.focus();
   }
 
   private onChatKeyPress_(event : KeyboardEvent) {
+    event.stopPropagation();
+
     if (event.keyCode != Key.Code.ENTER) {
       return;
     }
@@ -106,20 +104,17 @@ export default class Chat {
     this.chatBox_.value = '';
     this.chatBox_.blur();
     this.chatBox_.classList.remove(Chat.CHAT_BOX_VISIBLE_CLASS_NAME_);
-    event.stopPropagation();
   }
 
   private keyFilter_(event : KeyboardEvent) {
+    event.stopPropagation();
+
     // Chrome doesn't fire keypress events for the escape key so we have to handle it here instead.
     if (event.keyCode == Key.Code.ESCAPE) {
       this.chatBox_.value = '';
       this.chatBox_.blur();
       this.chatBox_.classList.remove(Chat.CHAT_BOX_VISIBLE_CLASS_NAME_);
       return;
-    }
-
-    if (this.isChatBoxVisible()) {
-      event.stopPropagation();
     }
   }
 
