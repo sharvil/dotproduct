@@ -7,7 +7,7 @@ import Game from 'ui/Game';
 import Vector from 'math/Vector';
 import ModelObject from 'model/ModelObject';
 
-export default class PrizeIndex extends ModelObject {
+export default class PrizeList extends ModelObject {
   private prizeSettings_ : any;
   private map_ : Map;
   private prng_ : Prng;
@@ -90,7 +90,7 @@ export default class PrizeIndex extends ModelObject {
   }
 
   protected onInvalidate_() : void {
-    assert(false, 'Cannot invalidate PrizeIndex');
+    assert(false, 'Cannot invalidate PrizeList');
   }
 
   private generatePrizeType_(prng : Prng) : PrizeType {

@@ -16,7 +16,7 @@ import Prize from 'model/Prize';
 import Simulation from 'model/Simulation';
 import Notifications from 'Notifications';
 import PlayerList from 'model/PlayerList';
-import PrizeIndex from 'model/PrizeIndex';
+import PrizeList from 'model/PrizeList';
 import Protocol from 'net/Protocol';
 import Timer from 'time/Timer';
 import Viewport from 'Viewport';
@@ -46,7 +46,7 @@ export default class Game {
   private viewport_ : Viewport;
   private map_ : Map;
   private playerIndex_ : PlayerList;
-  private prizeIndex_ : PrizeIndex;
+  private prizeIndex_ : PrizeList;
   private flagIndex_ : FlagList;
   private notifications_ : Notifications;
   private chatView_ : Chat;
@@ -73,7 +73,7 @@ export default class Game {
     let startingShip = Math.floor(Math.random() * this.settings_['ships'].length);
     let localPlayer = this.modelObjectFactory_.newLocalPlayer(this, this.settings_['id'], this.settings_['name'], this.settings_['team'], startingShip);
     this.playerIndex_ = new PlayerList(localPlayer);
-    this.prizeIndex_ = new PrizeIndex(this);
+    this.prizeIndex_ = new PrizeList(this);
     this.flagIndex_ = new FlagList(this);
     this.notifications_ = new Notifications(localPlayer);
 
@@ -166,7 +166,7 @@ export default class Game {
     return this.playerIndex_;
   }
 
-  public getPrizeIndex() : PrizeIndex {
+  public getPrizeList() : PrizeList {
     return this.prizeIndex_;
   }
 

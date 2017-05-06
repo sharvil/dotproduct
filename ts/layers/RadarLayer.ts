@@ -132,7 +132,7 @@ export default class RadarLayer extends ModelObject implements Drawable {
     let scaledTileHeight = Math.floor(tileHeight * SCALE_FACTOR) || 1;
 
     context.fillStyle = Palette.radarPrizeColor();
-    this.game_.getPrizeIndex().forEach(function (prize) {
+    this.game_.getPrizeList().forEach(function (prize) {
       let xPixels = (prize.getX() - dimensions.x / tileWidth) * scaledTileWidth;
       let yPixels = (prize.getY() - dimensions.y / tileHeight) * scaledTileHeight;
       let x = Math.floor(xPixels + radarWidth / 2);
