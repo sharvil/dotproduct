@@ -50,7 +50,7 @@ abstract class Entity extends ModelObject {
   protected updatePosition_(bounceFactor? : number) {
     let map = this.game_.getMap();
     let prizeIndex = this.game_.getPrizeIndex();
-    let flagIndex = this.game_.getFlagIndex();
+    let flagIndex = this.game_.getFlagList();
     bounceFactor = bounceFactor || 1;
 
     let tileWidth = map.getTileWidth();

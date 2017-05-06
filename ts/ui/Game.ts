@@ -1,4 +1,4 @@
-import FlagIndex from 'model/FlagIndex';
+import FlagList from 'model/FlagList';
 import Painter from 'graphics/Painter';
 import Keyboard from 'input/Keyboard';
 import Mouse from 'input/Mouse';
@@ -47,7 +47,7 @@ export default class Game {
   private map_ : Map;
   private playerIndex_ : PlayerList;
   private prizeIndex_ : PrizeIndex;
-  private flagIndex_ : FlagIndex;
+  private flagIndex_ : FlagList;
   private notifications_ : Notifications;
   private chatView_ : Chat;
   private menuBar_ : MenuBar;
@@ -74,7 +74,7 @@ export default class Game {
     let localPlayer = this.modelObjectFactory_.newLocalPlayer(this, this.settings_['id'], this.settings_['name'], this.settings_['team'], startingShip);
     this.playerIndex_ = new PlayerList(localPlayer);
     this.prizeIndex_ = new PrizeIndex(this);
-    this.flagIndex_ = new FlagIndex(this);
+    this.flagIndex_ = new FlagList(this);
     this.notifications_ = new Notifications(localPlayer);
 
     this.chatView_ = new Chat(this);
@@ -170,7 +170,7 @@ export default class Game {
     return this.prizeIndex_;
   }
 
-  public getFlagIndex() : FlagIndex {
+  public getFlagList() : FlagList {
     return this.flagIndex_;
   }
 

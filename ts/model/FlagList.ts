@@ -1,7 +1,7 @@
 import Flag from 'model/Flag';
 import Game from 'ui/Game';
 
-export default class FlagIndex {
+export default class FlagList {
   private game_ : Game;
   private flags_ : Array<Flag>;
 
