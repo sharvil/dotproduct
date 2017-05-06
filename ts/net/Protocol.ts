@@ -129,7 +129,7 @@ class Protocol {
 
   // |position| is the position of the local player at the time of death.
   public sendDeath(position : Vector, killer : Player) {
-    this.send_([C2SPacketType_.PLAYER_DIED, position.x, position.y, killer.getId()]);
+    this.send_([C2SPacketType_.PLAYER_DIED, position.x, position.y, killer.id]);
   }
 
   public sendChat(message : string) {

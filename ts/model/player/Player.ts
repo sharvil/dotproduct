@@ -65,39 +65,35 @@ abstract class Player extends Entity {
     this.wins_ = 0;
     this.losses_ = 0;
 
-    this.setShip(ship);
+    this.ship = ship;
     this.bounty_ = bounty;
   }
 
-  public getId() : string {
+  public get id() : string {
     return this.id_;
   }
 
-  public getName() : string {
+  public get name() : string {
     return this.name_;
   }
 
-  public getEnergy() : number {
+  public get energy() : number {
     return Math.floor(this.energy_);
   }
 
-  public getMaxEnergy() : number {
+  public get maxEnergy() : number {
     return this.maxEnergy_;
   }
 
-  public getShip() : number {
-    return this.ship_;
-  }
-
-  public getTeam() : number {
+  public get team() : number {
     return this.team_;
   }
 
-  public getPoints() : number {
+  public get points() : number {
     return this.points_;
   }
 
-  public getBounty() : number {
+  public get bounty() : number {
     return this.bounty_;
   }
 
@@ -106,11 +102,11 @@ abstract class Player extends Entity {
    * direction is distinct from the angle: an angle is represented in radians
    * whereas the direction is an integer in the range [0, DIRECTION_STEPS).
    */
-  public getDirection() : number {
+  public get direction() : number {
     return Math.floor(this.angleInRadians_ / (2 * Math.PI) * Player.DIRECTION_STEPS);
   }
 
-  public isAlive() : boolean {
+  public get isAlive() : boolean {
     return this.energy_ > 0;
   }
 
@@ -131,7 +127,21 @@ abstract class Player extends Entity {
     return (this.presence_ & presence) != 0;
   }
 
-  public setShip(ship : number) {
+  public get ship(): number {
+    return this.ship_;
+  }
+
+  public set ship(ship : number) {
+    this.setShipHack_(ship);
+  }
+
+  /**
+   * This function exists because Typescript doesn't support `super.ship = ship`
+   * property access from a derived class when targeting ES5. If we switch to
+   * generating ES6 code, Closure Compiler fails because it doesn't handle the
+   * same sort of property access as input.
+   */
+  protected setShipHack_(ship : number) {
     let oldShip = this.ship_;
 
     this.ship_ = ship;
@@ -220,7 +230,7 @@ abstract class Player extends Entity {
     Listener.fire(this, 'collect_prize', prize);
   }
 
-  /** 
+  /**
    * This function is called when a repel is active and may affect the player and
    * their projectiles.
    */

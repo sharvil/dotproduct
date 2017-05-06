@@ -13,12 +13,12 @@ export default class PlayerIndex {
   }
 
   public addPlayer(player: Player) {
-    this.players_.set(player.getId(), player);
+    this.players_.set(player.id, player);
   }
 
   public removePlayer(player : Player) {
     player.invalidate();
-    this.players_.delete(player.getId());
+    this.players_.delete(player.id);
   }
 
   public findById(id : string) : Player | undefined {

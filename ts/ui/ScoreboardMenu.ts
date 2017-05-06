@@ -30,17 +30,17 @@ export default class ScoreboardMenu implements Menu {
     let self = this;
     let localPlayer = this.playerIndex_.getLocalPlayer();
     let compareFn = function (p1, p2) {
-      return p2.getPoints() - p1.getPoints();
+      return p2.points - p1.points;
     };
 
     this.playerIndex_.forEach(function (player) {
       let nameNode = document.createElement('span');
       nameNode.classList.add(ScoreboardMenu.NAME_CLASS_NAME_);
-      nameNode.textContent = player.getName();
+      nameNode.textContent = player.name;
 
       let scoreNode = document.createElement('span');
       scoreNode.classList.add(ScoreboardMenu.SCORE_CLASS_NAME_);
-      scoreNode.textContent = '' + player.getPoints();
+      scoreNode.textContent = '' + player.points;
 
       let container = document.createElement('div');
       container.classList.add(player.isFriend(localPlayer) ? ScoreboardMenu.FRIEND_CLASS_NAME_ : ScoreboardMenu.FOE_CLASS_NAME_);

@@ -23,7 +23,7 @@ export default class ShipSelectMenu implements Menu {
     }
 
     Listener.add(this.player_, 'shipchange', this.shipChange_.bind(this));
-    this.shipChange_(this.player_, this.player_.getShip());
+    this.shipChange_(this.player_, this.player_.ship);
   }
 
   public get rootNode() : HTMLDivElement {
@@ -65,8 +65,7 @@ export default class ShipSelectMenu implements Menu {
 
   /** Event handler that's called when the given ship type is clicked on. */
   private selectShip_(ship : number) {
-    if (this.player_.getShip() != ship) {
-      this.player_.setShip(ship);
+    if (this.player_.requestShipChange(ship)) {
       this.menuBar_.dismiss(this);
     }
   }

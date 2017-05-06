@@ -28,7 +28,7 @@ export default class Burst extends Projectile {
   }
 
   protected checkPlayerCollision_(player : Player) : boolean {
-    if (!player.isAlive() || this.owner_.isFriend(player) || !this.isActive_) {
+    if (!player.isAlive || this.owner_.isFriend(player) || !this.isActive_) {
       return false;
     }
 

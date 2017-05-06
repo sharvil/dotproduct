@@ -151,7 +151,7 @@ export default class RadarLayer extends ModelObject implements Drawable {
     let actualYScale = (Math.floor(this.tileHeight_ * SCALE_FACTOR) || 1) / this.tileHeight_;
 
     this.game_.getPlayerIndex().forEach(function (player) {
-      if (!player.isAlive()) {
+      if (!player.isAlive) {
         return;
       }
 

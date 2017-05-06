@@ -38,7 +38,7 @@ export default class Chat {
 
     let nameNode = document.createElement('span');
     nameNode.classList.add(Chat.TEXT_NAME_CLASS_NAME_);
-    nameNode.textContent = player.getName() + ': ';
+    nameNode.textContent = player.name + ': ';
     nameNode.addEventListener('click', this.onNameClicked_.bind(this, player));
 
     let textNode = document.createElement('span');
@@ -125,6 +125,6 @@ export default class Chat {
     if (this.chatBox_.value.length > 0 && this.chatBox_.value[this.chatBox_.value.length - 1] != ' ') {
       this.chatBox_.value += ' ';
     }
-    this.chatBox_.value += '@' + player.getName();
+    this.chatBox_.value += '@' + player.name;
   }
 }

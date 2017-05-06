@@ -241,7 +241,7 @@ export default class Game {
     let player = this.playerIndex_.findById(id);
     if (player) {
       this.playerIndex_.removePlayer(player);
-      this.notifications_.addEnterMessage('Player left: ' + player.getName());
+      this.notifications_.addEnterMessage('Player left: ' + player.name);
     }
   }
 
@@ -285,7 +285,7 @@ export default class Game {
     killer.onKill(killee, bountyGained);
     this.prizeIndex_.addKillPrize(x, y);
 
-    let message = killee.getName() + '(' + bountyGained + ') killed by: ' + killer.getName()
+    let message = killee.name + '(' + bountyGained + ') killed by: ' + killer.name;
     if (killer == this.playerIndex_.getLocalPlayer()) {
       this.notifications_.addPersonalMessage(message);
     } else {
@@ -298,7 +298,7 @@ export default class Game {
     let ship = packet[1];
 
     if (player) {
-      player.setShip(ship);
+      player.ship = ship;
     }
   }
 
@@ -381,7 +381,7 @@ export default class Game {
     let x = player.getPosition().x;
     let y = player.getPosition().y;
 
-    this.notifications_.addPersonalMessage('You were killed by ' + killer.getName() + '!');
+    this.notifications_.addPersonalMessage('You were killed by ' + killer.name + '!');
     this.prizeIndex_.addKillPrize(x, y);
     this.protocol_.sendDeath(player.getPosition(), killer);
   }

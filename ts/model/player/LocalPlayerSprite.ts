@@ -37,7 +37,7 @@ export default class LocalPlayerSprite extends PlayerSprite {
     let context = viewport.getContext();
     let dimensions = viewport.getDimensions();
 
-    if (!this.player_.isAlive()) {
+    if (!this.player_.isAlive) {
       let millis = Timer.ticksToMillis(this.localPlayer_.getRespawnTimer());
       let seconds = Math.floor(millis / 1000);
       let tenths = Math.floor((millis % 1000) / 100);

@@ -43,6 +43,6 @@ export default class Flag {
   }
 
   private getTileType_() : TileType {
-    return (this.localPlayer_.getTeam() == this.team_) ? TileType.FRIEND_FLAG : TileType.FOE_FLAG;
+    return (this.localPlayer_.team == this.team_) ? TileType.FRIEND_FLAG : TileType.FOE_FLAG;
   }
 }

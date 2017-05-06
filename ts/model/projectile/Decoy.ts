@@ -23,7 +23,7 @@ export default class Decoy extends Projectile {
   }
 
   public getDirection() : number {
-    let ret = 2 * this.direction_ - this.owner_.getDirection();
+    let ret = 2 * this.direction_ - this.owner_.direction;
 
     // TODO: fix this madness.
     while (ret >= 40) {

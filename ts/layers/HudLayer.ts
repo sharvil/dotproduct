@@ -36,7 +36,7 @@ export default class HudLayer implements Drawable {
   }
 
   private renderEnergyBar_(context : CanvasRenderingContext2D, dimensions : any) {
-    let percentEnergy = this.player_.getEnergy() / this.player_.getMaxEnergy();
+    let percentEnergy = this.player_.energy / this.player_.maxEnergy;
     let energyBarMaxWidth = Math.floor(dimensions.width * 0.25);
     let energyBarWidth = percentEnergy * energyBarMaxWidth;
     let energyBarHeight = 10;
@@ -56,13 +56,13 @@ export default class HudLayer implements Drawable {
   }
 
   private renderNearShipEnergyDisplay_(context : CanvasRenderingContext2D, dimensions : any) {
-    if (!this.player_.isAlive()) {
+    if (!this.player_.isAlive) {
       return;
     }
 
-    let energy = this.player_.getEnergy();
+    let energy = this.player_.energy;
     let playerDimensions = this.player_.getDimensions();
-    let percentEnergy = energy / this.player_.getMaxEnergy();
+    let percentEnergy = energy / this.player_.maxEnergy;
 
     if (percentEnergy < 0.5) {
       let x = Math.floor(playerDimensions.left - dimensions.left - 10);

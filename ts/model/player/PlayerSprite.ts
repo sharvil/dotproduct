@@ -31,11 +31,11 @@ export default class PlayerSprite implements Drawable {
       return;
     }
 
-    if (!this.player_.isAlive()) {
+    if (!this.player_.isAlive) {
       return;
     }
 
-    PlayerSprite.renderPlayer(this.game_, viewport, this.player_, this.player_.getDirection(), this.player_.getPosition());
+    PlayerSprite.renderPlayer(this.game_, viewport, this.player_, this.player_.direction, this.player_.getPosition());
   }
 
   /**
@@ -45,7 +45,7 @@ export default class PlayerSprite implements Drawable {
    */
   public static renderPlayer(game : Game, viewport : Viewport, player : Player, direction : number, position : Vector) {
     let resourceManager = game.getResourceManager();
-    let shipImage = resourceManager.getImage('ship' + player.getShip());
+    let shipImage = resourceManager.getImage('ship' + player.ship);
 
     let dimensions = viewport.getDimensions();
     let context = viewport.getContext();
@@ -56,8 +56,8 @@ export default class PlayerSprite implements Drawable {
     shipImage.render(context, x, y, direction);
 
     // Draw a label for the player's name.
-    let name = player.getName();
-    let bounty = player.getBounty();
+    let name = player.name;
+    let bounty = player.bounty;
     let isFriend = player.isFriend(game.getPlayerIndex().getLocalPlayer());
     context.save();
     context.font = Font.playerFont().toString();
@@ -93,7 +93,7 @@ export default class PlayerSprite implements Drawable {
     let ensemble = resourceManager.getSpriteSheet('explode1');
     new Effect(this.game_, ensemble.getAnimation(0), position, velocity);
 
-    ensemble = resourceManager.getSpriteSheet('ship' + killee.getShip() + '_junk');
+    ensemble = resourceManager.getSpriteSheet('ship' + killee.ship + '_junk');
     for (let i = 0; i < ensemble.getNumAnimations(); ++i) {
       let animation = ensemble.getAnimation(i);
       let deltaVelocity = Vector.fromPolar(Math.random() * 2, Math.random() * 2 * Math.PI);

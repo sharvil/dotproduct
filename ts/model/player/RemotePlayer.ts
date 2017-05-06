@@ -48,7 +48,7 @@ export default class RemotePlayer extends Player {
       this.clearProjectiles_();
     }
 
-    if (!this.isAlive()) {
+    if (!this.isAlive) {
       this.respawn();
       this.angleInRadians_ = angle;
       this.position_ = position;

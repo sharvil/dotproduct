@@ -70,7 +70,7 @@ export default class LocalPlayer extends Player {
   protected captureFlag_(flag : Flag) {
     super.captureFlag_(flag);
 
-    if (flag.captureFlag(this.getTeam())) {
+    if (flag.captureFlag(this.team)) {
       Listener.fire(this, 'capture_flag', flag);
       this.game_.getProtocol().sendFlagCaptured(flag.getId());
     }
@@ -84,7 +84,7 @@ export default class LocalPlayer extends Player {
    * @param {number} damage The damage, in energy units, caused by the projectile.
    */
   public onDamage(shooter : Player, projectile : Projectile, energy : number) {
-    if (!this.isAlive() || this.isSafe()) {
+    if (!this.isAlive || this.isSafe()) {
       return;
     }
 
@@ -112,8 +112,45 @@ export default class LocalPlayer extends Player {
     super.respawn();
   }
 
-  public setShip(ship : number) {
-    super.setShip(ship);
+  /**
+   * Attempts to change the local player's ship to the specified ship type. Returns
+   * `true` on success, `false` otherwise. This method may fail if the ship is changing
+   * due to potentially sketchy user behavior (e.g. changing ships in quick succession
+   * or changing when their energy is low to get a free respawn).
+   */
+  public requestShipChange(ship : number) : boolean {
+    if (this.ship_ == ship) {
+      return false;
+    }
+
+    if (!this.shipChangeDelay_.isLow()) {
+      this.game_.getNotifications().addMessage('Ship change cooldown in effect.');
+      return false;
+    }
+
+    if (this.energy_ < this.maxEnergy_) {
+      this.game_.getNotifications().addMessage('You must have full energy to change ships.');
+      return false;
+    }
+
+    this.ship = ship;
+    this.shipChangeDelay_.setHigh();
+    return true;
+  }
+
+  // We have to override the getter if we override the setter.
+  public get ship() : number {
+    return this.ship_;
+  }
+
+  /**
+   * Immediately sets the ship and respawns the local player without rate limiting
+   * the ship change or checking for full energy. This method should only be called when
+   * getting forced ship changes from the server. For locally-initiated changes, call
+   * `requestShipChange` instead.
+   */
+  public set ship(ship : number) {
+    this.setShipHack_(ship);
     this.respawn();
   }
 
@@ -135,7 +172,7 @@ export default class LocalPlayer extends Player {
     if (this.respawnTimer_ > 0) {
       return;
     } else if (this.respawnTimer_ == 0) {
-      this.setShip(this.ship_);
+      this.respawn();
       forceSendUpdate = true;
     }
 
@@ -145,26 +182,6 @@ export default class LocalPlayer extends Player {
     this.exhaustTimer_.decrement();
     this.energy_ = isSafe ? this.maxEnergy_ : Math.min(this.energy_ + this.shipSettings_['rechargeRate'], this.maxEnergy_);
     this.exhaust_ = this.exhaust_.filter(function (e) { return e.isValid(); });
-
-    // Check for ship change before we read any ship settings.
-    if (this.shipChangeDelay_.isLow()) {
-      for (let i = 0; i < this.settings_['ships'].length; ++i) {
-        let keycode = (Key.Code.ONE + i);  // Digits 1-n
-        if (this.keyboard_.isKeyPressed(keycode)) {
-          if (i != this.ship_) {
-            if (this.energy_ >= this.maxEnergy_) {
-              this.setShip(i);
-              forceSendUpdate = true;
-            } else {
-              // TODO(sharvil): we shouldn't reach into game's private member...
-              this.game_.getNotifications().addMessage('You must have full energy to change ships.');
-            }
-            this.shipChangeDelay_.setHigh();
-          }
-          break;
-        }
-      }
-    }
 
     let oldAngle = this.angleInRadians_;
     let oldVelocity = this.velocity_;
@@ -343,7 +360,7 @@ export default class LocalPlayer extends Player {
 
   /**  Returns the angle, in radians, of the ship's current direction. */
   private getAngle_() : number {
-    return 2 * Math.PI * this.getDirection() / Player.DIRECTION_STEPS;
+    return 2 * Math.PI * this.direction / Player.DIRECTION_STEPS;
   }
 
   private onToggleMultifire_() {

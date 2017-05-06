@@ -30,7 +30,7 @@ export default class Bomb extends Projectile {
   }
 
   protected checkPlayerCollision_(player : Player) : boolean {
-    if (!player.isAlive() || this.owner_.isFriend(player)) {
+    if (!player.isAlive || this.owner_.isFriend(player)) {
       return false;
     }
 
