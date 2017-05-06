@@ -1,18 +1,18 @@
 import ModelObjectFactory from 'model/ModelObjectFactory';
 import LocalPlayer from 'model/player/LocalPlayer';
-import LocalPlayerSprite from 'model/player/LocalPlayerSprite';
+import LocalPlayerSprite from 'view/LocalPlayerSprite';
 import RemotePlayer from 'model/player/RemotePlayer';
-import RemotePlayerSprite from 'model/player/RemotePlayerSprite';
+import RemotePlayerSprite from 'view/RemotePlayerSprite';
 import Bomb from 'model/projectile/Bomb';
-import BombSprite from 'model/projectile/BombSprite';
+import BombSprite from 'view/BombSprite';
 import Bullet from 'model/projectile/Bullet';
-import BulletSprite from 'model/projectile/BulletSprite';
+import BulletSprite from 'view/BulletSprite';
 import Burst from 'model/projectile/Burst';
-import BurstSprite from 'model/projectile/BurstSprite';
+import BurstSprite from 'view/BurstSprite';
 import Decoy from 'model/projectile/Decoy';
-import DecoySprite from 'model/projectile/DecoySprite';
+import DecoySprite from 'view/DecoySprite';
 import Repel from 'model/projectile/Repel';
-import RepelSprite from 'model/projectile/RepelSprite';
+import RepelSprite from 'view/RepelSprite';
 
 export default class GraphicalModelObjectFactory implements ModelObjectFactory {
   constructor() {}

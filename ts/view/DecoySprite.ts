@@ -4,7 +4,7 @@ import Decoy from 'model/projectile/Decoy';
 import Drawable from 'graphics/Drawable';
 import { Layer } from 'graphics/Layer';
 import Viewport from 'Viewport';
-import PlayerSprite from 'model/player/PlayerSprite';
+import PlayerSprite from 'view/PlayerSprite';
 
 export default class DecoySprite extends ModelObject implements Drawable {
   private game_ : Game;

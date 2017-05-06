@@ -1,4 +1,4 @@
-import PlayerSprite from 'model/player/PlayerSprite';
+import PlayerSprite from 'view/PlayerSprite';
 import { Layer } from 'graphics/Layer';
 import Timer from 'time/Timer';
 import ResourceManager from 'ResourceManager';

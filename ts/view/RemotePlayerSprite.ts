@@ -1,5 +1,5 @@
 import { Layer } from 'graphics/Layer';
-import PlayerSprite from 'model/player/PlayerSprite';
+import PlayerSprite from 'view/PlayerSprite';
 import Player from 'model/player/Player';
 import Game from 'ui/Game';
 
