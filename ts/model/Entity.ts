@@ -49,8 +49,8 @@ abstract class Entity extends ModelObject {
 
   protected updatePosition_(bounceFactor? : number) {
     let map = this.game_.getMap();
-    let prizeIndex = this.game_.getPrizeList();
-    let flagIndex = this.game_.getFlagList();
+    let prizeList = this.game_.getPrizeList();
+    let flagList = this.game_.getFlagList();
     bounceFactor = bounceFactor || 1;
 
     let tileWidth = map.getTileWidth();
@@ -70,14 +70,14 @@ abstract class Entity extends ModelObject {
             this.bounce_();
             break;
           case ObjectType.PRIZE:
-            let prize = prizeIndex.getPrize(collision.xTile, collision.yTile);
+            let prize = prizeList.getPrize(collision.xTile, collision.yTile);
             if (prize && this.shouldCollectPrize_(prize)) {
               this.onPrizeCollected(prize);
-              prizeIndex.removePrize(prize);
+              prizeList.removePrize(prize);
             }
             break;
           case ObjectType.FLAG:
-            let flag = flagIndex.getFlag(collision.xTile, collision.yTile);
+            let flag = flagList.getFlag(collision.xTile, collision.yTile);
             if (flag != null) {
               this.captureFlag_(flag);
             } else {
@@ -107,14 +107,14 @@ abstract class Entity extends ModelObject {
             this.bounce_();
             break;
           case ObjectType.PRIZE:
-            let prize = prizeIndex.getPrize(collision.xTile, collision.yTile);
+            let prize = prizeList.getPrize(collision.xTile, collision.yTile);
             if (prize && this.shouldCollectPrize_(prize)) {
               this.onPrizeCollected(prize);
-              prizeIndex.removePrize(prize);
+              prizeList.removePrize(prize);
             }
             break;
           case ObjectType.FLAG:
-            let flag = flagIndex.getFlag(collision.xTile, collision.yTile);
+            let flag = flagList.getFlag(collision.xTile, collision.yTile);
             if (flag != null) {
               this.captureFlag_(flag);
             } else {

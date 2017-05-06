@@ -9,11 +9,11 @@ export default class ScoreboardMenu implements Menu {
   private static readonly FOE_CLASS_NAME_ = 'sv-row-foe';
 
   private view_ : HTMLDivElement;
-  private playerIndex_ : PlayerList;
+  private playerList_ : PlayerList;
 
   constructor(game : Game) {
     this.view_ = <HTMLDivElement> document.getElementById('sv');
-    this.playerIndex_ = game.getPlayerList();
+    this.playerList_ = game.getPlayerList();
   }
 
   public get rootNode() : HTMLElement {
@@ -28,12 +28,12 @@ export default class ScoreboardMenu implements Menu {
     this.view_.innerHTML = '';
 
     let self = this;
-    let localPlayer = this.playerIndex_.getLocalPlayer();
+    let localPlayer = this.playerList_.getLocalPlayer();
     let compareFn = function (p1, p2) {
       return p2.points - p1.points;
     };
 
-    this.playerIndex_.forEach(function (player) {
+    this.playerList_.forEach(function (player) {
       let nameNode = document.createElement('span');
       nameNode.classList.add(ScoreboardMenu.NAME_CLASS_NAME_);
       nameNode.textContent = player.name;

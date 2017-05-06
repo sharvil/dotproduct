@@ -45,9 +45,9 @@ export default class Game {
   private canvas_ : HTMLCanvasElement;
   private viewport_ : Viewport;
   private map_ : Map;
-  private playerIndex_ : PlayerList;
-  private prizeIndex_ : PrizeList;
-  private flagIndex_ : FlagList;
+  private playerList_ : PlayerList;
+  private prizeList_ : PrizeList;
+  private flagList_ : FlagList;
   private notifications_ : Notifications;
   private chatView_ : Chat;
   private menuBar_ : MenuBar;
@@ -72,9 +72,9 @@ export default class Game {
 
     let startingShip = Math.floor(Math.random() * this.settings_['ships'].length);
     let localPlayer = this.modelObjectFactory_.newLocalPlayer(this, this.settings_['id'], this.settings_['name'], this.settings_['team'], startingShip);
-    this.playerIndex_ = new PlayerList(localPlayer);
-    this.prizeIndex_ = new PrizeList(this);
-    this.flagIndex_ = new FlagList(this);
+    this.playerList_ = new PlayerList(localPlayer);
+    this.prizeList_ = new PrizeList(this);
+    this.flagList_ = new FlagList(this);
     this.notifications_ = new Notifications(localPlayer);
 
     this.chatView_ = new Chat(this);
@@ -163,15 +163,15 @@ export default class Game {
   }
 
   public getPlayerList() : PlayerList {
-    return this.playerIndex_;
+    return this.playerList_;
   }
 
   public getPrizeList() : PrizeList {
-    return this.prizeIndex_;
+    return this.prizeList_;
   }
 
   public getFlagList() : FlagList {
-    return this.flagIndex_;
+    return this.flagList_;
   }
 
   public getModelObjectFactory() : ModelObjectFactory {
@@ -231,16 +231,16 @@ export default class Game {
 
     let player = this.modelObjectFactory_.newRemotePlayer(this, id, name, team, isAlive, ship, bounty);
     player.setPresence(presence);
-    this.playerIndex_.addPlayer(player);
+    this.playerList_.addPlayer(player);
 
     this.notifications_.addEnterMessage('Player entered: ' + name);
   }
 
   private onPlayerLeft_(packet : Array<any>) {
     let id = packet[0];
-    let player = this.playerIndex_.findById(id);
+    let player = this.playerList_.findById(id);
     if (player) {
-      this.playerIndex_.removePlayer(player);
+      this.playerList_.removePlayer(player);
       this.notifications_.addEnterMessage('Player left: ' + player.name);
     }
   }
@@ -261,7 +261,7 @@ export default class Game {
       return;
     }
 
-    let player = this.playerIndex_.findById(id);
+    let player = this.playerList_.findById(id);
     if (player) {
       (<RemotePlayer> player).onPositionUpdate(timeDiff, angle, position, velocity, isSafe);
       if (packet.length > 8) {
@@ -273,8 +273,8 @@ export default class Game {
   private onPlayerDied_(packet : Array<any>) {
     let x = packet[0];
     let y = packet[1];
-    let killee = this.playerIndex_.findById(packet[2]);
-    let killer = this.playerIndex_.findById(packet[3]);
+    let killee = this.playerList_.findById(packet[2]);
+    let killer = this.playerList_.findById(packet[3]);
     let bountyGained = packet[4];
 
     if (!killer || !killee) {
@@ -283,10 +283,10 @@ export default class Game {
 
     killee.onDeath(killer);
     killer.onKill(killee, bountyGained);
-    this.prizeIndex_.addKillPrize(x, y);
+    this.prizeList_.addKillPrize(x, y);
 
     let message = killee.name + '(' + bountyGained + ') killed by: ' + killer.name;
-    if (killer == this.playerIndex_.getLocalPlayer()) {
+    if (killer == this.playerList_.getLocalPlayer()) {
       this.notifications_.addPersonalMessage(message);
     } else {
       this.notifications_.addMessage(message);
@@ -294,7 +294,7 @@ export default class Game {
   }
 
   private onShipChanged_(packet : Array<any>) {
-    let player = this.playerIndex_.findById(packet[0]);
+    let player = this.playerList_.findById(packet[0]);
     let ship = packet[1];
 
     if (player) {
@@ -309,7 +309,7 @@ export default class Game {
     if (playerId == Player.SYSTEM_PLAYER_ID) {
       this.chatView_.addSystemMessage(message);
     } else {
-      let player = this.playerIndex_.findById(packet[0]);
+      let player = this.playerList_.findById(packet[0]);
       if (player) {
         this.chatView_.addMessage(player, message);
       }
@@ -317,7 +317,7 @@ export default class Game {
   }
 
   private onScoreUpdated_(packet : Array<any>) {
-    let player = this.playerIndex_.findById(packet[0]);
+    let player = this.playerList_.findById(packet[0]);
     let points = packet[1];
     let wins = packet[2];
     let losses = packet[3];
@@ -332,19 +332,19 @@ export default class Game {
     let timeDeltaMillis = this.protocol_.getMillisSinceServerTime(packet[1]);
 
     let ticks = Timer.millisToTicks(timeDeltaMillis);
-    this.prizeIndex_.onSeedUpdate(seed, ticks);
+    this.prizeList_.onSeedUpdate(seed, ticks);
   }
 
   private onPrizeCollected_(packet : Array<any>) {
-    let player = this.playerIndex_.findById(packet[0]);
+    let player = this.playerList_.findById(packet[0]);
     let type = packet[1];
     let xTile = packet[2];
     let yTile = packet[3];
 
     // Remove the prize from the map if we have it in our model.
-    let prize = this.prizeIndex_.getPrize(xTile, yTile);
+    let prize = this.prizeList_.getPrize(xTile, yTile);
     if (prize) {
-      this.prizeIndex_.removePrize(prize);
+      this.prizeList_.removePrize(prize);
     }
 
     if (player) {
@@ -356,7 +356,7 @@ export default class Game {
   }
 
   private onSetPresence_(packet : Array<any>) {
-    let player = this.playerIndex_.findById(packet[0]);
+    let player = this.playerList_.findById(packet[0]);
     let presence = <Player.Presence> packet[1];
     if (player) {
       player.clearPresence(Player.Presence.ALL);
@@ -370,7 +370,7 @@ export default class Game {
     let xTile = packet[2];
     let yTile = packet[3];
 
-    this.flagIndex_.updateFlag(id, team, xTile, yTile);
+    this.flagList_.updateFlag(id, team, xTile, yTile);
   }
 
   private onLocalPlayerShipChanged_(player : Player, shipType : number) {
@@ -382,7 +382,7 @@ export default class Game {
     let y = player.getPosition().y;
 
     this.notifications_.addPersonalMessage('You were killed by ' + killer.name + '!');
-    this.prizeIndex_.addKillPrize(x, y);
+    this.prizeList_.addKillPrize(x, y);
     this.protocol_.sendDeath(player.getPosition(), killer);
   }
 
