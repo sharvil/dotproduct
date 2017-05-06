@@ -35,9 +35,7 @@
 
       <!-- Game canvas -->
       <canvas id="gv-canvas" class="gv-canvas"></canvas>
-
-      <!-- Scoreboard view -->
-      <div id="sv" class="sv sv-hidden"></div>
+      <div id="menu"></div>
 
       <!-- Chat view -->
       <div id="cv" class="cv">
@@ -45,11 +43,23 @@
         <input id="cv-input" class="cv-input" type="text" maxlength="140"></input>
       </div>
 
+      <!-- Disconnected view -->
+      <div id="dcv" class="dcv">
+        <center>
+          <p>
+            Oops, you got disconnected...
+          </p>
+          <p>
+            Click here to get back in the game.
+          </p>
+        </center>
+      </div>
+
       <!-- Debug view -->
       <div id="dv" class="dv"></div>
 
       <!-- Help view -->
-      <div id="help" class="help">
+      <div id="help" class="menu help">
         <div style="float: left">
           <table>
             <caption>Movement</caption>
@@ -83,17 +93,13 @@
         </div>
       </div>
 
-      <!-- Disconnected view -->
-      <div id="dcv" class="dcv">
-        <center>
-          <p>
-            Oops, you got disconnected...
-          </p>
-          <p>
-            Click here to get back in the game.
-          </p>
-        </center>
+      <!-- Ship select view -->
+      <div id="ss" class="menu ss">
+        <p>Ship selection</p>
       </div>
+
+      <!-- Scoreboard view -->
+      <div id="sv" class="menu sv"></div>
 
       <!-- Tooltip -->
       <div id="tt" class="tt tt-hide"></div>

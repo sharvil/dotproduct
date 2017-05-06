@@ -149,7 +149,7 @@ export default class LocalPlayer extends Player {
     // Check for ship change before we read any ship settings.
     if (this.shipChangeDelay_.isLow()) {
       for (let i = 0; i < this.settings_['ships'].length; ++i) {
-        let keycode = (49 + i);  // Digits 1-n
+        let keycode = (Key.Code.ONE + i);  // Digits 1-n
         if (this.keyboard_.isKeyPressed(keycode)) {
           if (i != this.ship_) {
             if (this.energy_ >= this.maxEnergy_) {

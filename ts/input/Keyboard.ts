@@ -18,11 +18,17 @@ export default class Keyboard {
   }
 
   private keyPressed_(e : KeyboardEvent) {
-    Listener.fire(this, e.keyCode);
+    Listener.fire(this, e.keyCode, e.keyCode);
   }
 
   private keyDown_(e : KeyboardEvent) {
-    Listener.fire(this, e.keyCode);
+    // Fire events for non-printable characters. Printable characters
+    // will be handled by the 'keypress' event. The 'keydown' event
+    // gives us uncooked keyCode values (e.g. 'a' == 65 instead of 97)
+    // whereas 'keypress' gives us cooked values.
+    if (e.key.length != 1) {
+      Listener.fire(this, e.keyCode, e.keyCode);
+    }
 
     if (e.keyCode == Key.Code.LEFT || e.keyCode == Key.Code.RIGHT ||
         e.keyCode == Key.Code.UP || e.keyCode == Key.Code.DOWN ||

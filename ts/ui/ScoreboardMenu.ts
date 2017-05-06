@@ -1,8 +1,8 @@
 import Game from 'ui/Game';
+import Menu from 'ui/Menu';
 import PlayerIndex from 'model/PlayerIndex';
 
-export default class Scoreboard {
-  private static readonly VISIBLE_CLASS_NAME_ = 'sv-visible';
+export default class ScoreboardMenu implements Menu {
   private static readonly NAME_CLASS_NAME_ = 'sv-name';
   private static readonly SCORE_CLASS_NAME_ = 'sv-score';
   private static readonly FRIEND_CLASS_NAME_ = 'sv-row-friend';
@@ -16,16 +16,12 @@ export default class Scoreboard {
     this.playerIndex_ = game.getPlayerIndex();
   }
 
-  public show() {
-    this.view_.classList.add(Scoreboard.VISIBLE_CLASS_NAME_);
-  }
-
-  public hide() {
-    this.view_.classList.remove(Scoreboard.VISIBLE_CLASS_NAME_);
+  public get rootNode() : HTMLElement {
+    return this.view_;
   }
 
   public update() {
-    if (!this.view_.classList.contains(Scoreboard.VISIBLE_CLASS_NAME_)) {
+    if (!this.view_.parentNode) {
       return;
     }
 
@@ -39,15 +35,15 @@ export default class Scoreboard {
 
     this.playerIndex_.forEach(function (player) {
       let nameNode = document.createElement('span');
-      nameNode.classList.add(Scoreboard.NAME_CLASS_NAME_);
+      nameNode.classList.add(ScoreboardMenu.NAME_CLASS_NAME_);
       nameNode.textContent = player.getName();
 
       let scoreNode = document.createElement('span');
-      scoreNode.classList.add(Scoreboard.SCORE_CLASS_NAME_);
-      scoreNode.textContent = player.getPoints();
+      scoreNode.classList.add(ScoreboardMenu.SCORE_CLASS_NAME_);
+      scoreNode.textContent = '' + player.getPoints();
 
       let container = document.createElement('div');
-      container.classList.add(player.isFriend(localPlayer) ? Scoreboard.FRIEND_CLASS_NAME_ : Scoreboard.FOE_CLASS_NAME_);
+      container.classList.add(player.isFriend(localPlayer) ? ScoreboardMenu.FRIEND_CLASS_NAME_ : ScoreboardMenu.FOE_CLASS_NAME_);
       container.appendChild(nameNode);
       container.appendChild(scoreNode);
 

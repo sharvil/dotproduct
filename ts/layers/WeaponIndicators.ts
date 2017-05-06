@@ -9,7 +9,7 @@ import Game from 'ui/Game';
 import Viewport from 'Viewport';
 
 export default class WeaponIndicators implements Drawable {
-  private static readonly TOOLTIP_HIDE_CLASS_NAME_ = 'tt-hide';
+  private static readonly TOOLTIP_VISIBLE_CLASS_NAME_ = 'tt-visible';
 
   private localPlayer_ : LocalPlayer;
   private mouse_ : Mouse;
@@ -41,7 +41,7 @@ export default class WeaponIndicators implements Drawable {
     let top = Math.floor((dimensions.height - (numIndicators * height + (numIndicators - 1) * padding)) / 2);
     let left = dimensions.width - width;
 
-    this.tooltip_.classList.add(WeaponIndicators.TOOLTIP_HIDE_CLASS_NAME_);
+    this.tooltip_.classList.remove(WeaponIndicators.TOOLTIP_VISIBLE_CLASS_NAME_);
 
     let label = 'Guns: ' + Key.Name[Key.Map.FIRE_GUN];
     this.renderLeveledWeapon_(context, new Rect(left, top, width, height), gunLevel, 0, label);
@@ -66,7 +66,7 @@ export default class WeaponIndicators implements Drawable {
     if (level >= 0) {
       tileNum += level;
       if (this.mouse_.isHovering(rect)) {
-        this.tooltip_.classList.remove(WeaponIndicators.TOOLTIP_HIDE_CLASS_NAME_);
+        this.tooltip_.classList.add(WeaponIndicators.TOOLTIP_VISIBLE_CLASS_NAME_);
         this.tooltip_.style.top = rect.y + 'px';
         this.tooltip_.style.right = rect.width + 'px';
         this.tooltip_.style.left = '';
@@ -86,7 +86,7 @@ export default class WeaponIndicators implements Drawable {
     if (count <= 0) {
       x -= rect.width - 4;
     } else if (this.mouse_.isHovering(rect)) {
-      this.tooltip_.classList.remove(WeaponIndicators.TOOLTIP_HIDE_CLASS_NAME_);
+      this.tooltip_.classList.add(WeaponIndicators.TOOLTIP_VISIBLE_CLASS_NAME_);
       this.tooltip_.style.top = rect.y + 'px';
       this.tooltip_.style.left = rect.width + 'px';
       this.tooltip_.style.right = '';

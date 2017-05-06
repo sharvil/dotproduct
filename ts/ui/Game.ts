@@ -23,14 +23,13 @@ import Viewport from 'Viewport';
 import Chat from 'ui/Chat';
 import Debug from 'ui/Debug';
 import Disconnected from 'ui/Disconnected';
-import Scoreboard from 'ui/Scoreboard';
 import ResourceManager from 'ResourceManager';
 import ModelObjectFactory from 'model/ModelObjectFactory';
 import { PrizeType } from 'types';
 import Vector from 'math/Vector';
 import Listener from 'Listener';
 import RemotePlayer from 'model/player/RemotePlayer';
-import Key from 'input/Key';
+import MenuBar from 'ui/MenuBar';
 
 export default class Game {
   private static readonly MAX_TICKS_PER_FRAME_ : number = 150;
@@ -51,7 +50,7 @@ export default class Game {
   private flagIndex_ : FlagIndex;
   private notifications_ : Notifications;
   private chatView_ : Chat;
-  private scoreboardView_ : Scoreboard;
+  private menuBar_ : MenuBar;
   private debugView_ : Debug;
   private disconnectedView_ : Disconnected;
   private lastTime_ : number;
@@ -80,7 +79,7 @@ export default class Game {
 
     this.chatView_ = new Chat(this);
     this.chatView_.addSystemMessage('Welcome to dotproduct! Press ? for help.');
-    this.scoreboardView_ = new Scoreboard(this);
+    this.menuBar_ = new MenuBar(this);
     this.debugView_ = new Debug(this, this.viewport_);
     this.disconnectedView_ = new Disconnected();
     this.lastTime_ = Date.now();
@@ -114,15 +113,11 @@ export default class Game {
     Listener.add(localPlayer, 'collect_prize', this.onLocalPlayerCollectedPrize_.bind(this));
     Listener.add(localPlayer, 'death', this.onLocalPlayerDied_.bind(this));
 
-    Listener.add(this.keyboard_, Key.Code.ESCAPE, this.onEscapePressed_.bind(this));
-    Listener.add(this.keyboard_, Key.Code.QUESTION_MARK, this.onHelp_.bind(this));
-
     window.addEventListener('resize', this.onResize_.bind(this));
     window.addEventListener('focus', function () { localPlayer.clearPresence(Player.Presence.AWAY); });
     window.addEventListener('blur', function () { localPlayer.setPresence(Player.Presence.AWAY); });
-    this.canvas_.addEventListener('mousemove', this.onMouseMoved_.bind(this));
 
-    new Timer().setInterval(this.heartbeat_.bind(this), 100);
+    Timer.setInterval(this.heartbeat_.bind(this), 100);
     Notification.requestPermission();
 
     // Make sure the game canvas is the right size and start rendering loop.
@@ -212,7 +207,6 @@ export default class Game {
 
     this.painter_.render(this.viewport_);
 
-    this.scoreboardView_.update();
     this.debugView_.update();
 
     this.tickResidue_ += curTime - this.lastTime_;
@@ -426,26 +420,6 @@ export default class Game {
 
     if (message) {
       this.notifications_.addMessage(message);
-    }
-  }
-
-  private onEscapePressed_() {
-    if (!this.chatView_.isChatBoxVisible()) {
-      (<HTMLElement> document.getElementById('help')).classList.remove('help-visible');
-    }
-  }
-
-  private onHelp_() {
-    if (!this.chatView_.isChatBoxVisible()) {
-      (<HTMLElement> document.getElementById('help')).classList.toggle('help-visible');
-    }
-  }
-
-  private onMouseMoved_(event) {
-    if (event.offsetX < 10) {
-      this.scoreboardView_.show();
-    } else {
-      this.scoreboardView_.hide();
     }
   }
 
