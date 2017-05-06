@@ -15,7 +15,7 @@ export default class NotificationLayer extends ModelObject implements Drawable {
   private notifications_ : Notifications;
 
   constructor(game : Game, notifications : Notifications) {
-    super(game.getSimulation());
+    super(game.simulation);
 
     this.game_ = game;
     this.notifications_ = notifications;

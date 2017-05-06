@@ -126,7 +126,7 @@ export default class Game {
     this.renderingLoop_();
   }
 
-  public getSimulation() : Simulation {
+  public get simulation() : Simulation {
     return this.simulation_;
   }
 

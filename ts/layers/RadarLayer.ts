@@ -21,7 +21,7 @@ export default class RadarLayer extends ModelObject implements Drawable {
   private blinkAlpha_ : number;
 
   constructor(game : Game) {
-    super(game.getSimulation());
+    super(game.simulation);
 
     this.game_ = game;
     this.tileWidth_ = this.game_.getResourceManager().getImage('tileset').tileWidth;

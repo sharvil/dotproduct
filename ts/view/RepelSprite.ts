@@ -12,7 +12,7 @@ export default class RepelSprite extends ModelObject implements Drawable {
   private animation_ : Animation;
 
   constructor(game : Game, repel : Repel) {
-    super(game.getSimulation());
+    super(game.simulation);
 
     this.game_ = game;
     this.repel_ = repel;

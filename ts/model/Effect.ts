@@ -14,7 +14,7 @@ export default class Effect extends ModelObject implements Drawable {
   private layer_ : number;
 
   constructor(game : Game, animation : Animation, position : Vector, velocity : Vector, layer? : Layer) {
-    super(game.getSimulation());
+    super(game.simulation);
 
     this.game_ = game;
     this.animation_ = animation;

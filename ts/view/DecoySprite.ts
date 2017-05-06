@@ -11,7 +11,7 @@ export default class DecoySprite extends ModelObject implements Drawable {
   private decoy_ : Decoy;
 
   constructor(game : Game, decoy : Decoy) {
-    super(game.getSimulation());
+    super(game.simulation);
 
     this.game_ = game;
     this.decoy_ = decoy;

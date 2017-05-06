@@ -13,7 +13,7 @@ abstract class Entity extends ModelObject {
   protected radius_ : number;
 
   constructor(game : Game) {
-    super(game.getSimulation());
+    super(game.simulation);
 
     this.game_ = game;
     this.position_ = Vector.ZERO;

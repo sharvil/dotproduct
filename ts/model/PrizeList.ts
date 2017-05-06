@@ -15,7 +15,7 @@ export default class PrizeList extends ModelObject {
   private prizes_ : Array<Prize>;
 
   constructor(game : Game) {
-    super(game.getSimulation());
+    super(game.simulation);
     this.prizeSettings_ = game.getSettings()['prize'];
     this.map_ = game.getMap();
     this.prng_ = new Prng();

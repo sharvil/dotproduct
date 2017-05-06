@@ -19,7 +19,7 @@ export default class BombSprite extends ModelObject implements Drawable {
   private bouncingAnimation_ : Animation;
 
   constructor(game : Game, bomb : Bomb) {
-    super(game.getSimulation());
+    super(game.simulation);
 
     let level = bomb.getLevel();
 

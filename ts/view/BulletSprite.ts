@@ -19,7 +19,7 @@ export default class BulletSprite extends ModelObject implements Drawable {
   private bouncingAnimation_ : Animation;
 
   constructor(game : Game, bullet : Bullet) {
-    super(game.getSimulation());
+    super(game.simulation);
 
     let level = bullet.getLevel();
 

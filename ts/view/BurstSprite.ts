@@ -18,7 +18,7 @@ export default class BurstSprite extends ModelObject implements Drawable {
   private inactiveAnimation_ : Animation;
 
   constructor(game : Game, burst : Burst) {
-    super(game.getSimulation());
+    super(game.simulation);
 
     this.game_ = game;
     this.burst_ = burst;
