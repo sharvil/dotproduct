@@ -1,5 +1,4 @@
 import { TileType } from 'types';
-import Game from 'ui/Game';
 import Map from 'model/Map';
 import LocalPlayer from 'model/player/LocalPlayer';
 
@@ -11,8 +10,8 @@ export default class Flag {
   private xTile_ : number;
   private yTile_ : number;
 
-  constructor(game : Game, map : Map, id : number, team : number, xTile : number, yTile : number) {
-    this.localPlayer_ = game.getPlayerList().localPlayer;
+  constructor(localPlayer : LocalPlayer, map : Map, id : number, team : number, xTile : number, yTile : number) {
+    this.localPlayer_ = localPlayer;
     this.map_ = map;
     this.id_ = id;
     this.team_ = team;

@@ -4,7 +4,6 @@ import Entity from 'model/Entity';
 import Image from 'graphics/Image';
 import Quadtree from 'structs/Quadtree';
 import { TileType, ObjectType } from 'types';
-import Game from 'ui/Game';
 
 export default class Map {
   private static readonly COLLISION_EPSILON_ = 0.0001;
@@ -19,36 +18,38 @@ export default class Map {
   private tileHeight_ : number;
   private quadtree_ : Quadtree;
 
-  constructor(game : Game, mapData : any, tileProperties : Array<any>) {
-    let settings = game.getSettings();
-    let tileset = game.getResourceManager().getImage('tileset');
-
+  constructor(settings : Object, mapData : any, tileProperties : Array<any>) {
     this.mapData_ = mapData;
     this.tileProperties_ = tileProperties;
     this.width_ = settings['map']['width'];
     this.height_ = settings['map']['height'];
     this.spawnRadius_ = settings['map']['spawnRadius'];
-    this.tileWidth_ = tileset.tileWidth;
-    this.tileHeight_ = tileset.tileHeight;
+    this.tileWidth_ = settings['map']['tileWidth'];
+    this.tileHeight_ = settings['map']['tileHeight'];
     this.quadtree_ = new Quadtree(mapData, this.width_, this.height_);
   }
 
+  /** Returns the width of the map in number of tiles. */
   public getWidth() : number {
     return this.width_;
   }
 
+  /** Returns the height of the map in number of tiles. */
   public getHeight() : number {
     return this.height_;
   }
 
+  /** Returns the width of each tile in pixels. */
   public getTileWidth() : number {
     return this.tileWidth_;
   }
 
+  /** Returns the height of each tile in pixels. */
   public getTileHeight() : number {
     return this.tileHeight_;
   }
 
+  /** Given a vector in pixels, returns a new vector in tile coordinates. */
   public toTileCoordinates(vector : Vector) : Vector {
     let xTile = Math.floor(vector.x / this.tileWidth_);
     let yTile = Math.floor(vector.y / this.tileHeight_);
@@ -59,12 +60,12 @@ export default class Map {
     return new Vector(xTile, yTile);
   }
 
-  public getTile(x : number, y : number) : number {
+  public getTile(x : number, y : number) : TileType {
     let index = x + y * this.width_;
     return this.mapData_[index] ? this.mapData_[index] : TileType.NONE;
   }
 
-  public setTile(x : number, y : number, value : number) {
+  public setTile(x : number, y : number, value : TileType) {
     assert(x >= 0 && x < this.width_, 'Invalid x coordinate.');
     assert(y >= 0 && y < this.height_, 'Invalid y coordinate.');
 

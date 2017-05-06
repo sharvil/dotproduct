@@ -1,4 +1,5 @@
 import FlagList from 'model/FlagList';
+import Flag from 'model/Flag';
 import Painter from 'graphics/Painter';
 import Keyboard from 'input/Keyboard';
 import Mouse from 'input/Mouse';
@@ -68,13 +69,13 @@ export default class Game {
     this.mouse_ = new Mouse();
     this.canvas_ = <HTMLCanvasElement> document.getElementById('gv-canvas');
     this.viewport_ = new Viewport(this, <CanvasRenderingContext2D> (this.canvas_.getContext('2d')));
-    this.map_ = new Map(this, mapData, tileProperties);
+    this.map_ = new Map(settings, mapData, tileProperties);
 
     let startingShip = Math.floor(Math.random() * this.settings_['ships'].length);
     let localPlayer = this.modelObjectFactory_.newLocalPlayer(this, this.settings_['id'], this.settings_['name'], this.settings_['team'], startingShip);
     this.playerList_ = new PlayerList(localPlayer);
-    this.prizeList_ = new PrizeList(this);
-    this.flagList_ = new FlagList(this);
+    this.prizeList_ = new PrizeList(this.simulation, settings, this.map_);
+    this.flagList_ = new FlagList(localPlayer, this.map_);
     this.notifications_ = new Notifications(localPlayer);
 
     this.chatView_ = new Chat(this);
@@ -111,6 +112,7 @@ export default class Game {
 
     Listener.add(localPlayer, 'shipchange', this.onLocalPlayerShipChanged_.bind(this));
     Listener.add(localPlayer, 'collect_prize', this.onLocalPlayerCollectedPrize_.bind(this));
+    Listener.add(localPlayer, 'capture_flag', this.onLocalPlayerCapturedFlag_.bind(this));
     Listener.add(localPlayer, 'death', this.onLocalPlayerDied_.bind(this));
 
     window.addEventListener('resize', this.onResize_.bind(this));
@@ -375,6 +377,10 @@ export default class Game {
 
   private onLocalPlayerShipChanged_(player : Player, shipType : number) {
     this.protocol_.sendShipChange(shipType);
+  }
+
+  private onLocalPlayerCapturedFlag_(player : Player, flag : Flag) {
+    this.protocol_.sendFlagCaptured(flag.getId());
   }
 
   private onLocalPlayerDied_(player : Player, killer : Player) {

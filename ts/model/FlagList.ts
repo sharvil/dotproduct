@@ -1,12 +1,15 @@
 import Flag from 'model/Flag';
-import Game from 'ui/Game';
+import LocalPlayer from 'model/player/LocalPlayer';
+import Map from 'model/Map';
 
 export default class FlagList {
-  private game_ : Game;
+  private localPlayer_ : LocalPlayer;
+  private map_ : Map;
   private flags_ : Array<Flag>;
 
-  constructor(game : Game) {
-    this.game_ = game;
+  constructor(localPlayer : LocalPlayer, map : Map) {
+    this.localPlayer_ = localPlayer;
+    this.map_ = map;
     this.flags_ = [];
   }
 
@@ -19,7 +22,7 @@ export default class FlagList {
   public updateFlag = function (id : number, team : number, xTile : number, yTile : number) {
     let flag = this.getFlag(xTile, yTile);
     if (!flag) {
-      this.flags_.push(new Flag(this.game_, this.game_.getMap(), id, team, xTile, yTile));
+      this.flags_.push(new Flag(this.localPlayer_, this.map_, id, team, xTile, yTile));
     } else {
       flag.captureFlag(team);
     }

@@ -9,7 +9,9 @@
   }, 
   "map": {
     "width": 1024, 
+    "tileWidth": 16, 
     "spawnRadius": 500, 
+    "tileHeight": 16, 
     "height": 1024
   }, 
   "prize": {

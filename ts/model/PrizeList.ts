@@ -3,7 +3,6 @@ import Prize from 'model/Prize';
 import { PrizeType } from 'types';
 import Simulation from 'model/Simulation';
 import Map from 'model/Map';
-import Game from 'ui/Game';
 import Vector from 'math/Vector';
 import ModelObject from 'model/ModelObject';
 
@@ -14,10 +13,10 @@ export default class PrizeList extends ModelObject {
   private killPrng_ : Prng;
   private prizes_ : Array<Prize>;
 
-  constructor(game : Game) {
-    super(game.simulation);
-    this.prizeSettings_ = game.getSettings()['prize'];
-    this.map_ = game.getMap();
+  constructor(simulation : Simulation, settings : Object, map : Map) {
+    super(simulation);
+    this.prizeSettings_ = settings['prize'];
+    this.map_ = map;
     this.prng_ = new Prng();
 
     // This PRNG doesn't need to be synchronized across clients. We use
