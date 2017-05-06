@@ -21,8 +21,8 @@ export default class MenuBar {
     this.currentMenu_ = null;
 
     Listener.add(game.getKeyboard(), Key.Code.ESCAPE, this.eventHandler_.bind(this));
+    Listener.add(game.getKeyboard(), Key.Code.ONE, this.eventHandler_.bind(this));
     Listener.add(game.getKeyboard(), Key.Code.ZERO, this.eventHandler_.bind(this));
-    Listener.add(game.getKeyboard(), Key.Code.NINE, this.eventHandler_.bind(this));
     Listener.add(game.getKeyboard(), Key.Code.QUESTION_MARK, this.eventHandler_.bind(this));
   }
 
@@ -45,11 +45,11 @@ export default class MenuBar {
 
     let menu : Menu | null = null;
     switch (code) {
+      case Key.Code.ONE:
+        menu = this.shipSelectMenu_;
+        break;
       case Key.Code.ZERO:
         menu = this.scoreMenu_;
-        break;
-      case Key.Code.NINE:
-        menu = this.shipSelectMenu_;
         break;
       case Key.Code.QUESTION_MARK:
         menu = this.helpMenu_;
