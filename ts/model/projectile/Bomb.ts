@@ -60,7 +60,7 @@ export default class Bomb extends Projectile {
     this.velocity_ = Vector.ZERO;
     this.lifetime_ = 0;
 
-    let localPlayer = this.game_.getPlayerIndex().getLocalPlayer();
+    let localPlayer = this.game_.getPlayerList().getLocalPlayer();
     let viewport = this.game_.getViewport();
 
     // Figure out how much damage the local player is going to take from this bomb explosion.

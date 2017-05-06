@@ -48,7 +48,7 @@ abstract class Projectile extends Entity {
     }
 
     this.updatePosition_();
-    this.game_.getPlayerIndex().some(this.checkPlayerCollision_.bind(this));
+    this.game_.getPlayerList().some(this.checkPlayerCollision_.bind(this));
   }
 
   /** This function is called when a repel may affect the projectile. */

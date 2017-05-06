@@ -29,7 +29,7 @@ export default class Repel extends Projectile {
   }
 
   public advanceTime() {
-    this.game_.getPlayerIndex().forEach((player : Player) => {
+    this.game_.getPlayerList().forEach((player : Player) => {
       if (!this.owner_.isFriend(player)) {
         player.onRepelled(this);
       }

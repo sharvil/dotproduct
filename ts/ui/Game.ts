@@ -15,7 +15,7 @@ import Player from 'model/player/Player';
 import Prize from 'model/Prize';
 import Simulation from 'model/Simulation';
 import Notifications from 'Notifications';
-import PlayerIndex from 'model/PlayerIndex';
+import PlayerList from 'model/PlayerList';
 import PrizeIndex from 'model/PrizeIndex';
 import Protocol from 'net/Protocol';
 import Timer from 'time/Timer';
@@ -45,7 +45,7 @@ export default class Game {
   private canvas_ : HTMLCanvasElement;
   private viewport_ : Viewport;
   private map_ : Map;
-  private playerIndex_ : PlayerIndex;
+  private playerIndex_ : PlayerList;
   private prizeIndex_ : PrizeIndex;
   private flagIndex_ : FlagIndex;
   private notifications_ : Notifications;
@@ -72,7 +72,7 @@ export default class Game {
 
     let startingShip = Math.floor(Math.random() * this.settings_['ships'].length);
     let localPlayer = this.modelObjectFactory_.newLocalPlayer(this, this.settings_['id'], this.settings_['name'], this.settings_['team'], startingShip);
-    this.playerIndex_ = new PlayerIndex(localPlayer);
+    this.playerIndex_ = new PlayerList(localPlayer);
     this.prizeIndex_ = new PrizeIndex(this);
     this.flagIndex_ = new FlagIndex(this);
     this.notifications_ = new Notifications(localPlayer);
@@ -162,7 +162,7 @@ export default class Game {
     return this.map_;
   }
 
-  public getPlayerIndex() : PlayerIndex {
+  public getPlayerList() : PlayerList {
     return this.playerIndex_;
   }
 

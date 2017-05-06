@@ -1,6 +1,6 @@
 import Game from 'ui/Game';
 import Menu from 'ui/Menu';
-import PlayerIndex from 'model/PlayerIndex';
+import PlayerList from 'model/PlayerList';
 
 export default class ScoreboardMenu implements Menu {
   private static readonly NAME_CLASS_NAME_ = 'sv-name';
@@ -9,11 +9,11 @@ export default class ScoreboardMenu implements Menu {
   private static readonly FOE_CLASS_NAME_ = 'sv-row-foe';
 
   private view_ : HTMLDivElement;
-  private playerIndex_ : PlayerIndex;
+  private playerIndex_ : PlayerList;
 
   constructor(game : Game) {
     this.view_ = <HTMLDivElement> document.getElementById('sv');
-    this.playerIndex_ = game.getPlayerIndex();
+    this.playerIndex_ = game.getPlayerList();
   }
 
   public get rootNode() : HTMLElement {

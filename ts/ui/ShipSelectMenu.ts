@@ -16,7 +16,7 @@ export default class ShipSelectMenu implements Menu {
     this.menuBar_ = menuBar;
     this.rootNode_ = <HTMLDivElement> document.getElementById('ss');
     this.resourceManager_ = game.getResourceManager();
-    this.player_ = game.getPlayerIndex().getLocalPlayer();
+    this.player_ = game.getPlayerList().getLocalPlayer();
 
     for (let i = 0; i < game.getSettings()['ships'].length; ++i) {
       this.addShip_(i, game.getSettings()['ships'][i]);

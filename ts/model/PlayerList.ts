@@ -1,7 +1,7 @@
 import LocalPlayer from 'model/player/LocalPlayer';
 import Player from 'model/player/Player';
 
-export default class PlayerIndex {
+export default class PlayerList {
   private players_ : Map<string, Player>;
   private localPlayer_ : LocalPlayer;
 
