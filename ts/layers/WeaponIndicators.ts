@@ -17,7 +17,7 @@ export default class WeaponIndicators implements Drawable {
   private tooltip_ : HTMLDivElement;
 
   constructor(game : Game) {
-    this.localPlayer_ = game.getPlayerList().getLocalPlayer();
+    this.localPlayer_ = game.getPlayerList().localPlayer;
     this.mouse_ = game.getMouse();
     this.icons_ = game.getResourceManager().getImage('icons');
     this.tooltip_ = <HTMLDivElement> document.getElementById('tt');

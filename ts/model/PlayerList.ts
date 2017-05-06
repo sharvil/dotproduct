@@ -21,8 +21,8 @@ export default class PlayerList {
     this.players_.delete(player.id);
   }
 
-  public findById(id : string) : Player | undefined {
-    return this.players_.get(id);
+  public findById(id : string) : Player | null {
+    return this.players_.get(id) || null;
   }
 
   public getCount() : number {
@@ -41,7 +41,7 @@ export default class PlayerList {
     Array.from(this.players_.values()).some(cb);
   }
 
-  public getLocalPlayer() : LocalPlayer {
+  public get localPlayer() : LocalPlayer {
     return this.localPlayer_;
   }
 }

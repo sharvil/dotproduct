@@ -28,7 +28,7 @@ export default class ScoreboardMenu implements Menu {
     this.view_.innerHTML = '';
 
     let self = this;
-    let localPlayer = this.playerList_.getLocalPlayer();
+    let localPlayer = this.playerList_.localPlayer;
     let compareFn = function (p1, p2) {
       return p2.points - p1.points;
     };

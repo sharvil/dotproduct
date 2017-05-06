@@ -144,7 +144,7 @@ export default class RadarLayer extends ModelObject implements Drawable {
 
   private renderPlayers_(context : CanvasRenderingContext2D, dimensions : any, radarWidth : number, radarHeight : number) {
     let self = this;
-    let localPlayer = this.game_.getPlayerList().getLocalPlayer();
+    let localPlayer = this.game_.getPlayerList().localPlayer;
 
     let SCALE_FACTOR = RadarLayer.SCALE_FACTOR_;
     let actualXScale = (Math.floor(this.tileWidth_ * SCALE_FACTOR) || 1) / this.tileWidth_;

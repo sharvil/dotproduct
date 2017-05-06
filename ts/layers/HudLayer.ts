@@ -19,7 +19,7 @@ export default class HudLayer implements Drawable {
   constructor(game : Game) {
     this.game_ = game;
     this.resourceManager_ = game.getResourceManager();
-    this.player_ = game.getPlayerList().getLocalPlayer();
+    this.player_ = game.getPlayerList().localPlayer;
     this.statusHudImage_ = this.resourceManager_.getImage('statusHud');
     this.energyFontImage_ = this.resourceManager_.getImage('energyFont');
     this.ledFontImage_ = this.resourceManager_.getImage('ledFont');

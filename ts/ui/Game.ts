@@ -286,7 +286,7 @@ export default class Game {
     this.prizeList_.addKillPrize(x, y);
 
     let message = killee.name + '(' + bountyGained + ') killed by: ' + killer.name;
-    if (killer == this.playerList_.getLocalPlayer()) {
+    if (killer == this.playerList_.localPlayer) {
       this.notifications_.addPersonalMessage(message);
     } else {
       this.notifications_.addMessage(message);

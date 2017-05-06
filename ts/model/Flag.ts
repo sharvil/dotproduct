@@ -12,7 +12,7 @@ export default class Flag {
   private yTile_ : number;
 
   constructor(game : Game, map : Map, id : number, team : number, xTile : number, yTile : number) {
-    this.localPlayer_ = game.getPlayerList().getLocalPlayer();
+    this.localPlayer_ = game.getPlayerList().localPlayer;
     this.map_ = map;
     this.id_ = id;
     this.team_ = team;
