@@ -41,10 +41,6 @@ export default class Bullet extends Projectile {
     if (hitPlayer) {
       hitPlayer.onDamage(this.owner_, this, this.damage_);
     }
-
-    if (this.game_.getViewport().contains(this.position_)) {
-      this.game_.getResourceManager().playSound('explodeBullet');
-    }
   }
 
   public onPrizeCollected(prize : Prize) {}

@@ -31,6 +31,7 @@ export default class BombSprite extends ModelObject implements Drawable {
     this.bouncingAnimation_.setRepeatCount(-1);
 
     Listener.add(this.bomb_, 'explode', this.onExplode_.bind(this));
+    Listener.add(this.bomb_, 'explode_jitter', this.onJitter_.bind(this));
 
     game.getPainter().registerDrawable(Layer.PROJECTILES, this);
   }
@@ -66,6 +67,16 @@ export default class BombSprite extends ModelObject implements Drawable {
   private onExplode_(projectile : Projectile, hitPlayer : Player | null) {
     let animation = this.game_.getResourceManager().getSpriteSheet('explode2').getAnimation(0);
     new Effect(this.game_, animation, this.bomb_.getPosition(), Vector.ZERO);
+
+    let viewport = this.game_.getViewport();
+    if (viewport.contains(this.bomb_.getPosition())) {
+      this.game_.getResourceManager().playSound('explodeBomb');
+    }
+  }
+
+  private onJitter_() {
+    // TODO: get jitter ticks from settings.
+    this.game_.getViewport().jitter(72);
   }
 
   protected onInvalidate_() {

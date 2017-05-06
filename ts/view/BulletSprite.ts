@@ -62,6 +62,11 @@ export default class BulletSprite extends ModelObject implements Drawable {
   private onExplode_(projectile : Projectile, hitPlayer : Player | null) {
     let animation = this.game_.getResourceManager().getSpriteSheet('explode0').getAnimation(0);
     new Effect(this.game_, animation, this.bullet_.getPosition(), Vector.ZERO);
+
+    let viewport = this.game_.getViewport();
+    if (viewport.contains(this.bullet_.getPosition())) {
+      this.game_.getResourceManager().playSound('explodeBullet');
+    }
   }
 
   protected onInvalidate_() {

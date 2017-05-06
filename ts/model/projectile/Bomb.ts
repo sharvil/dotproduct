@@ -61,7 +61,6 @@ export default class Bomb extends Projectile {
     this.lifetime_ = 0;
 
     let localPlayer = this.game_.getPlayerList().localPlayer;
-    let viewport = this.game_.getViewport();
 
     // Figure out how much damage the local player is going to take from this bomb explosion.
     let damage = this.damage_;
@@ -72,13 +71,7 @@ export default class Bomb extends Projectile {
 
     if (damage > 0) {
       localPlayer.onDamage(this.owner_, this, damage);
-
-      // TODO: get jitter ticks from settings.
-      viewport.jitter(72);
-    }
-
-    if (viewport.contains(this.position_)) {
-      this.game_.getResourceManager().playSound('explodeBomb');
+      Listener.fire(this, 'explode_jitter');
     }
   }
 
