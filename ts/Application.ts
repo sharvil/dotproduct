@@ -51,11 +51,6 @@ export default class Application {
   }
 
   private onLoadComplete_() {
-    // Hide all HTML elements that have been tagged with 'ng' (not-game).
-    Array.from(document.getElementsByClassName('ng')).forEach((elem : HTMLElement) => {
-      elem.style.display = 'none';
-    });
-
     this.game_ = new Game(this.protocol_, this.resourceManager_, this.settings_, this.mapData_, this.mapProperties_);
     if (this.jukebox_ != null) {
       this.jukebox_.play();
