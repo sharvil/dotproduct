@@ -97,6 +97,7 @@ export default class Game {
     Listener.add(localPlayer, 'collect_prize', this.onLocalPlayerCollectedPrize_.bind(this));
     Listener.add(localPlayer, 'capture_flag', this.onLocalPlayerCapturedFlag_.bind(this));
     Listener.add(localPlayer, 'death', this.onLocalPlayerDied_.bind(this));
+    Listener.add(localPlayer, 'usernotify', this.onLocalPlayerUserNotify_.bind(this));
 
     window.addEventListener('resize', this.onResize_.bind(this));
     window.addEventListener('focus', function () { localPlayer.clearPresence(Player.Presence.AWAY); });
@@ -353,6 +354,10 @@ export default class Game {
     this.notifications_.addPersonalMessage('You were killed by ' + killer.name + '!');
     this.simulation_.prizeList.addKillPrize(x, y);
     this.protocol_.sendDeath(player.getPosition(), killer);
+  }
+
+  private onLocalPlayerUserNotify_(player : Player, message : string) {
+    this.notifications_.addMessage(message);
   }
 
   // Event handler for when the local player picks up a prize. Notify the server

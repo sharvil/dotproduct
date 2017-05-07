@@ -126,12 +126,12 @@ export default class LocalPlayer extends Player {
     }
 
     if (!this.shipChangeDelay_.isLow()) {
-      this.game_.getNotifications().addMessage('Ship change cooldown in effect.');
+      Listener.fire(this, 'usernotify', 'Ship change cooldown in effect.');
       return false;
     }
 
     if (this.energy_ < this.maxEnergy_) {
-      this.game_.getNotifications().addMessage('You must have full energy to change ships.');
+      Listener.fire(this, 'usernotify', 'You must have full energy to change ships.');
       return false;
     }
 
