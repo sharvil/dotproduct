@@ -1,8 +1,8 @@
 import Game from 'ui/Game';
 import LocalPlayer from 'model/player/LocalPlayer';
 import Player from 'model/player/Player';
-import Protocol from 'net/Protocol';
 import Key from 'input/Key';
+import Listener from 'Listener';
 
 export default class Chat {
   private static readonly TEXT_NAME_CLASS_NAME_ = 'cv-text-name';
@@ -11,14 +11,12 @@ export default class Chat {
   private static readonly CHAT_BOX_VISIBLE_CLASS_NAME_ = 'cv-visible';
 
   private localPlayer_ : LocalPlayer;
-  private protocol_ : Protocol;
   private view_ : HTMLDivElement;
   private text_ : HTMLDivElement;
   private chatBox_ : HTMLInputElement;
 
   constructor(game : Game) {
     this.localPlayer_ = game.simulation.playerList.localPlayer;
-    this.protocol_ = game.getProtocol();
     this.view_ = <HTMLDivElement> document.getElementById('cv');
     this.text_ = <HTMLDivElement> document.getElementById('cv-text');
     this.chatBox_ = <HTMLInputElement> document.getElementById('cv-input');
@@ -97,8 +95,8 @@ export default class Chat {
     let message = this.chatBox_.value.trim();
     if (message != '') {
       let command = message.split(' ')[0];
-      this.protocol_.sendChat(message);
       this.addMessage(this.localPlayer_, message);
+      Listener.fire(this, 'onmessage', message);
     }
 
     this.chatBox_.value = '';

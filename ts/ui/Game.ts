@@ -27,8 +27,6 @@ import RemotePlayer from 'model/player/RemotePlayer';
 import MenuBar from 'ui/MenuBar';
 
 export default class Game {
-  private static readonly MAX_TICKS_PER_FRAME_ : number = 150;
-
   private protocol_ : Protocol;
   private resourceManager_ : ResourceManager;
   private simulation_ : Simulation;
@@ -52,7 +50,7 @@ export default class Game {
     this.keyboard_ = new Keyboard();
     this.mouse_ = new Mouse();
     this.painter_ = new Painter();
-    this.simulation_ = new Simulation(new GraphicalModelObjectFactory(this), settings, mapData, tileProperties);
+    this.simulation_ = new Simulation(new GraphicalModelObjectFactory(this), protocol, settings, mapData, tileProperties);
     this.canvas_ = <HTMLCanvasElement> document.getElementById('gv-canvas');
     this.viewport_ = new Viewport(this, <CanvasRenderingContext2D> (this.canvas_.getContext('2d')));
 
@@ -63,7 +61,7 @@ export default class Game {
     this.chatView_ = new Chat(this);
     this.chatView_.addSystemMessage('Welcome to dotproduct! Press ? for help.');
     this.menuBar_ = new MenuBar(this);
-    this.debugView_ = new Debug(this, this.viewport_);
+    this.debugView_ = new Debug(this, protocol);
     this.disconnectedView_ = new Disconnected();
     this.lastTime_ = Date.now();
     this.tickResidue_ = 0;
@@ -79,26 +77,16 @@ export default class Game {
     this.protocol_.registerEventHandler(this.onConnectionLost_.bind(this));
     this.protocol_.registerPacketHandler(Protocol.S2CPacketType.PLAYER_ENTERED, this.onPlayerEntered_.bind(this));
     this.protocol_.registerPacketHandler(Protocol.S2CPacketType.PLAYER_LEFT, this.onPlayerLeft_.bind(this));
-    this.protocol_.registerPacketHandler(Protocol.S2CPacketType.PLAYER_POSITION, this.onPlayerPosition_.bind(this));
     this.protocol_.registerPacketHandler(Protocol.S2CPacketType.PLAYER_DIED, this.onPlayerDied_.bind(this));
     this.protocol_.registerPacketHandler(Protocol.S2CPacketType.CHAT_MESSAGE, this.onChatMessage_.bind(this));
-    this.protocol_.registerPacketHandler(Protocol.S2CPacketType.SHIP_CHANGE, this.onShipChanged_.bind(this));
-    this.protocol_.registerPacketHandler(Protocol.S2CPacketType.SCORE_UPDATE, this.onScoreUpdated_.bind(this));
-    this.protocol_.registerPacketHandler(Protocol.S2CPacketType.PRIZE_SEED_UPDATE, this.onPrizeSeedUpdated_.bind(this));
-    this.protocol_.registerPacketHandler(Protocol.S2CPacketType.PRIZE_COLLECTED, this.onPrizeCollected_.bind(this));
-    this.protocol_.registerPacketHandler(Protocol.S2CPacketType.SET_PRESENCE, this.onSetPresence_.bind(this));
-    this.protocol_.registerPacketHandler(Protocol.S2CPacketType.FLAG_UPDATE, this.onFlagUpdate_.bind(this));
     this.protocol_.startGame(this.simulation_, startingShip);
 
     this.viewport_.followPlayer(localPlayer);
 
-    Listener.add(localPlayer, 'positionchange', this.onLocalPlayerPositionChanged_.bind(this));
-    Listener.add(localPlayer, 'shipchange', this.onLocalPlayerShipChanged_.bind(this));
-    Listener.add(localPlayer, 'presencechange', this.onLocalPlayerPresenceChanged_.bind(this));
     Listener.add(localPlayer, 'collect_prize', this.onLocalPlayerCollectedPrize_.bind(this));
-    Listener.add(localPlayer, 'capture_flag', this.onLocalPlayerCapturedFlag_.bind(this));
     Listener.add(localPlayer, 'death', this.onLocalPlayerDied_.bind(this));
     Listener.add(localPlayer, 'usernotify', this.onLocalPlayerUserNotify_.bind(this));
+    Listener.add(this.chatView_, 'onmessage', this.onSendChatMessage_.bind(this));
 
     window.addEventListener('resize', this.onResize_.bind(this));
     window.addEventListener('focus', function () { localPlayer.clearPresence(Player.Presence.AWAY); });
@@ -121,20 +109,12 @@ export default class Game {
     return this.painter_;
   }
 
-  public getProtocol() : Protocol {
-    return this.protocol_;
-  }
-
   public getKeyboard() : Keyboard {
     return this.keyboard_;
   }
 
   public getMouse() : Mouse {
     return this.mouse_;
-  }
-
-  public getNotifications() : Notifications {
-    return this.notifications_;
   }
 
   public getResourceManager() : ResourceManager {
@@ -160,7 +140,7 @@ export default class Game {
     let curTime = Date.now();
     let timeDiff = Timer.millisToTicks(curTime - this.lastTime_ + this.tickResidue_);
 
-    timeDiff = Math.min(timeDiff, Game.MAX_TICKS_PER_FRAME_);
+    timeDiff = Math.min(timeDiff, Simulation.MAX_TICKS_PER_FRAME);
 
     for (let i = 0; i < timeDiff; ++i) {
       this.simulation_.advanceTime();
@@ -184,71 +164,26 @@ export default class Game {
   }
 
   private onPlayerEntered_(packet : Array<any>) {
-    let id = packet[0];
-    let name = packet[1];
-    let team = packet[2];
-    let isAlive = packet[3];
-    let ship = packet[4];
-    let bounty = packet[5];
-    let presence = <Player.Presence> (packet[6]);
-
-    let player = this.simulation.modelObjectFactory.newRemotePlayer(id, name, team, isAlive, ship, bounty);
-    player.setPresence(presence);
-    this.simulation_.playerList.addPlayer(player);
-
-    this.notifications_.addEnterMessage('Player entered: ' + name);
+    this.notifications_.addEnterMessage(`Player entered: ${packet[1]}`);
   }
 
   private onPlayerLeft_(packet : Array<any>) {
-    let id = packet[0];
-    let player = this.simulation_.playerList.findById(id);
+    const player = this.simulation_.playerList.findById(packet[0]);
     if (player) {
-      this.simulation_.playerList.removePlayer(player);
-      this.notifications_.addEnterMessage('Player left: ' + player.name);
-    }
-  }
-
-  private onPlayerPosition_(packet : Array<any>) {
-    let timeDiff = Timer.millisToTicks(this.protocol_.getMillisSinceServerTime(packet[0]));
-    let id = packet[1];
-    let angle = packet[2];
-    let position = new Vector(packet[3], packet[4]);
-    let velocity = new Vector(packet[5], packet[6]);
-    let isSafe = packet[7];
-
-    // If the packet is really old, just discard it entirely. We should be getting
-    // an updated one soon anyway. It may be the case that we discard a weapon
-    // packet, but the remote player is lagging so their experience will be
-    // degraded but everyone else's will be fine.
-    if (timeDiff >= Game.MAX_TICKS_PER_FRAME_) {
-      return;
-    }
-
-    let player = this.simulation_.playerList.findById(id);
-    if (player) {
-      (<RemotePlayer> player).onPositionUpdate(timeDiff, angle, position, velocity, isSafe);
-      if (packet.length > 8) {
-        player.onWeaponFired(timeDiff, position, velocity, packet[8]);
-      }
+      this.notifications_.addEnterMessage(`Player left: ${player.name}`);
     }
   }
 
   private onPlayerDied_(packet : Array<any>) {
-    let x = packet[0];
-    let y = packet[1];
-    let killee = this.simulation_.playerList.findById(packet[2]);
-    let killer = this.simulation_.playerList.findById(packet[3]);
-    let bountyGained = packet[4];
+    const killee = this.simulation_.playerList.findById(packet[2]);
+    const killer = this.simulation_.playerList.findById(packet[3]);
+    const bountyGained = packet[4];
 
     if (!killer || !killee) {
       return;
     }
 
-    killee.onDeath(killer);
-    killer.onKill(killee, bountyGained);
-    this.simulation_.prizeList.addKillPrize(x, y);
-
-    let message = killee.name + '(' + bountyGained + ') killed by: ' + killer.name;
+    const message = `${killee.name}(${bountyGained}) killed by: ${killer.name}`;
     if (killer == this.simulation_.playerList.localPlayer) {
       this.notifications_.addPersonalMessage(message);
     } else {
@@ -256,113 +191,30 @@ export default class Game {
     }
   }
 
-  private onShipChanged_(packet : Array<any>) {
-    let player = this.simulation_.playerList.findById(packet[0]);
-    let ship = packet[1];
-
-    if (player) {
-      player.ship = ship;
-    }
-  }
-
   private onChatMessage_(packet : Array<any>) {
-    let playerId = packet[0];
-    let message = packet[1];
+    const playerId = packet[0];
+    const message = packet[1];
 
     if (playerId == Player.SYSTEM_PLAYER_ID) {
       this.chatView_.addSystemMessage(message);
     } else {
-      let player = this.simulation_.playerList.findById(packet[0]);
+      const player = this.simulation_.playerList.findById(playerId);
       if (player) {
         this.chatView_.addMessage(player, message);
       }
     }
   }
 
-  private onScoreUpdated_(packet : Array<any>) {
-    let player = this.simulation_.playerList.findById(packet[0]);
-    let points = packet[1];
-    let wins = packet[2];
-    let losses = packet[3];
-
-    if (player) {
-      player.onScoreUpdate(points, wins, losses);
-    }
-  }
-
-  private onPrizeSeedUpdated_(packet : Array<any>) {
-    let seed = packet[0];
-    let timeDeltaMillis = this.protocol_.getMillisSinceServerTime(packet[1]);
-
-    let ticks = Timer.millisToTicks(timeDeltaMillis);
-    this.simulation_.prizeList.onSeedUpdate(seed, ticks);
-  }
-
-  private onPrizeCollected_(packet : Array<any>) {
-    let player = this.simulation_.playerList.findById(packet[0]);
-    let type = packet[1];
-    let xTile = packet[2];
-    let yTile = packet[3];
-
-    // Remove the prize from the map if we have it in our model.
-    let prize = this.simulation_.prizeList.getPrize(xTile, yTile);
-    if (prize) {
-      this.simulation_.prizeList.removePrize(prize);
-    }
-
-    if (player) {
-      // Let the player collect the prize, even if it wasn't on the map (this makes
-      // sure the bounty gets updated correctly for remote players even if our model
-      // doesn't have a prize at that location).
-      player.onPrizeCollected(prize);
-    }
-  }
-
-  private onSetPresence_(packet : Array<any>) {
-    let player = this.simulation_.playerList.findById(packet[0]);
-    let presence = <Player.Presence> packet[1];
-    if (player) {
-      player.clearPresence(Player.Presence.ALL);
-      player.setPresence(presence);
-    }
-  }
-
-  private onFlagUpdate_(packet : Array<any>) {
-    let id = packet[0];
-    let team = packet[1];
-    let xTile = packet[2];
-    let yTile = packet[3];
-
-    this.simulation.flagList.updateFlag(id, team, xTile, yTile);
-  }
-
-  private onLocalPlayerPositionChanged_(player : Player, data : any) {
-    this.protocol_.sendPosition(data.angle, data.position, data.velocity, data.isSafe, data.weaponData);
-  }
-
-  private onLocalPlayerShipChanged_(player : Player, shipType : number) {
-    this.protocol_.sendShipChange(shipType);
-  }
-
-  private onLocalPlayerPresenceChanged_(player : Player, presence : number) {
-    this.protocol_.sendSetPresence(presence);
-  }
-
-  private onLocalPlayerCapturedFlag_(player : Player, flag : Flag) {
-    this.protocol_.sendFlagCaptured(flag.getId());
-  }
-
   private onLocalPlayerDied_(player : Player, killer : Player) {
-    let x = player.getPosition().x;
-    let y = player.getPosition().y;
-
     this.notifications_.addPersonalMessage('You were killed by ' + killer.name + '!');
-    this.simulation_.prizeList.addKillPrize(x, y);
-    this.protocol_.sendDeath(player.getPosition(), killer);
   }
 
   private onLocalPlayerUserNotify_(player : Player, message : string) {
     this.notifications_.addMessage(message);
+  }
+
+  private onSendChatMessage_(chat : Chat, message : string) {
+    this.protocol_.sendChat(message);
   }
 
   // Event handler for when the local player picks up a prize. Notify the server
@@ -372,33 +224,27 @@ export default class Game {
       return;
     }
 
-    this.protocol_.sendPrizeCollected(prize.getType(), prize.getX(), prize.getY());
-    let message;
     switch (prize.getType()) {
       case PrizeType.NONE:
-        message = 'No prize for you. Sadface.';
+        this.notifications_.addMessage('No prize for you. Sadface.');
         break;
       case PrizeType.GUN_UPGRADE:
-        message = 'Guns upgraded.';
+        this.notifications_.addMessage('Guns upgraded.');
         break;
       case PrizeType.BOMB_UPGRADE:
-        message = 'Bombs upgraded.';
+        this.notifications_.addMessage('Bombs upgraded.');
         break;
       case PrizeType.FULL_ENERGY:
-        message = 'Full charge.';
+        this.notifications_.addMessage('Full charge.');
         break;
       case PrizeType.BOUNCING_BULLETS:
-        message = 'Bouncing bullets.';
+        this.notifications_.addMessage('Bouncing bullets.');
         break;
       case PrizeType.MULTIFIRE:
-        message = 'Multifire bullets.';
+        this.notifications_.addMessage('Multifire bullets.');
         break;
       default:
         assert(false, 'Unhandled prize type: ' + prize.getType());
-    }
-
-    if (message) {
-      this.notifications_.addMessage(message);
     }
   }
 

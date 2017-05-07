@@ -1,17 +1,17 @@
 import Game from 'ui/Game';
-import Viewport from 'Viewport';
+import Protocol from 'net/Protocol';
 import Labs from 'Labs';
 
 export default class Debug {
   private game_ : Game;
-  private viewport_ : Viewport;
+  private protocol_ : Protocol;
   private view_ : HTMLDivElement;
   private lastTime_ : number;
   private frames_ : number;
 
-  constructor(game : Game, viewport : Viewport) {
+  constructor(game : Game, protocol : Protocol) {
     this.game_ = game;
-    this.viewport_ = viewport;
+    this.protocol_ = protocol;
     this.view_ = <HTMLDivElement> document.getElementById('dv');
     this.lastTime_ = Date.now();
     this.frames_ = 0;
@@ -31,7 +31,7 @@ export default class Debug {
     }
 
     if (Labs.DEBUG_UI) {
-      html += this.game_.getProtocol().getRoundTripTime() + 'ms, ' +
+      html += this.protocol_.getRoundTripTime() + 'ms, ' +
         this.frames_ + 'fps, ' +
         this.game_.simulation.playerList.getCount();
     }
