@@ -1,17 +1,17 @@
 import Range from 'math/Range';
 import Player from 'model/player/Player';
 import Weapon from 'model/Weapon';
-import Game from 'ui/Game';
+import Simulation from 'model/Simulation';
 import Vector from 'math/Vector';
 
 export default class BombBay implements Weapon {
-  private game_ : Game;
+  private simulation_ : Simulation;
   private bombBaySettings_ : any;
   private owner_ : Player;
   private level_ : Range;
 
-  constructor(game : Game, bombBaySettings : any, owner : Player) {
-    this.game_ = game;
+  constructor(simulation : Simulation, bombBaySettings : any, owner : Player) {
+    this.simulation_ = simulation;
     this.bombBaySettings_ = bombBaySettings;
     this.owner_ = owner;
     this.level_ = new Range(Math.min(0, bombBaySettings['maxLevel']), bombBaySettings['maxLevel'], 1);
@@ -50,15 +50,9 @@ export default class BombBay implements Weapon {
     let blastRadius = this.getBlastRadius_();
     let proxRadius = this.getProxRadius_();
     let newVelocity = isMine ? Vector.ZERO : velocity.add(Vector.fromPolar(this.getBombSpeed_(), angle));
-    let projectile = this.game_.getModelObjectFactory().newBomb(this.game_, this.owner_, level, position, newVelocity, lifetime, damage, bounceCount, blastRadius, proxRadius);
+    let projectile = this.simulation_.modelObjectFactory.newBomb(this.owner_, level, position, newVelocity, lifetime, damage, bounceCount, blastRadius, proxRadius);
 
     this.owner_.addProjectile(projectile);
-
-    if (isMine) {
-      this.game_.getResourceManager().playSound('mine' + level);
-    } else {
-      this.game_.getResourceManager().playSound('bomb' + level);
-    }
 
     return {
       'type': this.getType(),
@@ -78,7 +72,7 @@ export default class BombBay implements Weapon {
     // Make sure the level is correct so the following getters use the right value for their calculations.
     this.level_.setValue(level);
 
-    let projectile = this.game_.getModelObjectFactory().newBomb(this.game_, this.owner_, this.level_.getValue(), position, velocity, this.getLifetime_(), this.getDamage_(), bounceCount, this.getBlastRadius_(), this.getProxRadius_());
+    let projectile = this.simulation_.modelObjectFactory.newBomb(this.owner_, this.level_.getValue(), position, velocity, this.getLifetime_(), this.getDamage_(), bounceCount, this.getBlastRadius_(), this.getProxRadius_());
     for (let i = 0; i < timeDiff; ++i) {
       projectile.advanceTime();
     }

@@ -1,7 +1,7 @@
 import Player from 'model/player/Player';
 import Timer from 'time/Timer';
 import Vector from 'math/Vector';
-import Game from 'ui/Game';
+import Simulation from 'model/Simulation';
 
 export default class RemotePlayer extends Player {
   private static readonly MAX_DRIFT_PIXELS_ : number = 64;
@@ -23,8 +23,8 @@ export default class RemotePlayer extends Player {
   private originalVelocity_ : Vector;
   private velocityAdjustTimer_ : number;
 
-  constructor(game : Game, id : string, name : string, team : number, isAlive : boolean, ship : number, bounty : number) {
-    super(game, id, name, team, ship, bounty);
+  constructor(simulation : Simulation, id : string, name : string, team : number, isAlive : boolean, ship : number, bounty : number) {
+    super(simulation, id, name, team, ship, bounty);
 
     this.bounceTimestamp_ = 0;
     this.originalVelocity_ = Vector.ZERO;
@@ -84,7 +84,7 @@ export default class RemotePlayer extends Player {
   }
 
   public advanceTime() {
-    let bounceFactor = this.game_.getSettings()['ships'][this.ship_]['bounceFactor'];
+    let bounceFactor = this.simulation_.settings['ships'][this.ship_]['bounceFactor'];
     --this.velocityAdjustTimer_;
     if (this.velocityAdjustTimer_ == 0) {
       this.velocity_ = this.originalVelocity_;
@@ -94,7 +94,7 @@ export default class RemotePlayer extends Player {
   }
 
   private extrapolatePosition_(timeDiff : number, startPosition : Vector, startVelocity : Vector) : Vector {
-    let bounceFactor = this.game_.getSettings()['ships'][this.ship_]['bounceFactor'];
+    let bounceFactor = this.simulation_.settings['ships'][this.ship_]['bounceFactor'];
     let savedPosition = this.position_;
     let savedVelocity = this.velocity_;
 

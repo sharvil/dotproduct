@@ -16,10 +16,10 @@ export default class ShipSelectMenu implements Menu {
     this.menuBar_ = menuBar;
     this.rootNode_ = <HTMLDivElement> document.getElementById('ss');
     this.resourceManager_ = game.getResourceManager();
-    this.player_ = game.getPlayerList().localPlayer;
+    this.player_ = game.simulation.playerList.localPlayer;
 
-    for (let i = 0; i < game.getSettings()['ships'].length; ++i) {
-      this.addShip_(i, game.getSettings()['ships'][i]);
+    for (let i = 0; i < game.simulation.settings['ships'].length; ++i) {
+      this.addShip_(i, game.simulation.settings['ships'][i]);
     }
 
     Listener.add(this.player_, 'shipchange', this.shipChange_.bind(this));

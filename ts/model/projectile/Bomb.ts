@@ -2,9 +2,9 @@ import Listener from 'Listener';
 import Projectile from 'model/projectile/Projectile';
 import Weapon from 'model/Weapon';
 import Vector from 'math/Vector';
-import Game from 'ui/Game';
 import Player from 'model/player/Player';
 import Prize from 'model/Prize';
+import Simulation from 'model/Simulation';
 
 export default class Bomb extends Projectile {
   private blastRadius_ : number;
@@ -12,8 +12,8 @@ export default class Bomb extends Projectile {
   private proxActivator_ : Player | null;
   private lastDistanceToProxActivator_ : number;
 
-  constructor(game : Game, owner : Player, level : number, position : Vector, velocity : Vector, lifetime : number, damage : number, bounceCount : number, blastRadius : number, proxRadius : number) {
-    super(game, owner, level, lifetime, damage, bounceCount);
+  constructor(simulation : Simulation, owner : Player, level : number, position : Vector, velocity : Vector, lifetime : number, damage : number, bounceCount : number, blastRadius : number, proxRadius : number) {
+    super(simulation, owner, level, lifetime, damage, bounceCount);
 
     this.position_ = position;
     this.velocity_ = velocity;
@@ -60,7 +60,7 @@ export default class Bomb extends Projectile {
     this.velocity_ = Vector.ZERO;
     this.lifetime_ = 0;
 
-    let localPlayer = this.game_.getPlayerList().localPlayer;
+    let localPlayer = this.simulation_.playerList.localPlayer;
 
     // Figure out how much damage the local player is going to take from this bomb explosion.
     let damage = this.damage_;

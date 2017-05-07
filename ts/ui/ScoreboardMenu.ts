@@ -13,7 +13,7 @@ export default class ScoreboardMenu implements Menu {
 
   constructor(game : Game) {
     this.view_ = <HTMLDivElement> document.getElementById('sv');
-    this.playerList_ = game.getPlayerList();
+    this.playerList_ = game.simulation.playerList;
   }
 
   public get rootNode() : HTMLElement {

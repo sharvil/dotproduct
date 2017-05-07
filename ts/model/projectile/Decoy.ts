@@ -1,14 +1,16 @@
 import Projectile from 'model/projectile/Projectile';
 import Player from 'model/player/Player';
 import Prize from 'model/Prize';
+import Simulation from 'model/Simulation';
+import Vector from 'math/Vector';
 
 export default class Decoy extends Projectile {
   private direction_ : number;
 
-  constructor(game, owner, position, velocity, lifetime) {
-    super(game, owner, 0 /* level */, lifetime, 0 /* damage */, -1 /* bounceCount */);
+  constructor(simulation : Simulation, owner : Player, position : Vector, velocity : Vector, lifetime : number) {
+    super(simulation, owner, 0 /* level */, lifetime, 0 /* damage */, -1 /* bounceCount */);
 
-    this.direction_ = owner.getDirection();
+    this.direction_ = owner.direction;
     this.position_ = position;
     this.velocity_ = velocity;
     this.radius_ = owner.getDimensions().radius;

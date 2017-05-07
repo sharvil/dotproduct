@@ -8,9 +8,9 @@ import RepelWeapon from 'model/RepelWeapon';
 import Weapon from 'model/Weapon';
 import Vector from 'math/Vector';
 import Projectile from 'model/projectile/Projectile';
-import Game from 'ui/Game';
 import Prize from 'model/Prize';
 import Repel from 'model/projectile/Repel';
+import Simulation from 'model/Simulation';
 
 type PlayerEvent =
     'bounce' |
@@ -44,15 +44,16 @@ abstract class Player extends Entity {
   protected wins_ : number;
   protected losses_ : number;
 
-  constructor(game : Game, id : string, name : string, team : number, ship : number, bounty : number) {
-    super(game);
+  constructor(simulation : Simulation, id : string, name : string, team : number, ship : number, bounty : number) {
+    super(simulation);
 
-    this.settings_ = game.getSettings();this.shipSettings_ = this.settings_['ships'][ship];
-    this.gun_ = new Gun(game, this.shipSettings_['bullet'], this);
-    this.bombBay_ = new BombBay(game, this.shipSettings_['bomb'], this);
-    this.burst_ = new BurstWeapon(game, this.shipSettings_['burst'], this);
-    this.decoy_ = new DecoyWeapon(game, this.shipSettings_['decoy'], this);
-    this.repel_ = new RepelWeapon(game, this.shipSettings_['repel'], this);
+    this.settings_ = simulation.settings;
+    this.shipSettings_ = this.settings_['ships'][ship];
+    this.gun_ = new Gun(simulation, this.shipSettings_['bullet'], this);
+    this.bombBay_ = new BombBay(simulation, this.shipSettings_['bomb'], this);
+    this.burst_ = new BurstWeapon(simulation, this.shipSettings_['burst'], this);
+    this.decoy_ = new DecoyWeapon(simulation, this.shipSettings_['decoy'], this);
+    this.repel_ = new RepelWeapon(simulation, this.shipSettings_['repel'], this);
     this.id_ = id;
     this.name_ = name;
     this.team_ = team;
@@ -146,11 +147,11 @@ abstract class Player extends Entity {
 
     this.ship_ = ship;
     this.shipSettings_ = this.settings_['ships'][this.ship_];
-    this.gun_ = new Gun(this.game_, this.shipSettings_['bullet'], this);
-    this.bombBay_ = new BombBay(this.game_, this.shipSettings_['bomb'], this);
-    this.burst_ = new BurstWeapon(this.game_, this.shipSettings_['burst'], this);
-    this.decoy_ = new DecoyWeapon(this.game_, this.shipSettings_['decoy'], this);
-    this.repel_ = new RepelWeapon(this.game_, this.shipSettings_['repel'], this);
+    this.gun_ = new Gun(this.simulation_, this.shipSettings_['bullet'], this);
+    this.bombBay_ = new BombBay(this.simulation_, this.shipSettings_['bomb'], this);
+    this.burst_ = new BurstWeapon(this.simulation_, this.shipSettings_['burst'], this);
+    this.decoy_ = new DecoyWeapon(this.simulation_, this.shipSettings_['decoy'], this);
+    this.repel_ = new RepelWeapon(this.simulation_, this.shipSettings_['repel'], this);
 
     this.position_ = Vector.ZERO;
     this.velocity_ = Vector.ZERO;

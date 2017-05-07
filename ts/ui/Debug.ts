@@ -33,7 +33,7 @@ export default class Debug {
     if (Labs.DEBUG_UI) {
       html += this.game_.getProtocol().getRoundTripTime() + 'ms, ' +
         this.frames_ + 'fps, ' +
-        this.game_.getPlayerList().getCount();
+        this.game_.simulation.playerList.getCount();
     }
 
     this.view_.innerHTML = html;

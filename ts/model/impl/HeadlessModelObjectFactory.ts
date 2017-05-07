@@ -6,35 +6,40 @@ import Bullet from 'model/projectile/Bullet';
 import Burst from 'model/projectile/Burst';
 import Decoy from 'model/projectile/Decoy';
 import Repel from 'model/projectile/Repel';
+import Game from 'ui/Game';
 
 export default class HeadlessModelObjectFactory implements ModelObjectFactory {
-  constructor() {}
+  private game_ : Game;
 
-  public newLocalPlayer = function (game, id, name, team, ship) {
-    return new LocalPlayer(game, id, name, team, ship);
+  constructor(game : Game) {
+    this.game_ = game;
   }
 
-  public newRemotePlayer = function (game, id, name, team, isAlive, ship, bounty) {
-    return new RemotePlayer(game, id, name, team, isAlive, ship, bounty);
+  public newLocalPlayer = function (simulation, id, name, team, ship) {
+    return new LocalPlayer(this.game_, simulation, id, name, team, ship);
   }
 
-  public newBullet = function (game, owner, level, position, velocity, lifetime, damage, bounceCount) {
-    return new Bullet(game, owner, level, position, velocity, lifetime, damage, bounceCount);
+  public newRemotePlayer = function (id, name, team, isAlive, ship, bounty) {
+    return new RemotePlayer(this.game_.simulation, id, name, team, isAlive, ship, bounty);
   }
 
-  public newBomb = function (game, owner, level, position, velocity, lifetime, damage, bounceCount, blastRadius, proxRadius) {
-    return new Bomb(game, owner, level, position, velocity, lifetime, damage, bounceCount, blastRadius, proxRadius);
+  public newBullet = function (owner, level, position, velocity, lifetime, damage, bounceCount) {
+    return new Bullet(this.game_.simulation, owner, level, position, velocity, lifetime, damage, bounceCount);
   }
 
-  public newBurst = function (game, owner, position, velocity, lifetime, damage) {
-    return new Burst(game, owner, position, velocity, lifetime, damage);
+  public newBomb = function (owner, level, position, velocity, lifetime, damage, bounceCount, blastRadius, proxRadius) {
+    return new Bomb(this.game_.simulation, owner, level, position, velocity, lifetime, damage, bounceCount, blastRadius, proxRadius);
   }
 
-  public newDecoy = function (game, owner, position, velocity, lifetime) {
-    return new Decoy(game, owner, position, velocity, lifetime);
+  public newBurst = function (owner, position, velocity, lifetime, damage) {
+    return new Burst(this.game_.simulation, owner, position, velocity, lifetime, damage);
   }
 
-  public newRepel = function (game, owner, position, lifetime, distance, speed) {
-    return new Repel(game, owner, position, lifetime, distance, speed);
+  public newDecoy = function (owner, position, velocity, lifetime) {
+    return new Decoy(this.game_.simulation, owner, position, velocity, lifetime);
+  }
+
+  public newRepel = function (owner, position, lifetime, distance, speed) {
+    return new Repel(this.game_.simulation, owner, position, lifetime, distance, speed);
   }
 }

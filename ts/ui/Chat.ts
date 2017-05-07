@@ -17,7 +17,7 @@ export default class Chat {
   private chatBox_ : HTMLInputElement;
 
   constructor(game : Game) {
-    this.localPlayer_ = game.getPlayerList().localPlayer;
+    this.localPlayer_ = game.simulation.playerList.localPlayer;
     this.protocol_ = game.getProtocol();
     this.view_ = <HTMLDivElement> document.getElementById('cv');
     this.text_ = <HTMLDivElement> document.getElementById('cv-text');

@@ -4,18 +4,16 @@ import ModelObject from 'model/ModelObject';
 import Flag from 'model/Flag';
 import Prize from 'model/Prize';
 import { TileType, ObjectType } from 'types';
-import Game from 'ui/Game';
+import Simulation from 'model/Simulation';
 
 abstract class Entity extends ModelObject {
-  protected game_ : Game;
   protected position_ : Vector;
   protected velocity_ : Vector;
   protected radius_ : number;
 
-  constructor(game : Game) {
-    super(game.simulation);
+  constructor(simulation : Simulation) {
+    super(simulation);
 
-    this.game_ = game;
     this.position_ = Vector.ZERO;
     this.velocity_ = Vector.ZERO;
     this.radius_ = 0;
@@ -48,9 +46,9 @@ abstract class Entity extends ModelObject {
   }
 
   protected updatePosition_(bounceFactor? : number) {
-    let map = this.game_.simulation.map;
-    let prizeList = this.game_.simulation.prizeList;
-    let flagList = this.game_.getFlagList();
+    let map = this.simulation_.map;
+    let prizeList = this.simulation_.prizeList;
+    let flagList = this.simulation_.flagList;
     bounceFactor = bounceFactor || 1;
 
     let tileWidth = map.getTileWidth();
@@ -97,7 +95,7 @@ abstract class Entity extends ModelObject {
       let dy = Math.min(ySpeed - i, tileHeight);
       this.position_ = this.position_.add(new Vector(0, yVel < 0 ? -dy : dy));
 
-      let collision = this.game_.simulation.map.getCollision(this);
+      let collision = this.simulation_.map.getCollision(this);
       if (collision) {
         switch (collision.object) {
           case ObjectType.NONE:

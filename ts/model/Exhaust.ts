@@ -10,7 +10,7 @@ export default class Exhaust extends Entity {
   private hack_ : number;
 
   constructor(game : Game, position : Vector, velocity : Vector) {
-    super(game);
+    super(game.simulation);
 
     this.position_ = position;
     this.velocity_ = velocity;

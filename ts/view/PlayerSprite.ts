@@ -58,7 +58,7 @@ export default class PlayerSprite implements Drawable {
     // Draw a label for the player's name.
     let name = player.name;
     let bounty = player.bounty;
-    let isFriend = player.isFriend(game.getPlayerList().localPlayer);
+    let isFriend = player.isFriend(game.simulation.playerList.localPlayer);
     context.save();
     context.font = Font.playerFont().toString();
     context.fillStyle = isFriend ? Palette.friendColor() : Palette.foeColor();

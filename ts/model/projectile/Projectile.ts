@@ -1,8 +1,8 @@
 import Entity from 'model/Entity';
 import Player from 'model/player/Player';
 import Listener from 'Listener';
-import Game from 'ui/Game';
 import Repel from 'model/projectile/Repel';
+import Simulation from 'model/Simulation';
 
 abstract class Projectile extends Entity {
   protected owner_ : Player;
@@ -11,8 +11,8 @@ abstract class Projectile extends Entity {
   protected damage_ : number;
   private bounceCount_ : number;
 
-  constructor(game : Game, owner : Player, level : number, lifetime : number, damage : number, bounceCount : number) {
-    super(game);
+  constructor(simulation : Simulation, owner : Player, level : number, lifetime : number, damage : number, bounceCount : number) {
+    super(simulation);
 
     this.owner_ = owner;
     this.level_ = level;
@@ -48,7 +48,7 @@ abstract class Projectile extends Entity {
     }
 
     this.updatePosition_();
-    this.game_.getPlayerList().some(this.checkPlayerCollision_.bind(this));
+    this.simulation_.playerList.some(this.checkPlayerCollision_.bind(this));
   }
 
   /** This function is called when a repel may affect the projectile. */

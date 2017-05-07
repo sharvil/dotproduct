@@ -3,14 +3,14 @@ import Projectile from 'model/projectile/Projectile';
 import Weapon from 'model/Weapon';
 import Vector from 'math/Vector';
 import Player from 'model/player/Player';
-import Game from 'ui/Game';
 import Prize from 'model/Prize';
+import Simulation from 'model/Simulation';
 
 export default class Burst extends Projectile {
   protected isActive_ : boolean;
 
-  constructor(game : Game, owner : Player, position : Vector, velocity : Vector, lifetime : number, damage : number) {
-    super(game, owner, 4 /* level */, lifetime, damage, -1 /* bounceCount */);
+  constructor(simulation : Simulation, owner : Player, position : Vector, velocity : Vector, lifetime : number, damage : number) {
+    super(simulation, owner, 4 /* level */, lifetime, damage, -1 /* bounceCount */);
 
     this.isActive_ = false;
 

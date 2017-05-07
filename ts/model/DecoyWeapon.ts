@@ -1,16 +1,16 @@
 import Vector from 'math/Vector';
 import Weapon from 'model/Weapon';
 import Player from 'model/player/Player';
-import Game from 'ui/Game';
+import Simulation from 'model/Simulation';
 
 export default class DecoyWeapon implements Weapon {
-  private game_ : Game;
+  private simulation_ : Simulation;
   private settings_ : any;
   private owner_ : Player;
   private count_ : number;
 
-  constructor(game : Game, decoySettings : any, owner : Player) {
-    this.game_ = game;
+  constructor(simulation : Simulation, decoySettings : any, owner : Player) {
+    this.simulation_ = simulation;
     this.settings_ = decoySettings;
     this.owner_ = owner;
     this.count_ = this.settings_['initialCount'];
@@ -31,7 +31,7 @@ export default class DecoyWeapon implements Weapon {
 
     --this.count_;
     let lifetime = this.settings_['lifetime'];
-    let projectile = this.game_.getModelObjectFactory().newDecoy(this.game_, this.owner_, this.owner_.getPosition(), this.owner_.getVelocity(), lifetime);
+    let projectile = this.simulation_.modelObjectFactory.newDecoy(this.owner_, this.owner_.getPosition(), this.owner_.getVelocity(), lifetime);
     this.owner_.addProjectile(projectile);
 
     return {
@@ -44,7 +44,7 @@ export default class DecoyWeapon implements Weapon {
 
     let lifetime = this.settings_['lifetime'];
 
-    let projectile = this.game_.getModelObjectFactory().newDecoy(this.game_, this.owner_, this.owner_.getPosition(), this.owner_.getVelocity(), lifetime);
+    let projectile = this.simulation_.modelObjectFactory.newDecoy(this.owner_, this.owner_.getPosition(), this.owner_.getVelocity(), lifetime);
     this.owner_.addProjectile(projectile);
 
     for (let i = 0; i < timeDiff; ++i) {

@@ -1,4 +1,3 @@
-import FlagList from 'model/FlagList';
 import Flag from 'model/Flag';
 import Painter from 'graphics/Painter';
 import Keyboard from 'input/Keyboard';
@@ -10,12 +9,10 @@ import RadarLayer from 'layers/RadarLayer';
 import Starfield from 'layers/Starfield';
 import WeaponIndicators from 'layers/WeaponIndicators';
 import GraphicalModelObjectFactory from 'model/impl/GraphicalModelObjectFactory';
-import HeadlessModelObjectFactory from 'model/impl/HeadlessModelObjectFactory';
 import Player from 'model/player/Player';
 import Prize from 'model/Prize';
 import Simulation from 'model/Simulation';
 import Notifications from 'Notifications';
-import PlayerList from 'model/PlayerList';
 import Protocol from 'net/Protocol';
 import Timer from 'time/Timer';
 import Viewport from 'Viewport';
@@ -23,7 +20,6 @@ import Chat from 'ui/Chat';
 import Debug from 'ui/Debug';
 import Disconnected from 'ui/Disconnected';
 import ResourceManager from 'ResourceManager';
-import ModelObjectFactory from 'model/ModelObjectFactory';
 import { PrizeType } from 'types';
 import Vector from 'math/Vector';
 import Listener from 'Listener';
@@ -35,16 +31,12 @@ export default class Game {
 
   private protocol_ : Protocol;
   private resourceManager_ : ResourceManager;
-  private modelObjectFactory_ : ModelObjectFactory;
   private simulation_ : Simulation;
   private painter_ : Painter;
-  private settings_ : Object;
   private keyboard_ : Keyboard;
   private mouse_ : Mouse;
   private canvas_ : HTMLCanvasElement;
   private viewport_ : Viewport;
-  private playerList_ : PlayerList;
-  private flagList_ : FlagList;
   private notifications_ : Notifications;
   private chatView_ : Chat;
   private menuBar_ : MenuBar;
@@ -57,19 +49,15 @@ export default class Game {
   constructor(protocol : Protocol, resourceManager : ResourceManager, settings : Object, mapData : any, tileProperties : Array<Object>) {
     this.protocol_ = protocol;
     this.resourceManager_ = resourceManager;
-    this.modelObjectFactory_ = new GraphicalModelObjectFactory();
-    this.simulation_ = new Simulation(this.modelObjectFactory_, settings, mapData, tileProperties);
-    this.painter_ = new Painter();
-    this.settings_ = settings;
     this.keyboard_ = new Keyboard();
     this.mouse_ = new Mouse();
+    this.painter_ = new Painter();
+    this.simulation_ = new Simulation(this, new GraphicalModelObjectFactory(this), settings, mapData, tileProperties);
     this.canvas_ = <HTMLCanvasElement> document.getElementById('gv-canvas');
     this.viewport_ = new Viewport(this, <CanvasRenderingContext2D> (this.canvas_.getContext('2d')));
 
-    let startingShip = Math.floor(Math.random() * this.settings_['ships'].length);
-    let localPlayer = this.modelObjectFactory_.newLocalPlayer(this, this.settings_['id'], this.settings_['name'], this.settings_['team'], startingShip);
-    this.playerList_ = new PlayerList(localPlayer);
-    this.flagList_ = new FlagList(localPlayer, this.simulation_.map);
+    const localPlayer = this.simulation_.playerList.localPlayer;
+    const startingShip = localPlayer.ship;
     this.notifications_ = new Notifications(localPlayer);
 
     this.chatView_ = new Chat(this);
@@ -105,6 +93,7 @@ export default class Game {
     this.viewport_.followPlayer(localPlayer);
 
     Listener.add(localPlayer, 'shipchange', this.onLocalPlayerShipChanged_.bind(this));
+    Listener.add(localPlayer, 'presencechange', this.onLocalPlayerPresenceChanged_.bind(this));
     Listener.add(localPlayer, 'collect_prize', this.onLocalPlayerCollectedPrize_.bind(this));
     Listener.add(localPlayer, 'capture_flag', this.onLocalPlayerCapturedFlag_.bind(this));
     Listener.add(localPlayer, 'death', this.onLocalPlayerDied_.bind(this));
@@ -148,22 +137,6 @@ export default class Game {
 
   public getResourceManager() : ResourceManager {
     return this.resourceManager_;
-  }
-
-  public getSettings() : Object {
-    return this.settings_;
-  }
-
-  public getPlayerList() : PlayerList {
-    return this.playerList_;
-  }
-
-  public getFlagList() : FlagList {
-    return this.flagList_;
-  }
-
-  public getModelObjectFactory() : ModelObjectFactory {
-    return this.modelObjectFactory_;
   }
 
   public getViewport() : Viewport {
@@ -217,18 +190,18 @@ export default class Game {
     let bounty = packet[5];
     let presence = <Player.Presence> (packet[6]);
 
-    let player = this.modelObjectFactory_.newRemotePlayer(this, id, name, team, isAlive, ship, bounty);
+    let player = this.simulation.modelObjectFactory.newRemotePlayer(id, name, team, isAlive, ship, bounty);
     player.setPresence(presence);
-    this.playerList_.addPlayer(player);
+    this.simulation_.playerList.addPlayer(player);
 
     this.notifications_.addEnterMessage('Player entered: ' + name);
   }
 
   private onPlayerLeft_(packet : Array<any>) {
     let id = packet[0];
-    let player = this.playerList_.findById(id);
+    let player = this.simulation_.playerList.findById(id);
     if (player) {
-      this.playerList_.removePlayer(player);
+      this.simulation_.playerList.removePlayer(player);
       this.notifications_.addEnterMessage('Player left: ' + player.name);
     }
   }
@@ -249,7 +222,7 @@ export default class Game {
       return;
     }
 
-    let player = this.playerList_.findById(id);
+    let player = this.simulation_.playerList.findById(id);
     if (player) {
       (<RemotePlayer> player).onPositionUpdate(timeDiff, angle, position, velocity, isSafe);
       if (packet.length > 8) {
@@ -261,8 +234,8 @@ export default class Game {
   private onPlayerDied_(packet : Array<any>) {
     let x = packet[0];
     let y = packet[1];
-    let killee = this.playerList_.findById(packet[2]);
-    let killer = this.playerList_.findById(packet[3]);
+    let killee = this.simulation_.playerList.findById(packet[2]);
+    let killer = this.simulation_.playerList.findById(packet[3]);
     let bountyGained = packet[4];
 
     if (!killer || !killee) {
@@ -274,7 +247,7 @@ export default class Game {
     this.simulation_.prizeList.addKillPrize(x, y);
 
     let message = killee.name + '(' + bountyGained + ') killed by: ' + killer.name;
-    if (killer == this.playerList_.localPlayer) {
+    if (killer == this.simulation_.playerList.localPlayer) {
       this.notifications_.addPersonalMessage(message);
     } else {
       this.notifications_.addMessage(message);
@@ -282,7 +255,7 @@ export default class Game {
   }
 
   private onShipChanged_(packet : Array<any>) {
-    let player = this.playerList_.findById(packet[0]);
+    let player = this.simulation_.playerList.findById(packet[0]);
     let ship = packet[1];
 
     if (player) {
@@ -297,7 +270,7 @@ export default class Game {
     if (playerId == Player.SYSTEM_PLAYER_ID) {
       this.chatView_.addSystemMessage(message);
     } else {
-      let player = this.playerList_.findById(packet[0]);
+      let player = this.simulation_.playerList.findById(packet[0]);
       if (player) {
         this.chatView_.addMessage(player, message);
       }
@@ -305,7 +278,7 @@ export default class Game {
   }
 
   private onScoreUpdated_(packet : Array<any>) {
-    let player = this.playerList_.findById(packet[0]);
+    let player = this.simulation_.playerList.findById(packet[0]);
     let points = packet[1];
     let wins = packet[2];
     let losses = packet[3];
@@ -324,7 +297,7 @@ export default class Game {
   }
 
   private onPrizeCollected_(packet : Array<any>) {
-    let player = this.playerList_.findById(packet[0]);
+    let player = this.simulation_.playerList.findById(packet[0]);
     let type = packet[1];
     let xTile = packet[2];
     let yTile = packet[3];
@@ -344,7 +317,7 @@ export default class Game {
   }
 
   private onSetPresence_(packet : Array<any>) {
-    let player = this.playerList_.findById(packet[0]);
+    let player = this.simulation_.playerList.findById(packet[0]);
     let presence = <Player.Presence> packet[1];
     if (player) {
       player.clearPresence(Player.Presence.ALL);
@@ -358,11 +331,15 @@ export default class Game {
     let xTile = packet[2];
     let yTile = packet[3];
 
-    this.flagList_.updateFlag(id, team, xTile, yTile);
+    this.simulation.flagList.updateFlag(id, team, xTile, yTile);
   }
 
   private onLocalPlayerShipChanged_(player : Player, shipType : number) {
     this.protocol_.sendShipChange(shipType);
+  }
+
+  private onLocalPlayerPresenceChanged_(player : Player, presence : number) {
+    this.protocol_.sendSetPresence(presence);
   }
 
   private onLocalPlayerCapturedFlag_(player : Player, flag : Flag) {

@@ -11,6 +11,8 @@ import Listener from 'Listener';
 import Player from 'model/player/Player';
 import Prize from 'model/Prize';
 import Flag from 'model/Flag';
+import Vector from 'math/Vector';
+import Weapon from 'model/Weapon';
 
 export default class LocalPlayerSprite extends PlayerSprite {
   private resourceManager_ : ResourceManager;
@@ -26,6 +28,7 @@ export default class LocalPlayerSprite extends PlayerSprite {
     Listener.add(localPlayer, 'bounce', this.bounce_.bind(this));
     Listener.add(localPlayer, 'multifire', this.toggleMultifire_.bind(this));
     Listener.add(localPlayer, 'capture_flag', this.captureFlag_.bind(this));
+    Listener.add(localPlayer, 'weapon_fired', this.weaponFired_.bind(this));
   }
 
   public render(viewport : Viewport) {
@@ -91,5 +94,33 @@ export default class LocalPlayerSprite extends PlayerSprite {
   private toggleMultifire_(player : LocalPlayer, enabled : boolean) {
     let resource = enabled ? 'multion' : 'multioff';
     this.resourceManager_.playSound(resource);
+  }
+
+  private weaponFired_(player : LocalPlayer, weapon : any) {
+    switch (weapon.type) {
+      case Weapon.Type.GUN:
+        this.resourceManager_.playSound('gun' + weapon.level);
+        break;
+
+      case Weapon.Type.BOMB:
+        if (weapon.vel == Vector.ZERO) {
+          this.resourceManager_.playSound('mine' + weapon.level);
+        } else {
+          this.resourceManager_.playSound('bomb' + weapon.level);
+        }
+        break;
+
+      case Weapon.Type.BURST:
+        this.resourceManager_.playSound('burst');
+        break;
+
+      case Weapon.Type.DECOY:
+        this.resourceManager_.playSound('decoy');
+        break;
+
+      case Weapon.Type.REPEL:
+        this.resourceManager_.playSound('repel');
+        break;
+    }
   }
 }

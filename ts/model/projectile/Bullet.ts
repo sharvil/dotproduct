@@ -2,13 +2,13 @@ import Listener from 'Listener';
 import Projectile from 'model/projectile/Projectile';
 import Weapon from 'model/Weapon';
 import Vector from 'math/Vector';
-import Game from 'ui/Game';
 import Player from 'model/player/Player';
 import Prize from 'model/Prize';
+import Simulation from 'model/Simulation';
 
 export default class Bullet extends Projectile {
-  constructor(game : Game, owner : Player, level : number, position : Vector, velocity : Vector, lifetime : number, damage : number, bounceCount : number) {
-    super(game, owner, level, lifetime, damage, bounceCount);
+  constructor(simulation : Simulation, owner : Player, level : number, position : Vector, velocity : Vector, lifetime : number, damage : number, bounceCount : number) {
+    super(simulation, owner, level, lifetime, damage, bounceCount);
 
     this.position_ = position;
     this.velocity_ = velocity;

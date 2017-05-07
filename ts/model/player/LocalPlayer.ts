@@ -12,8 +12,10 @@ import Game from 'ui/Game';
 import Prize from 'model/Prize';
 import Flag from 'model/Flag';
 import Projectile from 'model/projectile/Projectile';
+import Simulation from 'model/Simulation';
 
 export default class LocalPlayer extends Player {
+  private game_ : Game;
   private projectileFireDelay_ : Range;
   private shipChangeDelay_ : Range;
   private respawnTimer_ : number;
@@ -22,9 +24,10 @@ export default class LocalPlayer extends Player {
   private exhaustTimer_ : Range;
   private keyboard_ : Keyboard;
 
-  constructor(game : Game, id : string, name : string, team : number, ship : number) {
-    super(game, id, name, team, ship, 0 /* bounty */);
+  constructor(game : Game, simulation : Simulation, id : string, name : string, team : number, ship : number) {
+    super(simulation, id, name, team, ship, 0 /* bounty */);
 
+    this.game_ = game;
     this.projectileFireDelay_ = new Range(0, Number.MAX_VALUE, 1);
     this.shipChangeDelay_ = new Range(0, 300, 1);  // 3 seconds
     this.respawnTimer_ = 0;
@@ -102,7 +105,7 @@ export default class LocalPlayer extends Player {
 
   public respawn() {
     this.angleInRadians_ = Math.random() * 2 * Math.PI;
-    this.position_ = this.game_.simulation.map.getSpawnLocation(this);
+    this.position_ = this.simulation_.map.getSpawnLocation(this);
     this.velocity_ = Vector.ZERO;
     this.energy_ = this.shipSettings_['maxEnergy'];
     this.maxEnergy_ = this.shipSettings_['maxEnergy'];
@@ -155,12 +158,12 @@ export default class LocalPlayer extends Player {
 
   public setPresence(presence : Player.Presence) {
     super.setPresence(presence);
-    this.game_.getProtocol().sendSetPresence(this.presence_);
+    Listener.fire(this, 'presencechange', this.presence_);
   }
 
   public clearPresence(presence : Player.Presence) {
     super.clearPresence(presence);
-    this.game_.getProtocol().sendSetPresence(this.presence_);
+    Listener.fire(this, 'presencechange', this.presence_);
   }
 
   public advanceTime() {
@@ -223,6 +226,9 @@ export default class LocalPlayer extends Player {
     this.updatePosition_(this.shipSettings_['bounceFactor']);
 
     let weaponData = this.getFiredWeapon_();
+    if (weaponData) {
+      Listener.fire(this, 'weapon_fired', weaponData);
+    }
 
     // If, after the position update, we moved into / out of a safe zone, send a force update.
     if (this.isSafe() != isSafe) {
@@ -372,7 +378,7 @@ export default class LocalPlayer extends Player {
   }
 
   public isSafe() : boolean {
-    let map = this.game_.simulation.map;
+    let map = this.simulation_.map;
     let pos = map.toTileCoordinates(this.position_);
     let tile = map.getTile(pos.x, pos.y);
     let tileProperties = map.getTileProperties(tile);

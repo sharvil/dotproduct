@@ -1,16 +1,16 @@
 import Vector from 'math/Vector';
 import Weapon from 'model/Weapon';
 import Player from 'model/player/Player';
-import Game from 'ui/Game';
+import Simulation from 'model/Simulation';
 
 export default class BurstWeapon implements Weapon {
-  private game_ : Game;
+  private simulation_ : Simulation;
   private settings_ : any;
   private owner_ : Player;
   private count_ : number;
 
-  constructor(game : Game, burstSettings : any, owner : Player) {
-    this.game_ = game;
+  constructor(simulation : Simulation, burstSettings : any, owner : Player) {
+    this.simulation_ = simulation;
     this.settings_ = burstSettings;
     this.owner_ = owner;
     this.count_ = this.settings_['initialCount'];
@@ -35,11 +35,9 @@ export default class BurstWeapon implements Weapon {
 
     for (let i = 0; i < shrapnelCount; ++i) {
       let velocity = Vector.fromPolar(this.settings_['speed'], i * 2 * Math.PI / shrapnelCount).add(this.owner_.getVelocity());
-      let projectile = this.game_.getModelObjectFactory().newBurst(this.game_, this.owner_, this.owner_.getPosition(), velocity, lifetime, damage);
+      let projectile = this.simulation_.modelObjectFactory.newBurst(this.owner_, this.owner_.getPosition(), velocity, lifetime, damage);
       this.owner_.addProjectile(projectile);
     }
-
-    this.game_.getResourceManager().playSound('burst');
 
     return {
       'type': this.getType()
@@ -55,7 +53,7 @@ export default class BurstWeapon implements Weapon {
 
     for (let i = 0; i < shrapnelCount; ++i) {
       let shrapVel = Vector.fromPolar(this.settings_['speed'], i * 2 * Math.PI / shrapnelCount).add(velocity);
-      let projectile = this.game_.getModelObjectFactory().newBurst(this.game_, this.owner_, position, shrapVel, lifetime, damage);
+      let projectile = this.simulation_.modelObjectFactory.newBurst(this.owner_, position, shrapVel, lifetime, damage);
       for (let j = 0; j < timeDiff; ++j) {
         projectile.advanceTime();
       }

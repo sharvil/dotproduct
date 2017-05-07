@@ -13,55 +13,60 @@ import Decoy from 'model/projectile/Decoy';
 import DecoySprite from 'view/DecoySprite';
 import Repel from 'model/projectile/Repel';
 import RepelSprite from 'view/RepelSprite';
+import Game from 'ui/Game';
 
 export default class GraphicalModelObjectFactory implements ModelObjectFactory {
-  constructor() {}
+  private game_ : Game;
 
-  public newLocalPlayer = function (game, id, name, team, ship) {
-    let player = new LocalPlayer(game, id, name, team, ship);
-    let sprite = new LocalPlayerSprite(game, player);
+  constructor(game : Game) {
+    this.game_ = game;
+  }
+
+  public newLocalPlayer = function (simulation, id, name, team, ship) {
+    let player = new LocalPlayer(this.game_, simulation, id, name, team, ship);
+    let sprite = new LocalPlayerSprite(this.game_, player);
 
     return player;
   }
 
-  public newRemotePlayer = function (game, id, name, team, isAlive, ship, bounty) {
-    let player = new RemotePlayer(game, id, name, team, isAlive, ship, bounty);
-    let sprite = new RemotePlayerSprite(game, player);
+  public newRemotePlayer = function (id, name, team, isAlive, ship, bounty) {
+    let player = new RemotePlayer(this.game_.simulation, id, name, team, isAlive, ship, bounty);
+    let sprite = new RemotePlayerSprite(this.game_, player);
 
     return player;
   }
 
-  public newBullet = function (game, owner, level, position, velocity, lifetime, damage, bounceCount) {
-    let projectile = new Bullet(game, owner, level, position, velocity, lifetime, damage, bounceCount);
-    let sprite = new BulletSprite(game, projectile);
+  public newBullet = function (owner, level, position, velocity, lifetime, damage, bounceCount) {
+    let projectile = new Bullet(this.game_.simulation, owner, level, position, velocity, lifetime, damage, bounceCount);
+    let sprite = new BulletSprite(this.game_, projectile);
 
     return projectile;
   }
 
-  public newBomb = function (game, owner, level, position, velocity, lifetime, damage, bounceCount, blastRadius, proxRadius) {
-    let projectile = new Bomb(game, owner, level, position, velocity, lifetime, damage, bounceCount, blastRadius, proxRadius);
-    let sprite = new BombSprite(game, projectile);
+  public newBomb = function (owner, level, position, velocity, lifetime, damage, bounceCount, blastRadius, proxRadius) {
+    let projectile = new Bomb(this.game_.simulation, owner, level, position, velocity, lifetime, damage, bounceCount, blastRadius, proxRadius);
+    let sprite = new BombSprite(this.game_, projectile);
 
     return projectile;
   }
 
-  public newBurst = function (game, owner, position, velocity, lifetime, damage) {
-    let projectile = new Burst(game, owner, position, velocity, lifetime, damage);
-    let sprite = new BurstSprite(game, projectile);
+  public newBurst = function (owner, position, velocity, lifetime, damage) {
+    let projectile = new Burst(this.game_.simulation, owner, position, velocity, lifetime, damage);
+    let sprite = new BurstSprite(this.game_, projectile);
 
     return projectile;
   }
 
-  public newDecoy = function (game, owner, position, velocity, lifetime) {
-    let projectile = new Decoy(game, owner, position, velocity, lifetime);
-    let sprite = new DecoySprite(game, projectile);
+  public newDecoy = function (owner, position, velocity, lifetime) {
+    let projectile = new Decoy(this.game_.simulation, owner, position, velocity, lifetime);
+    let sprite = new DecoySprite(this.game_, projectile);
 
     return projectile;
   }
 
-  public newRepel = function (game, owner, position, lifetime, distance, speed) {
-    let projectile = new Repel(game, owner, position, lifetime, distance, speed);
-    let sprite = new RepelSprite(game, projectile);
+  public newRepel = function (owner, position, lifetime, distance, speed) {
+    let projectile = new Repel(this.game_.simulation, owner, position, lifetime, distance, speed);
+    let sprite = new RepelSprite(this.game_, projectile);
 
     return projectile;
   }

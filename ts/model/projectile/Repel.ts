@@ -1,14 +1,14 @@
 import Projectile from 'model/projectile/Projectile';
-import Game from 'ui/Game';
 import Vector from 'math/Vector';
 import Player from 'model/player/Player';
 import Prize from 'model/Prize';
+import Simulation from 'model/Simulation';
 
 export default class Repel extends Projectile {
   private distance_ : number;
   private speed_ : number;
-  constructor(game : Game, owner : Player, position : Vector, lifetime : number, distance : number, speed : number) {
-    super(game, owner, 0 /* level */, lifetime, 0, 0 /* bounceCount */);
+  constructor(simulation : Simulation, owner : Player, position : Vector, lifetime : number, distance : number, speed : number) {
+    super(simulation, owner, 0 /* level */, lifetime, 0, 0 /* bounceCount */);
 
     this.distance_ = distance;
     this.speed_ = speed;
@@ -29,7 +29,7 @@ export default class Repel extends Projectile {
   }
 
   public advanceTime() {
-    this.game_.getPlayerList().forEach((player : Player) => {
+    this.simulation_.playerList.forEach((player : Player) => {
       if (!this.owner_.isFriend(player)) {
         player.onRepelled(this);
       }
