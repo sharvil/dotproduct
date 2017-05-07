@@ -1,5 +1,4 @@
 import FlagList from 'model/FlagList';
-import Game from 'ui/Game';
 import Map from 'model/Map';
 import ModelObject from 'model/ModelObject';
 import ModelObjectFactory from 'model/ModelObjectFactory';
@@ -20,7 +19,7 @@ export default class Simulation {
   private prizeList_: PrizeList;
   private settings_ : Object;
 
-  constructor(game : Game, modelObjectFactory : ModelObjectFactory, settings : Object, mapData : any, tileProperties : Array<Object>) {
+  constructor(modelObjectFactory : ModelObjectFactory, settings : Object, mapData : any, tileProperties : Array<Object>) {
     this.modelObjectFactory_ = modelObjectFactory;
     this.registeredObjects_ = [];
     this.timeMillis_ = 0;

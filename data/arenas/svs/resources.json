@@ -124,18 +124,16 @@
       "url": "data/shared/graphics/icons.png",
       "xTiles": 9,
       "yTiles": 6
+    },
+
+    "exhaust": {
+      "url": "data/shared/graphics/exhaust.png",
+      "xTiles": 19,
+      "yTiles": 2
     }
   },
 
   "spritesheets": {
-    "exhaust": {
-      "url": "data/shared/graphics/exhaust.png",
-      "xTiles": 19,
-      "yTiles": 2,
-      "frames": 19,
-      "period": 1
-    },
-
     "ship0_junk": {
       "url": "data/shared/graphics/ship0_junk.png",
       "xTiles": 10,

@@ -1,5 +1,5 @@
 import Vector from 'math/Vector';
-import Effect from 'model/Effect';
+import Effect from 'view/Effect';
 import Projectile from 'model/projectile/Projectile';
 import { Layer } from 'graphics/Layer';
 import Drawable from 'graphics/Drawable';

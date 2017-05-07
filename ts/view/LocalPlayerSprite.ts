@@ -13,6 +13,7 @@ import Prize from 'model/Prize';
 import Flag from 'model/Flag';
 import Vector from 'math/Vector';
 import Weapon from 'model/Weapon';
+import Exhaust from 'model/Exhaust';
 
 export default class LocalPlayerSprite extends PlayerSprite {
   private resourceManager_ : ResourceManager;
@@ -53,8 +54,11 @@ export default class LocalPlayerSprite extends PlayerSprite {
       return;
     }
 
-    this.localPlayer_.getExhaust().forEach(function (e) {
-      e.render(viewport);
+    this.localPlayer_.getExhaust().forEach((e : Exhaust) => {
+      const image = this.resourceManager_.getImage('exhaust');
+      const x = Math.floor(e.position.x - dimensions.left - image.tileWidth / 2);
+      const y = Math.floor(e.position.y - dimensions.top - image.tileHeight / 2);
+      image.render(context, x, y, e.frame);
     });
 
     super.render(viewport);

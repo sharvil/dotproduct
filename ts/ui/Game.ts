@@ -52,7 +52,7 @@ export default class Game {
     this.keyboard_ = new Keyboard();
     this.mouse_ = new Mouse();
     this.painter_ = new Painter();
-    this.simulation_ = new Simulation(this, new GraphicalModelObjectFactory(this), settings, mapData, tileProperties);
+    this.simulation_ = new Simulation(new GraphicalModelObjectFactory(this), settings, mapData, tileProperties);
     this.canvas_ = <HTMLCanvasElement> document.getElementById('gv-canvas');
     this.viewport_ = new Viewport(this, <CanvasRenderingContext2D> (this.canvas_.getContext('2d')));
 
@@ -92,6 +92,7 @@ export default class Game {
 
     this.viewport_.followPlayer(localPlayer);
 
+    Listener.add(localPlayer, 'positionchange', this.onLocalPlayerPositionChanged_.bind(this));
     Listener.add(localPlayer, 'shipchange', this.onLocalPlayerShipChanged_.bind(this));
     Listener.add(localPlayer, 'presencechange', this.onLocalPlayerPresenceChanged_.bind(this));
     Listener.add(localPlayer, 'collect_prize', this.onLocalPlayerCollectedPrize_.bind(this));
@@ -333,6 +334,10 @@ export default class Game {
     let yTile = packet[3];
 
     this.simulation.flagList.updateFlag(id, team, xTile, yTile);
+  }
+
+  private onLocalPlayerPositionChanged_(player : Player, data : any) {
+    this.protocol_.sendPosition(data.angle, data.position, data.velocity, data.isSafe, data.weaponData);
   }
 
   private onLocalPlayerShipChanged_(player : Player, shipType : number) {

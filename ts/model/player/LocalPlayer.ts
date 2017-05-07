@@ -8,14 +8,12 @@ import { PrizeType, ToggleState } from 'types';
 import Keyboard from 'input/Keyboard';
 import Key from 'input/Key';
 import Listener from 'Listener';
-import Game from 'ui/Game';
 import Prize from 'model/Prize';
 import Flag from 'model/Flag';
 import Projectile from 'model/projectile/Projectile';
 import Simulation from 'model/Simulation';
 
 export default class LocalPlayer extends Player {
-  private game_ : Game;
   private projectileFireDelay_ : Range;
   private shipChangeDelay_ : Range;
   private respawnTimer_ : number;
@@ -24,17 +22,16 @@ export default class LocalPlayer extends Player {
   private exhaustTimer_ : Range;
   private keyboard_ : Keyboard;
 
-  constructor(game : Game, simulation : Simulation, id : string, name : string, team : number, ship : number) {
+  constructor(simulation : Simulation, keyboard : Keyboard, id : string, name : string, team : number, ship : number) {
     super(simulation, id, name, team, ship, 0 /* bounty */);
 
-    this.game_ = game;
     this.projectileFireDelay_ = new Range(0, Number.MAX_VALUE, 1);
     this.shipChangeDelay_ = new Range(0, 300, 1);  // 3 seconds
     this.respawnTimer_ = 0;
     this.ticksSincePositionUpdate_ = 999999;
     this.exhaust_ = [];
     this.exhaustTimer_ = new Range(0, 6, 1);
-    this.keyboard_ = game.getKeyboard();
+    this.keyboard_ = keyboard;
     Listener.add(this.keyboard_, Key.Map.TOGGLE_MULTIFIRE, this.onToggleMultifire_.bind(this));
   }
 
@@ -340,8 +337,8 @@ export default class LocalPlayer extends Player {
     let exhaustVelocity = this.velocity_.subtract(thrustVector.resize(5));
     let perpendicular = Vector.fromPolar(1, angle + Math.PI / 2);
 
-    let e1 = new Exhaust(this.game_, bottomOfShip.add(perpendicular.scale(3)), exhaustVelocity.add(perpendicular));
-    let e2 = new Exhaust(this.game_, bottomOfShip.subtract(perpendicular.scale(3)), exhaustVelocity.subtract(perpendicular));
+    let e1 = new Exhaust(this.simulation_, bottomOfShip.add(perpendicular.scale(3)), exhaustVelocity.add(perpendicular));
+    let e2 = new Exhaust(this.simulation_, bottomOfShip.subtract(perpendicular.scale(3)), exhaustVelocity.subtract(perpendicular));
     this.exhaust_.push(e1);
     this.exhaust_.push(e2);
     this.exhaustTimer_.setHigh();
@@ -359,7 +356,7 @@ export default class LocalPlayer extends Player {
       }
     }
 
-    this.game_.getProtocol().sendPosition(this.angleInRadians_, this.position_, this.velocity_, this.isSafe(), weaponData);
+    Listener.fire(this, 'positionchange', { angle: this.angleInRadians_, position: this.position_, velocity: this.velocity_, isSafe: this.isSafe(), weaponData: weaponData });
     this.ticksSincePositionUpdate_ = 0;
   }
 

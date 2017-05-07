@@ -1,6 +1,6 @@
 import Drawable from 'graphics/Drawable';
 import { Layer } from 'graphics/Layer';
-import Effect from 'model/Effect';
+import Effect from 'view/Effect';
 import Vector from 'math/Vector';
 import Player from 'model/player/Player';
 import Game from 'ui/Game';

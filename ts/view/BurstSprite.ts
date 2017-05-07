@@ -1,7 +1,7 @@
 import Animation from 'graphics/Animation';
 import Burst from 'model/projectile/Burst';
 import Drawable from 'graphics/Drawable';
-import Effect from 'model/Effect';
+import Effect from 'view/Effect';
 import Game from 'ui/Game';
 import { Layer } from 'graphics/Layer';
 import Listener from 'Listener';

@@ -2,7 +2,7 @@ import ModelObject from 'model/ModelObject';
 import Bomb from 'model/projectile/Bomb';
 import Projectile from 'model/projectile/Projectile';
 import Vector from 'math/Vector';
-import Effect from 'model/Effect';
+import Effect from 'view/Effect';
 import { Layer } from 'graphics/Layer';
 import Labs from 'Labs';
 import Game from 'ui/Game';
