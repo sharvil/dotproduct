@@ -1,16 +1,26 @@
+import Map from 'model/Map';
 import ModelObject from 'model/ModelObject';
 import ModelObjectFactory from 'model/ModelObjectFactory';
+import PrizeList from 'model/PrizeList';
 import Timer from 'time/Timer';
 
 export default class Simulation {
+  // State used to move simulation forward.
   private modelObjectFactory_ : ModelObjectFactory;
   private registeredObjects_ : Array<ModelObject>;
   private timeMillis_ : number;
 
-  constructor(modelObjectFactory : ModelObjectFactory) {
+  // Simulation model state.
+  private map_ : Map;
+  private prizeList_: PrizeList;
+
+  constructor(modelObjectFactory : ModelObjectFactory, settings : Object, mapData : any, tileProperties : Array<Object>) {
     this.modelObjectFactory_ = modelObjectFactory;
     this.registeredObjects_ = [];
     this.timeMillis_ = 0;
+
+    this.map_ = new Map(settings, mapData, tileProperties);
+    this.prizeList_ = new PrizeList(this, settings, this.map_);
   }
 
   public registerObject(obj : ModelObject) {
@@ -41,4 +51,7 @@ export default class Simulation {
   public getTimeMillis() : number {
     return this.timeMillis_;
   }
+
+  public get map() : Map { return this.map_; }
+  public get prizeList() : PrizeList { return this.prizeList_; }
 }

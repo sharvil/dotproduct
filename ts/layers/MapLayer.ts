@@ -19,7 +19,7 @@ export default class MapLayer extends ModelObject implements Drawable {
     super(game.simulation),
 
     this.resourceManager_ = game.getResourceManager();
-    this.map_ = game.getMap();
+    this.map_ = game.simulation.map;
     this.animations_ = [];
     this.tileset_ = this.resourceManager_.getImage('tileset');
 

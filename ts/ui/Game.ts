@@ -9,7 +9,6 @@ import MapLayer from 'layers/MapLayer';
 import RadarLayer from 'layers/RadarLayer';
 import Starfield from 'layers/Starfield';
 import WeaponIndicators from 'layers/WeaponIndicators';
-import Map from 'model/Map';
 import GraphicalModelObjectFactory from 'model/impl/GraphicalModelObjectFactory';
 import HeadlessModelObjectFactory from 'model/impl/HeadlessModelObjectFactory';
 import Player from 'model/player/Player';
@@ -17,7 +16,6 @@ import Prize from 'model/Prize';
 import Simulation from 'model/Simulation';
 import Notifications from 'Notifications';
 import PlayerList from 'model/PlayerList';
-import PrizeList from 'model/PrizeList';
 import Protocol from 'net/Protocol';
 import Timer from 'time/Timer';
 import Viewport from 'Viewport';
@@ -45,9 +43,7 @@ export default class Game {
   private mouse_ : Mouse;
   private canvas_ : HTMLCanvasElement;
   private viewport_ : Viewport;
-  private map_ : Map;
   private playerList_ : PlayerList;
-  private prizeList_ : PrizeList;
   private flagList_ : FlagList;
   private notifications_ : Notifications;
   private chatView_ : Chat;
@@ -62,20 +58,18 @@ export default class Game {
     this.protocol_ = protocol;
     this.resourceManager_ = resourceManager;
     this.modelObjectFactory_ = new GraphicalModelObjectFactory();
-    this.simulation_ = new Simulation(this.modelObjectFactory_);
+    this.simulation_ = new Simulation(this.modelObjectFactory_, settings, mapData, tileProperties);
     this.painter_ = new Painter();
     this.settings_ = settings;
     this.keyboard_ = new Keyboard();
     this.mouse_ = new Mouse();
     this.canvas_ = <HTMLCanvasElement> document.getElementById('gv-canvas');
     this.viewport_ = new Viewport(this, <CanvasRenderingContext2D> (this.canvas_.getContext('2d')));
-    this.map_ = new Map(settings, mapData, tileProperties);
 
     let startingShip = Math.floor(Math.random() * this.settings_['ships'].length);
     let localPlayer = this.modelObjectFactory_.newLocalPlayer(this, this.settings_['id'], this.settings_['name'], this.settings_['team'], startingShip);
     this.playerList_ = new PlayerList(localPlayer);
-    this.prizeList_ = new PrizeList(this.simulation, settings, this.map_);
-    this.flagList_ = new FlagList(localPlayer, this.map_);
+    this.flagList_ = new FlagList(localPlayer, this.simulation_.map);
     this.notifications_ = new Notifications(localPlayer);
 
     this.chatView_ = new Chat(this);
@@ -160,16 +154,8 @@ export default class Game {
     return this.settings_;
   }
 
-  public getMap() : Map {
-    return this.map_;
-  }
-
   public getPlayerList() : PlayerList {
     return this.playerList_;
-  }
-
-  public getPrizeList() : PrizeList {
-    return this.prizeList_;
   }
 
   public getFlagList() : FlagList {
@@ -285,7 +271,7 @@ export default class Game {
 
     killee.onDeath(killer);
     killer.onKill(killee, bountyGained);
-    this.prizeList_.addKillPrize(x, y);
+    this.simulation_.prizeList.addKillPrize(x, y);
 
     let message = killee.name + '(' + bountyGained + ') killed by: ' + killer.name;
     if (killer == this.playerList_.localPlayer) {
@@ -334,7 +320,7 @@ export default class Game {
     let timeDeltaMillis = this.protocol_.getMillisSinceServerTime(packet[1]);
 
     let ticks = Timer.millisToTicks(timeDeltaMillis);
-    this.prizeList_.onSeedUpdate(seed, ticks);
+    this.simulation_.prizeList.onSeedUpdate(seed, ticks);
   }
 
   private onPrizeCollected_(packet : Array<any>) {
@@ -344,9 +330,9 @@ export default class Game {
     let yTile = packet[3];
 
     // Remove the prize from the map if we have it in our model.
-    let prize = this.prizeList_.getPrize(xTile, yTile);
+    let prize = this.simulation_.prizeList.getPrize(xTile, yTile);
     if (prize) {
-      this.prizeList_.removePrize(prize);
+      this.simulation_.prizeList.removePrize(prize);
     }
 
     if (player) {
@@ -388,7 +374,7 @@ export default class Game {
     let y = player.getPosition().y;
 
     this.notifications_.addPersonalMessage('You were killed by ' + killer.name + '!');
-    this.prizeList_.addKillPrize(x, y);
+    this.simulation_.prizeList.addKillPrize(x, y);
     this.protocol_.sendDeath(player.getPosition(), killer);
   }
 

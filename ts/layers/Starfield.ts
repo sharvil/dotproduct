@@ -22,7 +22,7 @@ export default class Starfield implements Drawable {
     this.bigStars_ = [];
     this.stars_ = [];
 
-    let map = game.getMap();
+    let map = game.simulation.map;
     let mapWidth = map.getTileWidth() * map.getWidth();
     let mapHeight = map.getTileHeight() * map.getHeight();
     let rng = new Prng();

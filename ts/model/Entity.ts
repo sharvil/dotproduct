@@ -48,8 +48,8 @@ abstract class Entity extends ModelObject {
   }
 
   protected updatePosition_(bounceFactor? : number) {
-    let map = this.game_.getMap();
-    let prizeList = this.game_.getPrizeList();
+    let map = this.game_.simulation.map;
+    let prizeList = this.game_.simulation.prizeList;
     let flagList = this.game_.getFlagList();
     bounceFactor = bounceFactor || 1;
 
@@ -97,7 +97,7 @@ abstract class Entity extends ModelObject {
       let dy = Math.min(ySpeed - i, tileHeight);
       this.position_ = this.position_.add(new Vector(0, yVel < 0 ? -dy : dy));
 
-      let collision = this.game_.getMap().getCollision(this);
+      let collision = this.game_.simulation.map.getCollision(this);
       if (collision) {
         switch (collision.object) {
           case ObjectType.NONE:

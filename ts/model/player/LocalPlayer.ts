@@ -102,7 +102,7 @@ export default class LocalPlayer extends Player {
 
   public respawn() {
     this.angleInRadians_ = Math.random() * 2 * Math.PI;
-    this.position_ = this.game_.getMap().getSpawnLocation(this);
+    this.position_ = this.game_.simulation.map.getSpawnLocation(this);
     this.velocity_ = Vector.ZERO;
     this.energy_ = this.shipSettings_['maxEnergy'];
     this.maxEnergy_ = this.shipSettings_['maxEnergy'];
@@ -372,7 +372,7 @@ export default class LocalPlayer extends Player {
   }
 
   public isSafe() : boolean {
-    let map = this.game_.getMap();
+    let map = this.game_.simulation.map;
     let pos = map.toTileCoordinates(this.position_);
     let tile = map.getTile(pos.x, pos.y);
     let tileProperties = map.getTileProperties(tile);
